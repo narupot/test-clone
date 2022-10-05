@@ -35,4 +35,3 @@ storage/*
 resources/lang/*
 /node_modules/*
 public/theme/TH-50-theme-type-1/json/*
-public/firebase/*
