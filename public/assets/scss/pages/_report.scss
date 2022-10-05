@@ -1,0 +1,74 @@
+/*  Report page */
+
+.sales-reportbox {
+	border-bottom: 1px solid $border;
+    padding: 0 0 20px 0;
+    display: inline-block;
+    width: 100%;
+    clear: both;
+    margin-bottom: 20px;
+
+	.column{
+		float: left;
+	    margin-right: 12px;
+	    margin-bottom: 5px;
+
+	    select {
+	    	width: 160px;
+	    }
+	}
+}
+
+
+.filter-report {
+	h3 {
+		margin-bottom: 10px;
+	}
+	.filter-report-row {
+		margin-bottom: 10px; display: none;
+		div.label {
+			float: left; min-width: 145px; color: $black;
+			label {
+				padding-top: 5px;
+			}
+		}
+		.filter-report-content {
+			margin-left: 145px; padding-bottom: 5px;
+		}
+		.check-wrap {
+			padding-bottom: 6px;
+		}
+	}
+	label {
+		display: inline-block;
+		.is {
+			padding:0 12px 0 30px;
+		}
+	}
+	button {
+		margin-left: 8px;  margin-bottom: 8px; min-width: 150px;
+	}
+	.icon-remove {
+		margin-left: 8px; display: inline-block; vertical-align: middle;
+	}
+	select {
+		width: auto !important; margin-bottom: 10px;
+		&.filter-dd {
+			margin-bottom: 15px;
+		}
+	}
+	.btnCheck {
+		position: relative;
+		input[type="checkbox"] {
+			position: absolute; right: 0; bottom: 0px; margin:0; width: 100%; height: 32px; cursor: pointer; opacity: 0;
+			&:checked+.btn-grey {
+				background:$primary; color: $white;
+			}
+		}
+	}
+	
+}
+
+.btn-group-promo {
+	padding-bottom: 15px;
+}

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+		<title>Page Title</title>
+		<link rel="stylesheet" type="text/css" href="css/font-awesome.css">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="css/global.css">
+		<link rel="stylesheet" type="text/css" href="css/flatpickr.min.css">
+		<link rel="stylesheet" type="text/css" href="css/select2.min.css">	
+	</head>
+	<body>
+		<div class="wrapper">
+		<header>&nbsp;</header>
+		<div class="container">
+			<div class="row">
+				<h1 class="col-sm-6">This is heading 1</h1>
+				<h2 class="col-sm-6">This is heading 2</h2>
+				<h3 class="col-sm-6">This is heading 3</h3>
+			</div>
+			
+			
+			<div class="form-group">
+				<div class="row">
+					<div class="col-sm-4">
+						<label>Status</label>							
+							<select class="js-select2" multiple="multiple">
+								<option value="O1" data-badge="">Ready</option>
+								<option value="O2" data-badge="">Prepare</option>
+								<option value="O3" data-badge="">Waiting</option>
+								<option value="O4" data-badge="">Option4</option>
+								<option value="O5" data-badge="">Option5</option>
+								<option value="O6" data-badge="">Option6</option>
+								<option value="O7" data-badge="">Option7</option>
+								<option value="O8" data-badge="">Option8</option>
+								<option value="O9" data-badge="">Option9</option>																
+							</select>
+					</div>
+					<div class="col-sm-4">
+						<label>Shipping Method</label>						
+						<select class="js-select2" multiple="multiple">
+								<option value="O1" data-badge="">Pick up at store</option>
+								<option value="O2" data-badge="">Pick up at center</option>
+								<option value="O3" data-badge="">Delivered by company</option>
+								<option value="O4" data-badge="">Option4</option>
+								<option value="O5" data-badge="">Option5</option>
+								<option value="O6" data-badge="">Option6</option>
+								<option value="O7" data-badge="">Option7</option>
+								<option value="O8" data-badge="">Option8</option>
+								<option value="O9" data-badge="">Option9</option>																
+							</select>
+					</div>
+					<div class="col-sm-4">
+						<label>Sort by</label>
+						<select>
+							<option value="1">Order</option>
+							<option value="2">Time to Receive</option>										
+						</select>
+					</div>
+				</div>
+			</div>
+
+			
+			<div class="form-group">
+				<div class="row">
+					<div class="col-sm-6">
+						<input type="text" placeholder="Name">
+					</div>
+					<div class="col-sm-6">
+						<input type="text" placeholder="date" class="date-select">
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="pwd-show">
+							<input type="password" placeholder="Password" id="pwd" value="Secret">
+							<span class="pwdshow" onclick="pwdShow()"><i class="fa fa-fw fa-eye"></i></span>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<input type="number" placeholder="Mobile">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-sm-6">
+						<select>
+							<option>Gender</option>
+							<option>Male</option>
+							<option>Female</option>
+						</select>
+					</div>
+					<div class="col-sm-6">
+						<select>
+							<option>Pen</option>
+							<option>Mouse</option>
+							<option>Keyword</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-sm-6">
+						<select multiple="multiple">
+							<option>Gender</option>
+							<option>Male</option>
+							<option>Female</option>
+						</select>
+					</div>
+					<div class="col-sm-6">
+						<textarea></textarea>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="row">
+				<div class="col-sm-3">
+					<div class="input-sign">
+						<input type="text" placeholder="Unit Price">
+						<span class="curr-label">Baht</span>
+					</div>
+				</div>
+			
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-sm-6">
+						<label>Checkbox</label>
+						<label class="chk-wrap">
+							<input type="checkbox" checked="checked">
+							<span class="chk-mark">This is checkbox</span>
+						</label>
+					</div>
+					<div class="col-sm-6 chk-group">
+						<label>&nbsp;</label>
+						<label class="chk-wrap">
+							<input type="checkbox">
+							<span class="chk-mark">This is checkbox</span>
+						</label>
+						<label class="chk-wrap">
+							<input type="checkbox">
+							<span class="chk-mark">This is checkbox</span>
+						</label>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-sm-6">
+						<label>Radiobox</label>
+						<label class="radio-wrap">
+							<input type="radio" name="radio">
+							<span class="radio-mark">This is Radio box</span>
+						</label>
+					</div>
+					<div class="col-sm-6 chk-group">
+						<label>&nbsp;</label>
+						<label class="radio-wrap">
+							<input type="radio" name="radio" checked="checked">
+							<span class="radio-mark">This is Radio box</span>
+						</label>
+						<label class="radio-wrap">
+							<input type="radio" name="radio">
+							<span class="radio-mark">This is Radio box</span>
+						</label>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				
+				<button type="button" class="btn">Primary</button>
+				<button type="button" class="btn-blue">Button blue</button>
+				<button type="button" class="btn-grey">Button grey</button>
+				<button type="button" class="btn-dark-grey">Button grey</button>
+				<button type="button" class="btn-default">Default</button>
+				<button type="button" class="btn-green">Button green</button>
+				
+			</div>
+			<div class="form-group">
+				<button class="btn-green" data-toggle="modal" data-target="#myModal">Popup</button>
+			</div>
+			<div class="form-group">
+				<span class="spiner">
+                    <span class="decrease fas fa-minus">  </span>
+                    <input type="number" class="spinNum" value="0" min="0" max="50">
+                    <span class="increase fas fa-plus">  </span>
+                </span>
+			</div>
+
+			<div class="form-group">
+				<div class="on-offbtn">
+	                <div class="onoffswitch myonoffswitch">
+	                  <input type="checkbox" name="onoffswitch" class="myonoffswitch-checkbox" id="myonoffswitch2" value="2">
+	                       <label class="myonoffswitch-label" for="myonoffswitch">      
+	                         <div class="onofftravelbox clearfix">     
+	                          <span class="myonoffswitch-inner">Off</span>     
+	                          <span class="myonoffswitch-switch">On</span>     
+	                         </div>     
+	                         <span class="myonoffswitch-circle"></span>     
+	                       </label>                  
+	               </div>
+	            </div>
+			</div>
+
+			<div class="form-group">
+				<div class="on-offbtn">
+	                <div class="onoffswitch myonoffswitch2">
+	                  <input type="checkbox" name="onoffswitch" class="myonoffswitch-checkbox" id="myonoffswitch2" checked="checked" value="2">
+	                       <label class="myonoffswitch-label2" for="myonoffswitch">      
+	                         <div class="onofftravelbox2 clearfix">     
+	                          <span class="myonoffswitch-inner2">Close</span>     
+	                          <span class="myonoffswitch-switch2">Open</span>     
+	                         </div>     
+	                         <span class="myonoffswitch-circle2"></span>     
+	                       </label>                  
+	               </div>
+	            </div>
+			</div>
+
+			<div class="table-wrapper">
+				<div class="table">
+					<div class="table-header">
+						<ul>
+							<li>heading</li>
+							<li>heading</li>
+							<li>heading</li>
+							<li>heading</li>
+							<li>heading</li>
+						</ul>
+					</div>
+					<div class="table-content">
+						<ul>
+							<li>data</li>
+							<li>data</li>
+							<li>data</li>
+							<li>data</li>
+							<li>data</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+	<footer>&nbsp;</footer>
+	
+	<!-- Popup start here  -->
+	<div class="modal" id="myModal">
+		<div class="modal-dialog modal-sm modal-dialog-centered">
+			<div class="modal-content">
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<span class="close fas fa-times" data-dismiss="modal"></span>
+				</div>
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div class="sucess-body">
+						<i class="fa-check-icon far fa-check-circle"></i>
+						<p>The system has successfully sent an email.</p>
+						<button type="button" class="btn-grey" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.bundle.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/bootstrap-select.js"></script>
+	<script src="js/select2.min.js"></script>	
+	<script src="js/flatpickr.min.js"></script>
+	<script>
+		$(".date-select").flatpickr();
+	</script>
+	<script src="js/sgCustom.js"></script>
+	<script>
+		function pwdShow() {	
+			var p = document.getElementById("pwd");
+			
+			if (p.type === "password") {
+				p.type = "text";
+			}
+			else {
+				p.type = "password";
+			}
+		}
+	</script>
+	<script type="text/javascript">
+	    
+	$(function ($) {
+	    $('.increase').on('click',function(){
+	        var $qty=$('.spinNum');       
+	        var currentVal = parseInt($qty.val());
+	        if (!isNaN(currentVal)) {
+	            $qty.val(currentVal + 1);
+	        }
+	    });
+	    $('.decrease').on('click',function(){
+	        var $qty=$('.spinNum');
+	        var currentVal = parseInt($qty.val());
+	        if (!isNaN(currentVal) && currentVal > 0) {
+	            $qty.val(currentVal - 1);
+	        }
+	    });
+	});
+
+	</script>
+
+	<script type="text/javascript">		
+			$(".js-select2").select2({
+			closeOnSelect : false,
+			placeholder : "Status",
+			allowHtml: true,
+			allowClear: true,
+			tags: true
+		});
+		function iformat(icon, badge,) {
+			var originalOption = icon.element;
+			var originalOptionBadge = $(originalOption).data('badge');		 
+			return $('<span><i class="fa ' + $(originalOption).data('icon') + '"></i> ' + icon.text + '<span class="badge">' + originalOptionBadge + '</span></span>');
+		}
+		
+	</script>
+
+	
+</body>
+</html>

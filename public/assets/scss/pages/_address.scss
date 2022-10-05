@@ -1,0 +1,130 @@
+/*  User Address Page */
+
+
+
+.user-list-wrap { 
+
+    li {
+        float: left;
+        margin: 0 24px 15px 0;
+        width: 210px;
+    }
+ 
+}
+
+.user-address-box {
+    border:1px solid $border;
+    width: 210px; min-height: 265px; position: relative;
+    margin-bottom: 10px; padding: 10px 15px; line-height: 1.4; 
+
+    &.add-user-address {
+        background: $default; 
+    }
+    .add-botttom {
+        position: absolute;
+        bottom: 10px;
+        left: 15px; 
+    }
+    .adduser-icon {
+        text-align: center;
+        margin-top: 80px; 
+    }
+    
+}
+
+
+@media all and (min-width: 768px) {
+  .user-list-wrap li {
+    min-height: 295px; } }
+
+
+  .user-address-box 
+    .user-address-box .adduser-icon .plus-circle-icon {
+      background: #fff;
+      padding: 10px;
+      -webkit-border-radius: 50%;
+      -moz-border-radius: 50%;
+      -ms-border-radius: 50%;
+      border-radius: 50%;
+      color: #6c6e6f;
+      width: 70px;
+      text-align: center;
+      font-size: 50px;
+      text-align: center;
+      display: inline-block;
+      border: 1px solid #bcbcbc; }
+      .user-address-box .adduser-icon .plus-circle-icon:hover {
+        background: #00b7bb;
+        color: #fff;
+        border-color: #00b7bb; }
+  .user-address-box .name, .user-address-box .tel, .user-address-box .email {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis; }
+  .user-address-box address {
+    max-height: 122px;
+    overflow: hidden; }
+
+.address-radio-group .radio-wrap {
+  display: block;
+  width: 100%; }
+  .address-radio-group .radio-wrap + .radio-wrap {
+    padding-top: 8px; }
+
+.modal button[type="submit"] {
+  min-width: 165px; }
+
+#sucess-msg .form-header {
+  border-bottom: none;
+  margin-bottom: 0; }
+
+.tel a {
+  color: #000; }
+  .tel a:hover {
+    color: #552c80; }
+
+.edit-del a {
+  color: #000; }
+.edit-del .delete {
+  margin-right: 15px; }
+
+.default-address-wrap {
+  border-bottom: 1px solid #bcbcbc;
+  margin-bottom: 25px; 
+  overflow: hidden;
+}
+
+
+
+  .default-address-wrap h2 {
+    margin-bottom: 5px; }
+
+.user-address-wrap {
+  background: #e6d2ff;
+  padding: 10px;
+  display: inline-block;
+  margin-bottom: 25px;
+  margin-right: 15px; }
+  .user-address-wrap .user-address-box {
+    background: #fff;
+    min-height: auto;
+    padding-bottom: 40px; 
+    line-height: 1.5;
+  }
+  .user-address-wrap .default-txt {
+    text-align: center;
+    padding-top: 5px; }
+
+#ui-id-1, #ui-id-2, #ui-id-3, #ui-id-4, #ui-id-5, [id*="ui-id-"], .address-autosearch {
+  position: absolute;
+  z-index: 999999 !important;
+  max-width: 262px; }
+  #ui-id-1 [id*="ui-id-"], #ui-id-2 [id*="ui-id-"], #ui-id-3 [id*="ui-id-"], #ui-id-4 [id*="ui-id-"], #ui-id-5 [id*="ui-id-"], [id*="ui-id-"] [id*="ui-id-"], .address-autosearch [id*="ui-id-"] {
+    max-width: 100%; }
+
+#add-address .modal-header, #add-address .modal-content {
+  padding: 0 7.5px; }
+#add-address .form-row {
+  margin-bottom: 0;
+  padding-bottom: 10px; }

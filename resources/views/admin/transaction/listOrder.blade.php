@@ -1,0 +1,223 @@
+@extends('layouts/admin/default')
+
+@section('title')
+    @lang('admin_product.product_list')
+@stop
+
+@section('header_styles')
+   {!! CustomHelpers::dataTableCss() !!}
+    <script type="text/javascript">
+        var filter_data = {!! $filter !!};    
+    </script>
+    
+@stop
+
+@section('content')
+    <div class="content">
+        <div class="header-title">
+            <h1 class="title">@lang('admin_order.order_list')</h1>
+        </div>
+             
+        <!-- Main content -->         
+           
+        <div class="content-wrap">
+             <div class="breadcrumb">
+                <ul class="bredcrumb-menu">
+                    {!!getBreadcrumbAdmin()!!}<li>@lang('admin_order.order_list')</li>
+                </ul>
+            </div>
+           <div id="jq_grid_table" class="table table-bordered">                 
+                
+
+            </div>
+        </div>
+    </div>
+@stop
+
+@section('footer_scripts')
+
+    {!! CustomHelpers::dataTableJs() !!}
+    <!-- end grid table js files -->  
+    <script>
+        let JQ_GRID_DATA_URL = "{{ action('Admin\Transaction\OrderController@listOrderData') }}"; 
+        /*var BATCH_ACTION_DELETE = {
+            action_name : "@lang('admin_common.delete')",
+            action_handler : '',
+            btn_class : 'btn',
+        };
+        var BATCH_ACTION_STATUS = {
+            action_name : "@lang('admin_common.change_status')",
+            action_handler : '',
+            btn_class : 'btn',
+        }; */
+        const JQ_GRID_TITLE = "@lang('admin_order.order_list')";
+        /*
+        *@desc : Table column configrations
+            Array of column 
+        */
+        let columnModel = [  
+            /* check for row selection ***/
+            /*{   title: "", 
+                width: 50, 
+                dataType: "integer",
+                type:'checkbox', 
+                cbId: 'state',
+                sortable : false,
+                align : 'center',
+            },
+            { 
+                dataIndx: 'state', 
+                editable: true,
+                cb: {header: true, select: true, all: true}, 
+                dataType: 'bool',
+                hidden: true
+            },*/
+            /**** end selection *******/ 
+            {   title: "@lang('admin_common.actions')", 
+                dataIndx:'detail_url', 
+                render : function(ui) {
+                    return {
+                        text:'<a href="'+ui.cellData+'" class="btn-primary">@lang("admin_common.view")</a>',    
+                    };                
+                },
+                sortable : !1,
+                minWidth : 150,
+            },         
+            {   title: "@lang('admin_order.main_order')", 
+                dataIndx:'formatted_id', 
+                minWidth: 140,
+                filter : {
+                    attr : "@lang('admin_order.formatted_id')",                        
+                    crules: [
+                        {
+                            condition: getFilter('formatted_id', 'condition') ||  'contain',
+                            value : getFilter('formatted_id', 'value')  || "",
+                        }
+                    ],
+                    type: 'textbox', 
+                    listeners: ['change'],
+                },
+            },
+            {   title: "@lang('admin_order.bill_to_name')", 
+                dataIndx:'user_name', 
+                minWidth: 140,
+                filter : {
+                    attr : "@lang('admin_order.enter_name')",                        
+                    crules: [
+                        {
+                            condition: getFilter('user_name', 'condition') ||  'contain',
+                            value : getFilter('user_name', 'value')  || "",
+                        }
+                    ],
+                    type: 'textbox', 
+                    listeners: ['change'],
+                },
+            },
+            {   title: "@lang('admin_order.grand_total')", 
+                dataIndx:'total_final_price', 
+                minWidth: 140,
+                align : "right",
+                filter : {
+                    attr : "@lang('admin_order.total_final_price')",                        
+                    crules: [
+                        {
+                            condition: getFilter('total_final_price', 'condition') ||  'contain',
+                            value : getFilter('total_final_price', 'value')  || "",
+                        }
+                    ],
+                    type: 'textbox', 
+                    listeners: ['change'],
+                },
+            },
+            {   
+                title: "@lang('admin_order.paid')", 
+                minWidth: 60,
+                align : 'center',
+                render : function(ui) {                        
+                    return {
+                        text:'<span class="circle '+ui.rowData.payment_status+'"></span>',
+                    };                
+                },
+            },
+            {    
+                dataIndx:'order_status',
+                title: "@lang('admin_order.order_status')", 
+                minWidth: 150,
+                render : function(ui) {    
+                    let ord =  {!! $ord_status !!}.filter(o=> {
+                      return (Object.keys(o)[0] == ui.cellData);
+                    });
+                    ord = ord.length && ord[0][ui.cellData] || '';
+                    return {
+                        text:'<span class="'+ui.rowData.order_status_class+'">'+ord+'</span>',
+                    };                
+                }, 
+                filter : {
+                    attr: "placeholder='admin_common.please_select'",
+                    crules: [
+                        {
+                            condition: getFilter('order_status', 'condition') || 'range',
+                            value : getFilter('order_status', 'value') || "",
+                        }
+                    ],options: {!! $ord_status !!},                                           
+                },               
+            },
+            {   title: "@lang('admin_order.end_shopping_date_time')", 
+                dataIndx:'end_shopping_date_time', 
+                minWidth: 140, 
+                dataType: "date",
+                filter: { 
+                    init: pqDatePicker,
+                    crules :[
+                        {
+                            condition: getFilter('end_shopping_date_time', 'condition') ||  "between",
+                            value : getFilter('end_shopping_date_time', 'value') || "",
+                            value2 : getFilter('end_shopping_date_time', 'value2') || ""
+                        }
+                    ]           
+                },
+            },
+            {   title: "@lang('admin_order.shipping_method')", 
+                dataIndx:'shipping_method', 
+                minWidth: 140,
+                align : "right",
+        
+            },
+            {   title: "@lang('admin_order.pickup_time')", 
+                dataIndx:'pickup_time', 
+                minWidth: 140,
+                align : "right",
+        
+            },{   title: "@lang('admin_order.total_weight')", 
+                dataIndx:'total_weight', 
+                minWidth: 140,
+                align : "right",
+        
+            },
+            {   title: "@lang('admin_order.remark')", 
+                dataIndx:'admin_remark', 
+                minWidth: 140,
+                align : "right",
+                filter : {
+                    attr : "@lang('admin_order.remark')",                        
+                    crules: [
+                        {
+                            condition: getFilter('admin_remark', 'condition') ||  'contain',
+                            value : getFilter('admin_remark', 'value')  || "",
+                        }
+                    ],
+                    type: 'textbox', 
+                    listeners: ['change'],
+                },
+            },
+            
+
+            
+            
+            
+        ];    
+    </script>
+
+    <!-- end of page level js -->
+    
+@stop

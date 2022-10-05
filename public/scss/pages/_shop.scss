@@ -1,0 +1,395 @@
+
+
+/*  Shop Page */
+
+.shop-banner-header {
+	position: relative;
+}
+.shop-ban-img {	
+	img {
+		border-radius:10px; max-width: 100%;
+		position: absolute; z-index: -1;
+		min-height: 130px; width: 100%;
+	}
+}
+.shop-banner-content {
+	@include flex();
+	justify-content: space-between;	padding-top: 15px; 
+
+	.shop-img {
+		margin-left: 58px;
+		img {
+			border-radius: 10px; box-shadow: 0 3px 10px $grey-dark;
+		}
+	}
+	.shop-wish-vacation {
+		text-align: right; color: $white; margin-right: 20px;
+
+		.shop-wish {
+			cursor: pointer;
+			i {
+				font-size: $font-20; display: inline-block; vertical-align: top;
+				margin-right: 5px; text-shadow: 0 0px 5px $grey-dark;
+			}
+			&.active {
+				color: $red;
+			}
+		}
+		h2 {
+			margin-top: 20px; font-size: 34px; line-height: 1; text-shadow: 0 0px 5px $grey-dark;
+		}
+		.shop-date, .fav-shop {
+			text-shadow: 0 0px 5px $grey-dark;
+		}
+		
+	}
+
+	.shop-cam-vacation {
+		text-align: right; color: $white; margin-right: 20px;
+		position: absolute; bottom: 35px; right: -10px;
+		.shop-cam {
+			i {
+				font-size: $font-20; display: inline-block; vertical-align: top;
+				margin-right: 5px;
+			}
+			.fa-camera {
+				position: absolute;
+			    right: 20px;
+			    bottom: 20px;
+			    color: $white;
+			    text-shadow: 0 0px 6px $grey-dark;
+			    font-size: $font-20;
+			}
+		}
+	}
+
+	.logoupld {
+		text-align: right; color: $white; margin-right: 0px;
+		position: absolute; bottom: 0px; right: -10px;
+		.shop-cam {
+			i {
+				font-size: $font-20; display: inline-block; vertical-align: top;
+				margin-right: 5px;
+			}
+			.fa-camera {
+				position: absolute;
+			    right: 20px;
+			    bottom: 20px;
+			    color: $white;
+			    text-shadow: 0 0px 6px $grey-dark;
+			    font-size: $font-20;
+			}
+		}
+	}
+
+}
+
+.shop-content-header {
+	overflow: hidden; @include flex(); justify-content: space-between;
+	align-items: flex-end; margin-bottom: 15px; margin-top: -6px;
+
+	.respons-shop-list {
+		width: calc(100% - 130px);
+	}
+
+	.chat {		
+		.available {
+			width: 16px; height: 16px; 
+			border-radius:50%; display: inline-block; margin:7px 0 0 0px;
+			background: $green-light; vertical-align: top;
+		}
+	}	
+}
+
+.shop-content {
+	.view-mode {
+		display: none;
+	}
+}
+
+.respon-update {
+	@include flex(); 
+
+	li {
+		float: left; width: 23%;
+		text-align: center;
+		&:last-child {
+			width:31%; 
+			.shop-label {
+				border:none;
+			}
+			.res-num {
+				border-radius:0 10px 10px 0; 
+			}
+		}
+		&:first-child {
+			.res-num {
+				border-radius: 10px 0 0 10px;
+			}
+		}
+	}
+	.shop-label, .res-num {
+		display: block; padding-left: 5px; padding-right: 5px;
+	}
+	.shop-label {
+		border-right: 1px solid $border; margin-bottom: 6px;
+		line-height: 1.1;
+	}
+	.res-num {
+		background: $grey-lighter; padding:15px; @extend .ellips;
+		font-size: $font-18; color:$blue-lighter ;
+	}
+
+
+
+}
+
+
+
+/*  Sidebar  */
+
+.left-sidebar {
+	margin-top: 17px;
+}
+.side-heading {
+	background: $grey-lighter; padding:12px 15px;
+	margin-bottom: 10px; overflow: hidden;
+	border-radius:10px;
+
+	a {
+		text-decoration: underline; font-size: $font-18;
+	}
+
+	h2 {
+		text-align: center; margin-bottom: 0px;
+		@extend .ellips;
+	}
+	
+	.grey-stars, .filled-stars {
+		&:before {
+			letter-spacing:3px;
+		}
+	}
+}
+
+.credit-req {	
+	margin-bottom: 10px;
+	a {
+		background: $red; padding:12px 15px;		 
+		border-radius:10px; color: $white; text-decoration: underline;
+		display: block; text-align: center; @extend .transition;
+		&:hover {
+			background:$red-dark;
+		}
+	}
+}
+
+.side-content {
+	margin-bottom: 10px; word-break: break-all;
+	p {
+		&:last-child {
+			margin-bottom:0;
+		}
+	}
+	.side-label {
+		color: $grey3; display: block; margin-bottom: 5px;
+	}
+	time {
+		padding-bottom: 5px; display: block;
+	}
+	.shop-status {
+		border-top: 1px solid $border; padding-top: 10px;
+		.shop-status-name {
+			@include flex(); align-items: center;
+		}
+		.shop-status-txt {
+			margin-left: 10px;
+			.last-update {
+				color: $grey3; font-size: $font-12;
+			}
+		}
+		.vacation-label {
+			color: $red;
+		}
+	}
+}
+
+.shop-location-row {
+	margin-bottom: 6px;
+
+	.map-img {
+		margin: 6px 0;
+
+		img {
+			border:1px solid $border; border-radius: 10px;
+		}
+
+	}
+
+	.map-upload-img {
+		margin-top: 5px;		
+		display: flex;
+		flex-wrap: wrap;
+		li {
+			margin-right: 3px; text-align: center;
+			img {
+				border:1px solid $border; border-radius: 10px;
+			}
+			i {
+				color: $red;
+			}			
+		}
+	}
+}
+
+.shop-img-list {
+	@include flex(); justify-content: space-between;
+
+	li {
+		margin-bottom: 10px; overflow: hidden; border-radius: 10px;
+	}
+
+	img {
+		border-radius: 10px;  @extend .transition; 
+
+		&:hover {
+			transform: scale(1.1);
+    		-webkit-transform: scale(1.1);
+		}
+	}
+}
+
+
+.shop-grid-view {
+	.product-info {
+		.action-btn {
+			.btn-default {
+				color: $blue-lighter;
+			}
+		}
+	}
+	.prod-img {
+		img {
+			min-height: 194px;
+    		max-height: 194px;
+    		object-fit: cover;
+		}
+	}
+}
+
+.sold-product {	
+	display: flex; flex-wrap: wrap;
+	li {
+		margin-right: 10px;
+		margin:5px 10px 5px 0;
+	}
+	.prod-img {
+		margin-bottom: 5px;
+	}
+	.prod-name {
+		font-size: $font-12;
+	}
+}
+.shop-image {
+	display: flex;
+	li {
+		margin-right: 10px;
+		img {
+			border-radius: 10px;  @extend .transition;
+		}
+	}
+}
+
+.file-wrapper {
+	.custom-attach-file {
+		position: relative;
+		input[type="file"] {
+			width: 100%;
+			opacity: 0;
+			height: 100%;
+			position: absolute;
+			z-index: 2;
+		}
+		button {
+			margin-left: 0px !important;
+		}
+	}	
+}
+
+.manage-store-btn {
+	margin-top: 30px;
+	.button-group {
+		border-top: solid 1px $border;
+		padding-top: 15px;
+		.btn {
+			float: right;
+		}	
+	}
+	
+}
+
+.manage-store-header {
+	.respons-shop-list {
+		width: calc(100% - 0px);
+	}
+	.respon-update {
+		.res-num {
+			color: $skyblue;
+		}
+	}
+}
+
+
+
+
+
+@media all and (max-width: 768px) {
+
+	.shop-ban-img {
+		img {
+			min-height: 50px; position: static;
+		}
+	}
+	.shop-banner-content {
+		justify-content: flex-start;
+		.shop-img {
+			margin-left: 0; max-width: 75px; margin-right: 15px;
+		}
+		.shop-wish-vacation {
+			color: $black; text-align: left; margin-right: 0;
+			h2 {
+				margin: 6px 0; font-size: $font-20;
+			}
+		}
+	}
+	.shop-content-header {
+		display: block;
+		.respons-shop-list {
+			width: 100%;
+		}
+		.respon-update {
+			display: block;
+			li {
+				width: 100%;
+			}
+			.shop-label {
+				border:none;
+			}
+			.res-num {
+				border-radius: 10px !important; margin-bottom: 10px;
+			}
+		}
+	}
+
+
+	.shop-img-list {
+		display: block; text-align: center;
+		li {			
+			display: inline-block; margin:0 10px 10px 0;
+		}
+	}
+
+}
+
+
+

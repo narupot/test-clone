@@ -1,0 +1,48 @@
+
+@import "helpers/funmixhelp";
+
+
+#footer {
+	background: $black; color: $white;
+	padding:25px 0 15px 0; font-size: $font-14;
+	margin-top: 30px;
+	
+	.footer-subtitle { 
+		font-size: $font-14; margin-bottom: 10px;
+	}
+	ul {
+		margin-bottom: 0;
+	}
+	li {
+		margin-top: 5px;
+	}
+	a {
+		color: $grey2;
+		&:hover {
+			text-decoration:underline;
+			color: $white;
+		}
+	}
+	address {
+		color: $grey2; line-height: 1.5; margin-bottom: 0;
+	}
+}
+.footer-list {
+	border-left: 1px solid $grey; margin-bottom: 20px;
+	&:first-child {
+		border-left:none;
+	}
+}
+.copyright {
+	text-align: center; color: $grey2;
+	border-top:1px solid $grey2; padding-top: 15px;
+}
+
+
+@media all and (max-width: 767px) {
+
+	.footer-list {
+		border-left:none;
+	}
+	
+}

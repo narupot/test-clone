@@ -1,0 +1,159 @@
+/*Favorite shop*/
+
+.favorite-shop {	
+	padding: 0px;
+	@include border-radius(0 0 10px 10px);
+
+	.review-star {
+		.grey-stars, .filled-stars {
+			&:before {
+				font-size:$font-12;
+			}
+		}
+	}
+
+	.review-star {
+		white-space: nowrap;
+	}
+	.table-responsive {
+		overflow-y: hidden;
+	}
+	
+	.table {
+		ul {
+			border-bottom: solid 1px $border;			
+			li {
+				border: none;
+			}
+			
+		}
+	}
+	.table-header {
+		li {
+			font-size: $font-16;
+			
+			&:first-child {
+				border-top-left-radius:10px;
+			}
+			&:last-child {
+				border-top-right-radius:10px;
+			}			
+		}
+	}
+	.table-content {
+		ul {
+			@extend .transition;
+			&:hover {
+				@include box-shadow;				
+			}
+			li {
+				position: relative;
+				font-size: $font-14;				
+				&:after {
+					position: absolute;
+					right: 0;
+					top: 50%;
+					width: 1px;
+					background: $border;
+					height: 80%;
+					content: "";
+					transform: translateY(-50%);
+				}
+				&:last-child {
+					&:after {
+						display:none;
+					}
+				}
+			}
+		}		
+	}
+	/*.last-update {
+		color: $red;
+		i {
+			font-size: $font-12;			
+		}
+	}*/
+	.product-wrap {
+		display: flex;
+	}
+	.prod-img {		
+		margin-bottom: 0px;
+		img {
+			@include border-radius(5px);
+			width: 50px;			
+			max-width: 50px;			
+		}
+	}
+	.product-info {
+		padding-left: 12px;		
+		.shop-name {
+			margin-bottom: 5px;	
+			font-size: $font-14;	
+			a {
+				color: $skyblue;
+			}
+		}
+	}	
+	.table-header {
+		background: $grey-lighter;
+	}
+	.last-updatebox {		
+		align-items: center;  width: 100%;
+
+		.date, .time, .divider {
+			color: $grey-dark;
+		}
+		.update-price {
+			white-space: nowrap;
+			i {
+				color: $blue-lighter;
+				padding: 0 5px;			
+			}
+		}
+		.divider {
+			padding:0 3px;
+		}
+		.wishlist {
+			a {
+				padding: 15px;
+			}
+			i {
+				font-size: $font-20;
+				color: $grey;
+			}			
+		}
+		.wrap-box {
+			display: inline-block;
+			& + .wrap-box {
+				float: right;
+			}
+		}
+	}
+
+	.resp-progress {
+		min-width: 106px;
+	}
+
+	.view-detail {	    
+		
+		a {
+			color: $blue-lighter;	display: inline-block;
+			vertical-align: middle;	
+			span {
+				text-decoration: underline; line-height: 20px;
+			}
+			&:hover {
+				color: $primary;
+			}
+		}
+		.notification {
+			width: 20px; height: 20px;
+			background: $skyblue;
+			@include border-radius(50%);
+			color: $white; text-align: center;
+			text-decoration: none;
+			float: left; margin-right: 5px;
+		}
+	}
+	
+}

@@ -1,0 +1,222 @@
+@extends('layouts/admin/default')
+
+@section('title')
+    @lang('admin_product.product_list')
+@stop
+
+@section('header_styles')
+   {!! CustomHelpers::dataTableCss() !!}
+    <script type="text/javascript">
+        var filter_data = {!! $filter !!};    
+    </script>
+    
+@stop
+
+@section('content')
+    <div class="content">
+        <div class="header-title">
+            <h1 class="title">@lang('admin_order.shop_order_list')</h1>
+        </div>
+             
+        <!-- Main content -->         
+           
+        <div class="content-wrap">
+            <div class="breadcrumb">
+                <ul class="bredcrumb-menu">
+                    {!!getBreadcrumbAdmin('shoporder', 'shoporder', 'list')!!}
+                </ul>
+            </div>                             
+           <div id="jq_grid_table" class="table table-bordered">                 
+                
+
+            </div>
+        </div>
+    </div>
+@stop
+
+@section('footer_scripts')
+
+    {!! CustomHelpers::dataTableJs() !!}
+    <!-- end grid table js files -->  
+    <script>
+        let JQ_GRID_DATA_URL = "{{ action('Admin\Transaction\ShopOrderController@listOrderData') }}";     
+        /*var BATCH_ACTION_DELETE = {
+            action_name : "@lang('admin_common.delete')",
+            action_handler : '',
+            btn_class : 'btn',
+        };
+        var BATCH_ACTION_STATUS = {
+            action_name : "@lang('admin_common.change_status')",
+            action_handler : '',
+            btn_class : 'btn',
+        }; */ 
+        const JQ_GRID_TITLE = "@lang('admin_order.shop_order_list')";    
+        /*
+        *@desc : Table column configrations
+            Array of column 
+        */
+        let columnModel = [  
+            /* check for row selection ***/
+            /*{   title: "", 
+                width: 50, 
+                dataType: "integer",
+                type:'checkbox', 
+                cbId: 'state',
+                sortable : false,
+                align : 'center',
+            },
+            { 
+                dataIndx: 'state', 
+                editable: true,
+                cb: {header: true, select: true, all: true}, 
+                dataType: 'bool',
+                hidden: true
+            },*/
+            /**** end selection *******/ 
+            {   title: "@lang('admin_common.actions')", 
+                    dataIndx:'detail_url', 
+                    minWidth: 75,
+                    render : function(ui) {
+                        return {
+                            text:'<a href="'+ui.cellData+'" class="btn-primary">@lang("admin_common.view")</a>',    
+                        };                
+                    },
+                    sortable : !1,
+                },         
+            {   title: "@lang('admin_order.main_order')", 
+                dataIndx:'formatted_id', 
+                minWidth: 140,
+                filter : {
+                    attr : "@lang('admin_order.formatted_id')",                        
+                    crules: [
+                        {
+                            condition: getFilter('formatted_id', 'condition') ||  'contain',
+                            value : getFilter('formatted_id', 'value')  || "",
+                        }
+                    ],
+                    type: 'textbox', 
+                    listeners: ['change'],
+                },
+            },
+            {   title: "@lang('admin_order.shop_order')", 
+                dataIndx:'shop_formatted_id', 
+                minWidth: 140,
+                filter : {
+                    attr : "@lang('admin_order.shop_formatted_id')",                        
+                    crules: [
+                        {
+                            condition: getFilter('shop_formatted_id', 'condition') ||  'contain',
+                            value : getFilter('shop_formatted_id', 'value')  || "",
+                        }
+                    ],
+                    type: 'textbox', 
+                    listeners: ['change'],
+                },
+            },
+            {   title: "@lang('admin_order.seller_id')", 
+                dataIndx:'seller_id', 
+                minWidth: 140,
+                filter : {
+                    attr : "@lang('admin_order.enter_name')",                        
+                    crules: [
+                        {
+                            condition: getFilter('seller_id', 'condition') ||  'contain',
+                            value : getFilter('seller_id', 'value')  || "",
+                        }
+                    ],
+                    type: 'textbox', 
+                    listeners: ['change'],
+                },
+            },
+            {   title: "@lang('admin_order.seller_name')", 
+                dataIndx:'seller_name', 
+                minWidth: 140,
+                filter : {
+                    attr : "@lang('admin_order.enter_name')",                        
+                    crules: [
+                        {
+                            condition: getFilter('seller_name', 'condition') ||  'contain',
+                            value : getFilter('seller_name', 'value')  || "",
+                        }
+                    ],
+                    type: 'textbox', 
+                    listeners: ['change'],
+                },
+            },
+            {   title: "@lang('admin_order.grand_total')", 
+                dataIndx:'total_final_price', 
+                minWidth: 140,
+                align : "right",
+                filter : {
+                    attr : "@lang('admin_order.total_final_price')",                        
+                    crules: [
+                        {
+                            condition: getFilter('total_final_price', 'condition') ||  'contain',
+                            value : getFilter('total_final_price', 'value')  || "",
+                        }
+                    ],
+                    type: 'textbox', 
+                    listeners: ['change'],
+                },
+            },
+            {   
+                title: "@lang('admin_order.paid')", 
+                minWidth: 60,
+                align : 'center',
+                render : function(ui) {                        
+                    return {
+                        text:'<span class="circle '+ui.rowData.payment_status+'"></span>',
+                    };                
+                },
+            },
+            {   title: "@lang('admin_common.status')", 
+                dataIndx:'status', 
+                minWidth: 140,
+                align : "center",
+                filter : {
+                    attr : "@lang('admin_common.status')",                        
+                    crules: [
+                        {
+                            condition: getFilter('status', 'condition') ||  'contain',
+                            value : getFilter('status', 'value')  || "",
+                        }
+                    ],
+                    type: 'textbox', 
+                    listeners: ['change'],
+                },
+            },
+           
+            {   title: "@lang('admin_order.end_shopping_date')", 
+                dataIndx:'end_shopping_date_time', 
+                minWidth: 140,
+                dataType: "date",
+                filter: { 
+                    crules :[
+                        {
+                            condition: getFilter('end_shopping_date', 'condition') ||  "between",
+                            value : getFilter('end_shopping_date', 'value') || "",
+                            value2 : getFilter('end_shopping_date', 'value2') || ""
+                        }
+                    ]           
+                },
+            },
+            {   title: "@lang('admin_order.remark')", 
+                dataIndx:'admin_remark', 
+                minWidth: 140,
+                filter : {
+                    attr : "@lang('admin_order.remark')",                        
+                    crules: [
+                        {
+                            condition: getFilter('admin_remark', 'condition') ||  'contain',
+                            value : getFilter('admin_remark', 'value')  || "",
+                        }
+                    ],
+                    type: 'textbox', 
+                    listeners: ['change'],
+                },
+            },
+            
+        ];    
+    </script>
+    
+@stop

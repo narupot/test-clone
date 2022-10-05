@@ -1,0 +1,22 @@
+@import "helpers/variable";
+@import "helpers/funmixhelp";
+
+@import "pages/buyer/order";
+@import "pages/buyer/favorite";
+@import "pages/buyer/wishlist";
+
+@import "pages/seller/smanage";
+@import "pages/seller/customer";
+
+
+
+
+
+
+/*  */ 
+
+.title-border {
+	border-bottom: 1px solid $border; padding-bottom: 5px;
+	margin-bottom: 12px;
+}
+

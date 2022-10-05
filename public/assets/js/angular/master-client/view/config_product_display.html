@@ -1,0 +1,63 @@
+<!-- This tamplate used for display config product on select from popup 
+when click on add -->
+<div class="detail-box config-product-section" ng-repeat="(prd_key, prd_val) in productData track by $index">
+    <div class="row">
+        <div class="col-sm-8">
+            <!-- <div class="thumber"><i class="fa fa-bars"></i></div> -->
+            <div class="sal-req-img">
+                <a href="javascript:void(0)">
+                    <img ng-src="<%prd_val.main_product_detail[0].thumbnail_image%>" alt="">
+                </a>
+            </div>
+             <div class="sal-req-detail">
+                <div class="sal-detail-row">
+                    Product Name : <%prd_val.main_product_detail[0].name%>
+                </div>
+                <div class="sal-detail-row">
+                    Product Price : <%prd_val.main_product_detail[0].currency_symbol%> <%prd_val.main_product_detail[0].initial_price%>
+                </div>
+                <div class="sal-detail-row">
+                    Created At : <%prd_val.main_product_detail[0].created_at%>
+                </div>
+                <div class="sal-detail-row">
+                    Updated At : <%prd_val.main_product_detail[0].updated_at%>
+                </div>
+                <div class="sal-detail-row">
+                    Product Tag : <a href="javascript:void(0)" class="tag">Shoes</a> <a href="javascript:void(0)" class="tag">Leather</a>
+                </div>
+            </div>
+        </div>
+        <div class="product-order col-sm-3">
+            <label>Sorting Order</label>
+            <input type="text" name="sorting-order"  ng-model="prd_val.main_product_detail[0].prd_sorting_order"  ng-change="sortingOrderHandler('config', prd_val.main_product_detail[0])" onkeypress="return isNumberKey(event)"/>
+        </div>
+        <div class="pull-right text-right">
+            <span class="back-btn fas fa-times" ng-click="removeConfigProd($event,prd_val,prd_key)"></span>
+        </div>
+    </div>
+    
+    <div class="table-wrapper" ng-if="prd_val.varient_product_details.length">
+        <div class="table">
+            <div class="table-header">
+                <ul>
+                    <li><span class="id-num">#</span></li>
+                    <li class="coupon-code">SKU</li>
+                    <li>Name</li>
+                    <li>Price</li>
+                    <li>Last Updated</li>
+                </ul>
+            </div>
+            <div class="table-content">
+                <ul ng-repeat="(vp_key, vp_val) in prd_val.varient_product_details">
+                    <li><span class="id-num"><%$index+1%></span></li>
+                    <li class="sku">
+                    	<img ng-src="<%vp_val.thumbnail_image%>" width="50" height="50"><%vp_val.sku%>
+                    </li>
+                    <li><%vp_val.name%></li>
+                    <li><%vp_val.currency_symbol%> <%vp_val.initial_price%></li>                
+                    <li><%vp_val.updated_at%></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

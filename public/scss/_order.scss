@@ -1,0 +1,430 @@
+.account-nav {
+	h3 {
+		background: $grey-dark;
+		color: $white;
+		padding: 10px 20px;
+		margin-bottom: 0px;
+		@include border-radius(10px 10px 0 0);
+		font-weight: normal;
+	}
+	ul {
+		padding:0 15px;
+		margin-bottom: 15px;
+		background: $grey-lighter;
+		@include border-radius(0 0 10px 10px);
+	}
+	li {
+		border-bottom: solid 1px $border;		
+		padding: 10px 0;
+		a {
+			color: $grey-dark;
+			@extend .transition;
+			&:hover, &.active {
+				color:$red;
+			}			
+		}
+		&:last-child {
+			border-bottom: none;
+		}
+	
+	}
+
+}
+
+.title-bg-red {	    
+	span {
+		background: $red; color: $white;
+	    font-size:$font-16; padding: 10px 20px;
+	    display: inline-block;
+	    @include border-radius(10px 10px 0 0);	
+	    font-family: $paridi; font-weight: normal;
+	}
+}
+
+.show-link {
+	background: $grey2;
+	width: 30px;
+	height: 30px;
+	@include border-radius(5px);
+	display:inline-block;	
+	vertical-align: middle;
+	line-height: 30px;
+	color: $white;
+	text-align: center;
+}
+
+.move-container {
+	min-width:inherit;
+}
+
+
+/*Profile setting*/
+.profile-setting {
+	h1 {
+		padding-bottom: 10px;
+	}
+	.profile-image {
+		display: inline-block;
+		vertical-align: bottom;
+		width: 115px;
+		height: 115px;
+		position: relative;
+		@include box-shadow;
+		@include border-radius(50%);
+		padding: 0px;
+		overflow: hidden;
+		> span {			
+			@include border-radius(50%);			
+			background: $grey-lighter;
+			text-align: center;
+			width: 100%;
+			height: 100%;
+			display: inline-block;			
+		}
+		
+		i {
+			font-size: $font-36;
+			color: $grey;
+			@include hv-center;
+		}
+	}
+	.profile-summery {
+		display: inline-block;
+		vertical-align: middle;
+		padding-bottom: 15px;
+		margin-left: 15px;
+	}
+	.form-profile-setting {
+		margin: 25px 0;
+	} 	
+}
+
+.file-upload-btn {
+	position: absolute;
+    width: 30px;
+    height: 30px;
+    right: 0px;
+    bottom: 15px;
+	input[type="file"] {
+		width: 100%;
+		height: 100%;
+		opacity: 0;
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+	}
+	span {
+		font-size: $font-30;
+		color: $white;
+		@include border-radius(50%);
+		@include box-shadow;
+		background: $grey;
+	}
+}
+
+
+/*rating*/
+
+.post-rating {
+	.table {
+		ul {
+			li {
+				border:none;
+				position: relative;
+				padding: 15px;
+				border-bottom: solid 1px $border;				
+				&:after {
+					position: absolute;
+					right: 0;
+					top: 50%;
+					width: 1px;
+					background: $border;
+					height: 80%;
+					content: "";
+					transform: translateY(-50%);
+				}
+				&:last-child {
+					&:after {
+						display:none;
+					}
+				}
+				&:first-child {
+					padding-left:0px;			
+				}
+			}
+		}
+	}
+
+	.prod-img {
+		width: 135px;
+		padding-right: 10px;
+	}
+	.action {
+		vertical-align: bottom;		
+	}
+	.post-review-content {
+		vertical-align: bottom;
+		label {		
+			margin-bottom: 0px;
+			line-height: 30px;		
+		}
+		.starrating {
+			margin-left: 10px;
+		}
+		input[type="text"] {
+			max-width: 290px;
+			width: 100%;
+		}
+		button {
+			margin-left: 15px;
+		}
+	}
+
+}
+
+.wrap-inline {
+	display: flex;	
+}
+.wrap-box {
+	display: flex;
+}
+.review-container {
+	h1 {
+		padding-bottom: 15px;
+	}
+	
+}
+.starrating {
+	> label {
+		&:before {
+			font-size: $font-30;				
+		}
+	}		
+}
+
+.text-review {
+	margin-bottom: 5px;
+	text-align: left;	
+}
+.review-comment {
+	margin-bottom: 5px;
+	text-align: left;
+}
+
+
+
+
+
+
+/*remove this table*/
+.status-text {
+	font-size: $font-14;
+	text-decoration: underline;
+	margin-bottom: 10px;
+	display: block;
+}
+
+.status-wrap {
+	display: flex;
+	margin-bottom: 0px;
+	li {
+		padding: 0 10px;
+		font-size: $font-14;
+		position: relative;
+		&:first-child {
+			padding-left:0px;
+		}
+		&:last-child {
+			padding-right:0px;
+		}
+		&:after {
+				position: absolute;
+				right: 0;
+				top: 50%;
+				width: 1px;
+				background: $border;
+				height: 26px;
+				content: "";
+				transform: translateY(-50%);
+			}
+			&:last-child {
+				&:after {
+					display:none;
+				}
+			}
+
+	}
+}
+
+
+/*Manage Address*/
+.add-new-address {
+	a {
+		width: 70px;
+		height: 70px;
+		display: inline-block;
+		vertical-align: middle;
+		background: $blue-lighter;
+		color: $white;
+		text-align: center;
+		line-height: 70px;
+		font-size: $font-16;
+		border-radius: 50%;
+	}
+	span {
+		display: inline-block;
+		vertical-align: middle;
+	}
+}
+
+
+.adj-search {
+	position: relative;
+	div.dataTables_filter {
+		position: relative !important;
+	}
+}
+
+
+
+/*remove this table*/
+
+/*.order-history-wrapper {
+	overflow: auto;	
+}
+
+.grey-header {
+	background: $grey-lighter;
+	li {						
+		border: none !important;
+		text-align: center;	
+		font-size: $font-16;		
+		&:first-child {
+			border-top-left-radius:10px;
+		}
+		&:last-child {
+			border-top-right-radius:10px;
+		}			
+	}
+}
+
+.grey-table-content {
+	ul {
+		li {
+			text-align: center;	
+			font-size: $font-16;
+		}
+	}
+}
+
+
+.grey-table {
+	margin-bottom: 0px;
+	ul {		
+		li {			
+			text-align: center;	
+			font-size: $font-16;		
+		}
+	}	
+
+	.table-content {
+		li {
+			position: relative;
+			border: none;
+			border-bottom: solid 1px $border;						
+			&:after {
+				position: absolute;
+				right: 0;
+				top: 50%;
+				width: 1px;
+				background: $border;
+				height: 80%;
+				content: "";
+				transform: translateY(-50%);
+			}
+			&:last-child {
+				&:after {
+					display:none;
+				}
+			}
+
+		}	
+	}
+
+	.table-footer {
+		display: table-row-group;
+		ul {
+			display: table-row;
+			li {
+				border: none;
+				display: table-cell;
+			}
+		}
+	}
+
+}
+
+.product-wrap {
+	display: flex;	
+	text-align: left;
+	.prod-img {		
+		margin-bottom: 0px;
+		margin-right: 10px;
+		img {
+			@include border-radius(5px);
+			width: 135px;
+		}
+	}
+	.product-info {
+		padding-left: 12px;
+		.shop-name {			
+			a {
+				color: $blue-lighter;
+				font-size: $font-14;
+			}
+		}
+	}
+
+}
+
+.product-group {
+	display: table-row;
+	padding: 10px 0;
+	border-bottom: solid 1px $border;
+	background: $grey-lighter;
+}
+.product-group-name {
+	color: $blue-lighter;
+}
+
+.data-table-content {
+	background: $grey-lighter;
+	padding: 10px;
+}
+
+.wrap-content {	
+	width: 100%;
+	
+}
+
+
+
+
+.table-footer {
+    width: 50%;
+    float: right;
+    display: inline-block;
+    text-align: right;    
+}
+.footer-row {
+	overflow: hidden;
+	padding: 8px 0;
+}*/
+
+/*remove this table*/
+
+
+
+
+

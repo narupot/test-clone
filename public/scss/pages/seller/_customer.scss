@@ -1,0 +1,85 @@
+
+.reg-customer-form {
+	max-width: 320px;
+}
+.user-header {
+	@include flex();
+
+	.user-img {
+		margin-right: 12px;
+		img {
+			border-radius: 50%;
+		}
+	}
+	.user-body {
+		.customer-name {
+			margin-bottom: 4px;
+		}
+	}
+}
+.modal {
+	.credit-label {
+		margin-right: 20px;
+	}
+}
+
+
+
+.user-desc {
+	@include flex(); margin-bottom: 15px;
+
+	.user-img {
+		margin-right: 15px;
+		img {
+			border-radius: 50%;
+		}
+	}
+	.user-body {
+		width: calc(100% - 115px);
+		&.grey-bg {
+			background: $grey-lighter; padding:15px;
+			border-radius:10px;
+		}
+		.user-name {
+			font-size: $font-18;
+		}
+		.user-row {
+			margin-bottom: 9px;
+			&:last-child {
+				margin-bottom:0;
+			}
+		}
+		.user-label {
+			color: $grey-dark;
+		}
+		.edit {
+			color: $skyblue; text-decoration: underline;
+		}
+	}
+
+}
+
+
+.giv-credit-btn {
+	float: right;
+	margin:0 0 5px 5px;
+}
+
+/*Manage customer*/
+.circle-img {
+	img {
+		border-radius: 50%;
+		width: 50px;
+		/*height: 50px;*/	
+	}	
+}
+.designation {
+	display: flex;
+	justify-content: space-between;
+}
+
+.view-action {
+	a, button {
+		margin: 0 5px
+	}
+}

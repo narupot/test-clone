@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+	<title>Smmarket</title>
+	<link rel="stylesheet" type="text/css" href="css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="css/global.css">
+	<link rel="stylesheet" type="text/css" href="css/style-front.css">
+	<link rel="stylesheet" type="text/css" href="css/myaccount.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-select.css">
+
+</head>
+<body>
+
+<div class="wrapper">
+
+	<header id="header">
+		<div class="container">
+			<div class="header-inner">
+				<div class="logo">
+					<a href="#" title="Smmarket"><img src="images/logo.png" width="85" alt=""></a>
+				</div>
+				<div class="header-content">
+					<div class="login-link">
+						<a href="index.html" class="go-home">Back to homepage</a>
+						<ul>
+							<li><a href="#"> <i class="fas fa-sign-in-alt"></i> Sign out</a></li>
+							<li><a href="#"> <i class="fas fa-comments"></i> Chat</a></li>
+						</ul>
+					</div>
+					<div class="search-cart-wrap">
+						<div class="head-col buyer-seller-col">
+							<div class="btn-buyer-header">
+								<a href="#" class="btn"><i class="far fa-home"></i> For Seller <i class="badge">3</i></a>
+								<a href="#" class="btn-grey"><i class="fas fa-user"></i> For Buyer <i class="badge">3</i></a>
+							</div>
+						</div>
+						<div class="head-col search-form">
+							&nbsp;
+						</div>
+
+						<div class="head-col buyer-col">
+							<div class="seller-pannel">
+								<h3 class="sell-name">lorem ipsum <a class="btn-grey"><i class="fas fa-apple-alt"></i></a></h3>
+							</div>							
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+	</header>
+	
+	<!-- Content Start -->
+	<div class="content-wrap">
+
+		<div class="seller-header clearfix">
+			<div class="container">
+				<ul class="seller-menu">
+					<li>
+						<a href="#">
+							<span class="menu-txt">Seller Panel</span>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<i class="fas fa-history"></i> Order History
+						</a>
+					</li>
+					<li>
+						<a href="#" class="active">
+							<i class="fas fa-plus"></i> Manage Product
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<i class="fas fa-users"></i> Customer
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<i class="fas fa-credit-card"></i> Credit
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<i class="fas fa-star"></i> Rating
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<i class="far fa-home"></i> Manage Store
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<i class="far fa-chart-bar"></i> Report
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<i class="fas fa-dollar-sign"></i> Bills
+						</a>
+					</li>
+				</ul>			
+			</div>
+		</div>
+
+
+		<div class="container">
+			<h1 class="page-title title-border">+Add New Product</h1>
+
+			<form action="" class="">
+				
+				<div class="add-new-productForm">
+					<div class="form-group row">
+						<div class="col-sm-6">
+							<label>Select Product <i class="red">*</i></label>
+							<select class="selectpicker">
+								<option>Select the product name to sell.</option>
+								<option>Orange</option>
+								<option>Banana</option>
+								<option>Coconut</option>
+								<option>Lemon</option>
+								<option>Mango</option>
+								<option>Strawberry</option>
+							</select>
+						</div>
+						<div class="col-sm-6">
+							
+						</div>
+					</div>
+					<div class="form-group">						
+						<label>Product Description</label>
+						<textarea></textarea>						
+					</div>
+					<div class="form-group row">
+						<div class="col-sm-6">
+							<label>Product Standard</label>
+							<select>
+								<option>Select Standard</option>
+								<option>Choose Product</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group row">
+						<div class="col-sm-6">
+							<label>Stock</label>
+							<input type="text">
+						</div>
+						<div class="col-sm-6">
+							<label>Unit</label>
+							<select>
+								<option>Select Unit</option>
+								<option>200</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group row">
+						<div class="col-sm-6">
+							<label>Price</label>
+							<div class="input-sign">
+								<input type="text" placeholder="Unit Price">
+								<span class="curr-label">Baht</span>
+							</div>
+
+						</div>
+					</div>
+					<div class="form-group">
+						<label>Product Image</label>
+						<div class="file-wrapper">
+							<div class="custom-img-file">
+								<input type="file" name="image" accept="image/*" >
+								<span class="file-img btn-default"><img src="images/file-upload.png"></span>
+							</div>
+							<button class="btn-blue custom-img-button">Attach</button>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="tier-price-box">
+							<label class="tier-label">Tier Price</label>
+							<div class="tier-input-group">								
+								<div class="tier-col initial-num">
+									<label>Initial number</label>
+									<div class="input-sign">
+										<input type="text" placeholder="Qty">
+										<span class="curr-label">Unit</span>
+									</div>
+								</div>
+								<div class="tier-col end-num">
+									<label>End number</label>
+									<div class="input-sign">
+										<input type="text" placeholder="Qty">
+										<span class="curr-label">Unit</span>
+										<span class="minus">-</span>
+									</div>
+								</div>
+								<div class="tier-col unit-price">
+									<label>Unit Price</label>
+									<div class="input-sign">
+										<input type="text" placeholder="Unit Price">
+										<span class="curr-label">Baht</span>
+										<span class="minus">=</span>
+									</div>
+								</div>
+								<div class="tier-col">
+									<label>&nbsp;</label>
+									<button class="btn-grey">Add more</button>
+								</div>								
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="radio-wrap">
+							<input type="radio" name="soldbyunit" checked="checked">
+							<span class="radio-mark">Sold by product unit (bag, crate)</span>
+						</label>
+					</div>
+					<div class="form-group row">						
+						<div class="col-sm-6">
+							<label>Unit</label>
+							<select>
+								<option></option>
+								<option>200</option>
+							</select>
+						</div>
+						<div class="col-sm-6">
+							<label>Explain Unit</label>
+							<input type="text" placeholder="Ex. 1 bag = 1 Kg.">
+						</div>
+					</div>
+					<div class="form-group row">
+						<div class="col-sm-6">
+							<label>Weight / Unit</label>
+							<input type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="radio-wrap">
+							<input type="radio" name="soldbyweight" checked="checked">
+							<span class="radio-mark">Sold by weight</span>
+						</label>
+					</div>
+					<div class="form-group">
+						<div class="min-order">							
+							<label>Minimum order</label>
+							<input type="text">							
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="grey-box text-center">
+							<button type="submit" class="btn">Create</button>
+						</div>						
+					</div>
+					
+
+
+				</div>
+				
+				
+			</form>
+
+		</div>
+
+				
+	</div>
+	<!-- Footer start here -->
+	<footer id="footer">
+		<div class="container">			
+			<div class="row">
+				<div class="col-sm-3 footer-list">
+					<h3 class="footer-subtitle">Site Map</h3>
+					<ul>
+						<li>
+							<a href="#" title="About us">About us</a>
+						</li>
+						<li>
+							<a href="#" title="Category">Category</a>
+						</li>
+						<li>
+							<a href="#" title="Shopping list">Shopping list</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-sm-3 footer-list">
+					<h3 class="footer-subtitle">Help seller</h3>
+					<ul>
+						<li>
+							<a href="#" title="Register">Register</a>
+						</li>
+						<li>
+							<a href="#" title="How to Create new product">How to Create new product</a>
+						</li>
+						<li>
+							<a href="#" title="Manual">Manual</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-sm-3 footer-list">
+					<h3 class="footer-subtitle">Site Map</h3>
+					<ul>
+						<li>
+							<a href="#" title="How to pay">How to pay</a>
+						</li>
+						<li>
+							<a href="#" title="How to buy">How to buy</a>
+						</li>
+						<li>
+							<a href="#" title="How to ship">How to ship</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-sm-3 footer-list">
+					<h3 class="footer-subtitle">Contact us</h3>
+					<address>
+						355/115-116 ม.15 ถนนพหลโยธิน ต.คูคต อ.ลำลูกกา จ.ปทุมธานี 12130 โทร. 02-995-0610-3
+					</address>
+				</div>
+			</div>
+			<div class="copyright">
+				copyright © Donmuangpattana Co., Ltd. All rights reserved.
+			</div>
+			
+		</div>
+	</footer>
+	
+
+
+</div>
+
+<script src="js/jquery.min.js"></script>  
+<script src="js/bootstrap.bundle.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/sgCustom.js"></script>
+<script src="js/bootstrap-select.js"></script>
+<script>
+	jQuery('.selectpicker').selectpicker();
+</script> 
+
+</body>
+</html>

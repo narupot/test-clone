@@ -1,0 +1,44 @@
+Migrations
+----------------
+1. New Database table(s) will be placed in migration directory only.
+
+Version
+----------
+
+1. schema: All those table(s) will place in this directory in which structure/schema changes occures.
+2. entity: All those database tables will place in this diretory in which new data entry or update data entry available.
+	a) New: Table(s) of only new entries will place here.
+	b) update: Table(s) of only updated entries will place here.
+
+Module Dependency Management
+-----------------------------
+1. System will read and parse data of info.txt file and detect all dependent module(s) related to current version of module.
+
+Core Database table(s) of PaymentModule2c2p
+============================================
+1. sbn_payment_gateway2c2p_module
+
+
+
+
+Database Dependency with Application
+====================================
+1. sbn_payment_option 
+	
+	Description:: sbn_payment_option database table is used for checkout process and all the available payment gatewys will be list here, so when we install payment module in system, we will create an entry for installed payment gateway.
+
+2. sbn_payment_option_desc
+
+	Description:: sbn_payment_option_desc database table is used for payment option description for four language, so we need to put foure entry for specific language.
+	
+	Note: *** the last inserted id of payment_option table must be updated in sbn_payment_option_desc table
+
+
+=====================================================================================================================================
+******************************************************** Issue(s) With PaymentModule2C2P ********************************************
+-------------------------------------------------------------------------------------------------------------------------------------
+1. At the installtion time how we can manage application's base db table(s) relation(s) with new PaymentModule2c2p
+ 
+
+
+

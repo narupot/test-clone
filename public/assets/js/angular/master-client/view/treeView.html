@@ -1,0 +1,21 @@
+<div class="root-box tree-menu" ui-tree="" id="productCateTree" data-drag-enabled="false">
+    <ol id="productCateTree" ui-tree-nodes="" class="tree" data-ng-model="tree" collapsed="false">
+      <li ng-repeat="item in tree" ui-tree-node ng-include="'items_renderer.html'" collapsed="false"></li>
+    </ol>
+</div>
+<script type="text/ng-template" id="items_renderer.html">
+  <div class="tree-node tree-node-content" ui-tree-handle ng-click="itemSelect(item,this)" ng-class="{nodeActive:item.checked,matched:item.match}">
+    <a class="btn-xs" data-ng-if="item.children && item.children.length > 0" data-ng-click="expandNode(this,$event)">
+      <span class="expandCollapse" data-ng-class="{'glyphicon-plus plus': collapsed,'glyphicon-minus minus': !collapsed}"></span>
+    </a>
+    <!-- <label class="check-wrap"> indeterminate-checkbox-->
+      <input style="position: relative; visibility: visible !important;" type="checkbox" ng-checked="item.checked" node="item">
+      <!-- <span class="chk-label"></span>  -->
+    <!-- </label> -->
+    <span class="listName"><%item.name%> (<%item.total_products%>)</span>
+  </div>
+  <ol ui-tree-nodes="" ng-model="item.children" ng-class="{hidden: collapsed}">
+    <li ng-repeat="item in item.children" ui-tree-node ng-include="'items_renderer.html'">
+    </li>
+  </ol>
+</script>

@@ -1,0 +1,86 @@
+<div class="sgpopup" data-popup="popup-3">
+  <div class="popup-inner">
+    <div class="popup-header">
+        <i class="fas fa-cog"></i> Setting Properties
+        <a class="popup-close fas fa-times" data-popup-close="popup-3" href="#" id="close_setting_design_popup"></a>
+    </div>
+    <div class="form-rows" ng-repeat="item in setting.setting_prop">
+      <h2><%item.show_name%></h2>
+      <!-- for select box -->
+      <div ng-if="item.html_type == 'select_box'">
+        <select ng-model="item.type_model" ng-options="opt.value as opt.name for opt in item.prop_value"></select>
+        <label>items/row</label>
+      </div>
+      <!-- for select box with after label(like grid mode setting) -->
+      <div class="grid-mode mt-3 form-row align-items-center" ng-if="item.html_type == 'select_box_label'">
+        <div class="col-sm-4">
+          <select ng-model="item.type_model" ng-options="opt.value as opt.name for opt in item.prop_value" ng-change="gridViewItemChnage(item)"></select>
+        </div>
+        <div class="col"><%item.label_text%></div>        
+      </div>
+      <!-- for browse logo item.html_type=='browse_file' -->
+      <div ng-if="item.html_type=='browse_file'" class="file-wrapper">
+        <input type="file" name="<%item.name%>" id="file_upload" accept="image/*" />
+        <span class="btn btn-skyblue"><%item.show_name%></span>
+      </div>
+      <!-- image slider for product thumnbail item.html_type=='image_slider_with_radio' -->
+      <div data-attr="image_slider_with_radio" ng-if="item.html_type=='image_slider_with_radio'">
+          <div class="wrap-thumb-one" ng-repeat="img in item.prop_value">
+              <label class="radio-wrap-admin radio-cart">
+                  <input type="radio" class="radiomark" name="<%item.name%>" value="<%img.name%>" ng-model="item.type_model" ng-change="thumbDesignChange(item)"/>
+                  <span class="radiomark"> </span>                           
+              </label>
+              <!-- single image -->
+              <div class="thumb-imagebx" data-attr="single_image" ng-if="img.type ==='single_image'">
+                 <img ng-src="<%$root.themeurl%><%img.image%>" alt="<%img.name%>">
+              </div>
+              <!-- mutiple image with slider -->
+              <div class="thumb-imagebx slideshow" id="slideshow" data-attr="single_image" ng-if="img.type === 'image_with_slide'">
+                 <div class="slide-wrapper" data-attr="slider_container">
+                     <div class="slide" ng-repeat="thumb in img.image">
+                      <img ng-src="<%thumb.image%>"/></div>
+                 </div>
+              </div>
+              <!-- single image with thumb -->
+              <div class="thumb-imagebx bg-greyback" data-attr="single_image" ng-if="img.type === 'image_with_thumb'">
+                 <div class="main-img">
+                     <img ng-src="<%img.image%>" alt="<%img.name%>">
+                  </div>
+                  <div class="sldr-thumblist">
+                     <ul>
+                        <li ng-repeat="thumb in img.image_thumb">
+                          <a href="javascript:void(0)" class="sthmb" data-img="<%thumb.image%>"> <img ng-src="<%thumb.image%>" alt="<%thumb.name%>"></a>
+                        </li>
+                     </ul>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- Image section for product deatil with thumbnail there are four thumb (left | right | top | bottom) image_thumb_with_radio -->
+      <div data-attr="image_thumb_with_radio" ng-if="item.html_type=='image_thumb_with_radio'">
+         <!-- left thumb -->
+         <div class="wrap-thumb-one" ng-repeat="thub in item.prop_value">
+            <label class="radio-wrap-admin radio-cart">
+              <input type="radio" class="radiomark" name="<%item.name%>" value="<%thub.name%>" ng-model="item.type_model" ng-change="productImageViewChange(item)" />
+              <span class="radiomark"> </span>                           
+            </label>
+            <div class="slider-imagebx" data-thumb="<%thub.type%>">
+              <img ng-src="<%$root.themeurl%><%thub.image%>" alt="<%thub.name%>">
+            </div>
+         </div>
+      </div>
+      <!-- user menu selection -->
+      <div data-attr="user_menu_with_checkbox" ng-if="item.html_type=='user_menu_with_checkbox'" dir-sortable>
+        <div class="list" ng-repeat="thub in item.prop_value">
+          <div class="d-inline-flex">
+            <i class="fas fa-bars pr-2"></i>          
+            <label class="chk-wrap">
+               <input type="checkbox" name="<%thub.id%>" value="<%thub.id%>" ng-model="thub.status" ng-change="userMenuChange(thub, item)">
+               <span class="chkmark"><i class="cr-icon fa fa-check"></i></span> <%thub.name%>
+            </label>
+          </div>
+        </div>
+      </div>      
+    </div>
+  </div>
+</div>

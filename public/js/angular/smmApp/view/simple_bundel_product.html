@@ -1,0 +1,36 @@
+<div class="detail-box"  ng-repeat="item in productData track by $index" >
+    <div class="row">
+    	<div class="col-sm-8">
+        	<!-- <div class="thumber"><i class="fa fa-bars"></i></div> -->
+            <div class="sal-req-img">
+                <a href="javascript:void(0)">
+                    <img ng-src="<%item.thumbnail_image%>" alt="Loading.."/> 
+                </a>
+            </div>
+            <div class="sal-req-detail">
+                <div class="sal-detail-row"> 
+                	Product Name :<%item.name%>
+                </div>
+                <div class="sal-detail-row">
+                   Price : <%item.currency_symbol + item.initial_price%>
+                </div>
+                <div class="sal-detail-row">
+                   SUK : <%item.sku%>
+                </div>
+                <div class="sal-detail-row">
+                  Created At : <%item.created_at%>
+                </div>
+                <div class="sal-detail-row">
+                  Last Update :<%item.updated_at%>
+                </div>
+            </div>
+        </div>
+        <div class="product-order col-sm-3">
+            <label>Sorting Order</label>
+            <input type="text" name="sorting-order"  ng-model="item.prd_sorting_order"  ng-change="sortingOrderHandler('simple', item)" onkeypress="return isNumberKey(event)"/>
+        </div>
+        <div class="pull-right text-right">            
+            <span class="back-btn icon-remove" ng-click="removeSimpleProd($event,item,$index)"></span>
+        </div>
+    </div>
+</div>

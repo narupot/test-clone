@@ -1,0 +1,70 @@
+{
+  "driver": [
+    {
+      "name": "SMTP",
+      "key": "smtp",
+      "provider": [
+        {
+          "name": "Gmail",
+          "key": "gmail",
+          "host": "smtp.gmail.com",
+          "port": "587",
+          "encription": [
+            {
+              "name": "tls"
+            },
+            {
+              "name": "ssl"
+            },
+            {
+              "name": "starttls"
+            }
+          ],
+          "username": "",
+          "password": "",
+          "sender": ""
+        },
+        {
+          "name": "Sendgrid",
+          "key": "sendgrid",
+          "host": "smtp.sendgrid.net",
+          "port": "465",
+          "encription": [
+            {
+              "name": "ssl"
+            },
+            {
+              "name": "tls"
+            },
+            {
+              "name": "starttls"
+            }
+          ],
+          "username": "",
+          "password": "",
+          "sender": ""
+        },
+        {
+          "name": "Custom",
+          "key": "custom",
+          "host": "",
+          "port": "",
+          "encription": [
+            {
+              "name": "tls"
+            },
+            {
+              "name": "ssl"
+            },
+            {
+              "name": "starttls"
+            }
+          ],
+          "username": "",
+          "password": "",
+          "sender": ""
+        }
+      ]
+    }
+  ]
+}

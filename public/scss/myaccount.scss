@@ -1,0 +1,63 @@
+@import "helpers/variable";
+@import "helpers/funmixhelp";
+
+@import "pages/buyer/order";
+@import "pages/buyer/favorite";
+@import "pages/buyer/wishlist";
+
+@import "pages/seller/smanage";
+@import "pages/seller/customer";
+
+
+
+
+
+
+/*  */ 
+
+.title-border {
+	border-bottom: 1px solid $border; padding-bottom: 5px;
+	margin-bottom: 12px;
+}
+
+
+
+/* Data table pagination overide  */
+
+.dataTables_paginate {
+
+	font-size: $font-18;
+	
+	.paginate_button {
+		&:hover, &.current {
+			color: $primary; text-decoration: underline;
+			background: transparent;
+		}
+	}
+	.previous, .next {
+		font-family: "Font Awesome 5 Pro"; position: relative;
+		text-indent: -9999px; font-weight: 900; min-width: 10px;
+		outline: none;
+
+		&.disabled {			
+			&:after {
+				cursor: not-allowed; opacity: .7;
+			}
+		}
+
+		&:after {
+			text-indent:0px; cursor: pointer;
+			position: absolute; left: 0; top: 0;
+		}
+	}
+	.previous {
+		&:after {
+			content: "\f053";
+		}		
+	}
+	.next {
+		&:after {
+			content: "\f054";	
+		}		
+	}
+}

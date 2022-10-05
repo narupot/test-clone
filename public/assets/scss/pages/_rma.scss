@@ -1,0 +1,130 @@
+
+/*  For Seo Pages */
+
+.rmawrapper {
+	max-width: 1200px;
+}
+
+.rma-form-wrap {
+	.title-prod {
+		/*padding-left: 10px;*/ max-width: 1300px;
+	}
+}
+.order-comment {
+	border: 1px solid $border; margin-bottom: 15px;
+	padding-top: 0px;
+	.cmt-order-row{
+		padding:10px; overflow: hidden; background: $white; border-bottom: 1px solid $border;
+		&:last-child {
+			border-bottom:none;
+		}
+		.name {
+			color: $primary;
+		}
+		.user-pic {
+			float: left; 
+			img {
+				border:1px solid $border; display: block;
+			}
+		}
+		.cmt-comment {
+			padding-left: 70px;
+			h3 {
+				color: $primary; font-size:$font-normal; font-weight: 700;
+			}
+			.datetime {
+				display: block; font-size: $font-xsmall;
+			}
+		}
+		&.right{
+			background: $default; text-align: right; border-bottom-color: $white;
+			.user-pic {
+				float: right;
+			}
+			.cmt-comment {
+				padding-right: 70px; padding-left: 0;
+			}
+		}
+	}
+	.filename {
+		position: relative; color: $black;
+		padding-left: 35px; font-size: $font-normal;
+		&:after {
+			content: "\e142"; position: absolute; left: 5px; 
+			top: 0px; font-family: "Glyphicons Halflings";
+			color: $border; font-size: $font-normal;
+		}
+	}
+}
+#comment_frm{
+	.leave-cmt {
+		max-width: 800px;
+	}	
+}
+.leave-cmt {
+	display: table; width: 100%; padding-bottom: 15px;
+	input {
+		display: table-cell; height: 50px;
+		margin-right: 10px;
+	}
+	input[type="text"] {
+		width: 60%;
+		width:calc(100% - 220px)!important; 
+	}
+	input[type="submit"], .btn {
+		width: 200px;
+	}
+	.file-icon {	
+		float: right; 
+	}
+}
+
+
+
+.status-bg {
+    display: inline-block;
+    padding: 5px 10px;
+    background: $primary;
+    min-width: 180px;
+    span {
+    	color:$white;
+    }
+}
+
+.rma-paybox {
+	line-height: 1.4;
+	.buy-pay-add {
+		h5 {
+			font-weight: bold; padding-bottom: 5px;
+		}
+	}
+}
+
+.spinner {
+	position: relative;
+	display: inline-block;
+	.glyphicon-triangle-top {
+		position: absolute;
+		right: 0;
+		top: 0;
+		cursor: pointer;
+		font-size: $font-normal;
+		border: 1px solid $border; border-bottom: none;
+		padding:7px 5px;
+		height: 25px;color: $black;
+		border-top-right-radius: 10px;
+		background-color: $black;
+	}
+	.glyphicon-triangle-bottom {
+		position: absolute;
+		right: 0px;
+		top: 25px;
+		cursor: pointer;
+		font-size: $font-normal;
+		border: 1px solid $border;
+		padding: 5px;
+		height: 25px;color: $black;
+		border-bottom-right-radius: 10px;
+		background-color: $black;
+	}
+}

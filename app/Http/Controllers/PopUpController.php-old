@@ -1,0 +1,160 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Input;
+use App\Http\Controllers\MarketPlace;
+use Illuminate\Http\Request;
+
+
+use Config;
+use Auth;
+use Lang;
+use DB;
+
+use App\Product;
+use App\Helpers\GeneralFunctions;
+use App\ProductBargain;
+
+class PopUpController extends MarketPlace
+{
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {   
+        // dd('hi');
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    
+    public function getBargainPopUp($id=null){
+        
+        $productdetail = Product::getProductDetailByID($id); 
+        //dd($productdetail);
+        if(empty($productdetail)){
+            abort(404);
+        }
+        
+        $productdetail->unit_name = getUnitName($productdetail->base_unit_id);
+        $quantity = $productdetail->stock?'unlimited':$productdetail->quantity;
+        $productdetail->total_quantity = $quantity;
+        return view('productBargin',['productDetail'=>$productdetail]);
+
+    }
+
+
+    public function getCheckBargainPopUp($id=null){
+        
+        $productdetail = Product::getProductDetailByID($id); 
+        if(empty($productdetail)){
+            return ['status'=>'fail','msg'=>Lang::get('checkout.invalid_product')];
+        }
+        /**checking if seller add own product***/
+        if(Auth::User()->user_type == 'seller'){
+            $owner_shop_id = session('user_shop_id');
+            if($owner_shop_id == $productdetail->shop_id){
+                $msg = Lang::get('checkout.you_cant_add_your_own_product');
+                return ['status'=>'fail','msg'=>$msg];
+            }
+        }
+
+        return ['status'=>'sucess'];
+    
+
+    }
+
+
+    public function saveBargain(Request $request){
+        $user_id = Auth::id();
+        $input = Input::all();
+        $input['user_id'] = $user_id;
+        $validate = $this->validateForm($input);
+        if ($validate->passes()) {
+            $prodata = \App\Product::where('id', $request->product_id)->first();
+            if(!empty($prodata)){
+               
+                \App\Cart::where('user_id',$user_id)->where('product_id',$request->product_id)->delete();
+                
+                $result =  new ProductBargain; 
+                $result->product_id = $request->product_id;
+                $result->shop_id = $prodata->shop_id;
+                $result->qty = $request->qty;
+                $result->user_id = $user_id;
+                $result->unit_id = $request->unit_id;
+                
+                $result->curr_unit_price = $prodata->unit_price;
+                $result->curr_total_price = $request->qty*$prodata->unit_price;
+                
+
+                $result->bar_status = '1';
+                $result->save();
+                $id = $result->id;
+                if(!empty($id)){
+                    $barData = new \App\ProductBargainDetails;
+                    $barData->bargain_id = $id;
+
+                    $barData->base_unit = $prodata->weight_per_unit;
+                    $barData->base_unit_price = floatval($request->base_unit_price);
+
+                    $barData->unit_price = floatval($request->unit_price);
+                    $barData->total_price = $request->qty*floatval($request->unit_price);
+                    $barData->bar_status = '1';
+                    $barData->created_by = 'buyer';
+                    $barData->save();
+                    $msg_text = Lang::get('product.bargain_value_send_to_seller_successfully');
+                    return json_encode(array('status'=>'success', 'message'=>$msg_text, 'url'=>'#'));   
+                }else{
+
+                   $msg_text = Lang::get('product.something_went_wrong');
+                   return json_encode(array('status'=>'validate_error','message'=>$msg_text));
+                }
+
+                  
+            }else{
+
+               $msg_text = Lang::get('product.something_went_wrong');
+               return json_encode(array('status'=>'validate_error','message'=>$msg_text));
+
+            }
+                      
+        }
+        else{
+
+            $errors = json_decode($validate->errors()); 
+            return json_encode(array('status'=>'validate_error','message'=>$errors));
+        }
+    }
+
+    public function validateForm($input, $id=null) {
+        
+        $rules['user_id'] = numberRule();
+        $rules['qty'] = numberRule();
+        $rules['unit_price'] = 'Required';
+        $rules['base_unit_price'] = 'Required';
+        
+        $error_msg['user_id.required'] = Lang::get('product.please_login');
+        $error_msg['qty.required'] = Lang::get('product.please_enter_valid_qty');
+        $error_msg['unit_price.required'] = Lang::get('product.please_enter_price');
+        $error_msg['base_unit_price.required'] = Lang::get('product.please_enter_base_unit_price');
+
+        $validate = Validator::make($input, $rules, $error_msg);
+        return $validate;         
+    }
+
+
+
+
+
+
+
+
+}

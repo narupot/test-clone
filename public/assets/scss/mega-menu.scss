@@ -1,0 +1,328 @@
+/*for admin login page 
+
+	1) Import css
+	2) Header css
+	3) Footer css
+=========================*/
+
+
+
+@import "../css/fonts.css";
+@import "component/variable";
+@import "component/mixin";
+
+.mega-wrap {
+	max-width: 1500px;
+}
+
+.menu-info-inner {
+	border-bottom: 1px dashed $border; overflow: hidden;
+	margin:0 15px 15px 15px;
+	.col-sm-3{
+		padding-left: 0;
+	}
+}
+.title-wrap {
+	margin-bottom: 8px; line-height: 30px;
+	.help {
+		color: $primary; font-size: $font-normal; 
+		&:hover {
+			color:$black;
+		}
+	}
+	h2 {
+		margin:0; font-size: $small_title;		
+	}
+	button {
+		i {
+			color: $white;
+		}
+	}
+}
+.preview-btn {
+	border:3px solid $border; margin-left: 5px; height: 31px; position: relative;
+	i {
+		color: $white; font-size: $font-small;
+	}
+	&:after {
+		content: ""; position: absolute; right: 0px; top: 0px;
+		width: 0;
+		height: 0;
+		border: 0 solid transparent;
+		border-right-width: 0px;
+		border-left-width: 62px;
+		border-top: 3px solid $white;
+	}
+}
+.mega-item-wrap {
+	background: $white; padding:5px; margin-bottom: 8px;
+	.meag-item:not(:first-child) {
+		margin-left: 30px;
+	}
+	.list-item {
+		margin-bottom: 6px;
+	}
+}
+.meag-item {
+	margin-bottom: 5px;
+}
+.list-item {
+	background: $white; border:1px solid $border; height: 32px; line-height: 32px;
+	&:hover {
+		background:$primary; color: $white;
+	}
+	& + .list-item {
+		margin-top: 5px;
+	}
+	.icon {
+		width: 30px; margin-right: 6px; text-align: center; padding:2px;
+		background: $black; color: $white; height: 100%; top: 0;
+		font-size: $font-normal; line-height: 26px;
+	}
+	.fa-bars.pull-right {
+		font-size: $font-normal; margin:7px 8px 0 0; cursor: move;
+	}	
+	&.content-link {
+		.icon {
+			/*background: #b2949c;*/
+		}
+	}
+	&.item-link {
+		.icon {
+		/*	background: #eac2a4;*/
+		}
+	}
+	&.tab-cont-link {
+		.icon {
+		/*	background: #809aaf;*/
+		}
+	}
+	&.tab-link {
+		.icon {
+		/*	background: #b3ceb9;*/
+		}
+	}
+	&.tree-link {
+		.icon {
+			/*background: #d6d2b0;*/
+		}
+	}
+}
+.menu-tab-container {
+	padding:5px 6px;
+	.list-item {
+		& + .list-item {
+			margin-left: 30px;
+		}
+	}
+}
+.drop-menu-box {
+	background: $white; padding:15px;
+	cursor: auto;
+}
+.blank-icon-box {
+	border:1px solid $border; width: 250px; padding:15px; margin-bottom: 10px;
+}
+.blank-icon {
+	text-align: center; margin-bottom: 5px;
+	.glyphicon-share-alt {
+		font-size: 80px;
+	}
+}
+.menu-edit-box {
+	border:1px solid $border;
+}
+.menu-edit-inner {
+	padding:15px;
+	.language-tab {
+		border-color: $border transparent transparent transparent;
+		/*padding: 10px 0 0 0;*/
+		.form-row:last-child {
+			margin-bottom:0;
+		}
+	}
+}
+.menu-edit-icon-wrap {
+	border-top: 1px dashed $border; padding: 15px 15px 5px 15px; margin:15px -15px 0 -15px;
+}
+.irem-wrap-icon {
+	color: $black; padding:0 8px; line-height: 30px;
+	min-width: 190px; text-align: right;
+	i {
+		margin:6px 0 0 8px; display: inline-block;
+	}
+}
+.lib-icon-wrap {
+	padding-top: 5px;
+	.list-icon {
+		display: inline-block; line-height: 28px; vertical-align: top;
+		font-size: $font-normal;
+		i {
+			display: inline-block; line-height: 30px; margin-left: 8px;
+		}
+	}
+}
+
+/*  Tree Menu */
+
+#treeMenuContainer {
+	max-height: 300px; max-width: 400px; width: 100%; margin-top: 3px;
+	border:1px solid $border; overflow-y: auto; padding:5px 15px;
+}
+.megatree-menu {
+	ul.tree {
+		margin-bottom: 0;
+	}
+}
+.layout-wrap{
+	border-top:1px solid $border; padding-top: 15px;
+}
+.col-lang-tab {
+	> li {
+		> a {
+			padding:6px; background: $white; border:1px solid $border;
+			border-bottom: none; margin-right: 5px;
+		}
+		&.active  {
+			> a {
+				background: $default !important; border-color: $border;
+			}
+		}
+	}
+	li {
+		a {
+			.img-active {
+				display: none;
+			}
+		}
+		&.active {
+			.img {
+				display: none;
+			}
+			.img-active {
+				display: block;
+			}
+		}
+	}
+}
+.col-lang-content {
+	padding:15px !important; margin-bottom: 15px; border:none;
+	.tab-action {
+		span {
+			background: $white; width: 20px; height: 20px; text-align: center; line-height: 18px;
+			border:1px solid $border; margin-right: 5px; cursor: pointer;
+			color: $black;
+			&:hover {
+				border-color:$primary; background: $primary; color: $white;
+			}
+		}
+	}
+}
+.example-txt {
+	color: $primary; margin-left: 15px;
+}
+.img-lig-list {
+	position: relative; display: inline-block; width: 185px;
+	margin:15px 14px 0 0;
+	.close {
+		position: absolute; right: 10px; top: 10px; color: $white;
+		&:hover {
+			color:$black;
+		}
+	}
+	img {
+		max-width: 100%;
+	}
+	.img-name {
+		color: $primary; margin-top: 8px; margin-bottom: 10px;
+	}
+}
+.position {
+	display: inline-block; max-width: 285px;
+}
+.pos-list {
+	display: inline-block; border:1px solid $border; padding:5px; width: 82px; margin:5px 6px 5px 0;
+	.pos-box {
+		width: 14px; height: 14px; line-height: 1; display: inline-block; border:1px solid $border;
+		margin:3px;
+		&.fill {
+			background: $border;
+		}
+	}
+	&.active {
+		
+	}
+	&.big-pos {
+		.pos-box  {
+			height: 50px;
+		}
+	}
+}
+.pos-measure {
+	display: inline-block; margin-right: 15px; width: 80px;
+	span {
+		margin-bottom: 5px;
+	}
+}
+.layout-example {
+	display: inline-block; margin:15px 14px 0 0;
+	.layout-exImg {
+		border:1px solid $border; padding:10px; margin-top: 5px;
+		img {
+			box-shadow: 0 0 1px $default;
+		}
+		&.selected {
+			background: $default;
+		}
+	}
+}
+
+/*  Modal  */
+
+.iconModal {
+	.modal-dialog {
+		width: 1080px; 
+	}
+	h3 {
+		border-bottom: 1px solid $border; margin-bottom: 10px; margin-top: 3px; padding-bottom: 3px;
+		&.modal-title {
+			margin-bottom: 0;border-bottom: none; 
+		}
+	}
+}
+
+.glyph-icon-item {
+	margin-bottom: 6px; display: inline-block; width: 25%; vertical-align: top;
+}
+.glyph-icon-item  a {
+	color: $black;
+
+	i {
+		float: left; font-size: $font-xsmall; margin-top: 4px;
+	}
+
+	&:hover {
+		color:$primary;
+	}
+}
+
+
+/*   new   */
+
+button, .btn {
+	line-height: 1.45;
+}
+
+.red {
+	color: $error;
+}
+
+.form-group {
+	label {
+		display: block; font-size: $font-normal;
+	}
+}
+
+
+
+

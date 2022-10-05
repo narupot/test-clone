@@ -1,0 +1,177 @@
+.server-info {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid $border; 
+  &:last-child {
+    border-bottom: none;
+  } 
+  h2 {
+    margin-bottom: 15px;
+    font-weight: 600;
+  }
+}
+.bs-tooltip-bottom {
+  top: 30px !important;
+  left: 15 !important;
+}
+.btn-change {
+  min-width: 150px;
+  color: $white !important;
+}
+
+.rangeslider-wrap { 
+  margin: 10px 0;
+  h5 {
+    font-size: $font-normal;
+    color: $primary;
+    margin-top: 5px;
+    font-weight: 400;
+  }
+  .date-range {
+    margin-top: 5px;
+    label {
+      font-size: $font-small;
+    }
+  }  
+}
+.remain-time {
+  color: $primary;
+}
+
+.range-wrap {
+  margin-top: 30px; 
+  height: 30px;
+  background: $secondary;
+  @include border-radius (20px);
+  position: relative;
+
+}
+.progress-range {
+  @include border-radius (20px);
+  height: 30px;
+  position: relative;
+  padding-left:30px;  
+}
+
+.circle-range {   
+    &:after{
+      position:absolute;
+      width: 30px;
+      height: 30px;
+      @include border-radius (50%);
+      content: "";
+      right: 0;
+      top: 0;
+      background: $white;
+      z-index: 9;
+      cursor: pointer;
+    } 
+}
+/*custom tooltip start */
+.wraptooltip {  
+  right: 0; position: absolute; min-width: 30px; z-index: 1;
+  .tooltip-inner {
+    background: #fff;  color: #000; text-align: left; border-radius: 0px; -webkit-border-radius: 0px; 
+    width: 135px;  text-align: left;
+    -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.25);
+-moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.25);
+box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.25);
+  }
+  .tool-row {
+    padding: 3px 0; overflow: hidden;
+  }   
+
+  .tooltip.bottom {
+    margin-top: 30px;
+    margin-left: 50% !important;
+  }
+
+  .pd {
+    font-weight: bold
+  }
+  .tooltip-arrow {
+    display: none;
+  }
+  .txttool {    
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: $font-small;
+    min-width: 125px;
+    text-align: center;
+
+  }
+  .latetxt {
+    color: $error;
+  }
+}
+
+.usage-row {
+  border-top:1px solid $border; padding-top: 10px;
+  .form-row {
+    align-items: flex-end;
+  }
+  .progress {
+    background-color: $white;
+    transition: width .6s ease;
+    border: 1px solid $border;
+    margin-bottom: 1px;
+    height: 1.5rem;
+    .progress-bar {
+      background: $primary !important;
+      &.space-danger {
+        background: $error !important;
+      }
+    }
+    .used-percent {
+      display: -webkit-box;
+      display: -moz-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center;
+      align-items: center;
+      margin: 0 auto;
+    }
+    &.space-unlimited {
+      background: $success !important;
+    }
+  }
+  .progress-lable {
+    span {
+      float: right;
+    }
+  }
+}
+
+.mediausage , .productusage, .bannerusage {
+  @include border-radius(20px); width: 100%;
+  height: 30px; font-size: $font-small; line-height: 30px; 
+  padding-left: 15px; color: $white;
+  span {
+    float: right; background: $secondary; color: $black;
+    padding-left: 15px; padding-right: 15px;
+    @include border-radius(0px 19px 19px 0);
+  }
+}
+
+.new-media {
+  h2 {
+    margin-top: 30px;
+    margin-bottom: 15px;
+  }
+}
+
+.mediausage {
+  background: $primary;
+}
+
+.productusage {
+  background: $success;
+}
+.bannerusage {
+  background: $info;
+}

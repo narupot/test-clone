@@ -1,0 +1,286 @@
+
+
+.page-title {
+	font-size: $font-24; margin-bottom: 10px; 
+	font-family: $paridi;
+	font-weight: normal;
+}
+
+.order-track-group {
+	display: flex; max-width: 675px;
+	button, a {
+		margin-left: 15px; min-width: 90px; 
+	}
+}
+
+.order-step-wrap {
+	text-align: center; padding-top: 65px;
+	li {
+		display: inline-block; width: 18%; 
+		position: relative; vertical-align: top;
+
+		&:before, &:after {
+			position:absolute; left: 0; top: 30px; content: "";
+			background: $grey-lighter; width: 50%; height: 10px;
+			z-index: -1;			
+		}
+		&:after {
+			left: 55%;
+		}
+
+		&:first-child {
+			&:before {
+				display:none;
+			}
+		}
+		&:last-child {
+			&:after {
+				display:none;
+			}
+		}
+
+		&.active {			
+			.step-icon {
+				background: $skyblue;
+			}
+			&:before {
+				background: $skyblue;
+			}
+		}
+		&.completed {			
+			.step-icon {
+				background: $skyblue;
+			}
+			&:before, &:after {
+				background: $skyblue;
+			}
+		}
+		.step-name {
+			display: block; color: $skyblue; padding:0 15px; font-size: $font-18;
+		}
+		
+	}
+	.step-icon {
+		background: $grey-lighter; color: $white; padding: 15px;
+		border-radius:50%; margin-bottom: 5px;
+		width: 70px; height: 70px; 
+		display: inline-block; text-align: center;
+		i {
+			font-size: $font-24; line-height: 42px;
+		}
+	}
+
+	.current-status {
+		position: absolute; left: 0; top: -60px;
+		width: 100%; text-align: center;
+		color: $red;
+
+		.d-block {
+			text-align: center; white-space: nowrap;
+			overflow: hidden; text-overflow: ellipsis;
+		}
+		i {
+			font-size: $font-30; margin-top: 5px;
+		}
+	}
+	
+}
+
+
+.track-order-num-wrap {
+	margin-bottom: 15px;
+}
+
+.track-ord-num {
+	@include flex();
+	justify-content: space-between; 
+	h2 {
+		margin-top: 8px; line-height: 1.5;
+	}
+}
+.track-status {
+	margin-bottom: 5px; display: flex;
+	align-items: center;
+	.ship-track-time {
+		display: inline-block; vertical-align: middle;
+		padding: 0px 15px; color: $grey-dark;
+	}
+}
+
+.track-buyer-info {
+	border-top: 1px solid $border; padding-top: 15px;
+}
+.title-track-info {
+	background: $grey-lighter; padding:11px 15px;
+	border-radius:10px; margin-bottom: 15px;
+	.skyblue {
+		text-decoration: underline; margin-bottom: 0;
+	}
+	.track-ship-name {
+		margin-top: 8px;
+	}
+}
+.track-info-detail {
+	padding:0 15px; padding-bottom: 10px;
+}
+.tInfo-row {
+	margin-bottom: 6px;
+	.label {
+		color: $grey-dark;
+	}
+} 
+
+
+
+.track-table-heading {
+	@include flex();
+	justify-content: space-between;
+	margin-bottom: 15px;
+	h2 {
+		margin-top: 12px;
+	}
+}
+
+
+.track-order-table {
+	.table {
+		margin-bottom: 10px;
+		.table-header {
+			background: $grey-dark; color: $white;
+
+			li {
+				&:first-child {
+					border-top-left-radius:10px;
+				}
+				&:last-child {
+					border-top-right-radius:10px;
+				}
+			}
+		}
+		li {
+			text-align: center; border:none;
+		}
+		.product {
+			text-align: left;
+			.prod-img {
+				margin-right: 10px;
+			}
+		}
+		.track-shop-name {
+			color: $skyblue; text-decoration: underline; margin-right: 5px;
+		}
+		.shopname-row {				
+			li {
+				text-align: left; background: $grey-lighter; border:none;
+				&:after {
+					display:none;
+				}
+
+			}
+		}
+		.noborder {
+			li {
+				border-bottom: none;
+			}
+		}
+	}
+
+	.table-content {
+		li {
+			border-bottom: 1px solid $border; position: relative;
+
+			&:after {
+				position: absolute; right: 0; top: 50%;
+			    width: 1px; background: $border;
+			    height: 80%; content: "";
+			    transform: translateY(-50%);
+			}
+
+			&:last-child {
+				&:after {
+					display:none;
+				}
+			}
+		}
+
+	}
+	.prod-img {
+		border-radius:5px;
+	}
+
+}
+
+
+
+.table-footer {
+	text-align: right;
+
+	.row {
+		.col-6 {
+			padding:5px 9px;
+			&:first-child {
+				text-align:left;
+			}
+		}
+	}
+	.bg {
+		font-size: $font-20; margin-top: 10px;
+		.col-6 {
+			background: $grey-dark; border-radius:10px 0 0 10px;
+			color: $white; padding:9px;
+
+			& + .col-6 {
+				border-radius:0 10px 10px 0;
+			}
+		}
+	}
+}
+
+
+
+
+@media all and(max-width: 1100px) {
+
+	.order-step-wrap {
+		overflow: hidden;
+		li {
+			float: left; width: 25%;
+		}
+	}
+}
+
+
+
+
+@media all and(max-width: 767px) {
+	
+
+}
+
+
+
+@media all and(max-width: 556px) { 
+
+	.order-step-wrap {
+
+		padding-top: 15px;
+		
+		li {
+			width: 100%; margin-bottom: 15px;
+
+			&:before, &:after {
+				display:none;
+			}
+
+			&.active {
+				padding-top: 60px; 
+
+				.current-status {
+					top: 5px;
+				}
+			}
+		}
+	}
+
+
+}

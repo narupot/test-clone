@@ -1,0 +1,238 @@
+/*  Variable */  
+$kanit 			:'Kanit', sans-serif;
+
+$default		:#d1d2d2;
+$primary		:#007bff;
+$secondary		:#6c757d;
+$success		:#28a745;
+$info			:#17a2b8;
+$warning		:#ffc107;
+$white			:#fff;
+$black			:#000;
+$error			:#e20;
+
+$overlay-default	: #6c757d;
+$overlay-light 		: #495057;
+$overlay-dark  		: #212529;
+
+$border         :#bcbcbc;
+
+/*  Font size  */
+$main_title 		: 2.5rem;/*40px;*/
+$sub_title			: 2.25rem;/*36px;*/
+$nested_sub_title 	: 2rem;/*32px;*/
+$large_title		: 1.875rem;/*30px;*/
+$defailt_title		: 1.75rem;/*28px;*/
+$small_title		: 1.5rem;/*24px;*/
+$font-normal 		: 1rem; /*16px;*/
+$font-small 		: 0.875rem; /*14px;*/
+$font-xsmall 		: 0.75rem; /*12px;*/
+$font-xxsmall 		: 0.625rem; /*10px;*/
+
+/*Border radius*/
+$enable-rounded :true;
+
+
+/* Global Section Variables */
+$border-width: 				  1px;
+$input-btn-border-width:      $border-width;
+$font-weight-light:           300;
+$font-weight-normal:          400;
+$font-weight-bold:            700;
+
+$font-size-base:              1rem;
+$font-weight-base:            $font-weight-normal;
+$line-height-base:            1.5;
+$font-size-lg:                ($font-size-base * 1.25);
+$font-size-sm:                ($font-size-base * .875);
+$line-height-lg:              1.5;
+$line-height-sm:              1.5;
+$border-radius-100:           .25rem;
+$border-radius-400:           .50rem;
+$border-radius-500:           1rem;
+
+$border-radius:               .25rem;
+$border-radius-lg:            .3rem;
+$border-radius-sm:            .2rem;
+
+$input-btn-padding-y:         .375rem;
+$input-btn-padding-x:         .75rem;
+$input-btn-font-size:         $font-size-base;
+$input-btn-line-height:       $line-height-base;
+
+$input-btn-focus-width:       .2rem;
+$input-btn-focus-color:       rgba($primary, .25);
+$input-btn-focus-box-shadow:  0 0 0 $input-btn-focus-width $input-btn-focus-color;
+
+$input-btn-padding-y-sm:      .25rem;
+$input-btn-padding-x-sm:      .5rem;
+$input-btn-font-size-sm:      $font-size-sm;
+$input-btn-line-height-sm:    $line-height-sm;
+
+$input-btn-padding-y-lg:      .5rem;
+$input-btn-padding-x-lg:      1rem;
+$input-btn-font-size-lg:      $font-size-lg;
+$input-btn-line-height-lg:    $line-height-lg;
+
+$btn-padding-y:               $input-btn-padding-y;
+$btn-padding-x:               $input-btn-padding-x;
+$btn-font-size:               $input-btn-font-size;
+$btn-line-height:             $input-btn-line-height;
+
+$btn-padding-y-sm:            $input-btn-padding-y-sm;
+$btn-padding-x-sm:            $input-btn-padding-x-sm;
+$btn-font-size-sm:            $input-btn-font-size-sm;
+$btn-line-height-sm:          $input-btn-line-height-sm;
+
+$btn-padding-y-lg:            $input-btn-padding-y-lg;
+$btn-padding-x-lg:            $input-btn-padding-x-lg;
+$btn-font-size-lg:            $input-btn-font-size-lg;
+$btn-line-height-lg:          $input-btn-line-height-lg;
+
+$btn-border-width:            $input-btn-border-width;
+$btn-border-radius:           $border-radius;
+$btn-border-radius-lg:        $border-radius-lg;
+$btn-border-radius-sm:        $border-radius-sm;
+
+$btn-focus-box-shadow:        $input-btn-focus-box-shadow;
+$btn-disabled-opacity:        .65;
+$enable-shadows:			  false;
+
+$btn-hover-color: 		 	  $white;
+
+$btn-primary-color:           $white;
+$btn-primary-bg:              $primary;
+$btn-primary-border:          $primary;
+
+$btn-secondary-color:         $secondary;
+$btn-secondary-bg:            $white;
+$btn-secondary-border:        #secondary;
+
+$btn-default-bg:              $default;
+$btn-default-border:          $default;
+$btn-secondary-color:         $black;
+
+$btn-info-color:              #info;
+$btn-info-bg:                 $info;
+$btn-info-border:             $info;
+
+$btn-success-color:           $white;
+$btn-success-bg:              $success;
+$btn-success-border:          $success;
+
+$btn-warning-color:           $white;
+$btn-warning-bg:              $warning;
+$btn-warning-border:          $warning;
+
+$btn-danger-color:            $white;
+$btn-danger-bg:               $error;
+$btn-danger-border:           $error;
+
+$btn-outline:              	 $black;
+$btn-outline-bg:             $white;
+$btn-outline-border:         $black;
+
+
+$input-padding-y:            $input-btn-padding-y;
+$input-padding-x:            $input-btn-padding-x;
+$input-font-size:            $input-btn-font-size;
+$input-font-weight:          $font-weight-base;
+$input-line-height:          $input-btn-line-height;
+
+$input-padding-y-sm:         $input-btn-padding-y-sm;
+$input-padding-x-sm:         $input-btn-padding-x-sm;
+$input-font-size-sm:         $input-btn-font-size-sm;
+$input-line-height-sm:       $input-btn-line-height-sm;
+
+$input-padding-y-lg:         $input-btn-padding-y-lg;
+$input-padding-x-lg:         $input-btn-padding-x-lg;
+$input-font-size-lg:         $input-btn-font-size-lg;
+$input-line-height-lg:       $input-btn-line-height-lg;
+$input-border-radius:        $border-radius;
+$input-border-radius-lg:     $border-radius-lg;
+$input-border-radius-sm:     $border-radius-sm;
+
+$input-border-width:         $input-btn-border-width;
+$input-height-border:        $input-border-width * 2;
+
+$input-bg-transition: 		all 0.4s ease-in-out 0s;
+
+$input-transition:           border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+$input-box-shadow:           inset 0 1px 1px rgba($black, .075);
+
+$input-height-inner:         ($input-btn-font-size * $input-btn-line-height) + ($input-btn-padding-y * 2);
+$input-height:               calc(#{$input-height-inner} + #{$input-height-border});
+
+$input-height-inner-sm:      ($input-btn-font-size-sm * $input-btn-line-height-sm) + ($input-btn-padding-y-sm * 2);
+$input-height-sm:            calc(#{$input-height-inner-sm} + #{$input-height-border});
+
+$input-height-inner-lg:      ($input-btn-font-size-lg * $input-btn-line-height-lg) + ($input-btn-padding-y-lg * 2);
+$input-height-lg:            calc(#{$input-height-inner-lg} + #{$input-height-border});
+
+$input-border-width:         $input-btn-border-width;
+$input-height-border:        $input-border-width * 2;
+$input-height-inner-sm:      ($input-btn-font-size-sm * $input-btn-line-height-sm) + ($input-btn-padding-y-sm * 2);
+$input-height-sm:            calc(#{$input-height-inner-sm} + #{$input-height-border});
+$input-height-inner-lg:      ($input-btn-font-size-lg * $input-btn-line-height-lg) + ($input-btn-padding-y-lg * 2);
+$input-height-lg:            calc(#{$input-height-inner-lg} + #{$input-height-border});
+$error-msg-mt:				.25rem;
+$error-msg-font-size: 		($font-size-base - 0.275);
+$inputgroup-icon-bg: 		$white;
+$inputgroup-icon-width: 	40px;
+$inputgroup-icon-width-lg: 	$inputgroup-icon-width + 5;
+$inputgroup-border-color:	$border;
+
+$onoffheight: 30 / 16 * 1em;
+$onoffwidth: 72 / 16 * 1em;
+$transition-default: 0.25s ease-out 0.10s;
+
+
+$pagination-width-sm:				1.5rem;
+$pagination-width:					2rem;
+$pagination-width-lg:				2.5rem;
+
+$pagination-padding-y:              .5rem !default;
+$pagination-padding-x:              .75rem !default;
+$pagination-padding-y-sm:           .25rem !default;
+$pagination-padding-x-sm:           .5rem !default;
+$pagination-padding-y-lg:           .75rem !default;
+$pagination-padding-x-lg:           1.5rem !default;
+$pagination-line-height:            1.25 !default;
+
+
+$link-color: 						$primary;
+$link-hover-color:                  darken($link-color, 15%) !default;
+$component-active-color:      		$white !default;
+$component-active-bg:         		$primary !default;
+
+$pagination-color:                  $link-color !default;
+$pagination-bg:                     $white !default;
+$pagination-border-width:           $border-width !default;
+
+
+$pagination-focus-box-shadow:       $input-btn-focus-box-shadow !default;
+$pagination-focus-outline:          0 !default;
+
+$pagination-hover-color:            $link-hover-color !default;
+
+
+$pagination-active-color:           $component-active-color !default;
+$pagination-active-bg:              $component-active-bg !default;
+$pagination-active-border-color:    $pagination-active-bg !default;
+
+
+$pagination-disabled-bg:            $white !default;
+
+
+$spiner-width:		2.5rem;
+$spiner-height:		2rem;
+$spiner-width-sm:	2.5rem;
+$spiner-height-sm:	1.5rem;
+$spiner-width-lg:	4rem ;
+$spiner-height-lg:	3rem;
+$spiner-font-size-lg:3rem;
+$spiner-font-size-sm:3rem;
+
+$modal-transition	:.4s;
+$modal-transform	:-0%;
+$modal-opacity		:0.4s;
