@@ -264,10 +264,12 @@
 
             
             jQuery("#searchForm" ).submit(function( event ) {
-                if($('#searchtype').val()=='product')
+                /*if($('#searchtype').val()=='product')
                   var searchUrl = "{{action('ProductsController@search')}}?search=";  
                 else
-                  var searchUrl = "{{url('/')}}/shop?search=";  
+                  var searchUrl = "{{url('/')}}/shop?search=";  */
+
+                var searchUrl = "{{action('ProductsController@search')}}?search=";
 
                 $('#searchForm').attr('action', searchUrl);
             }); 
