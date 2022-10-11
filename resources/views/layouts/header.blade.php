@@ -196,7 +196,7 @@
           
           $("form#searchForm #searchProduct").autocomplete({
             source: availableTags+'?searchtype='+$('.searchtype').val(),
-            autoFocus: true,
+            autoFocus: false,
             delay: 100,
             select: function( event, ui ) {
               var searchtext = $('#searchProduct').val();
