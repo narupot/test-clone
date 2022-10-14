@@ -9,7 +9,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
 use App\Http\Controllers\AESEncription;
-
+use Illuminate\Support\Str;
 use App\Language;
 use App\MegaMenu;
 
@@ -456,7 +456,7 @@ class MenuController extends MarketPlace {
     public function update($id, Request $request){
         
         $user_id = Auth::guard('admin_user')->user()->id;
-        $menu_slug = str_slug($request->menu_name);
+        $menu_slug = Str::slug($request->menu_name);
         $menu_name = $request->menu_name;
         $status = $request->status;
         $rules = ['name' => ['required',Rule::unique('megamenu')->ignore($id, 'id')]];      
