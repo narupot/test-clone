@@ -342,7 +342,11 @@ class OrderController extends MarketPlace {
                     $shop_order[$value->id] = ['shop_formatted_id'=>$value->shop_formatted_id];
                     $post_arr = ['user_id'=>$value->shop_user_id, 'title'=>$title,'body'=>$body];
                     $url = Config::get('constants.mobile_notification_url');//url().'/api/buyer/v1/sendMobileNotification';
-                    $responce = $this->handleCurlRequest($url,$post_arr);
+                    if($value->send_noti == '2'){
+                       $responce = $this->handleCurlRequest($url,$post_arr);
+                       $value->send_noti = '1';
+                       $value->save();
+                    }
 
                     //dd($responce, $url);
                 }
@@ -363,9 +367,6 @@ class OrderController extends MarketPlace {
 
         $referer_url = $request->headers->get('referer');
         $breadcrumb = $this->getBreadcrumb($referer_url);
-        /*for notification*/
-            EmailHelpers::sendOrderNotificationEmail($formatted_id);
-        /*for notification*/
         return view(loadFrontTheme('checkout/thanks'),['main_order' => $main_order,'order_detail'=>$order_detail,'page'=>'thanks','breadcrumb'=>$breadcrumb,'shop_order'=>$shop_order,'total_logistic_cost'=>$total_logistic_cost]);
     }
 

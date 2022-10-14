@@ -17,6 +17,7 @@ use Auth;
 use Session;
 use Config;
 use Illuminate\Support\Facades\Redirect;
+use App\Helpers\EmailHelpers;
 
 
 class PaymentGatewayController extends MarketPlace {
@@ -75,6 +76,10 @@ class PaymentGatewayController extends MarketPlace {
                 $update_pay_resp = \App\OrderPayment::insert($arr);
 
                 $updateOrder = Order::updateOrderAfterPayment($orderInfo);
+
+                /*for notification*/
+                EmailHelpers::sendOrderNotificationEmail($orderInfo->formatted_id);
+                /*for notification*/
 
             }
         }
@@ -139,6 +144,10 @@ class PaymentGatewayController extends MarketPlace {
                 $update_pay_resp = \App\OrderPayment::insert($arr);
 
                 $updateOrder = Order::updateOrderAfterPayment($orderInfo);
+
+                /*for notification*/
+                EmailHelpers::sendOrderNotificationEmail($orderInfo->formatted_id);
+                /*for notification*/
 
             }
         }
