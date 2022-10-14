@@ -2651,13 +2651,13 @@ left:0;*/ }
         justify-content: space-between;
         line-height: 30px; }
     .cartpage-tbl .table-content .unit-tbl:before {
-      content: "α╕úα╕▓α╕äα╕▓α╕òα╣êα╕¡α╕½α╕Öα╣êα╕ºα╕ó"; }
+      content: "ราคาต่อหน่วย"; }
     .cartpage-tbl .table-content .num-tbl:before {
-      content: "α╕êα╕│α╕Öα╕ºα╕Ö"; }
+      content: "จำนวน"; }
     .cartpage-tbl .table-content .total-tbl:before {
-      content: "α╕úα╕▓α╕äα╕▓α╕úα╕ºα╕í"; }
+      content: "ราคารวม"; }
     .cartpage-tbl .table-content .paymethod-tbl:before {
-      content: "α╕èα╣êα╕¡α╕çα╕ùα╕▓α╕çα╕üα╕▓α╕úα╕èα╕│α╕úα╕░α╣Çα╕çα╕┤α╕Ö"; }
+      content: "ช่องทางการชำระเงิน"; }
   .cartpage-tbl .checkout-table-footer > .col-sm-5 {
     max-width: 100%; }
 
@@ -2690,5 +2690,3 @@ left:0;*/ }
   text-overflow: ellipsis;
   overflow: hidden;
   margin-bottom: 0; }
-
-/*# sourceMappingURL=style-front.css.map */
