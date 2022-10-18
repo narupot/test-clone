@@ -368,7 +368,7 @@
         Route::get('placeholder/image', 'Admin\Config\SystemConfigController@placeholderImage');
         Route::post('config/updatePickupCenter', 'Admin\Config\SystemConfigController@updatePickupCenter');
         //Route::get('config/pickup-center', 'Admin\Config\SystemConfigController@pickupCenter');
-        Route::resource('config', 'Admin\Config\SystemConfigController'); 
+        Route::resource('config', 'Admin\Config\SystemConfigController', array("as" => "configer")); 
 
         Route::group(['prefix' => 'shipping','middleware' => 'escape-back-history'], function(){
             Route::get('pickup-at-center','Admin\Config\SystemConfigController@pickupCenter');
