@@ -2,7 +2,7 @@
     <div class="container">
         <div class="header-inner">
             <div class="logo">
-                <a href="{{ action('HomeController@index') }}" title="Smmarket"><img src="{{ getSiteLogo('SITE_LOGO_HEADER') }}" width="85" alt=""></a>
+                <a href="{{ action('HomeController@index') }}" title="Smmarket"><img src="{{ getSiteLogo('SITE_LOGO_HEADER') }}" width="" alt=""></a>
             </div>
             <div class="header-content">
                 <div class="login-link">
