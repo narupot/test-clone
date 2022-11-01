@@ -37,3 +37,4 @@ resources/lang/*
 public/theme/TH-50-theme-type-1/json/*
 temp/*
 public/js/bargain-chat/*
+public/.htaccess
