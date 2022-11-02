@@ -6,7 +6,7 @@
 
 input[type="text"], input[type="email"], input[type="password"],
 input[type="tel"], input[type="number"], input[type="search"],
-textarea , select {
+textarea , select, .date-select {
 	outline: none; padding:5px 10px;
 	height: 50px; @extend .transition;
 	border:1px solid $border;
@@ -133,7 +133,7 @@ textarea {
 		background:$red-light; color: $white; border-color: $red-light;
 	}
 	&:focus {
-		background:$red-light; color: $white; border-color: $red-light;
+		background:$red-light1; color: $white; border-color: $red-light1;
 	}
 }
 
@@ -224,10 +224,10 @@ textarea {
 		line-height: 22px;
 
 		&:before {
-			-webkit-transition: all 0.30s;
+			/*-webkit-transition: all 0.30s;
 		    -moz-transition: all 0.30s;
 		    -o-transition: all 0.30s;
-		    transition: all 0.30s; 
+		    transition: all 0.30s; */
 		    cursor: pointer;
 		}
 	}
@@ -246,7 +246,7 @@ textarea {
 	input[type="checkbox"]:checked + .chk-mark:before {
 		content: "\f00c"; font-family: "Font Awesome 5 Pro";
 		color: $skyblue; border-color: $skyblue;
-		line-height: 18px;
+		line-height: 20px;
 
 	}
 }
@@ -459,12 +459,15 @@ option {
 	    padding-left: 10px;
 	}
 	.inputgroup-icon {
-		flex-grow: 1;
+		/*flex-grow: 1;*/
 	    display: flex;
 	    position: relative;
 	    border: 1px solid $border;
 	    margin-right: 15px;
 	    border-radius: 5px;
+	    .text-elements {
+	    	border: none; padding-left: 10px;
+	    }
 	}
 }
 
