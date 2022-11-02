@@ -25,7 +25,13 @@
 	
 }
 
-
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {	
+	display: none !important; 
+}	
+.grey-light {	
+  color: #d0cece; }	
+.grey-light2 {	
+  color: $blue; }
 
 /* Modal override */
 
@@ -38,11 +44,14 @@
 
 @media all and(min-width: 576px) {
 	.modal-sm {
-		max-width: 425px;
+		max-width: 475px;
 	}
 }
 .modal-dialog {
 	max-width: 630px;
+	&.modal-sm {
+		max-width: 450px;
+	}
 }
 .modal-content {
 	button {
@@ -93,7 +102,7 @@
 /* Bs4 Override  */
 
 .container {
-	max-width: 1170px;
+	max-width: 1200px;
 }
 
 
@@ -180,17 +189,17 @@
 /*filter color*/
 
 .la, .sa, .xsa, .xla, .ma, .xlb, .lb, .mb, .sb, .xsb, .xlc, .lc, .mc, .sc, .xsc, .xlr, .lr, .mr, .sr, .xsr {
-	@include border-radius(50%);
+	/*@include border-radius(50%);*/
 	/*min-width: 36px; min-height: 36px;
 	text-align: center; line-height: 32px;
 	padding: 0 5px; display: inline-block;
 	border:solid 2px $olive;
 	color: $black; 	text-decoration: underline;*/
-	height: 36px; width: 36px; background: none;
+	height: 36px; min-width: 36px; background: none;
 
 	img {
 		height: 36px; width: auto; min-width: 36px;
-		border-radius: 50%;
+		/*border-radius: 50%;*/
 	}
 } 
 
@@ -304,7 +313,7 @@
       content: '';
       font-size: 1em;
       position: absolute;
-      top: -3px;      
+      top: -1px;      
     }
 
     &:before {
@@ -316,26 +325,23 @@
       transition: background-color $red;
       transition: opacity 0.25s ease-out 0.1s;      
       width: 116px;
-      transition: transform 0.25s ease-out 0.1s, 
-      -webkit-transform 0.25s ease-out 0.1s;
+      transition: transform 0.25s ease-out 0.1s,  -webkit-transform 0.25s ease-out 0.1s;
     }
 
     &:after {
       border-radius: 50%;
       background: $white;
-      height: 40 / 16 * 1em;
+      height: 40 / 18 * 1em;
       transform: translate(0, 0);
       transition: opacity 0.25s ease-out 0.1s;
-      width: 40 / 16 * 1em;
-      transition: transform 0.25s ease-out 0.1s, 
-      -webkit-transform 0.25s ease-out 0.1s;
-      left: -4px;
+      width: 40 / 18 * 1em;
+      transition: transform 0.25s ease-out 0.1s,  -webkit-transform 0.25s ease-out 0.1s;
+      left: -2px;
     }
     &:checked {
       &:after {        
-        transform: translate(4.7em, 0);
-        transition: transform 0.25s ease-out 0.1s, 
-        -webkit-transform 0.25s ease-out 0.1s;        
+        transform: translate(4.7em, 0); 
+        transition: transform 0.25s ease-out 0.1s,  -webkit-transform 0.25s ease-out 0.1s;    
 
       }
       & ~ .lbl-off {
@@ -390,6 +396,7 @@
     position: absolute;
     top: 0;
     width: 0;
+    margin: 0 !important;
     &:before,
     &:after {
       content: '';
@@ -407,8 +414,7 @@
       transition: background-color $grey;
       transition: opacity 0.25s ease-out 0.1s;      
       width: 82px;
-      transition: transform 0.25s ease-out 0.1s, 
-      -webkit-transform 0.25s ease-out 0.1s;
+      transition: transform 0.25s ease-out 0.1s,  -webkit-transform 0.25s ease-out 0.1s;
     }
 
     &:after {
@@ -418,17 +424,14 @@
       transform: translate(0, 0);
       transition: opacity 0.25s ease-out 0.1s;
       width: 28px;
-      transition: transform 0.25s ease-out 0.1s, 
-      -webkit-transform 0.25s ease-out 0.1s;
+      transition: transform 0.25s ease-out 0.1s,  -webkit-transform 0.25s ease-out 0.1s;
       left: 0;
       top: 0;
     }
     &:checked {
       &:after {        
-        transform: translate(3.3em, 0);
-        transition: transform 0.25s ease-out 0.1s, 
-        -webkit-transform 0.25s ease-out 0.1s;        
-
+        transform: translate(3.3em, 0);       
+        transition: transform 0.25s ease-out 0.1s,  -webkit-transform 0.25s ease-out 0.1s;
       }
       & ~ .lbl-off {
         opacity: 0;
@@ -613,82 +616,27 @@
 	}
 }
 
-
-
-
-
-
-
-
-
-@media all and (max-width: 767px) {
-	.register-step-wrap  {
-		li {
-			width: 18%;			
-			&:before, &:after {
-				top:15px;				
-				height: 6px;
-			}
-			&:after {
-				left: 62%;
-			}
-		}
-
-		.top-title {
-			max-width: 100%;
-		}
-		.step-icon  {
-			width: 35px;
-			height: 35px;
-			padding: 7px;
-			i {
-				font-size: $font-14;
-				line-height: 20px;
-			}
-		}
-		.step-name {
-			display: none;
-		}
-
-	}
-
-	.register-otp, .seller-register-otp {
-		label {
-			line-height: normal;
-		}
-	}
-	.seller-banktab {
-		li {
-			min-width: auto;
-			margin-bottom: 10px;
-			a {
-				padding: 7px;
-			}
-		}
-	}
-
-	
-	.fancybox-inner .fancybox-content {
-		padding-left: 15px; padding-right: 15px;
-	}
-
-	.gal-item, .clipt-item , .news-item {
-		margin-bottom: 20px;
-		.gallery-img, .news-img, .clip-img {
-			margin-bottom: 10px;
-
-			img {
-				height: auto;
-			}
-		}
-		h3 {
-			font-size: $font-normal;
-		}
-	}
-
-
-
+/*Global Type for Link*/	
+.link-primary {	
+	color: #ED1B24;	
+  transition: all 0.5s;
+  &:hover {
+  	color: #CE232A;
+  }
 }
+
+.action-btn-wrap {  
+	display: flex;  
+	align-items: center;  
+	width: 100%; 
+	.btn-grey , .btn-blue {
+		padding-left: 8px;  
+		padding-right: 8px;
+	}
+	.action-del {  
+		margin-right: 0; 
+	}
+}  
 
 
 
@@ -865,4 +813,82 @@
 	th {
 		background: red !important;
 	}
+}
+
+
+@media all and (max-width: 767px) {
+	input[type="date"], .date-select {
+		&::-webkit-calendar-picker-indicator, 
+		&::-webkit-inner-spin-button,
+		 {
+			visibility: hidden;
+		}
+		&::-webkit-inner-spin-button {
+			visibility: hidden;
+		}
+	}
+	.mobhide {
+		display: none !important;
+	}
+	.register-step-wrap {
+		li {
+			width: 18%;
+			&:before , &:after{
+				top: 15px;
+				height: 6px;
+			}
+			&:after {
+				left: 62%;
+			}
+		}
+		.top-title {
+			max-width: 100%;
+		}
+		.step-icon {
+			width: 35px;
+			height: 35px;
+			padding: 7px;
+			i {
+				font-size: 14px;
+				line-height: 20px;
+			}
+		}
+		.step-name {
+			display: none;
+		}
+	}
+	.register-otp , .seller-register-otp {
+		label {
+			line-height: normal;
+		}
+	}
+	.seller-banktab {
+		li {
+			min-width: auto;
+			margin-bottom: 10px;
+			a {
+				padding: 7px;
+			}
+		}
+	}
+	.fancybox-inner {
+		.fancybox-content {
+			padding-left: 15px;
+			padding-right: 15px;
+		}
+	}
+	.gal-item, .clipt-item, .news-item {
+		margin-bottom: 20px;
+		.gallery-img, .news-img, .clip-img {
+			margin-bottom: 10px;
+			img {
+				height: auto;
+			}
+		}
+		h3 {
+				font-size: $font-16;
+		}
+	}
+
+
 }

@@ -76,7 +76,6 @@ ol.number {
 /*  Font Variable  */
 /*  Font-family  Variable  */
 /*  Mixin and Inheritance */
-/* Transition */
 .transition, input[type="text"], input[type="email"], input[type="password"],
 input[type="tel"], input[type="number"], input[type="search"],
 textarea, select, .date-select, .btn, .btn-blue, .btn-grey, .btn-default, .btn-green, .btn-dark-grey, .btn-light-red, .btn-blue2, .btn-w-outline, .header-menu li, .breadcrumb a {
@@ -119,8 +118,8 @@ textarea, select, .date-select, .btn, .btn-blue, .btn-grey, .btn-default, .btn-g
   src: url("../fonts/pridi-regular-webfont.eot?#iefix") format("embedded-opentype"), url("../fonts/pridi-regular-webfont.woff2") format("woff2"), url("../fonts/pridi-regular-webfont.woff") format("woff"), url("../fonts/pridi-regular-webfont.ttf") format("truetype"), url("../fonts/pridi-regular-webfont.svg#pridiregular") format("svg");
   font-weight: normal;
   font-style: normal; }
+/*  Form field  */
 /*  Mixin and Inheritance */
-/* Transition */
 .transition, input[type="text"], input[type="email"], input[type="password"],
 input[type="tel"], input[type="number"], input[type="search"],
 textarea, select, .date-select, .btn, .btn-blue, .btn-grey, .btn-default, .btn-green, .btn-dark-grey, .btn-light-red, .btn-blue2, .btn-w-outline, .header-menu li, .breadcrumb a {
@@ -139,7 +138,6 @@ textarea, select, .date-select, .btn, .btn-blue, .btn-grey, .btn-default, .btn-g
   box-shadow: 0 3px 20px #000;
   -webkit-box-shadow: 0 3px 20px #000; }
 
-/*  Form field  */
 input[type="text"], input[type="email"], input[type="password"],
 input[type="tel"], input[type="number"], input[type="search"],
 textarea, select, .date-select {
@@ -498,13 +496,6 @@ option {
     .form-group label.chk-wrap + .chk-wrap {
       margin-top: 10px; }
 
-
-      .header-inner .logo img {  max-height:70px;}
-.search-cart-wrap .nav-search-input { min-width:275px; }
-@media all and (min-width:768px) {
-.header-inner .header-content { padding-left:175px;}
-}
-
 /* show pass value */
 .pwd-show {
   position: relative; }
@@ -623,6 +614,7 @@ option {
     border-left: solid 1px #C4C4C4;
     padding-left: 10px; }
   .icon-append .inputgroup-icon {
+    /*flex-grow: 1;*/
     display: flex;
     position: relative;
     border: 1px solid #C4C4C4;
@@ -728,7 +720,6 @@ option {
 
 /*Multiple Select with Checkbox end*/
 /*  Mixin and Inheritance */
-/* Transition */
 .transition, input[type="text"], input[type="email"], input[type="password"],
 input[type="tel"], input[type="number"], input[type="search"],
 textarea, select, .date-select, .btn, .btn-blue, .btn-grey, .btn-default, .btn-green, .btn-dark-grey, .btn-light-red, .btn-blue2, .btn-w-outline, .header-menu li, .breadcrumb a {
@@ -858,14 +849,27 @@ textarea, select, .date-select, .btn, .btn-blue, .btn-grey, .btn-default, .btn-g
 .header-inner {
   margin-bottom: 15px;
   display: table;
-  width: 100%;
-  /*@include flex(); justify-content: space-between;*/ }
+  width: 100%; }
   .header-inner .logo {
     float: left;
     margin-right: 10px; }
   .header-inner .header-content {
     padding-left: 95px; }
 
+@media all and (min-width: 768px) {
+  .header-inner {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    justify-content: space-between; }
+    .header-inner .log {
+      float: none; }
+      .header-inner .log img {
+        max-height: 88px; }
+    .header-inner .header-content {
+      padding-left: 0; } }
 .search-cart-wrap {
   /*@include flex();
   justify-content: space-between;*/
@@ -887,22 +891,20 @@ textarea, select, .date-select, .btn, .btn-blue, .btn-grey, .btn-default, .btn-g
         margin-left: 10px; }
         .search-cart-wrap .head-col.buyer-col .chat-wrap i {
           color: #707070; }
-    .search-cart-wrap .head-col .btn-buyer-header .btn-grey {
-      /*padding-left: 12px; padding-right: 12px;*/ }
   .search-cart-wrap .search-form {
     padding-right: 15px; }
     .search-cart-wrap .search-form input {
       width: 100%;
       max-width: 600px; }
+  .search-cart-wrap .nav-search-input {
+    min-width: 225px; }
   .search-cart-wrap .search-group {
     position: relative;
     max-width: 500px;
     margin-left: auto; }
     .search-cart-wrap .search-group input[type="text"] {
       padding-left: 40px;
-      margin-left: auto;
-      /*border-radius: 0 10px 10px 0;*/
-      /*border-left: none;*/ }
+      margin-left: auto; }
     .search-cart-wrap .search-group button {
       position: absolute;
       left: 0;
@@ -1091,14 +1093,9 @@ textarea, select, .date-select, .btn, .btn-blue, .btn-grey, .btn-default, .btn-g
       padding-top: 10px;
       border-top: 2px solid #C4C4C4; }
   .search-dropdown .ui-menu-item-wrapper {
-    transition: all 0.3s;
-    /*display: flex !important;*/
-    /*width: 100%;*/
-    /*padding: 6px 10px;*/
-    /*border-bottom: 1px solid $border;*/ }
+    transition: all 0.3s; }
     .search-dropdown .ui-menu-item-wrapper .search-img {
-      margin-bottom: 10px;
-      /*margin-right: 10px;*/ }
+      margin-bottom: 10px; }
       .search-dropdown .ui-menu-item-wrapper .search-img img {
         width: 80px;
         height: 80px;
@@ -1208,7 +1205,7 @@ textarea, select, .date-select, .btn, .btn-blue, .btn-grey, .btn-default, .btn-g
       margin-left: 2px; }
 
   .header-inner .logo {
-    max-width: 50px;
+    max-width: 55px;
     margin-bottom: 10px; }
   .header-inner .header-content {
     padding-left: 0; }
@@ -1252,7 +1249,6 @@ textarea, select, .date-select, .btn, .btn-blue, .btn-grey, .btn-default, .btn-g
   .btn-buyer-header .btn {
     padding: 9px 10px; } }
 /*  Mixin and Inheritance */
-/* Transition */
 .transition, input[type="text"], input[type="email"], input[type="password"],
 input[type="tel"], input[type="number"], input[type="search"],
 textarea, select, .date-select, .btn, .btn-blue, .btn-grey, .btn-default, .btn-green, .btn-dark-grey, .btn-light-red, .btn-blue2, .btn-w-outline, .header-menu li, .breadcrumb a {
@@ -1960,11 +1956,9 @@ textarea, select, .date-select, .btn, .btn-blue, .btn-grey, .btn-default, .btn-g
   background: red !important; }
 
 @media all and (max-width: 767px) {
-  input[type="date"]::-webkit-calendar-picker-indicator,
-  input[type="date"]::-webkit-inner-spin-button,
-  .date-select::-webkit-calendar-picker-indicator,
-  .date-select::-webkit-inner-spin-button {
-    /*display: none;*/
+  input[type="date"]::-webkit-calendar-picker-indicator, input[type="date"]::-webkit-inner-spin-button, .date-select::-webkit-calendar-picker-indicator, .date-select::-webkit-inner-spin-button {
+    visibility: hidden; }
+  input[type="date"]::-webkit-inner-spin-button, .date-select::-webkit-inner-spin-button {
     visibility: hidden; }
 
   .mobhide {
@@ -2010,5 +2004,3 @@ textarea, select, .date-select, .btn, .btn-blue, .btn-grey, .btn-default, .btn-g
         height: auto; }
     .gal-item h3, .clipt-item h3, .news-item h3 {
       font-size: 16px; } }
-
-/*# sourceMappingURL=global.css.map */

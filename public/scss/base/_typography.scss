@@ -56,9 +56,10 @@ ol {
 		padding-left: 25px;
 	}
 }
-
-
-
+.disabled {	
+  opacity: .7;	
+  pointer-events: none; 
+}
 .red {
 	color: $red;
 }
