@@ -383,6 +383,20 @@
        var unitPerPrice = parseFloat($('#unitPerPrice').val()) || 0;
        $('#unitPrices').val(unitPerPrice * unitWeight);
     });
+   
+    $(function(){
+        $('#weightPerUnits, #unitPrices').keyup(function(){
+           var unitWeight = parseFloat($('#weightPerUnits').val()) || 0;
+           var unitPrice = parseFloat($('#unitPrices').val()) || 0;
+           $('#unitPerPrice').val(unitPrice / unitWeight);
+        });
+
+        $('#weightPerUnits, #unitPerPrice').keyup(function(){
+           var unitWeight = parseFloat($('#weightPerUnits').val()) || 0;
+           var unitPerPrice = parseFloat($('#unitPerPrice').val()) || 0;
+           $('#unitPrices').val(unitPerPrice * unitWeight);
+        });
+    });    
    </script>
   <script>
     $('body').on('click','#add_more_btn',function(){
