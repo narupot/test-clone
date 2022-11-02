@@ -374,7 +374,7 @@
 
 @section('footer_scripts_include')
     <script type="text/javascript">
-    /*$(function(){
+    $(function(){
        var unitWeight = parseFloat($('#weightPerUnits').val()) || 0;
        var unitPrice = parseFloat($('#unitPrices').val()) || 0;
        $('#unitPerPrice').val(unitPrice / unitWeight);
@@ -382,9 +382,8 @@
        var unitWeight = parseFloat($('#weightPerUnits').val())|| 0;
        var unitPerPrice = parseFloat($('#unitPerPrice').val()) || 0;
        $('#unitPrices').val(unitPerPrice * unitWeight);
-    });*/
-   </script>
-   <script type="text/javascript">
+    });
+   
     $(function(){
         $('#weightPerUnits, #unitPrices').keyup(function(){
            var unitWeight = parseFloat($('#weightPerUnits').val()) || 0;
