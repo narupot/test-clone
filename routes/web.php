@@ -18,9 +18,7 @@
     Route::post('synchronizeBroadcasts', 'SyncController@synchronizeBroadcasts');
     
     Route::group(array('prefix' => 'admin','middleware' => 'escape-back-history'), function () {
-
         Route::get('sync-mongo', 'Admin\SyncMongoController@index');
-
         Route::get('adminAutoSearch', 'Admin\Search\AdminSearchController@adminAutoSearch');
         Route::get('adminSearch', 'Admin\Search\AdminSearchController@index');
 
