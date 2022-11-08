@@ -197,7 +197,7 @@ class PaymentOptionController extends MarketPlace
             }
 
             $sandbox_detail = $live_detail = [] ;
-            if(count($request->field_name)){
+            if(!empty($request->field_name)){
                 foreach ($request->field_name as $key => $value) {
                     $sandbox_detail[$value] = $request->sandbox[$value];
                     $live_detail[$value] = $request->live[$value];
