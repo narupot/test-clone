@@ -22,7 +22,8 @@
 <form action="submit" method="post" id="payment_form">
     <div class="row h-100 justify-content-center align-items-center">
         <div class="card card_wraps text-center col-5">
-            <img src="https://www.mercular.com/img/footer/kbank.png" class="card-img-top" alt="Omise">
+            <!--https://www.mercular.com/img/footer/kbank.png-->
+            <img src="/assets/images/kbank.png" class="card-img-top" alt="Omise">
             <div class="card-body">
                 <div class="form-group">
                     <label for="item">@lang('common.phone_number') :</label>
