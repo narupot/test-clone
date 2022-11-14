@@ -266,6 +266,7 @@
         </script>    
     @endif
     <!-- begin page level js -->
+    @yield('footer_scripts_include')
     @yield('footer_scripts')
     <!-- end page level js -->
 
