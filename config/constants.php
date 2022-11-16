@@ -121,6 +121,7 @@ return [
     'mobile_notification_url' =>$mobile_app_url.'api/buyer/v1/sendMobileNotification',
     'mobile_app_url' => $mobile_app_url,
     'mobile_app_chat_url'=> env('MOBILE_APP_CHAT_URL'),
+    'send_order_json_url'=> env('SEND_ORDER_JSON_URL'),
 
 
 
