@@ -335,7 +335,7 @@ class OrderController extends MarketPlace {
             $body = $customer_name .' and order id '. $main_order->formatted_id;
             
             $order_detail = OrderDetail::getMainOrderDetail($main_order->id);
-            $shop_ord = \App\OrderShop::where('order_id',$main_order->id)->select('id','shop_formatted_id', 'shop_user_id')->get();
+            $shop_ord = \App\OrderShop::where('order_id',$main_order->id)->get();
             //dd($shop_ord);
             if(count($shop_ord)){
                 foreach ($shop_ord as $key => $value) {
