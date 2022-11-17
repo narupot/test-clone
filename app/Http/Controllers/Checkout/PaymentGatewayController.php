@@ -81,6 +81,8 @@ class PaymentGatewayController extends MarketPlace {
                 EmailHelpers::sendOrderNotificationEmail($orderInfo->formatted_id);
                 /*for notification*/
 
+                /*send noti at mobile*/
+                $this->buyerNotification($orderInfo);
             }
         }
         
@@ -101,6 +103,8 @@ class PaymentGatewayController extends MarketPlace {
             return ['status'=>'pending'];
         }
     }
+
+
 
     /*****kbank payplus tracking url function********/
     public function payplusReturnTransaction(Request $request){
@@ -148,6 +152,9 @@ class PaymentGatewayController extends MarketPlace {
                 /*for notification*/
                 EmailHelpers::sendOrderNotificationEmail($orderInfo->formatted_id);
                 /*for notification*/
+
+                /*send noti at mobile*/
+                $this->buyerNotification($orderInfo);
 
             }
         }
@@ -224,6 +231,16 @@ class PaymentGatewayController extends MarketPlace {
            
         }
         
+    }
+
+
+    public function buyerNotification($orderInfo){
+        $title = 'New Order';
+        $body = 'Order id '. $orderInfo->formatted_id;
+        $post_arr = ['user_id'=>$orderInfo->user_id, 'title'=>$title,'body'=>$body, 'type_redirect'=>'payment_success', 'order_id'=>$orderInfo->id, 'formatted_order_id'=>$orderInfo->formatted_id];
+        $url = Config::get('constants.mobile_notification_url');
+        $responce = $this->handleCurlRequest($url,$post_arr);
+
     }
 
 }
