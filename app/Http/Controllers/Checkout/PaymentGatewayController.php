@@ -81,6 +81,8 @@ class PaymentGatewayController extends MarketPlace {
                 EmailHelpers::sendOrderNotificationEmail($orderInfo->formatted_id);
                 /*for notification*/
 
+                /*send noti at mobile*/
+                $this->buyerNotification($orderInfo);
             }
         }
         
@@ -102,9 +104,45 @@ class PaymentGatewayController extends MarketPlace {
         }
     }
 
+
+
     /*****kbank payplus tracking url function********/
     public function payplusReturnTransaction(Request $request){
 
+        $pay_opt = \App\PaymentOption::where('slug','payplus')->first();
+        if(!empty($pay_opt)){
+            if($pay_opt->mode == 2)
+                $payplus_details = json_decode($pay_opt->sandbox_detail,true);
+            else
+                $payplus_details = json_decode($pay_opt->live_detail,true);
+        }
+
+        $secret_key = $payplus_details['secret_key'];
+        $order_id = $request->input("reference_order");
+
+        $gateway_log_id = OrderGatewayLog::insertLog(['gateway_type'=>'payplus','gateway_response'=>json_encode($request->all())]);
+
+        
+        $current_date = date('Y-m-d H:i:s');
+        $orderInfo = Order::where('id',$order_id)->first();
+        if($orderInfo){
+            $update_log = OrderGatewayLog::where('id',$gateway_log_id)->update(['order_id'=>$orderInfo->id]);
+            
+            $arr = ['order_id'=>$orderInfo->id,'payment_slug'=>'payplus','reference_order'=>$request->reference_order,'items'=>'','response'=>json_encode($request->all()),'created_at'=>$current_date];
+            $update_pay_resp = \App\OrderPayment::insert($arr);
+
+            $updateOrder = Order::updateOrderAfterPayment($orderInfo);
+
+            /*for notification*/
+            EmailHelpers::sendOrderNotificationEmail($orderInfo->formatted_id);
+            /*for notification*/
+
+            /*send noti at mobile*/
+            $this->buyerNotification($orderInfo);
+
+        }
+        exit;
+        /**old***/
         $message = $request->input("PMGWRESP2");
 
         $decrypted_message = exec("java -jar ".storage_path()."/aes.jar decrypt \"$message\"");
@@ -148,6 +186,9 @@ class PaymentGatewayController extends MarketPlace {
                 /*for notification*/
                 EmailHelpers::sendOrderNotificationEmail($orderInfo->formatted_id);
                 /*for notification*/
+
+                /*send noti at mobile*/
+                $this->buyerNotification($orderInfo);
 
             }
         }
@@ -224,6 +265,16 @@ class PaymentGatewayController extends MarketPlace {
            
         }
         
+    }
+
+
+    public function buyerNotification($orderInfo){
+        $title = 'New Order';
+        $body = 'Order id '. $orderInfo->formatted_id;
+        $post_arr = ['user_id'=>$orderInfo->user_id, 'title'=>$title,'body'=>$body, 'type_redirect'=>'payment_success', 'order_id'=>$orderInfo->id, 'formatted_order_id'=>$orderInfo->formatted_id];
+        $url = Config::get('constants.mobile_notification_url');
+        $responce = $this->handleCurlRequest($url,$post_arr);
+
     }
 
 }
