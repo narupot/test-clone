@@ -142,6 +142,8 @@ class SendOrderLogistic extends Command
                 }else{
                     $update_statue = '2';
                 }
+
+                //dd($resp);
                 $msg = is_array($resp) || is_object($resp)?json_encode($resp):$resp;
 
                 $update_log = \App\LogisticLog::insertLog($main_order->id,$msg,$full_order_json);
