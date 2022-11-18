@@ -568,4 +568,21 @@ class ProductController extends MarketPlace
         } 
     }
 
+    public function baseUnit($cat_id=null){
+        if(!empty($cat_id)){
+            $default_lang = '0';
+            $sql = DB::table(with(new \App\CategoryUnit)->getTable().' as cu')
+                ->join(with(new \App\Unit)->getTable().' as u','u.id', '=', 'cu.unit_id')
+                ->join(with(new \App\UnitDesc)->getTable().' as ud', 
+                    [ ['u.id', '=', 'ud.unit_id'],
+                      ['ud.lang_id', '=', DB::raw($default_lang)]
+                    ]
+                );
+
+            $sql =  $sql->select('u.id','ud.unit_name')->where('u.status','1')->where('cu.cat_id', $cat_id)->get(); 
+
+            return $sql;   
+        }
+    }
+
 }
