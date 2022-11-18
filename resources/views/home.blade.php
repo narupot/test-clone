@@ -1,5 +1,3 @@
-@php($section_data = GeneralFunctions::sectionData(basename(request()->path())))  
-@php(extract($section_data))
 @extends('layouts.app') 
 
 @section('header_style')

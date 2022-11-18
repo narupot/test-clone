@@ -210,11 +210,13 @@ class ShopController extends MarketPlace
                 if($shop_info->shop_status == 'open'){
                     $value = 'close';
                     $return = '0';
+                    $status = '0';
                 }else{
                     $value = 'open';
                     $return = '1';
+                    $status = '1';
                 }
-               
+                $shop_info->status = $status;
                 $shop_info->shop_status = $value;
                 $column_name = 'shop_status';
             }elseif(isset($request->type) && $request->type == 'bargaining'){
@@ -232,6 +234,9 @@ class ShopController extends MarketPlace
             $shop_info->save();
 
             $update_data = \App\MongoShop::updateShopColumn($shop_id,$column_name,$value);
+            if(isset($status)){
+                $update_data = \App\MongoShop::updateShopColumn($shop_id,'status',$status);
+            }
 
             $response = ['status'=>'success','msg'=>Lang::get('common.records_updated_successfully'),'value'=>$return];
             
