@@ -10,7 +10,7 @@
    <link rel="stylesheet" href="{{ Config('constants.admin_css_url') }}table/pqselect.min.css"/>
     <script type="text/javascript">
         var lang_json = {"ok":"@lang('common.ok')", "success":"@lang('common.success')", "select":"@lang('common.select')"};
-        var base_unit_url = '{{action('Seller\ProductController@baseUnit')}}';
+        var base_unit_url = '{{action('Admin\Product\ProductController@baseUnit')}}';
     </script>
 @stop
 @section('content')

@@ -254,6 +254,8 @@
             Route::post('store', 'Admin\Product\ProductController@store');
             Route::get('sellerdata', 'Admin\Product\ProductController@SellerData');
             Route::get('getsellercat', 'Admin\Product\ProductController@getSellerCategory');
+            Route::get('baseunit/{cat_id?}','Admin\Product\ProductController@baseUnit');
+
             
             Route::get('/', 'Admin\Product\ProductController@index');
             Route::get('productlistdata', 'Admin\Product\ProductController@productListData');
