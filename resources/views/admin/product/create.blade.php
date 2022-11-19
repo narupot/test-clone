@@ -11,6 +11,8 @@
     <script type="text/javascript">
         var lang_json = {"ok":"@lang('common.ok')", "success":"@lang('common.success')", "select":"@lang('common.select')"};
         var base_unit_url = '{{action('Admin\Product\ProductController@baseUnit')}}';
+        var currency = "@lang('common.baht')";
+        var base_unit_id = "";
     </script>
 @stop
 @section('content')

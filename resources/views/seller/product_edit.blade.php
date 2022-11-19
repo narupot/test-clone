@@ -7,10 +7,10 @@
 @section('header_script')
     var lang_json = {"ok":"@lang('common.ok')", "success":"@lang('common.success')", "select":"@lang('common.select')"};
     var base_unit_url = '{{action('Seller\ProductController@baseUnit')}}';
-  
     var txt_no = "@lang('common.no')";
     var text_ok_btn = "@lang('common.ok_btn')";
     var currency = "@lang('common.baht')";
+    var base_unit_id = "{{$result->base_unit_id}}";
 @endsection
 
 @section('content')
@@ -90,9 +90,6 @@
     $(function(){
        $('.active input[name="product_cat"]').trigger('click');
     });
-    $(document).ready(function(e){
-       $('#baseunit option[value="{{$result->base_unit_id}}"]').prop('selected','selected');
-    })
     
 </script>  
 @stop
