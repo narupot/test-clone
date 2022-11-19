@@ -82,8 +82,14 @@
     // Set custom buttons with separator between them.
     const TOOLBAR_BATTONS = ['undo', 'redo' , '|', 'bold', 'italic', 'underline', 'html'];
     const TOOLBAR_BATTONS_XS = ['undo', 'redo' , '-', 'bold', 'italic', 'underline'];
+    
 </script>
 {!! CustomHelpers::combineCssJs(['js/price_formatter', 'js/seller/product'],'js') !!}
 @include('includes.froalaeditor_dependencies')
-<script src="{{asset('js/normal_froala_editor_setting.js')}}"></script>  
+<script src="{{asset('js/normal_froala_editor_setting.js')}}"></script>
+<script type="text/javascript">
+    $(function(){
+       $('.active input[name="product_cat"]').trigger('click');
+    });
+</script>  
 @stop

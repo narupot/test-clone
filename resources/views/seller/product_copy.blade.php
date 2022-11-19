@@ -57,4 +57,9 @@
 
 @section('footer_scripts')
 {!! CustomHelpers::combineCssJs(['js/price_formatter', 'js/seller/product'],'js') !!}
+<script type="text/javascript">
+    $(function(){
+       $('.active input[name="product_cat"]').trigger('click');
+    });
+</script>  
 @stop
