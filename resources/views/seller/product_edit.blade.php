@@ -81,8 +81,7 @@
 <script type="text/javascript">
     // Set custom buttons with separator between them.
     const TOOLBAR_BATTONS = ['undo', 'redo' , '|', 'bold', 'italic', 'underline', 'html'];
-    const TOOLBAR_BATTONS_XS = ['undo', 'redo' , '-', 'bold', 'italic', 'underline'];
-    
+    const TOOLBAR_BATTONS_XS = ['undo', 'redo' , '-', 'bold', 'italic', 'underline'];    
 </script>
 {!! CustomHelpers::combineCssJs(['js/price_formatter', 'js/seller/product'],'js') !!}
 @include('includes.froalaeditor_dependencies')
@@ -91,5 +90,9 @@
     $(function(){
        $('.active input[name="product_cat"]').trigger('click');
     });
+    $(document).ready(function(e){
+       $('#baseunit option[value="{{$result->base_unit_id}}"]').prop('selected','selected');
+    })
+    
 </script>  
 @stop
