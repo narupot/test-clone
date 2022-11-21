@@ -186,7 +186,7 @@ class CmsSlider extends Model
                     if($id_arr['unit_price']<1){
                         //dd($value);
                     }
-                    if(isset($sub_cat_data[$id_arr['cat_id']])){
+                    if(isset($sub_cat_data[$id_arr['cat_id']]) && $id_arr['unit_price']>0){
                         $cat_data = $sub_cat_data[$id_arr['cat_id']];
                         $id_arr['cat_name'] = $cat_data['name'][session('lang_code')];
                         $id_arr['cat_url'] = getCategoryUrl($cat_data['url']);

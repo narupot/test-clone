@@ -116,29 +116,51 @@ class PaymentGatewayController extends MarketPlace {
             else
                 $payplus_details = json_decode($pay_opt->live_detail,true);
         }
-
-        $secret_key = $payplus_details['secret_key'];
+        $ref_3 = $request->input("ref_3");
+        $secret_key = ($ref_3 == 'mobile') ? $payplus_details['mobile_secret_key'] : $payplus_details['web_secret_key'];
+        $charge_id = $request->input("id");
+        $transaction_state = $request->input("transaction_state");
         $order_id = $request->input("reference_order");
+        $currency = 'THB';
+        $status = $request->input('status');
 
         $gateway_log_id = OrderGatewayLog::insertLog(['gateway_type'=>'payplus','gateway_response'=>json_encode($request->all())]);
 
         
         $current_date = date('Y-m-d H:i:s');
         $orderInfo = Order::where('id',$order_id)->first();
-        if($orderInfo){
-            $update_log = OrderGatewayLog::where('id',$gateway_log_id)->update(['order_id'=>$orderInfo->id]);
-            
-            $arr = ['order_id'=>$orderInfo->id,'payment_slug'=>'payplus','reference_order'=>$request->reference_order,'items'=>'','response'=>json_encode($request->all()),'created_at'=>$current_date];
-            $update_pay_resp = \App\OrderPayment::insert($arr);
 
-            $updateOrder = Order::updateOrderAfterPayment($orderInfo);
+        if($orderInfo && $status=='success'){
 
-            /*for notification*/
-            EmailHelpers::sendOrderNotificationEmail($orderInfo->formatted_id);
-            /*for notification*/
+            $amount = number_format($orderInfo->total_final_price,4);
+            $ord_amount = str_replace(',', '', $amount);
 
-            /*send noti at mobile*/
-            $this->buyerNotification($orderInfo);
+            $string = $charge_id.$ord_amount.$currency.$status.$transaction_state.$secret_key;
+            $hash = hash('sha256', $string);
+            $checksum = $request->input('checksum');
+            $json_arr = ['string'=>$string,'hash'=>$hash];
+
+            if($hash == $checksum){
+                $json = json_encode($json_arr);
+            }else{
+                $json = '';
+            }
+
+            $update_log = OrderGatewayLog::where('id',$gateway_log_id)->update(['order_id'=>$orderInfo->id,'gateway_response_two'=>$json]);
+
+            if($hash == $checksum){
+                $arr = ['order_id'=>$orderInfo->id,'payment_slug'=>'payplus','reference_order'=>$request->reference_order,'items'=>'','response'=>json_encode($request->all()),'created_at'=>$current_date];
+                $update_pay_resp = \App\OrderPayment::insert($arr);
+
+                $updateOrder = Order::updateOrderAfterPayment($orderInfo);
+
+                /*for notification*/
+                EmailHelpers::sendOrderNotificationEmail($orderInfo->formatted_id);
+                /*for notification*/
+
+                /*send noti at mobile*/
+                $this->buyerNotification($orderInfo);
+            }
 
         }
         exit;
@@ -167,10 +189,6 @@ class PaymentGatewayController extends MarketPlace {
                                           "mobile"=>$mobile,"amount"=>$amount,"response_code"=>$response_code,
                                           "reference1"=>$reference1,"reference2"=>$reference2];
                                           
-
-        /*$invoice = '002556056518';
-        $response_code = '00';
-        $response = ['invoice'=>$invoice];*/
         $current_date = date('Y-m-d H:i:s');
         if($invoice && $response_code=='00'){
 
