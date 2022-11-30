@@ -78,8 +78,8 @@ class ODDController extends MarketPlace
             $post_array['external_system'] = $pay_details['external_system'];
             $post_array['payee_short_name'] = $pay_details['payee_short_name'];
             /*$post_array['payer_short_name'] = substr(str_replace(' ', '', $userDetail->display_name), 0,11);*/
-            $post_array['payer_short_name'] = "";
-            $post_array['user_email'] = "";//$userDetail->email;
+            //$post_array['payer_short_name'] = "";
+            //$post_array['user_email'] = "";//$userDetail->email;
             $post_array['user_mobile_no'] = $request->ph_number;
             //$post_array['id'] = $request->citizen_id;
             $post_array['external_reference'] = $ref_no;

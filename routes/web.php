@@ -446,8 +446,9 @@
     });
     /**admin route end*******/
     Route::get('track-order/{order_id?}','Checkout\TrackOrderController@trackOrderDetail');
-    Route::any('paymentgateway/kbank/v1/odd/checkout/tracking', 'Checkout\PaymentGatewayController@oddRegisterTracking');
-    Route::any('payment-gateway/kbank/v1/odd/checkout/tracking', 'Checkout\PaymentGatewayController@oddRegisterTracking');
+   
+    Route::any('payment-gateway/kbank/v1/odd/register/tracking', 'Checkout\PaymentGatewayController@oddRegisterTracking');
+    Route::any('payment-gateway/kbank/v1/odd/checkout/tracking', 'Checkout\PaymentGatewayController@oddPaymentTracking');
     Route::group(['prefix' => 'user','middleware' => 'escape-back-history'], function () {
         Route::post('address/default', 'User\UserController@setDefaultAddress');
         Route::post('address/sequence', 'User\UserController@updateSequence');
