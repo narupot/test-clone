@@ -1109,7 +1109,7 @@ class MailTemplateController extends MarketPlace
                         $transport->setHost(trim($emailServerData['host']));
                         $transport->setPort(trim($emailServerData['port']));
                         $transport->setUsername(trim($emailServerData['username']));
-                        $transport->setPassword(base64_decode(trim($emailServerData['password'])));
+                        $transport->setPassword(trim($emailServerData['password']));
                         $transport->setEncryption(trim($emailServerData['encription']));
                     break;
                     case 'mailgun':
