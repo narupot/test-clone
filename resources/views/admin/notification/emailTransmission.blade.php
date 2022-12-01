@@ -31,7 +31,7 @@
                 <div class="float-right">
                     <button type="button" name="edit_server" class="btn btn-dark d-none" id="edit_server">@lang('admin_common.edit')</button>
                     <button type="button" name="cancel_edit" class="btn btn-danger d-none" id="cancel_edit">@lang('admin_common.cancel')</button>
-                    <button type="submit" id="save_server" name="submit_type" value="submit" class="btn btn-primary btn-save">@lang('admin_common.save')</button>
+                    <button type="submit" id="save_server" name="submit_type" value="submit" class="btn btn-primary btn-save d-none">@lang('admin_common.save')</button>
                 </div>
             </div>       
             <div class="content-wrap column-modal clearfix">

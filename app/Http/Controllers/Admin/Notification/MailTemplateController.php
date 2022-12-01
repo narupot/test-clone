@@ -801,7 +801,7 @@ class MailTemplateController extends MarketPlace
         $mainTransmissionMissionObj->port = trim($request->port);
         $mainTransmissionMissionObj->email_from = trim($request->email_from);
         $mainTransmissionMissionObj->username = trim($request->username);
-        $mainTransmissionMissionObj->password = trim(base64_encode($request->password));
+        $mainTransmissionMissionObj->password = base64_encode(trim($request->password));
         $mainTransmissionMissionObj->encription = trim($request->encription);
 
 
@@ -1109,7 +1109,7 @@ class MailTemplateController extends MarketPlace
                         $transport->setHost(trim($emailServerData['host']));
                         $transport->setPort(trim($emailServerData['port']));
                         $transport->setUsername(trim($emailServerData['username']));
-                        $transport->setPassword(trim($emailServerData['password']));
+                        $transport->setPassword(base64_decode(trim($emailServerData['password'])));
                         $transport->setEncryption(trim($emailServerData['encription']));
                     break;
                     case 'mailgun':
