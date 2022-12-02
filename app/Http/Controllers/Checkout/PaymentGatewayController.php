@@ -229,7 +229,11 @@ class PaymentGatewayController extends MarketPlace {
     }
 
     public function oddRegisterTracking(Request $request){
-        
+        if($request->all()){
+            $gateway_log_id = OrderGatewayLog::insertLog(['gateway_type'=>'odd-register','gateway_response'=>json_encode($request->all())]);
+        }
+      
+
         file_put_contents(Config::get('constants.public_path')."/odd_register.txt",json_encode($request->all(),JSON_UNESCAPED_UNICODE));
         
         if(!isset($request->returnStatus)){
@@ -285,6 +289,66 @@ class PaymentGatewayController extends MarketPlace {
         
     }
 
+    public function oddPaymentTracking(Request $request){
+        if($request->all()){
+            $gateway_log_id = OrderGatewayLog::insertLog(['gateway_type'=>'odd-payment','gateway_response'=>json_encode($request->all())]);
+        }
+        
+
+        file_put_contents(Config::get('constants.public_path')."/odd_register.txt",json_encode($request->all(),JSON_UNESCAPED_UNICODE));
+        
+        if(!isset($request->returnStatus)){
+            
+            exit();
+        }
+
+        /*$response = '{"returnStatus":"322110350545883                                   4AF5F60748A81F41BF4C25C04AB9B9EB9F42D135720ACCE13E6F6FD54217B0FF                                    0481879086           00202106170203090K0025Your Online Direct Debit Registration is successful."}';*/
+
+        $gateway_log_id = OrderGatewayLog::insertLog(['gateway_type'=>'odd_register','gateway_response'=>json_encode($request->all())]);
+
+        $response = $request->returnStatus;
+        $external_reference = substr($response,0,20);
+        $payer_short_name  = substr($response,20,30);
+        $espa_id = substr($response,50,100);
+        $account_no = substr($response,150,20);
+        
+        $user_email = substr($response,170,1);
+        $mobile = substr($response,171,1);
+        $matching_flag = substr($response,172,1);
+        $timestamp = substr($response,173,14);
+        $return_status = substr($response,187,1);
+        $return_code = substr($response,188,5);
+        $return_msg = substr($response,193);
+
+        $user_info = \App\UserInfo::where('reference_no',$external_reference)->first();
+
+
+        if($user_info && is_object($user_info)){
+
+            $update_log = OrderGatewayLog::where('id',$gateway_log_id)->update(['order_id'=>$user_info->id]);
+            
+            $info_json = json_decode($user_info->info_json,true);
+
+            if(count($info_json)){
+                $info_json['tracking_response'] = $response;
+                $new_json = json_encode($info_json,JSON_UNESCAPED_UNICODE);
+            }else{
+                $new_json = $response;
+            }
+            if($return_status == '0' || $return_status == 0){
+                $user_info->status = '1';
+                $user_info->espa_id = $espa_id;
+            }else{
+                $user_info->status = '0';
+                $user_info->espa_id = '';
+            }
+            
+            $user_info->info_json = $new_json;
+            $user_info->save();
+           
+        }
+        
+    }
 
     public function buyerNotification($orderInfo){
         $title = 'New Order';
