@@ -45,7 +45,7 @@
                         <ul class="nav nav-tabs">
                             <li class="nav-item"><a class="nav-link show active" data-toggle="tab" data-target="#page-details">General</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" data-target="#seo-details">SEO</a></li>
-                            <li class="nav-item"><a class="nav-link" data-toggle="tab" data-target="#blogSocilashare">@lang('page.page_socialshare')</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" data-target="#blogSocilashare">@lang('cms.page_socialshare')</a></li>
                         </ul>
                     </div>
                 </div>
@@ -98,7 +98,7 @@
                         </div>
 
                         <div id="blogSocilashare" class="tab-pane">
-                            <h2 class="title-prod">@lang('page.page_socialshare')</h2>
+                            <h2 class="title-prod">@lang('cms.page_socialshare')</h2>
                             <div class="blog-share">
                                 <ul class="nav nav-tabs listing-nav-tabs ">
                                     <li class="nav-item"><a class="active nav-link" data-toggle="tab" href="#seo-facebook"><i class="icon-facebook"></i></a></li>
@@ -111,7 +111,7 @@
                                             {!! CustomHelpers::fieldstabWithLanuageEdit([['field'=>'text', 'name'=>'fbtitle', 'label'=>'Facebook Title', 'errorkey'=>'fbtitle',],['field'=>'textarea', 'name'=>'fbdesc', 'label'=>'Facebook Description', 'errorkey'=>'fbdesc','editor_required'=>'N']], '3','static_page_id',$page_dtls->id,$tblStaticPageDesc, $errors) !!}                                        
                                         </div>                                    
                                         <div class="form-group thumb-image-upload file-wrapper">
-                                            <label>@lang('page.page_fb_image')</label>
+                                            <label>@lang('cms.page_fb_image')</label>
                                             <img class="upload-img" src="{{getPageSocialshareImageUrl($page_dtls->fbimage)}}" width="360" height="230">                                           
                                             <input type="file" name="fbimage" accept=".png, .jpg, .jpeg" class="file-upload">
                                             @if($errors->has('fbimage'))
@@ -124,7 +124,7 @@
                                             {!! CustomHelpers::fieldstabWithLanuageEdit([['field'=>'text', 'name'=>'twtitle', 'label'=>'Twitter Title', 'errorkey'=>'twtitle'],['field'=>'textarea', 'name'=>'twdesc', 'label'=>'Twitter Description', 'errorkey'=>'twdesc','editor_required'=>'N']], '4','static_page_id',$page_dtls->id,$tblStaticPageDesc, $errors) !!}                                        
                                         </div>                                    
                                         <div class="form-group thumb-image-upload file-wrapper">
-                                            <label>@lang('page.page_tw_image')</label>
+                                            <label>@lang('cms.page_tw_image')</label>
                                             <img class="upload-img" src="{{getPageSocialshareImageUrl($page_dtls->twimage)}}" width="360" height="230">
                                             <input type="file" name="twimage" accept=".png, .jpg, .jpeg" class="file-upload">
                                             @if($errors->has('twimage'))
@@ -137,7 +137,7 @@
                                             {!! CustomHelpers::fieldstabWithLanuageEdit([['field'=>'text', 'name'=>'institle', 'label'=>'Instagram Title', 'errorkey'=>'institle'],['field'=>'textarea', 'name'=>'insdesc', 'label'=>'Instagram Description', 'errorkey'=>'insdesc','editor_required'=>'N']], '5', 'static_page_id',$page_dtls->id,$tblStaticPageDesc, $errors) !!}                                         
                                         </div>
                                         <div class="form-group thumb-image-upload file-wrapper">
-                                            <label>@lang('page.page_ins_image')</label>
+                                            <label>@lang('cms.page_ins_image')</label>
                                             <img class="upload-img" src="{{getPageSocialshareImageUrl($page_dtls->insimage)}}" width="360" height="230">
                                             <input type="file" name="insimage" accept=".png, .jpg, .jpeg" class="file-upload">
                                             @if($errors->has('insimage'))

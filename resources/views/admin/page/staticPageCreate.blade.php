@@ -39,7 +39,7 @@
                         <ul class="nav nav-tabs">
                             <li class="nav-item"><a class="nav-link show active" data-toggle="tab" data-target="#page-details" class="active">General</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" data-target="#seo-details">SEO</a></li>
-                            <li class="nav-item"><a class="nav-link" data-toggle="tab" data-target="#blogSocilashare">@lang('page.page_socialshare')</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" data-target="#blogSocilashare">@lang('cms.page_socialshare')</a></li>
                         </ul>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-6">
-                                    <label>@lang('page.meta_image')</label>
+                                    <label>@lang('cms.meta_image')</label>
                                     <div class="thumb-image-upload file-wrapper">
                                         <input type="file" accept=".png, .jpg, .jpeg" class="file-upload" name="metaimage"> 
                                         <img class="upload-img" src="{{ Config::get('constants.image_url') }}file-upload.jpg" width="360" height="230">
@@ -95,7 +95,7 @@
                             </div>
                         </div>
                          <div id="blogSocilashare" class="tab-pane">
-                            <h2 class="title-prod">@lang('page.page_socialshare')</h2>
+                            <h2 class="title-prod">@lang('cms.page_socialshare')</h2>
                             <div class="blog-share">
                                 <ul class="nav nav-tabs listing-nav-tabs">
                                     <li class="nav-item"><a class="nav-link show active" data-toggle="tab" href="#seo-facebook"><i class="icon-facebook"></i></a></li>
