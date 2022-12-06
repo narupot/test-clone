@@ -51,41 +51,42 @@ class CartNotificationForExpire extends Command
         $body = 'ตระกร้าของคุณมีเวลาเหลือ ';
         $url = Config::get('constants.mobile_notification_url');
         foreach($orders as $order){
-            $sendNoti = 0;  
-            $order_time_in_cart = strtotime($order->created_at);
-            $order_time_in_mint = abs($current_time-$order_time_in_cart)/60;
-            if($order_time_in_mint >= 120 && $order_time_in_mint < 150){
-                 $messageTitle = $title. '60 นาที';
-                 $messageBody = $body. '60 นาที';
-                 if($order->noti_60 == '2'){
+            $sendNoti = 0; 
+            if($order->user_id > 0){ 
+                $order_time_in_cart = strtotime($order->created_at);
+                $order_time_in_mint = abs($current_time-$order_time_in_cart)/60;
+                if($order_time_in_mint >= 120 && $order_time_in_mint < 150){
+                     $messageTitle = $title. '60 นาที';
+                     $messageBody = $body. '60 นาที';
+                     if($order->noti_60 == '2'){
+                         $sendNoti = 1; 
+                         $order->noti_60 = '1';
+                         $order->save();
+
+                     }
+                 }elseif($order_time_in_mint >= 150 && $order_time_in_mint < 170){
+                     $messageTitle = $title. '30 นาที';
+                     $messageBody = $body. '30 นาที';
+                     if($order->noti_30 == '2'){
+                         $sendNoti = 1; 
+                         $order->noti_30 = '1';
+                         $order->save();
+
+                     }
+
+
+                }else if($order_time_in_mint > 178 && $order_time_in_mint <= 180){
+                     $messageTitle = $title. 'ตระกร้าของคุณหมดอายุ';
+                     $messageBody = $body. 'ตระกร้าของคุณหมดอายุ';
                      $sendNoti = 1; 
-                     $order->noti_60 = '1';
-                     $order->save();
+                }
+                
+                if($sendNoti == 1){
+                    $post_arr = ['user_id'=>$order->user_id, 'title'=>$messageTitle,'body'=>$messageBody, 'type_redirect'=>'cart_notify']; 
+                    $responce = $this->handleCurlRequest($url,$post_arr);
+                }                 
 
-                 }
-             }elseif($order_time_in_mint >= 150 && $order_time_in_mint < 170){
-                 $messageTitle = $title. '30 นาที';
-                 $messageBody = $body. '30 นาที';
-                 if($order->noti_30 == '2'){
-                     $sendNoti = 1; 
-                     $order->noti_30 = '1';
-                     $order->save();
-
-                 }
-
-
-            }else if($order_time_in_mint > 178 && $order_time_in_mint <= 180){
-                 $messageTitle = $title. 'ตระกร้าของคุณหมดอายุ';
-                 $messageBody = $body. 'ตระกร้าของคุณหมดอายุ';
-                 $sendNoti = 1; 
             }
-            
-            if($sendNoti == 1){
-                $post_arr = ['user_id'=>$order->user_id, 'title'=>$messageTitle,'body'=>$messageBody, 'type_redirect'=>'cart_notify']; 
-                $responce = $this->handleCurlRequest($url,$post_arr);
-            }
-
-
 
         }
 
