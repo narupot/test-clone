@@ -44,7 +44,9 @@ class CartNotificationForExpire extends Command
 
         $date = date('Y-m-d H:i:s');
         $current_time = strtotime($date);
-        $orders = \App\OrdersTemp::where('created_at','<=',$one_hour_left)->where('order_status','0')->get();
+        //$one_hour_left = date("Y-m-d H:i:s", strtotime('-2 hours', strtotime($date)));
+        //where('created_at','<=',$one_hour_left)
+        $orders = \App\OrdersTemp::where('order_status','0')->get();
         $title = 'ตระกร้าของคุณมีเวลาเหลือ ';
         $body = 'ตระกร้าของคุณมีเวลาเหลือ ';
         $url = Config::get('constants.mobile_notification_url');
