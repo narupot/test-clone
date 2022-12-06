@@ -498,7 +498,6 @@
     });
 
     Route::group(['prefix' => 'buyer','middleware' => 'escape-back-history'], function () {
-        
         Route::get('bargain/{sortby?}','User\BargainController@index');
         Route::get('getbargainlist','User\BargainController@getBargainList');
         Route::post('bargainPriceFromBuyer/{id?}','User\BargainController@bargainPriceFromBuyer');
