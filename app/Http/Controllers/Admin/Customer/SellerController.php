@@ -469,10 +469,7 @@ class SellerController extends MarketPlace
             $error_msg['ph_number.unique'] = Lang::get('customer.phone_number_already_exist');
         }
 
-        if(isset($input->dob) && $input->dob !=''){
-            $error_msg['dob.required'] = Lang::get('customer.please_enter_dob');
-        } 
-
+        $error_msg['dob.required'] = Lang::get('customer.please_enter_dob');
         return $validate = Validator::make($input, $rules, $error_msg);
     }
 

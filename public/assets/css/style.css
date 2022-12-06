@@ -3535,7 +3535,7 @@ h2.title {
 .hide {
   display: none !important; }
 
-.error, .error-msg, .red {
+.error, .error-msg, .red , form .help-block {
   color: #e20; }
 
 img {
