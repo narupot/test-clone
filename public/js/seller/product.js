@@ -421,11 +421,15 @@ $(document).ready(function() {
                 //response = JSON.parse(response);
                 
                 var html = '<option value="">---'+lang_json.select+'---</option>';
-                
+                var selected = '';
                 //console.log(response);
                 //var html = '';
                 $.each(response, function( index, value ) {
-                    html += '<option value="'+value.id+'">'+value.unit_name+'</option>';
+                    selected = '';
+                    if(base_unit_id == value.id){
+                        selected = 'selected="selected"';
+                    }
+                    html += '<option value="'+value.id+'" '+selected+' >'+value.unit_name+'</option>';
                 });
 
                 $('#baseunit').html(html);

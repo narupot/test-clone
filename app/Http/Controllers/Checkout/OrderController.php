@@ -335,12 +335,12 @@ class OrderController extends MarketPlace {
             $body = $customer_name .' and order id '. $main_order->formatted_id;
             
             $order_detail = OrderDetail::getMainOrderDetail($main_order->id);
-            $shop_ord = \App\OrderShop::where('order_id',$main_order->id)->select('id','shop_formatted_id', 'shop_user_id')->get();
+            $shop_ord = \App\OrderShop::where('order_id',$main_order->id)->get();
             //dd($shop_ord);
             if(count($shop_ord)){
                 foreach ($shop_ord as $key => $value) {
                     $shop_order[$value->id] = ['shop_formatted_id'=>$value->shop_formatted_id];
-                    $post_arr = ['user_id'=>$value->shop_user_id, 'title'=>$title,'body'=>$body];
+                    $post_arr = ['user_id'=>$value->shop_user_id, 'title'=>$title,'body'=>$body, 'type_redirect'=>'order_history'];
                     $url = Config::get('constants.mobile_notification_url');//url().'/api/buyer/v1/sendMobileNotification';
                     if($value->send_noti == '2'){
                        $responce = $this->handleCurlRequest($url,$post_arr);

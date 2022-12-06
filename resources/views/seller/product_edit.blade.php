@@ -7,10 +7,10 @@
 @section('header_script')
     var lang_json = {"ok":"@lang('common.ok')", "success":"@lang('common.success')", "select":"@lang('common.select')"};
     var base_unit_url = '{{action('Seller\ProductController@baseUnit')}}';
-  
     var txt_no = "@lang('common.no')";
     var text_ok_btn = "@lang('common.ok_btn')";
     var currency = "@lang('common.baht')";
+    var base_unit_id = "{{$result->base_unit_id}}";
 @endsection
 
 @section('content')
@@ -81,9 +81,15 @@
 <script type="text/javascript">
     // Set custom buttons with separator between them.
     const TOOLBAR_BATTONS = ['undo', 'redo' , '|', 'bold', 'italic', 'underline', 'html'];
-    const TOOLBAR_BATTONS_XS = ['undo', 'redo' , '-', 'bold', 'italic', 'underline'];
+    const TOOLBAR_BATTONS_XS = ['undo', 'redo' , '-', 'bold', 'italic', 'underline'];    
 </script>
 {!! CustomHelpers::combineCssJs(['js/price_formatter', 'js/seller/product'],'js') !!}
 @include('includes.froalaeditor_dependencies')
-<script src="{{asset('js/normal_froala_editor_setting.js')}}"></script>  
+<script src="{{asset('js/normal_froala_editor_setting.js')}}"></script>
+<script type="text/javascript">
+    $(function(){
+       $('.active input[name="product_cat"]').trigger('click');
+    });
+    
+</script>  
 @stop

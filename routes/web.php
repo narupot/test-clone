@@ -18,9 +18,7 @@
     Route::post('synchronizeBroadcasts', 'SyncController@synchronizeBroadcasts');
     
     Route::group(array('prefix' => 'admin','middleware' => 'escape-back-history'), function () {
-
         Route::get('sync-mongo', 'Admin\SyncMongoController@index');
-
         Route::get('adminAutoSearch', 'Admin\Search\AdminSearchController@adminAutoSearch');
         Route::get('adminSearch', 'Admin\Search\AdminSearchController@index');
 
@@ -256,6 +254,8 @@
             Route::post('store', 'Admin\Product\ProductController@store');
             Route::get('sellerdata', 'Admin\Product\ProductController@SellerData');
             Route::get('getsellercat', 'Admin\Product\ProductController@getSellerCategory');
+            Route::get('baseunit/{cat_id?}','Admin\Product\ProductController@baseUnit');
+
             
             Route::get('/', 'Admin\Product\ProductController@index');
             Route::get('productlistdata', 'Admin\Product\ProductController@productListData');
@@ -446,8 +446,9 @@
     });
     /**admin route end*******/
     Route::get('track-order/{order_id?}','Checkout\TrackOrderController@trackOrderDetail');
-    Route::any('paymentgateway/kbank/v1/odd/checkout/tracking', 'Checkout\PaymentGatewayController@oddRegisterTracking');
-    Route::any('payment-gateway/kbank/v1/odd/checkout/tracking', 'Checkout\PaymentGatewayController@oddRegisterTracking');
+   
+    Route::any('payment-gateway/kbank/v1/odd/register/tracking', 'Checkout\PaymentGatewayController@oddRegisterTracking');
+    Route::any('payment-gateway/kbank/v1/odd/checkout/tracking', 'Checkout\PaymentGatewayController@oddPaymentTracking');
     Route::group(['prefix' => 'user','middleware' => 'escape-back-history'], function () {
         Route::post('address/default', 'User\UserController@setDefaultAddress');
         Route::post('address/sequence', 'User\UserController@updateSequence');
@@ -497,7 +498,6 @@
     });
 
     Route::group(['prefix' => 'buyer','middleware' => 'escape-back-history'], function () {
-        
         Route::get('bargain/{sortby?}','User\BargainController@index');
         Route::get('getbargainlist','User\BargainController@getBargainList');
         Route::post('bargainPriceFromBuyer/{id?}','User\BargainController@bargainPriceFromBuyer');

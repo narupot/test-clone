@@ -1224,6 +1224,10 @@ function cache_hasKey($cache_key){
 	return \Cache::has($cache_key);
 }
 
+function cache_getData($cache_key){
+	return \Cache::get($cache_key);
+}
+
 function cache_getDate($cache_key){
 	return \Cache::get($cache_key);
 }

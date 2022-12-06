@@ -61,7 +61,7 @@
 @section('content')
 <div class="row h-100 justify-content-center align-items-center">
     <div class="card card_wraps text-center col-5">
-        <img src="https://www.mercular.com/img/footer/kbank.png" class="card-img-top" alt="Omise">
+        <img src="/assets/images/kbank.png" class="card-img-top" alt="Omise">
         <div class="card-body">
 
             <!-- <div class="form-group">

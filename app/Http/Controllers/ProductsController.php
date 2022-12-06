@@ -202,17 +202,20 @@ class ProductsController extends MarketPlace {
        $product_ids = $product_price= [];
 
        $data = \App\MongoProduct::select('_id', 'unit_price', 'shop_id')->where('cat_id',$cat_id)->where('status',"1")->OrderBy('shop_id','ASC')->get();
+
+       //dd($data);
        
        foreach ($data as $key => $val){
           //$product_price[$val['shop_id']] = $val['unit_price'];
           if(!isset($product_price[$val['shop_id']]) || ( $val['unit_price'] > 0 && $product_price[$val['shop_id']] > $val['unit_price'])){
+              $product_price[$val['shop_id']] = $val['unit_price']; 
               $product_ids[$val['shop_id']] = $val['_id'];
           }  
 
            
        }
 
-        //dd($product_id);
+       //dd($product_ids, $product_price, $data);
 
         /*
         if(count($data)){

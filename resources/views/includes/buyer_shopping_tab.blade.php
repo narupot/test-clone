@@ -36,7 +36,7 @@
         </li>
 
         <li>
-            <a href="{{action('User\ShoppinglistController@index')}}" class="disable" @if(isset($page) && $page=='shopping_list') class="active" @endif style="pointer-events: none;"> 
+            <a href="{{action('User\ShoppinglistController@index')}}" @if(isset($page) && $page=='shopping_list') class="active" @endif> 
                 <span class="icon-list"><i class="fas fa-lemon"></i></span>
                 <span class="tab-name">@lang('shopping_list.shopping_list')</span>
                 <!-- <span class="info-list"></span> -->

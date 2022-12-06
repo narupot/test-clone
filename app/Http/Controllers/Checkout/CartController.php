@@ -1237,53 +1237,47 @@ class CartController extends MarketPlace {
 				$payplus_details = json_decode($pay_opt->live_detail,true);
 			
 		}
-        $trans_code = $payplus_details['trans_code'];
-        $merch_id = $payplus_details['merch_id'];
-        
-        $reserve = "XXXXXXXXXXXXXXXXXX";
-        $shop = "00";
-        $currency = "764";
-        $invoice = sprintf('%012d',substr(number_format(time() * rand(),0,'',''),0,10));//"000000000002";
-        $date = "XXXXXXXX";
-        $time = "XXXXXX";
+		$secret_key = $payplus_details['web_secret_key'];
+		$url = $payplus_details['url'];
+        $ref_no = substr(number_format(time() * rand(),0,'',''),0,10);
         $mobile = $request->input("phone");
-        $timeout = date("Ymd H:i:s",strtotime("+1 day"));
-        $amount = sprintf('%010d',$orderInfo->total_final_price).'00';
-        $resp_code = "00";
-        $reserve2 = "XXXXXXXXX";
-        $reference1 = "REFER".round(microtime(true) * 1000);
-        $reserve3 = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-        $reference2 = "ORDER".round(microtime(true) * 1000);
-        $rest = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 
-        $message =  $trans_code.$merch_id.$reserve.$shop.$currency.$invoice.$date.$time.$mobile.$timeout.$amount.$resp_code.$reserve2.$reference1.$reserve3.$reference2.$rest;
-        
-        $encrypted_message = exec("java -jar ".storage_path()."/aes.jar encrypt \"$message\"");
+        $post_array = array('amount'=>$orderInfo->total_final_price,'currency'=>'THB','description'=>'PayPLUS Description','source_type'=>'kplus_no','number'=>$mobile,'reference_order'=>$ref_no,'ref_1'=>$orderInfo->id,'ref_2'=>$orderInfo->id);
+        $post_json = json_encode($post_array);
 
-        $ch = curl_init();
+        $curl = curl_init();
 
-        curl_setopt($ch, CURLOPT_URL,"https://rt05.kasikornbank.com/payplus/Payplusdirectpgw.aspx");
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS,"pgwmsg=".$encrypted_message);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                'Content-Type: application/x-www-form-urlencoded')
-        );
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => $url,
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => "",
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 30,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => "POST",
+          CURLOPT_POSTFIELDS => $post_json,
+          CURLOPT_HTTPHEADER => array(
+            "cache-control: no-cache",
+            "content-type: application/json",
+            "x-api-key: ".$secret_key
+          ),
+        ));
 
-        $server_output = curl_exec($ch);
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
 
-        $decrypted_message = exec("java -jar ".storage_path()."/aes.jar decrypt \"$server_output\"");
+        curl_close($curl);
+        $result = json_decode($response);
 
-        file_put_contents(Config::get('constants.public_path')."/payplus_requests.txt",$decrypted_message);
+        if(isset($result->order_id) && isset($result->status) && $result->status=='success'){
 
-        $response_array = ["invoice"=>$invoice,"ref1"=>$reference1,"ref2"=>$reference2,"phone"=>$mobile];
-        //dd($server_output,$decrypted_message);
+        	$response_array = ["invoice"=>$ref_no,"ref1"=>$orderInfo->id,"ref2"=>$orderInfo->id,"phone"=>$mobile];
+            $update_ord = Order::where('id',$orderInfo->id)->update(['kbank_qrcode_id'=>$result->order_id]);
 
-        $update_ord = Order::where('id',$orderInfo->id)->update(['kbank_qrcode_id'=>$invoice]);
-
-        echo base64_encode(json_encode($response_array));
+            echo base64_encode(json_encode($response_array));
+        }else{
+            echo 'error';
+        }
 
 	}
 

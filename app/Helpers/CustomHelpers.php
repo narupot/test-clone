@@ -140,25 +140,33 @@ class CustomHelpers {
     public static function getSetMenu($menu_id = null, $class=''){
         $menuHtml = '';
         if(!empty($menu_id)){
-            $result = \App\MegaMenu::where('id', $menu_id)->where('status', '1')->first();
-            if(!empty($result)){
-                $menuHtml .= '<ul id="menu'.$result->menu_design_id.'" class="'.$class.'">';
-                foreach($result->getMenuItems as $key=>$item){
-                    //echo $item->id;
-                    $url = Self::getMenuUrl($item);
-                    $iconleft = $iconright = '';
-                    if($item->icon_show == 'after_text'){
-                      if(!empty($item->atr_menu_icon)) $iconright = '<span class="arrow ricon"><i class="'.$item->atr_menu_icon.'"></i></span>';
-                    }else{
-                      if(!empty($item->atr_menu_icon)) $iconleft = '<span class="arrow licon"><i class="'.$item->atr_menu_icon.'"></i></span>';  
-                    }
 
-                    $menuHtml .= '<li><span>'.$iconleft.'<a href="'.$url.'">'.$item->getMenuItemDesc->title.'</a>'.$iconright.'</span>';
-                    $menuHtml .= Self::getSetSubMenu($item->id);      
-                    $menuHtml .= '</li>';
-                }
-                $menuHtml .='</ul>'; 
-            }   
+            $cache_key = 'desktopmega_menu_'.$menu_id.'_'.session('default_lang');
+            if (cache_hasKey($cache_key) && \Config::get('constants.enable_cache')) {
+                $menuHtml = cache_getData($cache_key);
+            }
+            if(!$menuHtml){
+                $result = \App\MegaMenu::where('id', $menu_id)->where('status', '1')->first();
+                if(!empty($result)){
+                    $menuHtml .= '<ul id="menu'.$result->menu_design_id.'" class="'.$class.'">';
+                    foreach($result->getMenuItems as $key=>$item){
+                        //echo $item->id;
+                        $url = Self::getMenuUrl($item);
+                        $iconleft = $iconright = '';
+                        if($item->icon_show == 'after_text'){
+                          if(!empty($item->atr_menu_icon)) $iconright = '<span class="arrow ricon"><i class="'.$item->atr_menu_icon.'"></i></span>';
+                        }else{
+                          if(!empty($item->atr_menu_icon)) $iconleft = '<span class="arrow licon"><i class="'.$item->atr_menu_icon.'"></i></span>';  
+                        }
+
+                        $menuHtml .= '<li><span>'.$iconleft.'<a href="'.$url.'">'.$item->getMenuItemDesc->title.'</a>'.$iconright.'</span>';
+                        $menuHtml .= Self::getSetSubMenu($item->id);      
+                        $menuHtml .= '</li>';
+                    }
+                    $menuHtml .='</ul>'; 
+                    cache_putData($cache_key,$menuHtml); 
+                }   
+            }
         }
         return $menuHtml;
     }

@@ -148,7 +148,7 @@
                 <input type="text" id="weightPerUnits" name="weight_per_unit" onkeypress="return isNumericKey(event);" value="{{$result->weight_per_unit}}">
                 <select name="baseunit" id="baseunit" class="ml-3">
                    <!--option value="">--@lang('common.select')--</option-->   
-                   {!!CustomHelpers::getCatUnitOption($prod_cat->id, $result->base_unit_id)!!}
+                   {{--{{!!CustomHelpers::getCatUnitOption($prod_cat->id, $result->base_unit_id)!!}--}}
                 </select>
                 
             </div>

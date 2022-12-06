@@ -41,7 +41,7 @@ class ODDController extends MarketPlace
     public function oddToken(Request $request){
         $input = $request->all();
         $rules['ph_number'] = phoneRule();
-        $rules['citizen_id'] = reqRule();
+        /*$rules['citizen_id'] = reqRule();*/
         $error_msg['ph_number.required'] = Lang::get('customer.please_enter_phone_no');
         $error_msg['ph_number.digits'] = Lang::get('customer.phone_no_must_be_10_digits');
         $validate = Validator::make($input, $rules, $error_msg);
@@ -78,10 +78,10 @@ class ODDController extends MarketPlace
             $post_array['external_system'] = $pay_details['external_system'];
             $post_array['payee_short_name'] = $pay_details['payee_short_name'];
             /*$post_array['payer_short_name'] = substr(str_replace(' ', '', $userDetail->display_name), 0,11);*/
-            $post_array['payer_short_name'] = "";
-            $post_array['user_email'] = "";//$userDetail->email;
+            //$post_array['payer_short_name'] = "";
+            //$post_array['user_email'] = "";//$userDetail->email;
             $post_array['user_mobile_no'] = $request->ph_number;
-            $post_array['id'] = $request->citizen_id;
+            //$post_array['id'] = $request->citizen_id;
             $post_array['external_reference'] = $ref_no;
             $post_array['service_name'] = $pay_details['service_name'];
             $post_array['auth_parameter'] = $auth;
@@ -103,7 +103,7 @@ class ODDController extends MarketPlace
             );
 
             $server_output = curl_exec($ch);
-            //dd($server_output);
+            dd($server_output);
             //dd($server_output,$post_json,$pay_details['curl_url']."registerinit");
             if($server_output){
                 

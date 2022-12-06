@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use DB;
+use Config;
 
 class SendOrderLogistic extends Command
 {
@@ -141,6 +142,8 @@ class SendOrderLogistic extends Command
                 }else{
                     $update_statue = '2';
                 }
+
+                //dd($resp);
                 $msg = is_array($resp) || is_object($resp)?json_encode($resp):$resp;
 
                 $update_log = \App\LogisticLog::insertLog($main_order->id,$msg,$full_order_json);
@@ -153,7 +156,8 @@ class SendOrderLogistic extends Command
     private function sendOrderJson($order_json){
 
         //$server_url = 'http://103.129.13.138/similantms-interfaceapi/api/order/postorder';
-        $server_url = 'http://203.154.158.159/similantms-interfaceapi/api/order/postorder';
+        //$server_url = 'http://203.154.158.159/similantms-interfaceapi/api/order/postorder';
+        $server_url = Config::get('constants.send_order_json_url');
         $post_data = $order_json;
         try{
             $curl = curl_init();

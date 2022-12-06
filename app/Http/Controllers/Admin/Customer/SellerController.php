@@ -154,7 +154,7 @@ class SellerController extends MarketPlace
 
                 $check_panel_citizen = $this->checkPanelCitizen($request);
                 if(isset($check_panel_citizen['status']) && $check_panel_citizen['status']=='fail'){
-                    return redirect()->action('Admin\Customer\SellerController@addSeller')->with('errorMsg', $check_panel_citizen['msg']);
+                    return redirect()->action('Admin\Customer\SellerController@addSeller')->with('errorMsg', $check_panel_citizen['msg'])->withInput();
                 }
 
                 $default_group_id = \App\CustomerGroup::select('id','require_approve')->where(['is_default'=>'1','status'=>'1'])->first();
@@ -245,7 +245,7 @@ class SellerController extends MarketPlace
                         $update_data = MongoShop::updateData($shop_data);
                         
                         if($update_data['status'] == 'fail'){
-                            $return = redirect()->action('Admin\Customer\SellerController@addSeller')->with('errorMsg', Lang::get('admin_customer.seller_add_error_in_mongo'));
+                            $return = redirect()->action('Admin\Customer\SellerController@addSeller')->with('errorMsg', Lang::get('admin_customer.seller_add_error_in_mongo'))->withInput();
                         }
                     }
 
@@ -260,11 +260,11 @@ class SellerController extends MarketPlace
 
                 }else{
 
-                    $return = redirect()->action('Admin\Customer\SellerController@addSeller')->with('errorMsg', Lang::get('admin_customer.seller_add_error'));
+                    $return = redirect()->action('Admin\Customer\SellerController@addSeller')->with('errorMsg', Lang::get('admin_customer.seller_add_error'))->withInput();
                 }
             }
             catch(Exception $e){
-                $return = redirect()->action('Admin\Customer\SellerController@addSeller')->with('errorMsg', $e->getMessage());
+                $return = redirect()->action('Admin\Customer\SellerController@addSeller')->with('errorMsg', $e->getMessage())->withInput();
             }
         }else{
             $return = redirect()->action('Admin\Customer\SellerController@addSeller')->withErrors($validate)->withInput();    
@@ -469,10 +469,7 @@ class SellerController extends MarketPlace
             $error_msg['ph_number.unique'] = Lang::get('customer.phone_number_already_exist');
         }
 
-        if(isset($input->dob) && $input->dob !=''){
-            $error_msg['dob.required'] = Lang::get('customer.please_enter_dob');
-        } 
-
+        $error_msg['dob.required'] = Lang::get('customer.please_enter_dob');
         return $validate = Validator::make($input, $rules, $error_msg);
     }
 
