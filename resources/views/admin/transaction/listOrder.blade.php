@@ -80,12 +80,13 @@
                         text:'<a href="'+ui.cellData+'" class="btn-primary">@lang("admin_common.view")</a>',    
                     };                
                 },
-                sortable : !1,
-                minWidth : 150,
+                minWidth : 100,
+                align : 'center',
             },         
             {   title: "@lang('admin_order.main_order')", 
                 dataIndx:'formatted_id', 
-                minWidth: 140,
+                minWidth: 160,
+                align : 'center',
                 filter : {
                     attr : "@lang('admin_order.formatted_id')",                        
                     crules: [
@@ -100,7 +101,8 @@
             },
             {   title: "@lang('admin_order.bill_to_name')", 
                 dataIndx:'user_name', 
-                minWidth: 140,
+                minWidth: 160,
+                align : 'center',
                 filter : {
                     attr : "@lang('admin_order.enter_name')",                        
                     crules: [
@@ -115,8 +117,8 @@
             },
             {   title: "@lang('admin_order.grand_total')", 
                 dataIndx:'total_final_price', 
-                minWidth: 140,
-                align : "right",
+                minWidth: 100,
+                align : 'center',
                 filter : {
                     attr : "@lang('admin_order.total_final_price')",                        
                     crules: [
@@ -142,7 +144,8 @@
             {    
                 dataIndx:'order_status',
                 title: "@lang('admin_order.order_status')", 
-                minWidth: 150,
+                minWidth: 160,
+                align : 'center',
                 render : function(ui) {    
                     let ord =  {!! $ord_status !!}.filter(o=> {
                       return (Object.keys(o)[0] == ui.cellData);
@@ -164,7 +167,8 @@
             },
             {   title: "@lang('admin_order.end_shopping_date_time')", 
                 dataIndx:'end_shopping_date_time', 
-                minWidth: 140, 
+                minWidth: 160,
+                align : 'center', 
                 dataType: "date",
                 filter: { 
                     init: pqDatePicker,
@@ -179,25 +183,25 @@
             },
             {   title: "@lang('admin_order.shipping_method')", 
                 dataIndx:'shipping_method', 
-                minWidth: 140,
-                align : "right",
+                minWidth: 160,
+                align : 'center',
         
             },
             {   title: "@lang('admin_order.pickup_time')", 
                 dataIndx:'pickup_time', 
-                minWidth: 140,
-                align : "right",
+                minWidth: 160,
+                align : 'center',
         
             },{   title: "@lang('admin_order.total_weight')", 
                 dataIndx:'total_weight', 
-                minWidth: 140,
-                align : "right",
+                minWidth: 100,
+                align : 'center',
         
             },
             {   title: "@lang('admin_order.remark')", 
                 dataIndx:'admin_remark', 
-                minWidth: 140,
-                align : "right",
+                minWidth: 160,
+                align : 'center',
                 filter : {
                     attr : "@lang('admin_order.remark')",                        
                     crules: [
@@ -209,12 +213,7 @@
                     type: 'textbox', 
                     listeners: ['change'],
                 },
-            },
-            
-
-            
-            
-            
+            },  
         ];    
     </script>
 
