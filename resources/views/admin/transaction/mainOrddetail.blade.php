@@ -15,7 +15,6 @@
         <h1 class="title">@lang('checkout.order_no'). {{ $main_order->formatted_id }}</h1>       
         <div class="float-right">
             <a href="{{ action('Admin\Transaction\OrderController@index') }}" class="btn-back">@lang('admin_common.back')</a>
-
         </div>
     </div>
     <div class="content-wrap">
@@ -30,12 +29,23 @@
                     <div class="border-box order-status-wrap clearfix border-none">
                         <div class="row">
                             <div class="col-sm-6">
-                               <div class="box-status d-flex align-items-center justify-content-center">
-                                  <h3 class="status-heading mr-3">@lang('admin_order.main_order_status')</h3>
-                                  <div class="order-status-content m-0" style="min-height: auto;">
-                                     <span class="processing">{{ $main_order->getOrderStatus->status??'' }}</span>
-                                  </div>
-                               </div>
+                                <div class="box-status d-flex align-items-center justify-content-center">
+                                    <h3 class="status-heading">@lang('admin_order.main_order_status') : </h3>
+                                    <div class="order-status-content m-0" style="min-height: auto;">
+                                        <span class="processing">{{ $main_order->getOrderStatus->status??'' }}</span>
+                                        @if($main_order->order_status == '1')
+                                            <a href="javascript::void(0);" onclick="$('#change_status_option').show();">@lang('admin_common.change')</a>
+                                        @endif
+                                    </div>
+                                    <div class="order-status-content" id="change_status_option" style="display:none;">
+                                        <select id="order_status_id" name="order_status_id">
+                                            <option value="">--@lang('admin_order.select_new_status')--</option>
+                                            <option value="4">@lang('admin_common.cancel')</option>
+                                            <option value="2">@lang('admin_order.preparing_goods')</option>
+                                        </select>
+                                        <a href="javascript::void(0);" id="update_order_status" class="btn btn-primary">@lang('admin_common.update')</a>
+                                    </div>                                    
+                                </div>
                             </div>
                             <div class="col-sm-6">
                                <div class="box-status border-none">
@@ -243,7 +253,7 @@
                                 <label>@lang('admin_order.remark')</label>
                                 <textarea name="remark" required="required" id="txt_remark" placeholder="Remark text ...">{{$main_order->admin_remark}}</textarea>
                                 <div class="mt-2">
-                                    <button type="button" class="button button-primary" id="btn-remark">@lang('admin_common.save')</button>
+                                    <button type="button" class="btn btn-primary" id="btn-remark">@lang('admin_common.save')</button>
                                 </div>
                             </div>
                         </div>
@@ -282,9 +292,11 @@
 <script type="text/javascript">
     var lang_cancel = "@lang('admin_order.are_you_sure_want_to_cancel_this_items')";
     var lang_receive = "@lang('admin_order.are_you_sure_want_to_receive_this_items')";
+    var update_status_confirm = "@lang('admin_order.are_you_sure_to_update_status')";
+    var update_status_error = "@lang('admin_order.select_order_status_to_update')";
     var change_url = "{{ action('Admin\Transaction\OrderController@ordChangeItemStatus') }}";
 
-    jQuery('#btn-remark').click(function(evt){
+    jQuery('#btn-remark').click(function(evt) {
         evt.preventDefault();
         if($('#txt_remark').val()==''){
             $('#txt_remark').focus();
@@ -307,6 +319,33 @@
                 }else if(result.status=='success'){
                     swal('success', result.msg, "success");       
                 }
+        });
+    });
+
+    $('body').on('click','#update_order_status',function() {
+
+        swal({
+            text: update_status_confirm,
+            type: 'warning',
+            showCancelButton: true,
+        }).then(function () {
+            
+            var order_status_id = $('#order_status_id').val();
+            if(order_status_id == '') {
+                swal('', update_status_error, 'error');
+            }
+            else {
+                var order_id = {{$main_order->id}};
+                var ajax_url = "{{action('Admin\Transaction\OrderController@updateOrderStatus')}}";
+                var data = {'order_id':order_id, 'order_status_id':order_status_id};
+
+                callAjaxRequest(ajax_url, 'post', data, function(result) {
+
+                    swal('', result.msg, result.status).then(function() {
+                        location.reload();
+                    });                    
+                });
+            }
         });
     });
 </script>

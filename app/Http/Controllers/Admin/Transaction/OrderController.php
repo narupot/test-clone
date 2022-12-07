@@ -281,10 +281,11 @@ class OrderController extends MarketPlace
 
     }       
 
-    public function updateRemark(Request $request){
+    public function updateRemark(Request $request) {
+
         $order_id = $request->order_id;
         $order = Order::where('id',$request->order_id)->first();
-        if($order){
+        if($order) {
             $order->admin_remark = trim($request->remark);
             $order->admin_remark_by = Auth::guard('admin_user')->user()->nick_name;
             $order->save();
@@ -292,7 +293,35 @@ class OrderController extends MarketPlace
             return ['status'=>'success','msg'=>\Lang::get('admin_order.remark_updated_successfully')];
         }
         return ['status'=>'fail','msg'=>\Lang::get('admin_common.something_went_wrong')];
-    }    
+    }
+
+    public function updateOrderStatus(Request $request){
+
+        $order_id = $request->order_id;
+        $order_status_id = $request->order_status_id;
+
+        $order = Order::find($order_id);
+        if($order && $order->order_status == '1' && in_array($order_status_id, ['2', '4'])) {
+
+            $order->order_status = $order_status_id;
+            $order->save();
+
+            $order_status_key = 'order_cancelled';
+            if($order_status_id == '2') {
+                $order_status_key = 'order_end_shopping';
+            }
+
+            /****update entry in order transaction******/
+            $comment = GeneralFunctions::getOrderText($order_status_key);
+            $transaction_arr = ['order_id'=>$order_id,'order_shop_id'=>0,'order_detail_id'=>0,'event'=>'order','comment'=>$comment,'updated_by'=>'admin'];
+
+            \App\OrderTransaction::updateOrdTrans($transaction_arr);            
+
+            return ['status'=>'success','msg'=>\Lang::get('admin_order.order_status_updated_successfully')];
+        }else{
+            return ['status'=>'error','msg'=>\Lang::get('admin_order.invalid_order_id')];
+        }
+    }        
     
     public function create(){
     }
