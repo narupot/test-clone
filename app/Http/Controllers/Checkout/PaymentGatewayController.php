@@ -75,14 +75,17 @@ class PaymentGatewayController extends MarketPlace {
                 $arr = ['order_id'=>$orderInfo->id,'payment_slug'=>'kbank','reference_order'=>$ref_ord,'items'=>'','response'=>json_encode($request->all()),'created_at'=>$current_date];
                 $update_pay_resp = \App\OrderPayment::insert($arr);
 
-                $updateOrder = Order::updateOrderAfterPayment($orderInfo);
+                if (in_array($orderInfo->order_status, ['1', '4'])) {
 
-                /*for notification*/
-                EmailHelpers::sendOrderNotificationEmail($orderInfo->formatted_id);
-                /*for notification*/
+                    $updateOrder = Order::updateOrderAfterPayment($orderInfo);
 
-                /*send noti at mobile*/
-                $this->buyerNotification($orderInfo);
+                    /*for notification*/
+                    EmailHelpers::sendOrderNotificationEmail($orderInfo->formatted_id);
+                    /*for notification*/
+
+                    /*send noti at mobile*/
+                    $this->buyerNotification($orderInfo);
+                }
             }
         }
         
@@ -152,14 +155,17 @@ class PaymentGatewayController extends MarketPlace {
                 $arr = ['order_id'=>$orderInfo->id,'payment_slug'=>'payplus','reference_order'=>$request->reference_order,'items'=>'','response'=>json_encode($request->all()),'created_at'=>$current_date];
                 $update_pay_resp = \App\OrderPayment::insert($arr);
 
-                $updateOrder = Order::updateOrderAfterPayment($orderInfo);
+                if (in_array($orderInfo->order_status, ['1', '4'])) {
 
-                /*for notification*/
-                EmailHelpers::sendOrderNotificationEmail($orderInfo->formatted_id);
-                /*for notification*/
+                    $updateOrder = Order::updateOrderAfterPayment($orderInfo);
 
-                /*send noti at mobile*/
-                $this->buyerNotification($orderInfo);
+                    /*for notification*/
+                    EmailHelpers::sendOrderNotificationEmail($orderInfo->formatted_id);
+                    /*for notification*/
+
+                    /*send noti at mobile*/
+                    $this->buyerNotification($orderInfo);
+                }
             }
 
         }

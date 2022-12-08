@@ -779,7 +779,7 @@ class GeneralFunctions {
                 break;
 
             case 'order_end_shopping':
-                $val = 'Order end shopping';
+                $val = 'Order end shopping with payment';
                 break;
 
             case 'item_cancel':

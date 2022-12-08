@@ -30,15 +30,15 @@
                             <div class="col-sm-7">
                                 <div class="box-status">
                                     <div class="row">
-                                        <div class="col-md-4 pr-0">
+                                        <div class="col-md-5 pr-0">
                                             <h3 class="status-heading">@lang('admin_order.main_order_status') : </h3>
                                         </div>
-                                        <div class="col-md-8">
+                                        <div class="col-md-7">
                                             <div class="d-flex align-items-center">
                                                 <div class="order-status-content m-0 p-0" style="min-height: auto;">
                                                     <span class="processing mr-3">{{ $main_order->getOrderStatus->status??'' }}</span>
                                                     @if($main_order->order_status == '1')
-                                                        <a href="javascript::void(0);" onclick="$('#change_status_option').show();">@lang('admin_common.change')</a>
+                                                        <a href="javascript::void(0);" onclick="$('#change_status_option').show();$(this).hide();">@lang('admin_common.change')</a>
                                                     @endif
                                                 </div>
                                             </div>
@@ -46,8 +46,8 @@
                                                 <div class="d-flex align-items-center">
                                                     <select id="order_status_id" name="order_status_id" style="max-width: 170px;" class="mr-2">
                                                         <option value="">--@lang('admin_order.select_new_status')--</option>
-                                                        <option value="4">@lang('admin_common.cancel')</option>
                                                         <option value="2">@lang('admin_order.preparing_goods')</option>
+                                                        <!--<option value="4">@lang('admin_common.cancel')</option>-->
                                                     </select>
                                                     <a href="javascript::void(0);" id="update_order_status" class="btn btn-primary">@lang('admin_common.update')</a>
                                                 </div>
