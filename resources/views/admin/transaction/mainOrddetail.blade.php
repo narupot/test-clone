@@ -6,7 +6,7 @@
 
 @section('header_styles')
     <link rel="stylesheet" type="text/css" href="{{Config('constants.admin_css_url') }}order.css">
-
+    <style type="text/css"> .order_status_id {  max-width: 250px; margin-right:.5rem; } </style>
 @stop
 
 @section('content')
@@ -29,13 +29,15 @@
                     <div class="border-box order-status-wrap clearfix border-none">
                         <div class="row">
                             <div class="col-sm-6">
-                                <div class="box-status d-flex align-items-center justify-content-center">
-                                    <h3 class="status-heading">@lang('admin_order.main_order_status') : </h3>
-                                    <div class="order-status-content m-0" style="min-height: auto;">
-                                        <span class="processing">{{ $main_order->getOrderStatus->status??'' }}</span>
-                                        @if($main_order->order_status == '1')
-                                            <a href="javascript::void(0);" onclick="$('#change_status_option').show();">@lang('admin_common.change')</a>
-                                        @endif
+                                <div class="box-status">
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <h3 class="status-heading">@lang('admin_order.main_order_status') : </h3>
+                                        <div class="order-status-content m-0" style="min-height: auto;">
+                                            <span class="processing mr-3">{{ $main_order->getOrderStatus->status??'' }}</span>
+                                            @if($main_order->order_status == '1')
+                                                <a href="javascript::void(0);" onclick="$('#change_status_option').show();">@lang('admin_common.change')</a>
+                                            @endif
+                                        </div>
                                     </div>
                                     <div class="order-status-content" id="change_status_option" style="display:none;">
                                         <select id="order_status_id" name="order_status_id">
