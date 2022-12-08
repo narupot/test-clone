@@ -6,7 +6,6 @@
 
 @section('header_styles')
     <link rel="stylesheet" type="text/css" href="{{Config('constants.admin_css_url') }}order.css">
-    <style type="text/css"> .order_status_id {  max-width: 250px; margin-right:.5rem; } </style>
 @stop
 
 @section('content')
@@ -40,12 +39,14 @@
                                         </div>
                                     </div>
                                     <div class="order-status-content" id="change_status_option" style="display:none;">
-                                        <select id="order_status_id" name="order_status_id">
-                                            <option value="">--@lang('admin_order.select_new_status')--</option>
-                                            <option value="4">@lang('admin_common.cancel')</option>
-                                            <option value="2">@lang('admin_order.preparing_goods')</option>
-                                        </select>
-                                        <a href="javascript::void(0);" id="update_order_status" class="btn btn-primary">@lang('admin_common.update')</a>
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <select id="order_status_id" name="order_status_id" style="max-width: 275px;" class="mr-3">
+                                                <option value="">--@lang('admin_order.select_new_status')--</option>
+                                                <option value="4">@lang('admin_common.cancel')</option>
+                                                <option value="2">@lang('admin_order.preparing_goods')</option>
+                                            </select>
+                                            <a href="javascript::void(0);" id="update_order_status" class="btn btn-primary">@lang('admin_common.update')</a>
+                                        </div>
                                     </div>                                    
                                 </div>
                             </div>
