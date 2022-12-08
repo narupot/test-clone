@@ -281,8 +281,8 @@
                             @if(count($transaction))
                                 @foreach($transaction as $key => $value)
                                     <div class="">
-                                        <span class="ord-txt">{{ $value->comment }}</span>
-                                        <span class="time"><b>{{ getDateFormat($value->created_at,1) }}</b>
+                                        <span class="ord-txt">{{$value->comment}}<label class="ml-1" style="color:lightslategray;">-by {{$value->updated_by}}</label></span>
+                                        <span class="time"><b>{{getDateFormat($value->created_at,1)}}</b>
                                         </span>
                                     </div>
                                 @endforeach
