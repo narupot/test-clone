@@ -303,8 +303,8 @@ class OrderController extends MarketPlace
         $orderInfo = Order::find($order_id);
         if($orderInfo && $orderInfo->order_status == '1' && $order_status_id == '2') {
 
-            $orderInfo->updated_by = 'admin';
-            Order::updateOrderAfterPayment($orderInfo);
+            $updated_by = 'admin';
+            Order::updateOrderAfterPayment($orderInfo, $updated_by);
 
             /*for notification*/
             EmailHelpers::sendOrderNotificationEmail($orderInfo->formatted_id);
