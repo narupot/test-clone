@@ -101,7 +101,7 @@ class Order extends Model
     }
 
     /*****use after payment done to update payment status*******/
-    public static function updateOrderAfterPayment($orderInfo){
+    public static function updateOrderAfterPayment($orderInfo, $updated_by='buyer'){
         /**updating main order payment status***/
         $current_date = date('Y-m-d H:i:s');
         $orderInfo->order_status = 2;
@@ -148,8 +148,7 @@ class Order extends Model
          /****update entry in order transaction******/
         //$comment = 'Order end shopping with payment done';
         $comment = GeneralFunctions::getOrderText('order_end_shopping');
-        $updated_by = isset($orderInfo->updated_by)?$orderInfo->updated_by:'buyer';
-        
+
         $transaction_arr = ['order_id'=>$orderInfo->id,'order_shop_id'=>0,'order_detail_id'=>0,'event'=>'order','comment'=>$comment,'updated_by'=>$updated_by];
 
         $update_transaction = \App\OrderTransaction::updateOrdTrans($transaction_arr);
