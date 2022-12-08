@@ -348,8 +348,9 @@
                 var ajax_url = "{{action('Admin\Transaction\OrderController@updateOrderStatus')}}";
                 var data = {'order_id':order_id, 'order_status_id':order_status_id};
 
-                callAjaxRequest(ajax_url, 'post', data, function(result) {
-
+                showHideLoaderAdmin('showLoader');
+                callAjax(ajax_url, 'post', data, function(result) {
+                    showHideLoaderAdmin('hideLoader');
                     swal('', result.msg, result.status).then(function() {
                         location.reload();
                     });                    
