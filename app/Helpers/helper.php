@@ -294,7 +294,7 @@ if (! function_exists('numberFormat')) {
 		$currencyVal = $price;
 		if($currencyId)
 			$currencyVal = ($currencyId) ? convertCurrency($price,$currencyId,session('default_currency_id')) : $price;
-		$exp = explode($currencyVal, '.');
+		$exp = $currencyVal ? explode($currencyVal, '.') : 0;
 		
 		if(isset($exp[1]) && $exp[1]>0){
 			return number_format($currencyVal, 2);

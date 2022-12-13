@@ -64,7 +64,7 @@ class PaymentGatewayController extends MarketPlace {
         
         
         if(isset($response->order_id)){
-            $orderInfo = Order::where('kbank_qrcode_id',$response->order_id)->first();
+            $orderInfo = Order::where('kbank_qrcode_id','like','%'.$response->order_id.'%')->first();
 
             if($orderInfo){
                 $update_log = OrderGatewayLog::where('id',$gateway_log_id)->update(['order_id'=>$orderInfo->id]);
@@ -94,7 +94,7 @@ class PaymentGatewayController extends MarketPlace {
     /*****this function check when kbank qrcode hit for check tracking hit********/
     public function Check($order_id){
 
-        $order = Order::select("*")->where("kbank_qrcode_id","=",$order_id)->where('payment_status',1)->first();
+        $order = Order::select("*")->where("kbank_qrcode_id",'like','%'.$order_id.'%')->where('payment_status',1)->first();
         if(!empty($order)){
             if(strtotime($order->end_shopping_date) > 0){
                 $url = action('Checkout\OrderController@thanks',$order->formatted_id);
