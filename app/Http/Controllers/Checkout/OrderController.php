@@ -455,7 +455,13 @@ class OrderController extends MarketPlace {
 
         $response = json_decode($server_output);
         if(!empty($response->id)){
-            $update_ord = Order::where('id',$orderInfo->id)->update(['kbank_qrcode_id'=>$response->id]);
+            if($orderInfo->kbank_qrcode_id){
+                $ref_id = $orderInfo->kbank_qrcode_id.','.$response->id;
+            }else{
+                $ref_id = $response->id;
+            }
+            
+            $update_ord = Order::where('id',$orderInfo->id)->update(['kbank_qrcode_id'=>$ref_id]);
             return $response->id;
         }else{
             return 0;

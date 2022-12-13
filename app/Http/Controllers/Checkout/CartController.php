@@ -1239,10 +1239,10 @@ class CartController extends MarketPlace {
 		}
 		$secret_key = $payplus_details['web_secret_key'];
 		$url = $payplus_details['url'];
-        $ref_no = substr(number_format(time() * rand(),0,'',''),0,10);
+        $ref_no = $orderInfo->id;//substr(number_format(time() * rand(),0,'',''),0,10);
         $mobile = $request->input("phone");
 
-        $post_array = array('amount'=>$orderInfo->total_final_price,'currency'=>'THB','description'=>'PayPLUS Description','source_type'=>'kplus_no','number'=>$mobile,'reference_order'=>$ref_no,'ref_1'=>$orderInfo->id,'ref_2'=>$orderInfo->id);
+        $post_array = array('amount'=>$orderInfo->total_final_price,'currency'=>'THB','description'=>'PayPLUS Description','source_type'=>'kplus_no','number'=>$mobile,'reference_order'=>$orderInfo->id,'ref_1'=>$orderInfo->id,'ref_2'=>$orderInfo->id);
         $post_json = json_encode($post_array);
 
         $curl = curl_init();
