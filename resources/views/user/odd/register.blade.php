@@ -59,7 +59,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="row">
+                <div class="row">
                     <div class="col-sm-4 mb-3 pr-0">
                         <div class="form-group">
                             <label>@lang('customer.citizen_id')</label>
@@ -69,7 +69,7 @@
                             @endif
                         </div>
                     </div>
-                </div> -->
+                </div>
                 <div class="form-group">
                     <button type="submit" id="" class="btn">@lang('customer.register')</button>
                 </div>
