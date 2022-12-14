@@ -29,7 +29,6 @@ class PaymentGatewayController extends MarketPlace {
     /****kbank qrcode tracking url function*********/
     public function ReturnTransaction(request $request){
 
-        file_put_contents(Config::get('constants.public_path')."/kbank_ret.txt",json_encode($request->all()));
         $charge_id = $request->input("id");
         $pay_opt = \App\PaymentOption::where('slug','kbank')->first();
         if(!empty($pay_opt)){
@@ -107,8 +106,6 @@ class PaymentGatewayController extends MarketPlace {
         }
     }
 
-
-
     /*****kbank payplus tracking url function********/
     public function payplusReturnTransaction(Request $request){
 
@@ -172,13 +169,9 @@ class PaymentGatewayController extends MarketPlace {
         exit;
         /**old***/
         $message = $request->input("PMGWRESP2");
-
         $decrypted_message = exec("java -jar ".storage_path()."/aes.jar decrypt \"$message\"");
-
         file_put_contents(Config::get('constants.public_path')."/payplus_responses.txt",$decrypted_message);
-
         $gateway_log_id = OrderGatewayLog::insertLog(['gateway_type'=>'payplus','gateway_response'=>$decrypted_message]);
-
         $trans_code = substr($decrypted_message,0,4);
         $merchant = substr($decrypted_message,4,5);
         $currency = substr($decrypted_message,29,3);
@@ -189,32 +182,10 @@ class PaymentGatewayController extends MarketPlace {
         $response_code = substr($decrypted_message,97,2);
         $reference1 = substr($decrypted_message,108,18);
         $reference2 = substr($decrypted_message,168,18);
-
-        $response = ["trans_code"=>$trans_code,"merchant"=>$merchant,"currency"=>$currency,
-                                          "invoice"=>$invoice,"date"=>$date,"time"=>date("Y-m-d H:i:s",$date),
-                                          "mobile"=>$mobile,"amount"=>$amount,"response_code"=>$response_code,
-                                          "reference1"=>$reference1,"reference2"=>$reference2];
-                                          
+        $response = ["trans_code"=>$trans_code,"merchant"=>$merchant,"currency"=>$currency,"invoice"=>$invoice,"date"=>$date,"time"=>date("Y-m-d H:i:s",$date),"mobile"=>$mobile,"amount"=>$amount,"response_code"=>$response_code,"reference1"=>$reference1,"reference2"=>$reference2];     
         $current_date = date('Y-m-d H:i:s');
         if($invoice && $response_code=='00'){
 
-            $orderInfo = Order::where('kbank_qrcode_id',$invoice)->first();
-            if($orderInfo){
-                $update_log = OrderGatewayLog::where('id',$gateway_log_id)->update(['order_id'=>$orderInfo->id]);
-
-                $arr = ['order_id'=>$orderInfo->id,'payment_slug'=>'payplus','reference_order'=>$invoice,'items'=>'','response'=>json_encode($response),'created_at'=>$current_date];
-                $update_pay_resp = \App\OrderPayment::insert($arr);
-
-                $updateOrder = Order::updateOrderAfterPayment($orderInfo);
-
-                /*for notification*/
-                EmailHelpers::sendOrderNotificationEmail($orderInfo->formatted_id);
-                /*for notification*/
-
-                /*send noti at mobile*/
-                $this->buyerNotification($orderInfo);
-
-            }
         }
     }
 
@@ -234,20 +205,13 @@ class PaymentGatewayController extends MarketPlace {
         }
     }
 
+    /**ODD register notify url***/
     public function oddRegisterTracking(Request $request){
-        if($request->all()){
-            $gateway_log_id = OrderGatewayLog::insertLog(['gateway_type'=>'odd-register','gateway_response'=>json_encode($request->all())]);
-        }
-      
-
-        file_put_contents(Config::get('constants.public_path')."/odd_register.txt",json_encode($request->all(),JSON_UNESCAPED_UNICODE));
         
         if(!isset($request->returnStatus)){
             
             exit();
         }
-
-        /*$response = '{"returnStatus":"322110350545883                                   4AF5F60748A81F41BF4C25C04AB9B9EB9F42D135720ACCE13E6F6FD54217B0FF                                    0481879086           00202106170203090K0025Your Online Direct Debit Registration is successful."}';*/
 
         $gateway_log_id = OrderGatewayLog::insertLog(['gateway_type'=>'odd_register','gateway_response'=>json_encode($request->all())]);
 
@@ -294,64 +258,10 @@ class PaymentGatewayController extends MarketPlace {
         }
         
     }
-
+    /***not use because it done by curl direct when submit checkout***/
     public function oddPaymentTracking(Request $request){
         if($request->all()){
             $gateway_log_id = OrderGatewayLog::insertLog(['gateway_type'=>'odd-payment','gateway_response'=>json_encode($request->all())]);
-        }
-        
-
-        file_put_contents(Config::get('constants.public_path')."/odd_register.txt",json_encode($request->all(),JSON_UNESCAPED_UNICODE));
-        
-        if(!isset($request->returnStatus)){
-            
-            exit();
-        }
-
-        /*$response = '{"returnStatus":"322110350545883                                   4AF5F60748A81F41BF4C25C04AB9B9EB9F42D135720ACCE13E6F6FD54217B0FF                                    0481879086           00202106170203090K0025Your Online Direct Debit Registration is successful."}';*/
-
-        $gateway_log_id = OrderGatewayLog::insertLog(['gateway_type'=>'odd_register','gateway_response'=>json_encode($request->all())]);
-
-        $response = $request->returnStatus;
-        $external_reference = substr($response,0,20);
-        $payer_short_name  = substr($response,20,30);
-        $espa_id = substr($response,50,100);
-        $account_no = substr($response,150,20);
-        
-        $user_email = substr($response,170,1);
-        $mobile = substr($response,171,1);
-        $matching_flag = substr($response,172,1);
-        $timestamp = substr($response,173,14);
-        $return_status = substr($response,187,1);
-        $return_code = substr($response,188,5);
-        $return_msg = substr($response,193);
-
-        $user_info = \App\UserInfo::where('reference_no',$external_reference)->first();
-
-
-        if($user_info && is_object($user_info)){
-
-            $update_log = OrderGatewayLog::where('id',$gateway_log_id)->update(['order_id'=>$user_info->id]);
-            
-            $info_json = json_decode($user_info->info_json,true);
-
-            if(count($info_json)){
-                $info_json['tracking_response'] = $response;
-                $new_json = json_encode($info_json,JSON_UNESCAPED_UNICODE);
-            }else{
-                $new_json = $response;
-            }
-            if($return_status == '0' || $return_status == 0){
-                $user_info->status = '1';
-                $user_info->espa_id = $espa_id;
-            }else{
-                $user_info->status = '0';
-                $user_info->espa_id = '';
-            }
-            
-            $user_info->info_json = $new_json;
-            $user_info->save();
-           
         }
         
     }
