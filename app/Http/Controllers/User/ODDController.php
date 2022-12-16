@@ -31,7 +31,8 @@ class ODDController extends MarketPlace
         if($user_odd_info && $user_odd_info->status=='1' && $user_odd_info->espa_id){
             return redirect(action('User\ODDController@index'));
         }
-
+        $cache_key = 'odd_term_cond_'.Auth::user()->id;
+        cache_deleteKey($cache_key);
         return view('user.odd.condition', ['userDetail'=>Auth::user(),'page'=>'buyer','user_odd_info'=>$user_odd_info]);
     }
 
@@ -41,7 +42,8 @@ class ODDController extends MarketPlace
         $error_msg['term_cond.required'] = Lang::get('customer.please_check_checkbox');
         $validate = Validator::make($input, $rules, $error_msg);
         if ($validate->passes()) {
-
+            $cache_key = 'odd_term_cond_'.Auth::user()->id;
+            cache_putData($cache_key,Auth::user()->id,1);
             return redirect(action('User\ODDController@index'));
 
         }else{
@@ -52,7 +54,17 @@ class ODDController extends MarketPlace
     public function index(Request $request) {
 
         $userDetail = Auth::user();
-
+        $previous_url = \URL::previous();
+        $exp_url = explode('/', $previous_url);
+        $last_param = end($exp_url);
+        $cache_key = 'odd_term_cond_'.Auth::user()->id;
+        $cache_odd = cache_hasKey($cache_key) ? cache_getData($cache_key) : '';
+        if($last_param=='register-odd-condition' && $cache_odd==Auth::user()->id){
+            
+        }else{
+            return redirect(action('User\ODDController@oddCondition'));
+        }
+        
         $userDetail->facebook_login = 'N';
         if(empty($userDetail->password) && !empty($userDetail->facebook_id)) {
             $userDetail->facebook_login = 'Y';
