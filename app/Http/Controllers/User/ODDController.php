@@ -24,6 +24,30 @@ class ODDController extends MarketPlace
     public function __construct() {
         $this->middleware('authenticate');
     }
+
+    public function oddCondition(Request $request) {
+
+        $user_odd_info = UserInfo::getUserInfo('odd-register');
+        if($user_odd_info && $user_odd_info->status=='1' && $user_odd_info->espa_id){
+            return redirect(action('User\ODDController@index'));
+        }
+
+        return view('user.odd.condition', ['userDetail'=>Auth::user(),'page'=>'buyer','user_odd_info'=>$user_odd_info]);
+    }
+
+    public function oddConditionStore(Request $request) {
+        $input = $request->all();
+        $rules['term_cond'] = reqRule();
+        $error_msg['term_cond.required'] = Lang::get('customer.please_check_checkbox');
+        $validate = Validator::make($input, $rules, $error_msg);
+        if ($validate->passes()) {
+
+            return redirect(action('User\ODDController@index'));
+
+        }else{
+            return redirect()->action('User\ODDController@oddCondition')->withErrors($validate)->withInput();
+        }
+    }
     
     public function index(Request $request) {
 
@@ -142,36 +166,7 @@ class ODDController extends MarketPlace
         file_put_contents(Config::get('constants.public_path')."/odd_register.txt", $returnODDRegister);
         
         $response = $request->all();
-        /*$response = '21082561011933 65B77EF620994DB727586497053E319896564A40F14B4D9231A7BD1338441FFA 9662588064 201808210234540K0000Success';
-
-        $external_reference = substr($response,0,20);
-        $payer_short_name  = substr($response,20,30);
-        $espa_id = substr($response,50,100);
-        $account_no = substr($response,150,20);
         
-        $user_email = substr($response,170,1);
-        $mobile = substr($response,171,1);
-        $matching_flag = substr($response,172,1);
-        $timestamp = substr($response,173,14);
-        $return_status = substr($response,187,1);
-        $return_code = substr($response,188,5);
-        $return_msg = substr($response,193);
-
-        $user_info = UserInfo::where('reference_no',$external_reference)->first();
-        if(!empty($user_info)){
-            $info_json = json_decode($user_info->info_json,true);
-            if(count($info_json)){
-                $info_json['tracking_response'] = $response;
-                $new_json = $info_json;
-            }else{
-                $new_json = $response;
-            }
-            
-            $user_info->status = '1';
-            $user_info->espa_id = $espa_id;
-            $user_info->info_json = $new_json;
-            $user_info->save();
-        }*/
         return true;
         // dd($request->all(),'aa');
     }

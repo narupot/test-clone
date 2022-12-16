@@ -471,6 +471,8 @@
         Route::get('wishlist','User\WishlistController@index');
         Route::post('wishlist-products','ProductsController@getProductByWishlist');
         Route::get('register-odd', 'User\ODDController@index');
+        Route::get('register-odd-condition', 'User\ODDController@oddCondition');
+        Route::post('save-condition', 'User\ODDController@oddConditionStore');
         Route::post('register-odd-token', 'User\ODDController@oddToken');
 
         Route::group(['prefix' => 'order','middleware' => 'escape-back-history'], function () {
