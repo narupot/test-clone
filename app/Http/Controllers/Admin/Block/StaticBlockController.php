@@ -114,7 +114,7 @@ class StaticBlockController extends MarketPlace
         if ($validate->passes()) {
 
             $cms = new StaticBlock;
-            $cms->url = str_slug($input['page_ttl'], '-');
+            $cms->url = createUrl($input['page_ttl'], '-');
             $cms->status = $request->status;
             $cms->created_by = Auth::guard('admin_user')->user()->id;
             $cms->save();
