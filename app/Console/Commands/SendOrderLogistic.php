@@ -51,6 +51,7 @@ class SendOrderLogistic extends Command
                     foreach ($key_arr as $smkey => $smvalue) {
                         $arr_json[$smvalue] = $json_arr['shipping_address'][$smvalue]??'';
                     }
+                    $arr_json['name'] = $json_arr['shipping_address']['title']??'';
                 }else{
                     foreach ($key_arr as $smkey => $smvalue) {
                         $arr_json[$smvalue] = $json_arr[$smvalue]??'';
