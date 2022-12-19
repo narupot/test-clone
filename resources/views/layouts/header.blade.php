@@ -213,7 +213,7 @@
                 $('.shop_0').before('<li class="head-wap-shop"><h3 class="search-head">Shop</h3></li>');
             }
           }).autocomplete().data("uiAutocomplete")._renderItem = function(ul, item) {          
-               console.log(item);
+               //console.log(item);
 
               //var names = highlighter(item.value);
               //var item = results.shop;
