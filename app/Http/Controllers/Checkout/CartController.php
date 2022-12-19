@@ -15,6 +15,7 @@ use App\ShippingAddress;
 use App\OrderGatewayLog;
 use App\Helpers\GeneralFunctions;
 use App\Helpers\CustomHelpers;
+use App\Helpers\EmailHelpers;
 use Auth;
 use App\Product;
 use Session;
@@ -1239,10 +1240,10 @@ class CartController extends MarketPlace {
 		}
 		$secret_key = $payplus_details['web_secret_key'];
 		$url = $payplus_details['url'];
-        $ref_no = substr(number_format(time() * rand(),0,'',''),0,10);
+        $ref_no = $orderInfo->id;//substr(number_format(time() * rand(),0,'',''),0,10);
         $mobile = $request->input("phone");
 
-        $post_array = array('amount'=>$orderInfo->total_final_price,'currency'=>'THB','description'=>'PayPLUS Description','source_type'=>'kplus_no','number'=>$mobile,'reference_order'=>$ref_no,'ref_1'=>$orderInfo->id,'ref_2'=>$orderInfo->id);
+        $post_array = array('amount'=>$orderInfo->total_final_price,'currency'=>'THB','description'=>'PayPLUS Description','source_type'=>'kplus_no','number'=>$mobile,'reference_order'=>$orderInfo->id,'ref_1'=>$orderInfo->id,'ref_2'=>$orderInfo->id);
         $post_json = json_encode($post_array);
 
         $curl = curl_init();
@@ -1339,6 +1340,7 @@ class CartController extends MarketPlace {
         
         //https:// 203.146.18.96/ws/v1/registerinit
         //https://ws04.uatebpp.kasikornbank.com/ws/v1/registerinit
+        $check_ping_resolve = ["$pay_details[host]:$pay_details[port]:$pay_details[ip]"];
         $ch = curl_init();
        
         curl_setopt($ch, CURLOPT_URL,$pay_details['curl_url']."ssopay");
@@ -1347,12 +1349,13 @@ class CartController extends MarketPlace {
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS,$post_json);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_RESOLVE, $check_ping_resolve);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
                 'Content-Type: application/json')
         );
 
         $server_output = curl_exec($ch);
-
+        //dd($server_output,$pay_details['curl_url']."ssopay",$post_json,$check_ping_resolve);
         $gateway_log_id = \App\OrderGatewayLog::insertLog(['gateway_type'=>'odd','gateway_response'=>$server_output]);
         
         file_put_contents(Config::get('constants.public_path')."/odd_checkout.txt",$server_output);
@@ -1374,6 +1377,13 @@ class CartController extends MarketPlace {
 
                 $updateOrder = Order::updateOrderAfterPayment($orderInfo);
 
+                /*for notification*/
+                EmailHelpers::sendOrderNotificationEmail($orderInfo->formatted_id);
+                /*for notification*/
+
+                /*send noti at mobile*/
+                $this->buyerNotification($orderInfo);
+
                 return ['status'=>'success','url'=>action('Checkout\OrderController@thanks',$orderInfo->formatted_id)];
             }
         }
@@ -1384,6 +1394,15 @@ class CartController extends MarketPlace {
         }
         return ['status'=>'success','url'=>$cancel_url];
 	}
+
+	public function buyerNotification($orderInfo){
+        $title = 'New Order';
+        $body = 'Order id '. $orderInfo->formatted_id;
+        $post_arr = ['user_id'=>$orderInfo->user_id, 'title'=>$title,'body'=>$body, 'type_redirect'=>'payment_success', 'order_id'=>$orderInfo->id, 'formatted_order_id'=>$orderInfo->formatted_id];
+        $url = Config::get('constants.mobile_notification_url');
+        $responce = $this->handleCurlRequest($url,$post_arr);
+
+    }
 
 	/****backup store function for all product checkout same time*****
 	function store(Request $request){
