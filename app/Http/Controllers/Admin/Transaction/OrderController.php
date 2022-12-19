@@ -300,25 +300,27 @@ class OrderController extends MarketPlace
         $order_id = $request->order_id;
         $order_status_id = $request->order_status_id;
 
-        $order = Order::find($order_id);
-        if($order && $order->order_status == '1' && in_array($order_status_id, ['2', '4'])) {
+        $orderInfo = Order::find($order_id);
+        if($orderInfo && $orderInfo->order_status == '1' && $order_status_id == '2') {
 
-            $order->order_status = $order_status_id;
-            $order->save();
+            $updated_by = 'admin';
+            Order::updateOrderAfterPayment($orderInfo, $updated_by);
 
-            $order_status_key = 'order_cancelled';
-            if($order_status_id == '2') {
-                $order_status_key = 'order_end_shopping';
-            }
+            /*for notification*/
+            EmailHelpers::sendOrderNotificationEmail($orderInfo->formatted_id);
+            /*for notification*/
 
-            /****update entry in order transaction******/
-            $comment = GeneralFunctions::getOrderText($order_status_key);
-            $transaction_arr = ['order_id'=>$order_id,'order_shop_id'=>0,'order_detail_id'=>0,'event'=>'order','comment'=>$comment,'updated_by'=>'admin'];
-
-            \App\OrderTransaction::updateOrdTrans($transaction_arr);            
+            /*send noti at mobile*/ 
+            $title = 'New Order';
+            $body = 'Order id '. $orderInfo->formatted_id;
+            $post_arr = ['user_id'=>$orderInfo->user_id, 'title'=>$title,'body'=>$body, 'type_redirect'=>'payment_success', 'order_id'=>$orderInfo->id, 'formatted_order_id'=>$orderInfo->formatted_id];
+            $url = Config::get('constants.mobile_notification_url');
+            $responce = $this->handleCurlRequest($url,$post_arr);                      
 
             return ['status'=>'success','msg'=>\Lang::get('admin_order.order_status_updated_successfully')];
-        }else{
+        }
+        else{
+
             return ['status'=>'error','msg'=>\Lang::get('admin_order.invalid_order_id')];
         }
     }        

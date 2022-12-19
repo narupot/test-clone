@@ -10,7 +10,7 @@
         <li><a href="{{action('User\UserController@index')}}" class="@if(strpos( $_SERVER['REQUEST_URI'], 'profile' ) !== false) active @endif">@lang('customer.profile_setting')</a></li>
         <li><a href="{{action('User\UserController@show')}}" class="@if(strpos( $_SERVER['REQUEST_URI'], 'address' ) !== false) active @endif">@lang('customer.address')</a></li>
         <li><a href="{{action('User\ReviewController@index')}}" class="@if(strpos( $_SERVER['REQUEST_URI'], 'review' ) !== false) active @endif">@lang('customer.user_review')</a></li>
-        <li><a href="{{action('User\ODDController@index')}}" class="@if(strpos( $_SERVER['REQUEST_URI'], 'register-odd' ) !== false) active @endif">@lang('customer.register_odd')</a></li>
+        <li><a href="{{action('User\ODDController@oddCondition')}}" class="@if(strpos( $_SERVER['REQUEST_URI'], 'register-odd' ) !== false) active @endif">@lang('customer.register_odd')</a></li>
     </ul>
     <div class="title-bg-red d-none"><span>@lang('shop.credit')</span></div>
     <ul class="box-grey d-none">
