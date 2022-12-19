@@ -24,11 +24,47 @@ class ODDController extends MarketPlace
     public function __construct() {
         $this->middleware('authenticate');
     }
+
+    public function oddCondition(Request $request) {
+
+        $user_odd_info = UserInfo::getUserInfo('odd-register');
+        if($user_odd_info && $user_odd_info->status=='1' && $user_odd_info->espa_id){
+            return redirect(action('User\ODDController@index'));
+        }
+        $cache_key = 'odd_term_cond_'.Auth::user()->id;
+        cache_deleteKey($cache_key);
+        return view('user.odd.condition', ['userDetail'=>Auth::user(),'page'=>'buyer','user_odd_info'=>$user_odd_info]);
+    }
+
+    public function oddConditionStore(Request $request) {
+        $input = $request->all();
+        $rules['term_cond'] = reqRule();
+        $error_msg['term_cond.required'] = Lang::get('customer.please_check_checkbox');
+        $validate = Validator::make($input, $rules, $error_msg);
+        if ($validate->passes()) {
+            $cache_key = 'odd_term_cond_'.Auth::user()->id;
+            cache_putData($cache_key,Auth::user()->id,1);
+            return redirect(action('User\ODDController@index'));
+
+        }else{
+            return redirect()->action('User\ODDController@oddCondition')->withErrors($validate)->withInput();
+        }
+    }
     
     public function index(Request $request) {
 
         $userDetail = Auth::user();
-
+        $previous_url = \URL::previous();
+        $exp_url = explode('/', $previous_url);
+        $last_param = end($exp_url);
+        $cache_key = 'odd_term_cond_'.Auth::user()->id;
+        $cache_odd = cache_hasKey($cache_key) ? cache_getData($cache_key) : '';
+        if($last_param=='register-odd-condition' && $cache_odd==Auth::user()->id){
+            
+        }else{
+            return redirect(action('User\ODDController@oddCondition'));
+        }
+        
         $userDetail->facebook_login = 'N';
         if(empty($userDetail->password) && !empty($userDetail->facebook_id)) {
             $userDetail->facebook_login = 'Y';
@@ -41,7 +77,7 @@ class ODDController extends MarketPlace
     public function oddToken(Request $request){
         $input = $request->all();
         $rules['ph_number'] = phoneRule();
-        /*$rules['citizen_id'] = reqRule();*/
+        $rules['citizen_id'] = reqRule();
         $error_msg['ph_number.required'] = Lang::get('customer.please_enter_phone_no');
         $error_msg['ph_number.digits'] = Lang::get('customer.phone_no_must_be_10_digits');
         $validate = Validator::make($input, $rules, $error_msg);
@@ -77,11 +113,11 @@ class ODDController extends MarketPlace
             $post_array['encoding'] = $pay_details['encoding'];
             $post_array['external_system'] = $pay_details['external_system'];
             $post_array['payee_short_name'] = $pay_details['payee_short_name'];
-            /*$post_array['payer_short_name'] = substr(str_replace(' ', '', $userDetail->display_name), 0,11);*/
+            $post_array['payer_short_name'] = 'SMMPYR';
             //$post_array['payer_short_name'] = "";
             //$post_array['user_email'] = "";//$userDetail->email;
             $post_array['user_mobile_no'] = $request->ph_number;
-            //$post_array['id'] = $request->citizen_id;
+            $post_array['id'] = $request->citizen_id;
             $post_array['external_reference'] = $ref_no;
             $post_array['service_name'] = $pay_details['service_name'];
             $post_array['auth_parameter'] = $auth;
@@ -90,6 +126,7 @@ class ODDController extends MarketPlace
             //dd($post_json,$post_array);
             //https:// 203.146.18.96/ws/v1/registerinit
             //https://ws04.uatebpp.kasikornbank.com/ws/v1/registerinit
+            $check_ping_resolve = ["$pay_details[host]:$pay_details[port]:$pay_details[ip]"];
             $ch = curl_init();
             
             curl_setopt($ch, CURLOPT_URL,$pay_details['curl_url']."registerinit");
@@ -98,12 +135,13 @@ class ODDController extends MarketPlace
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS,$post_json);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_RESOLVE, $check_ping_resolve);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array(
                     'Content-Type: application/json')
             );
 
             $server_output = curl_exec($ch);
-            dd($server_output);
+            //dd($server_output,$post_json,$pay_details['curl_url']."registerinit");
             //dd($server_output,$post_json,$pay_details['curl_url']."registerinit");
             if($server_output){
                 
@@ -140,36 +178,7 @@ class ODDController extends MarketPlace
         file_put_contents(Config::get('constants.public_path')."/odd_register.txt", $returnODDRegister);
         
         $response = $request->all();
-        /*$response = '21082561011933 65B77EF620994DB727586497053E319896564A40F14B4D9231A7BD1338441FFA 9662588064 201808210234540K0000Success';
-
-        $external_reference = substr($response,0,20);
-        $payer_short_name  = substr($response,20,30);
-        $espa_id = substr($response,50,100);
-        $account_no = substr($response,150,20);
         
-        $user_email = substr($response,170,1);
-        $mobile = substr($response,171,1);
-        $matching_flag = substr($response,172,1);
-        $timestamp = substr($response,173,14);
-        $return_status = substr($response,187,1);
-        $return_code = substr($response,188,5);
-        $return_msg = substr($response,193);
-
-        $user_info = UserInfo::where('reference_no',$external_reference)->first();
-        if(!empty($user_info)){
-            $info_json = json_decode($user_info->info_json,true);
-            if(count($info_json)){
-                $info_json['tracking_response'] = $response;
-                $new_json = $info_json;
-            }else{
-                $new_json = $response;
-            }
-            
-            $user_info->status = '1';
-            $user_info->espa_id = $espa_id;
-            $user_info->info_json = $new_json;
-            $user_info->save();
-        }*/
         return true;
         // dd($request->all(),'aa');
     }

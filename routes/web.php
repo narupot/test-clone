@@ -171,6 +171,7 @@
             Route::get('/{oid}/detail', 'Admin\Transaction\OrderController@orderDetail');
             Route::post('ordChangeItemStatus', 'Admin\Transaction\OrderController@ordChangeItemStatus');
             Route::post('updateRemark', 'Admin\Transaction\OrderController@updateRemark');
+            Route::post('update-order-status', 'Admin\Transaction\OrderController@updateOrderStatus');
             Route::get('export-order-log', 'Admin\Transaction\ExportOrderController@index');
             Route::get('listExportOrderData', 'Admin\Transaction\ExportOrderController@listExportOrderData');
             Route::get('download-export/{id?}', 'Admin\Transaction\ExportOrderController@downloadExport');
@@ -470,6 +471,8 @@
         Route::get('wishlist','User\WishlistController@index');
         Route::post('wishlist-products','ProductsController@getProductByWishlist');
         Route::get('register-odd', 'User\ODDController@index');
+        Route::get('register-odd-condition', 'User\ODDController@oddCondition');
+        Route::post('save-condition', 'User\ODDController@oddConditionStore');
         Route::post('register-odd-token', 'User\ODDController@oddToken');
 
         Route::group(['prefix' => 'order','middleware' => 'escape-back-history'], function () {
@@ -498,7 +501,6 @@
     });
 
     Route::group(['prefix' => 'buyer','middleware' => 'escape-back-history'], function () {
-        
         Route::get('bargain/{sortby?}','User\BargainController@index');
         Route::get('getbargainlist','User\BargainController@getBargainList');
         Route::post('bargainPriceFromBuyer/{id?}','User\BargainController@bargainPriceFromBuyer');
