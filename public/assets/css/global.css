@@ -1795,10 +1795,12 @@ td {
   padding: 2px 5px;
   font-size: 0.75rem; }
 .table .inactive {
+  background: #495057;
   color: #fff;
   border-radius: 5px;
   padding: 2px 5px;
-  font-size: 0.75rem; }
+  font-size: 0.75rem;
+  opacity:.5; }
 .table .spinner {
   display: inline-block; }
 .table .product img {
