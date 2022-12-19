@@ -125,7 +125,7 @@ jQuery(document).ready(function($){
 	textnum();
 	$('#shipTab a').on('click',function(){
 		textnum();  
-		console.log(1);
+		//console.log(1);
 	});
     
 
@@ -171,7 +171,7 @@ try{
             }
             sliders[k].style.height = Math.max.apply(null, sizes) +'px';
         }
-        console.log('onReady', arguments[0]);
+        //console.log('onReady', arguments[0]);
     }
 };
 }
