@@ -116,11 +116,11 @@ class PaymentGatewayController extends MarketPlace {
             else
                 $payplus_details = json_decode($pay_opt->live_detail,true);
         }
-        $ref_3 = $request->input("ref_3");
-        $secret_key = ($ref_3 == 'mobile') ? $payplus_details['mobile_secret_key'] : $payplus_details['web_secret_key'];
+        $ref_2 = $request->input("ref_2");
+        $secret_key = ($ref_2 == 'mobile') ? $payplus_details['mobile_secret_key'] : $payplus_details['web_secret_key'];
         $charge_id = $request->input("id");
         $transaction_state = $request->input("transaction_state");
-        $order_id = $request->input("reference_order");
+        $order_id = $request->input("ref_1");
         $currency = 'THB';
         $status = $request->input('status');
 
