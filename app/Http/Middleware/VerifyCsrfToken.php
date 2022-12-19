@@ -21,7 +21,7 @@ class VerifyCsrfToken extends BaseVerifier
         'checkout/tracking',
         '/checkout/payplus/tracking',
         'checkout/payplus/tracking',
-        'paymentgateway/kbank/v1/odd/checkout/tracking',
+        'payment-gateway/kbank/v1/odd/register/tracking',
         'payment-gateway/kbank/v1/odd/checkout/tracking'
     ];
 

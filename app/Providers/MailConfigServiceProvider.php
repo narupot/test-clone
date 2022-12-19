@@ -55,7 +55,7 @@ class MailConfigServiceProvider extends ServiceProvider
                     'from'       => array('address' => $mail->email_from, 'name' => $mail->from_name),
                     'encryption' => $mail->encription,
                     'username'   => $mail->username,
-                    'password'   => $mail->password,
+                    'password'   => base64_decode(trim($mail->password)),
                     'sendmail'   => '/usr/sbin/sendmail -bs',
                     'pretend'    => false,
                 );

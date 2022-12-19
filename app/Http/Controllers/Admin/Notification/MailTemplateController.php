@@ -669,6 +669,7 @@ class MailTemplateController extends MarketPlace
             $transMethodsData = $this->getJsonFileContent($file_path);
             $transMethods = is_null($transMethodsData)?[]:$transMethodsData;
             $default_sms_server = \App\EmailTransmissionMethod::where('type','sms')->first();
+            $default_mail_server->password = base64_decode($default_mail_server->password);
             //dd($transMethods);
             return view('admin.notification.emailTransmission',['default_mail_server'=>$default_mail_server,'transMethods'=>json_decode(json_encode($transMethods)),'default_timeout'=>$this->default_timeout,'default_sms_server'=>$default_sms_server]);
         }
@@ -800,7 +801,7 @@ class MailTemplateController extends MarketPlace
         $mainTransmissionMissionObj->port = trim($request->port);
         $mainTransmissionMissionObj->email_from = trim($request->email_from);
         $mainTransmissionMissionObj->username = trim($request->username);
-        $mainTransmissionMissionObj->password = trim($request->password);
+        $mainTransmissionMissionObj->password = base64_encode(trim($request->password));
         $mainTransmissionMissionObj->encription = trim($request->encription);
 
 
