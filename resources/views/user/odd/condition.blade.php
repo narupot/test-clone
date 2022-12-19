@@ -44,7 +44,7 @@
                     <div class="col-sm-4 mb-3 pr-0">
                         <div class="form-group">
                             <label>&nbsp;</label>
-                            <input type="checkbox" name="term_cond" value="1" required="required">
+                            <input type="checkbox" name="term_cond" value="1" required="required"> @lang('customer.accept_term_condition')
                             @if ($errors->has('term_cond'))
                                 <p class="error error-msg">{{ $errors->first('term_cond') }}</p>
                             @endif
