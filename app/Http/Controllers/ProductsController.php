@@ -678,7 +678,7 @@ class ProductsController extends MarketPlace {
         $order = $request->order;*/
         $cat_ids= null; 
 
-        $cat_data = \App\MongoCategory::where('category_name','like','%'.$name.'%')->where('status',"1")->where('parent_id','>',0)->select('category_name','img','url')->get()->toArray();
+        /*$cat_data = \App\MongoCategory::where('category_name','like','%'.$name.'%')->where('status',"1")->where('parent_id','>',0)->select('category_name','img','url')->get()->toArray();
         if(count($cat_data)){
             $cat_ids = array_unique(array_column($cat_data, '_id'));
         }else{
@@ -689,9 +689,14 @@ class ProductsController extends MarketPlace {
         if(count($product_data_list)){
             $product_data_list = $product_data_list->toArray(); 
             $product_cat_ids = array_unique(array_column($product_data_list, 'cat_id'));
-        }
+        }*/
+
+        $shop_closed_id = \App\MongoShop::where('shop_status','close')->pluck('_id')->toArray();
+        $cat_Ids = MongoProduct::where('status','1');
+        $cat_Ids = $cat_Ids->whereNotIn('shop_id',$shop_closed_id)->pluck('cat_id','cat_id')->toArray();
+        $product_data = \App\MongoCategory::whereIn('_id', $cat_Ids)->where('category_name','like','%'.$search.'%')->where('status',"1")->where('parent_id','>',0)->select('category_name','img','url')->get()->toArray(); 
         
-        $product_data = \App\MongoCategory::whereIn('_id',$product_cat_ids)->select('category_name','img','url')->get()->toArray();
+        //$product_data = \App\MongoCategory::whereIn('_id',$product_cat_ids)->select('category_name','img','url')->get()->toArray();
         
         $i=0;
         foreach ($product_data as $key => $result) {            
@@ -743,21 +748,31 @@ class ProductsController extends MarketPlace {
         $autoData = [];
         $data = [];
         if($request->searchtype=='all'){
-            $cat_data = \App\MongoCategory::where('category_name','like','%'.$term.'%')->where('status',"1")->where('parent_id','>',0)->select('category_name','img','url')->get()->toArray(); 
+           
+            $shop_closed_id = \App\MongoShop::where('shop_status','close')->pluck('_id')->toArray();
+
+            $cat_Ids = \App\MongoProduct::where('status','1');
+            $cat_Ids = $cat_Ids->whereNotIn('shop_id',$shop_closed_id)->pluck('cat_id','cat_id')->toArray();
+
+            /*$cat_data = \App\MongoCategory::where('category_name','like','%'.$term.'%')->where('status',"1")->where('parent_id','>',0)->select('category_name','img','url')->get()->toArray(); 
             
             if(count($cat_data)){
                 $cat_ids = array_unique(array_column($cat_data, '_id'));
             }else{
                 $cat_ids = [];  
-            }
-            $product_data_list =  \App\MongoProduct::whereIn('cat_id',$cat_ids)->where('status',"1")->select('badge_id','unit_price','cat_id')->get();
+            }*/
+            /*$product_data_list =  \App\MongoProduct::whereIn('cat_id',$cat_ids)->where('status',"1")->select('badge_id','unit_price','cat_id')->get();
             $product_cat_ids = [];
             if(count($product_data_list)){
                 $product_data_list = $product_data_list->toArray(); 
                 $product_cat_ids = array_unique(array_column($product_data_list, 'cat_id'));
-            }
+            }*/
+
+
             
-            $product_data = \App\MongoCategory::whereIn('_id',$product_cat_ids)->select('category_name','img','url')->get()->toArray();
+            //$product_data = \App\MongoCategory::whereIn('_id',$product_cat_ids)->select('category_name','img','url')->get()->toArray();
+
+            $product_data = \App\MongoCategory::whereIn('_id', $cat_Ids)->where('category_name','like','%'.$search.'%')->where('status',"1")->where('parent_id','>',0)->select('category_name','img','url')->get()->toArray(); 
            //dd($cat_data);
 
             //$cat_ids = array_unique(array_column($cat_data, '_id'));
