@@ -10,11 +10,19 @@
     <script src="{{ Config('constants.js_url') }}flatpickr.min.js"></script>
     <link rel="stylesheet" type="text/css" href="{{Config('constants.admin_css_url') }}cropper.min.css">
     <!-- end of page level css --> 
-    <script type="text/javascript">
-        //for banner image cropper setting
-        var cropper_setting = {!! getImageDimension('banner')!!};   
-        var banner_groups_data = {!! $banner_groups_data !!};
-    </script>
+    <?php if($result->group_id!=20){?>
+        <script type="text/javascript">
+            //tobo for banner image cropper setting
+            var cropper_setting = {!! getImageDimension('banner')!!};   
+            var banner_groups_data = {!! $banner_groups_data !!};
+        </script>
+    <?php }else{?>
+        <script type="text/javascript">
+            //for banner image cropper setting
+            var cropper_setting = {!! getImageDimension('mobile_banner')!!};   
+            var banner_groups_data = {!! $banner_groups_data !!};
+        </script>
+        <?php }?>
 @stop
 
 @section('content')
@@ -55,14 +63,21 @@
                                 @endif                         
                             </div>   
                         </div>
-
-                        <div class="form-group">
-                            <label for="form-text-input">@lang('cms.group')</label>
-                            <div>
-                                {!! Form::select('group_id', $groups,  $result->group_id, ['class'=>'form-control', "id" => "group_id"]) !!}
-                           </div>     
-                        </div>                
-
+                        @if($result->group_id!=20)
+                            <div class="form-group">
+                                <label for="form-text-input">@lang('cms.group')</label>
+                                <div>
+                                    {!! Form::select('group_id', $groups,  $result->group_id, ['class'=>'form-control', "id" => "group_id"]) !!}
+                                </div>     
+                            </div>      
+                        @else
+                            <div class="form-group">
+                                <label for="form-text-input">@lang('cms.group')</label>
+                                <div class="disable">
+                                    {!! Form::select('group_id', $groups,  $result->group_id, ['class'=>'form-control', "id" => "group_id"]) !!}
+                                </div>     
+                            </div> 
+                        @endif
                         <div class="form-group">
                             <label for="form-text-input">@lang('cms.tooltip')</label> 
                             <div>
@@ -99,7 +114,15 @@
                              @endif
                             </div>
                         </div>
-
+                        @if($result->group_id==20)
+                            <div class="form-group">
+                                <label>@lang('common.isDefault_mobile_banner')</label>                           
+                                <label class="check-wrap" @if($result->isDefault_mobile_banner == 1) style="pointer-events: none;" @endif>
+                                    <input type="checkbox" name="isDefault_mobile_banner" value="1" @if($result->isDefault_mobile_banner == 1) checked @endif > 
+                                    <span class="chk-label">@lang('common.yes')</span>
+                                </label>                                          
+                            </div>
+                        @endif    
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-sm-6">
