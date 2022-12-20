@@ -937,6 +937,9 @@ function getImageDimension($type){
 	if($type=="menu_design"){
 		return [['section' => 'menu_image_thumb', 'dimension' => ['width' => 1170, 'height' => 450], 'file_field_selector' => '#MenuThumbImage', 'section_id'=>'menu-image']];
 	}
+	if($type=='mobile_banner'){
+		return json_encode(['width'=>350,'height'=>120]);
+	}
 }
 
 function getDomainNameByBaseUrl($url){
