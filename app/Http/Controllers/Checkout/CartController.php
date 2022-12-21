@@ -1566,6 +1566,10 @@ class CartController extends MarketPlace {
 		$orderDetails = $paid_product = [];
 		$userid = Auth::User()->id;
 		$orderInfo = OrdersTemp::where(['user_id'=>$userid,'order_status'=>'0'])->first();
+		if(!$orderInfo){
+			return json_encode(array('status'=>'fail','msg'=>'order not found'));
+		}
+		
 		if($checkout_type == 'buy-now' || $checkout_type == 'buy-now-end-shopping'){
 			$orderDetails = Cart::getCartList($orderInfo->id);
 		}

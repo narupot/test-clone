@@ -17,7 +17,7 @@ class Category extends Model
     
     public function categorydesc(){
 
-      return $this->hasOne('App\CategoryDesc', 'cat_id', 'id')->where('lang_id', session('default_lang'))->select('id','category_name','cat_id'); 
+      return $this->hasOne('App\CategoryDesc', 'cat_id', 'id')->select('id','category_name','cat_id'); 
     }
 
     public function getCatDesc(){
