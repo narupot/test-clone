@@ -28,9 +28,9 @@ class ODDController extends MarketPlace
     public function oddCondition(Request $request) {
 
         $user_odd_info = UserInfo::getUserInfo('odd-register');
-        if($user_odd_info && $user_odd_info->status=='1' && $user_odd_info->espa_id){
+        /*if($user_odd_info && $user_odd_info->status=='1' && $user_odd_info->espa_id){
             return redirect(action('User\ODDController@index'));
-        }
+        }*/
         $cache_key = 'odd_term_cond_'.Auth::user()->id;
         cache_deleteKey($cache_key);
         return view('user.odd.condition', ['userDetail'=>Auth::user(),'page'=>'buyer','user_odd_info'=>$user_odd_info]);
