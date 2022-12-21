@@ -709,7 +709,7 @@ class MarketPlace extends Controller {
     public function getCategoryBreadcrumb($cat_id,$tree_array){
         $cat_details = \App\Category::where(['id'=>$cat_id])->with('categorydesc')->first();
         $total = count($tree_array);
-        $tree_array[$total]['cat_name'] = $cat_details->categorydesc->category_name;
+        $tree_array[$total]['cat_name'] = $cat_details->categorydesc ? $cat_details->categorydesc->category_name : $cat_details->url;
         $tree_array[$total]['url'] = $cat_details->url;
         
         if($cat_details->parent_id>0){
