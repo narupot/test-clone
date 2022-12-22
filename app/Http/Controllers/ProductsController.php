@@ -60,7 +60,7 @@ class ProductsController extends MarketPlace {
 
     public function category(Request $request, $url){
         
-        $referer_url = $request->server('REQUEST_SCHEME')."://".$request->server('HTTP_HOST').'/'.$request->server('REQUEST_URI');
+        $referer_url = url()->current();
         
         //dd($referer_url);
 
