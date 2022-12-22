@@ -978,7 +978,7 @@ class CustomHelpers {
         if ($response_api=="0") {
             $debug = true;
         }
-        
+        $debug = true;
         if($debug){
             $res_debug = "";
             foreach ($file_arr as $key) {
