@@ -379,6 +379,7 @@
 
 {!! CustomHelpers::combineCssJs(['js/jquery-ui.min', 'js/jquery-editable-select.min', 'js/cart/cart', 'js/user/user_address'],'js') !!}
 <script type="text/javascript">
+    
     $('#odd_radio').click(function(e){
         swal({
             title : "@lang('checkout.are_you_sure_want_to_register_odd')",

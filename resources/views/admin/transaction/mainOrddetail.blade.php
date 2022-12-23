@@ -334,7 +334,7 @@
                 }
         });
     });
-
+    //for re send order to logistic
     jQuery('#btn-resend').click(function(evt) {
         evt.preventDefault();
         _this.prop('disabled',false);

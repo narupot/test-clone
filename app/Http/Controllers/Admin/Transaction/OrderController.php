@@ -280,7 +280,7 @@ class OrderController extends MarketPlace
         }
 
     }  
-    /**resend order to logistic*/
+    /**resend order to logistic */
     public function resendLogistic(Request $request) {
 
         $order_id = $request->order_id;
