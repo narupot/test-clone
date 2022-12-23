@@ -337,14 +337,14 @@
     //for re send order to logistic
     jQuery('#btn-resend').click(function(evt) {
         evt.preventDefault();
-        _this.prop('disabled',false);
+        
         var order_id = {{$main_order->id}};
         var data = {'order_id':order_id};
         callAjax(resend_url, 'post', data, function(result) {
 
                 if(result.status=='fail'){
                     showSweetAlertError(result.msg);
-                    _this.prop('disabled',false);
+                   
                     return false;
 
                 }else if(result.status=='success'){
