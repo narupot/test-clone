@@ -279,7 +279,20 @@ class OrderController extends MarketPlace
             return ['status'=>'fail','msg'=>'Invalid order id'];
         }
 
-    }       
+    }  
+    /**resend order to logistic */
+    public function resendLogistic(Request $request) {
+
+        $order_id = $request->order_id;
+        $order = Order::where('id',$request->order_id)->first();
+        if($order) {
+            $order->logistic_status = '0';
+            $order->save();
+
+            return ['status'=>'success','msg'=>'Success ! It will send after one min'];
+        }
+        return ['status'=>'fail','msg'=>\Lang::get('admin_common.something_went_wrong')];
+    }     
 
     public function updateRemark(Request $request) {
 
