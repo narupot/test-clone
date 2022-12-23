@@ -169,6 +169,7 @@
             Route::get('/', 'Admin\Transaction\OrderController@index');
             Route::get('listOrderData', 'Admin\Transaction\OrderController@listOrderData');
             Route::get('/{oid}/detail', 'Admin\Transaction\OrderController@orderDetail');
+            Route::post('resendLogistic', 'Admin\Transaction\OrderController@resendLogistic');
             Route::post('ordChangeItemStatus', 'Admin\Transaction\OrderController@ordChangeItemStatus');
             Route::post('updateRemark', 'Admin\Transaction\OrderController@updateRemark');
             Route::post('update-order-status', 'Admin\Transaction\OrderController@updateOrderStatus');

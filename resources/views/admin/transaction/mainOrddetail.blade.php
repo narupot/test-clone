@@ -13,6 +13,9 @@
     <div class="header-title">
         <h1 class="title">@lang('checkout.order_no'). {{ $main_order->formatted_id }}</h1>       
         <div class="float-right">
+            @if($main_order->logistic_status != '1' && $main_order->end_shopping_date!=null && $main_order->shipping_method !=2)
+                <button id="btn-resend" class="btn-primary">Resend to logistic</button>
+            @endif
             <a href="{{ action('Admin\Transaction\OrderController@index') }}" class="btn-back">@lang('admin_common.back')</a>
         </div>
     </div>
@@ -304,6 +307,7 @@
     var update_status_confirm = "@lang('admin_order.are_you_sure_to_update_status')";
     var update_status_error = "@lang('admin_order.select_order_status_to_update')";
     var change_url = "{{ action('Admin\Transaction\OrderController@ordChangeItemStatus') }}";
+    var resend_url = "{{ action('Admin\Transaction\OrderController@resendLogistic') }}";
 
     jQuery('#btn-remark').click(function(evt) {
         evt.preventDefault();
@@ -319,6 +323,24 @@
 
         _this.prop('disabled',false);
         callAjaxFormRequest(formAction,'post',form_data,function(result){
+
+                if(result.status=='fail'){
+                    showSweetAlertError(result.msg);
+                    _this.prop('disabled',false);
+                    return false;
+
+                }else if(result.status=='success'){
+                    swal('success', result.msg, "success");       
+                }
+        });
+    });
+
+    jQuery('#btn-resend').click(function(evt) {
+        evt.preventDefault();
+        _this.prop('disabled',false);
+        var order_id = {{$main_order->id}};
+        var data = {'order_id':order_id};
+        callAjax(resend_url, 'post', data, function(result) {
 
                 if(result.status=='fail'){
                     showSweetAlertError(result.msg);
