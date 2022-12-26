@@ -179,8 +179,6 @@ class ODDController extends MarketPlace
             if(!empty($user_odd_info) && $user_odd_info->status=='1'){
                 $userDetail = Auth::user();
 
-                $ref_no = generateUniqueNo();
-
                 $pay_opt = \App\PaymentOption::where('slug','odd')->first();
                 if($pay_opt->mode == 2)
                     $pay_details = json_decode($pay_opt->sandbox_detail,true);
@@ -199,7 +197,7 @@ class ODDController extends MarketPlace
                 $post_array['external_system'] = $pay_details['external_system'];
                 $post_array['payee_short_name'] = $pay_details['payee_short_name'];
                 $post_array['payer_short_name'] = 'SMMPYR';
-                $post_array['espa_id'] = $user_odd_info->espa_id;
+                $post_array['espa_id'] = trim($user_odd_info->espa_id);
                 $post_array['timestamp'] = $timestamp;
                 
                 $post_array['auth_parameter'] = $auth;
@@ -227,7 +225,7 @@ class ODDController extends MarketPlace
                     $resp = json_decode($server_output);
                     $new_json = ['register'=>$info_data,'unregister'=>$resp];
                     if(isset($resp->return_status) && $resp->return_status=='0'){
-                        UserInfo::where(['user_id'=>Auth::id()])->update(['status'=>'0','espa_id'=>'info_json'=>$new_json]);
+                        UserInfo::where(['user_id'=>Auth::id()])->update(['status'=>'0','espa_id'=>'','info_json'=>$new_json]);
                         $message = Lang::get('checkout.odd_unregister_success');
                     }else{
                         UserInfo::where(['user_id'=>Auth::id()])->update(['info_json'=>$new_json]);
