@@ -42,7 +42,7 @@
                         </div>
                     </div>
                 <div class="row">
-                    <button type="button" id="" class="btn">@lang('checkout.unregister')</button>
+                    <button type="submit" id="" class="btn">@lang('checkout.unregister')</button>
                 </div>                         
                 </div>
             </div>
@@ -89,7 +89,7 @@
 @section('footer_scripts')
     {!! CustomHelpers::combineCssJs(['js/user/myaccount'],'js') !!}   
     <script type="text/javascript">
-        function submitOdd(this){
+        function submitOdd(_this){
             return confirm("@lang('checkout.are_you_sure_want_to_unregister')");
         }
     </script>
