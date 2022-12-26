@@ -170,6 +170,81 @@ class ODDController extends MarketPlace
         
     }
 
+    public function oddUnregister(Request $request){
+        $input = $request->all();
+        if ($request->all()) {
+
+            $user_odd_info = UserInfo::getUserInfo('odd-register');
+
+            if(!empty($user_odd_info) && $user_odd_info->status=='1'){
+                $userDetail = Auth::user();
+
+                $ref_no = generateUniqueNo();
+
+                $pay_opt = \App\PaymentOption::where('slug','odd')->first();
+                if($pay_opt->mode == 2)
+                    $pay_details = json_decode($pay_opt->sandbox_detail,true);
+                else
+                    $pay_details = json_decode($pay_opt->live_detail,true);
+
+                $timestamp = date('YmdHis');
+                $auth_str = $pay_details['pass_phrase'].$pay_details['external_system'].$pay_details['payee_short_name'].$timestamp;
+
+                $sha = hash('sha256', $auth_str);
+                $auth  = strtoupper($sha);
+
+                $post_array = [];
+                $post_array['transaction_type'] = $pay_details['transaction_type_register'];
+                $post_array['encoding'] = $pay_details['encoding'];
+                $post_array['external_system'] = $pay_details['external_system'];
+                $post_array['payee_short_name'] = $pay_details['payee_short_name'];
+                $post_array['payer_short_name'] = 'SMMPYR';
+                $post_array['espa_id'] = $user_odd_info->espa_id;
+                $post_array['timestamp'] = $timestamp;
+                
+                $post_array['auth_parameter'] = $auth;
+                
+                $post_json = json_encode($post_array);
+                $check_ping_resolve = ["$pay_details[host]:$pay_details[port]:$pay_details[ip]"];
+                $ch = curl_init();
+                
+                curl_setopt($ch, CURLOPT_URL,$pay_details['curl_url']."unregister");
+                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_POSTFIELDS,$post_json);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_RESOLVE, $check_ping_resolve);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                        'Content-Type: application/json')
+                );
+
+                $server_output = curl_exec($ch);
+
+                if($server_output){
+                    $info_data = json_decode($user_odd_info->info_json);
+
+                    $resp = json_decode($server_output);
+                    $new_json = ['register'=>$info_data,'unregister'=>$resp];
+                    if(isset($resp->return_status) && $resp->return_status=='0'){
+                        UserInfo::where(['user_id'=>Auth::id()])->update(['status'=>'0','espa_id'=>'info_json'=>$new_json]);
+                        $message = Lang::get('checkout.odd_unregister_success');
+                    }else{
+                        UserInfo::where(['user_id'=>Auth::id()])->update(['info_json'=>$new_json]);
+                        $message = isset($resp->return_message)?$resp->return_message:'Something went wrong!';
+                    }
+
+                    return \Redirect::to(action('User\ODDController@oddCondition'))->send()->with('succMsg',$message);
+
+                }else{
+                    return \Redirect::to(action('User\ODDController@oddCondition'))->send()->with('errorMsg','Something went wrong!');
+                }
+            }
+
+        }
+        
+    }
+
     public function tracking(Request $request){
 
         $returnODDRegister = json_encode($request->all());
