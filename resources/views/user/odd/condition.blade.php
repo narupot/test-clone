@@ -28,36 +28,59 @@
             <strong>@lang('admin_common.error'):</strong> {{ Session::get('errorMsg') }}
         </div>    
     @endif
-    <form method="post" id="" action="{{action('User\ODDController@oddConditionStore')}}">
-        {{ csrf_field() }}
-        
-        <div class="form-profile-setting">
-            <div class="row">
-                <div class="col-sm-12">
-                    
-                    {!! getStaticBlock('odd-register') !!}
-                </div>
-                                              
-            </div>
-            
+
+    @if(!empty($user_odd_info) && $user_odd_info->status=='1' && $user_odd_info->espa_id)
+        <form method="post" id="unregister_form" action="{{action('User\ODDController@oddUnregister')}}" onsubmit="return submitOdd(this);">
+            {{ csrf_field() }}
+            <div class="form-profile-setting">
                 <div class="row">
                     <div class="col-sm-4 mb-3 pr-0">
                         <div class="form-group">
-                            <label>&nbsp;</label>
-                            <input type="checkbox" name="term_cond" value="1" required="required"> @lang('customer.accept_term_condition')
-                            @if ($errors->has('term_cond'))
-                                <p class="error error-msg">{{ $errors->first('term_cond') }}</p>
-                            @endif
+                            <label>@lang('common.status') : 
+                                    @lang('customer.odd_registered')
+                            </label>
                         </div>
                     </div>
+                <div class="row">
+                    <button type="button" id="" class="btn">@lang('checkout.unregister')</button>
+                </div>                         
+                </div>
+            </div>
+        </form>
+    @else
+
+        <form method="post" id="" action="{{action('User\ODDController@oddConditionStore')}}">
+            {{ csrf_field() }}
+            
+            <div class="form-profile-setting">
+                <div class="row">
+                    <div class="col-sm-12">
+                        
+                        {!! getStaticBlock('odd-register') !!}
+                    </div>
+                                                  
                 </div>
                 
-                <div class="form-group">
-                    <button type="submit" id="" class="btn">@lang('common.submit')</button>
-                </div>
-            
-        </div>
-    </form>
+                    <div class="row">
+                        <div class="col-sm-4 mb-3 pr-0">
+                            <div class="form-group">
+                                <label>&nbsp;</label>
+                                <input type="checkbox" name="term_cond" value="1" required="required"> @lang('customer.accept_term_condition')
+                                @if ($errors->has('term_cond'))
+                                    <p class="error error-msg">{{ $errors->first('term_cond') }}</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" id="" class="btn">@lang('common.submit')</button>
+                    </div>
+                
+            </div>
+        </form>
+
+    @endif
 </div>
 
 
@@ -65,4 +88,9 @@
 
 @section('footer_scripts')
     {!! CustomHelpers::combineCssJs(['js/user/myaccount'],'js') !!}   
+    <script type="text/javascript">
+        function submitOdd(this){
+            return confirm("@lang('checkout.are_you_sure_want_to_unregister')");
+        }
+    </script>
 @endsection
