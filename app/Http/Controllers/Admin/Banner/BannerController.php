@@ -179,7 +179,12 @@ class BannerController extends MarketPlace
         $insertresult->url_target = $request->url_target;
         $insertresult->additional_html_code = $this->addslashes($request->additional_html_code);
         $insertresult->sort_order = $request->sort_order or 0;
-
+        if($request->isDefault_mobile_banner == '1' && $insertresult->isDefault_mobile_banner=='0') {
+            //dd("ok11");
+            Banner::where('isDefault_mobile_banner', '1')->update(['isDefault_mobile_banner' => '0']);
+            $insertresult->isDefault_mobile_banner = '1';
+        }
+        
         $insertresult->banner_url = $request->banner_url;
         $insertresult->status = $request->status;
         $insertresult->save();
