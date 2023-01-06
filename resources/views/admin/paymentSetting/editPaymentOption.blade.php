@@ -125,5 +125,6 @@
 @stop
 
 @section('footer_scripts')
-      
+@include('includes.froalaeditor_dependencies')
+<script src="{{asset('js/normal_froala_editor_setting.js')}}"></script>
 @stop
