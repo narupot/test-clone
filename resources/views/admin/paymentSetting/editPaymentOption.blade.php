@@ -5,7 +5,8 @@
 @stop
 
 @section('header_styles')
-  
+<link rel="stylesheet" type="text/css" href="{{Config('constants.public_url')}}/angular-froala/bower_components/font-awesome/css/font-awesome.min.css">
+
 @stop
 
 @section('content')
