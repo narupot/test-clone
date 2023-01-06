@@ -331,7 +331,7 @@
                                                 <div class="bank-img-block">
                                                     <img src="{{ getPayImgUrl($pval->image_name) }}" alt="">
                                                 </div>
-                                                <div class="bank-name">{{ $pval->paymentOptName->payment_option_name??'' }}</div>
+                                                <div class="bank-name">{!! $pval->paymentOptName->payment_option_name??'' !!}</div>
                                             </label>
                                         </a>
                                     </li>
