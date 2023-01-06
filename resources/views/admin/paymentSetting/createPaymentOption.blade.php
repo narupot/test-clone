@@ -74,7 +74,7 @@
                         </div>
 
                         <div class="form-group">                            
-                            {!! CustomHelpers::fieldstabWithLanuage([['field'=>'textarea', 'name'=>'payment_option_name','cssClass'=>'froala-editor-apply', 'label'=>Lang::get('common.title').' <i class="strick">*</i>', 'errorkey'=>'option_name']], '1', $errors) !!}                         
+                            {!! CustomHelpers::fieldstabWithLanuage([['field'=>'textarea', 'name'=>'payment_option_name', 'label'=>Lang::get('common.title').' <i class="strick">*</i>', 'errorkey'=>'option_name']], '1', $errors) !!}                         
                         </div>   
                     </div>
                 </div>                                                      
