@@ -319,19 +319,23 @@
                         <ul>
                             @if(count($payment_option))
                                 @foreach($payment_option as $pkey => $pval)
-                                    @if($pval->slug!='odd' ||($pval->slug=='odd' && !empty($user_odd_info) && $user_odd_info->espa_id!=''))
+                                    
                                     <li>
                                         <a href="javascript:void(0)">
                                             <label for="bank1">
-                                                <input type="radio" name="payment_method" value="{{ $pval->id }}">
+                                                @if($pval->slug!='odd' ||($pval->slug=='odd' && !empty($user_odd_info) && $user_odd_info->espa_id!=''))
+                                                    <input type="radio" name="payment_method" value="{{ $pval->id }}">
+                                                @else
+                                                    <input type="radio" name="" id="odd_radio" value="{{ $pval->id }}">
+                                                @endif
                                                 <div class="bank-img-block">
                                                     <img src="{{ getPayImgUrl($pval->image_name) }}" alt="">
                                                 </div>
-                                                <div class="bank-name">{{ $pval->paymentOptName->payment_option_name??'' }}</div>
+                                                <div class="bank-name">{!! $pval->paymentOptName->payment_option_name??'' !!}</div>
                                             </label>
                                         </a>
                                     </li>
-                                    @endif
+                                    
                                 @endforeach
                             @endif
                         </ul>
@@ -374,5 +378,24 @@
 @section('footer_scripts') 
 
 {!! CustomHelpers::combineCssJs(['js/jquery-ui.min', 'js/jquery-editable-select.min', 'js/cart/cart', 'js/user/user_address'],'js') !!}
-
+<script type="text/javascript">
+    
+    $('#odd_radio').click(function(e){
+        swal({
+            title : "@lang('checkout.are_you_sure_want_to_register_odd')",
+            text : "@lang('checkout.you_have_not_register_odd')",
+            type : 'warning',
+            confirmButtonText:lang_yes,
+            cancelButtonText:lang_cancel,
+            showCloseButton : true,
+            showConfirmButton : true,
+            showCancelButton: true,
+        }).then(res=>{
+            window.location.href = "{{action('User\ODDController@oddCondition')}}";
+            
+        }, rej=>{
+            console.log;
+        });
+    });
+</script>
 @stop
