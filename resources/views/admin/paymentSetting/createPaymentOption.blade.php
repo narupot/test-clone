@@ -5,7 +5,8 @@
 @stop
 
 @section('header_styles')
- 
+<link rel="stylesheet" type="text/css" href="{{Config('constants.public_url')}}/angular-froala/bower_components/font-awesome/css/font-awesome.min.css">
+
 @stop
 
 @section('content')
@@ -73,7 +74,7 @@
                         </div>
 
                         <div class="form-group">                            
-                            {!! CustomHelpers::fieldstabWithLanuage([['field'=>'text', 'name'=>'payment_option_name', 'label'=>Lang::get('common.title').' <i class="strick">*</i>', 'errorkey'=>'option_name']], '1', $errors) !!}                         
+                            {!! CustomHelpers::fieldstabWithLanuage([['field'=>'textarea', 'name'=>'payment_option_name', 'label'=>Lang::get('common.title').' <i class="strick">*</i>', 'errorkey'=>'option_name']], '1', $errors) !!}                         
                         </div>   
                     </div>
                 </div>                                                      
@@ -84,5 +85,6 @@
 @stop
 
 @section('footer_scripts')
-      
+@include('includes.froalaeditor_dependencies')
+<script src="{{asset('js/normal_froala_editor_setting.js')}}"></script>  
 @stop
