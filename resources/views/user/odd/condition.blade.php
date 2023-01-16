@@ -41,9 +41,9 @@
                             </label>
                         </div>
                     </div>
-                <div class="row">
+                <!-- <div class="row">
                     <button type="submit" id="" class="btn">@lang('checkout.unregister')</button>
-                </div>                         
+                </div>                          -->
                 </div>
             </div>
         </form>
