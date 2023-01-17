@@ -379,12 +379,12 @@ jQuery(document).ready(function() {
                 $elem.val(statusVal);
                 if(action == 'checked'){
                   $elem.parents('.switch-vertical').find('.toggle-outside').removeClass('switch-close');
-                  $('.cng-text').text("Open").css("color", "#1DDB5D");        
+                  $('.cng-text-1').text("Open").css("color", "#1DDB5D");        
                   $('.toggle-inside').removeClass('trv-bottom');
                 }else if(action == 'unchecked'){
                   $elem.prop("checked", false);
                   $elem.parents('.switch-vertical').find('.toggle-outside').addClass('switch-close');
-                  $('.cng-text').text("Close").css("color", "#ff0000");
+                  $('.cng-text-1').text("Close").css("color", "#ff0000");
                   $('.toggle-inside').addClass('trv-bottom');
                 }                              
             }else{
