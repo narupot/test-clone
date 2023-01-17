@@ -51,6 +51,7 @@
         var siteUrl ="{{url('/')}}/{{ session('lang_code')}}";
         var autoUrl = "{{ action('Admin\Search\AdminSearchController@adminAutoSearch') }}";
         var website_maintenance_url = "{{ Action('Admin\WebsiteMaintenance\WebsiteMaintenanceController@updateMaintenance') }}";
+        var mobile_maintenance_url = "{{ Action('Admin\WebsiteMaintenance\WebsiteMaintenanceController@updateMobileMaintenance') }}";
         var admin_default_lang = "{{Session::get('admin_default_lang')}}";
         var records_updated_successfully = "@lang('common.records_updated_successfully')";
         var lang_success = "@lang('common.success')";
@@ -98,6 +99,22 @@
                             @else
                                 <input id="switchonoff" type="checkbox" value="0" name="second-switch" />
                                 <div class="web-status">Web status</div>                              
+                                <label class="cng-text" style="color: #ff0000">Close</label>
+                                <span class="toggle-outside switch-close">
+                                    <span class="toggle-inside trv-bottom"></span>
+                                </span>
+                            @endif
+
+                            @if(empty(mobileMaintenanceMode()))
+                                <input id="mobileswitchonoff" type="checkbox" value="1" name="second-switch" checked="checked" />
+                                <div class="web-status">Mobile status</div>                              
+                                <label class="cng-text">Open</label>
+                                <span class="toggle-outside">
+                                    <span class="toggle-inside"></span>
+                                </span>
+                            @else
+                                <input id="mobileswitchonoff" type="checkbox" value="0" name="second-switch" />
+                                <div class="web-status">Mobile status</div>                              
                                 <label class="cng-text" style="color: #ff0000">Close</label>
                                 <span class="toggle-outside switch-close">
                                     <span class="toggle-inside trv-bottom"></span>

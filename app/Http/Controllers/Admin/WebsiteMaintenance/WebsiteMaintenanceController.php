@@ -175,4 +175,22 @@ class WebsiteMaintenanceController extends MarketPlace
 
         return ['status'=>'success','msg'=> Lang::get('common.records_updated_successfully')];
     }
+
+    public function updateMobileMaintenance(Request $request){
+        $value = $request->MOBILE_MAINTENANCE;
+
+        $update = WebsiteConfiguration::where('website_config_name','MOBILE_MAINTENANCE')->update(['website_config_value'=>$value]);
+
+        /*update activity log start*/
+        $action_type = "updated"; 
+        $module_name = "mobilemaintenance";            
+        $logdetails = "Admin has updated mobile maintenance configuration";
+        $old_data = "";
+        $new_data = "";
+        $logdata = array('action_type' =>$action_type,'module_name' =>$module_name,'logdetails' =>$logdetails );
+        $this->updateLogActivity($logdata);
+        /*update activity log End*/
+
+        return ['status'=>'success','msg'=> Lang::get('common.records_updated_successfully')];
+    }
 }
