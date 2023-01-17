@@ -79,7 +79,8 @@
         /*Website Mainenance Start | By Satish Anand | Date 14-02-2019       
         */         
         Route::resource('website_configuration', 'Admin\WebsiteMaintenance\WebsiteMaintenanceController');
-        Route::post('website_maintenance_update', 'Admin\WebsiteMaintenance\WebsiteMaintenanceController@updateMaintenance');     
+        Route::post('website_maintenance_update', 'Admin\WebsiteMaintenance\WebsiteMaintenanceController@updateMaintenance');  
+        Route::post('mobile_maintenance_url', 'Admin\WebsiteMaintenance\WebsiteMaintenanceController@updateMobileMaintenance');    
         /*
         * Website Mainenance End 
         */

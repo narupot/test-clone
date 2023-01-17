@@ -1057,6 +1057,10 @@ function websiteMaintenanceMode(){
 	return \App\WebsiteConfiguration::getWebsiteValue('SITE_MAINTENANCE');
 }
 
+function mobileMaintenanceMode(){
+	return \App\WebsiteConfiguration::getWebsiteValue('MOBILE_MAINTENANCE');
+}
+
 function getPrdThumbDim(){
     return ['w'=>340,'h'=>340];
 }
