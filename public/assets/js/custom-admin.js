@@ -360,9 +360,9 @@ jQuery(document).ready(function() {
     $(document).on('click', '#mobileswitchonoff', function(evt){
         var $that = $(this);
         if($that.is(':checked')){
-          mobileMaintenanceMode("Are you sure want to open website ?", 'checked', '0', $that);
+          mobileMaintenanceMode("Are you sure want to open mobile api ?", 'checked', '0', $that);
         }else{
-          mobileMaintenanceMode("Are you sure want to close website ?", 'unchecked', '1', $that);
+          mobileMaintenanceMode("Are you sure want to close mobile api ?", 'unchecked', '1', $that);
         }
     });
 
