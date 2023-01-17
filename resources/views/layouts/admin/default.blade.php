@@ -104,18 +104,19 @@
                                     <span class="toggle-inside trv-bottom"></span>
                                 </span>
                             @endif
-
+                        </div>    
+                        <div class="switch switch-vertical">
                             @if(empty(mobileMaintenanceMode()))
                                 <input id="mobileswitchonoff" type="checkbox" value="1" name="second-switch" checked="checked" />
                                 <div class="web-status">Mobile status</div>                              
-                                <label class="cng-text">Open</label>
+                                <label class="cng-text-1">Open</label>
                                 <span class="toggle-outside">
                                     <span class="toggle-inside"></span>
                                 </span>
                             @else
                                 <input id="mobileswitchonoff" type="checkbox" value="0" name="second-switch" />
                                 <div class="web-status">Mobile status</div>                              
-                                <label class="cng-text" style="color: #ff0000">Close</label>
+                                <label class="cng-text-1" style="color: #ff0000">Close</label>
                                 <span class="toggle-outside switch-close">
                                     <span class="toggle-inside trv-bottom"></span>
                                 </span>
