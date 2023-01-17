@@ -33,7 +33,7 @@
         
         <div class="form-profile-setting">
             <div class="row">
-                <div class="col-sm-4 mb-3 pr-0">
+                <div class="col-sm-6 mb-3 pr-0">
                     <div class="form-group">
                         <label>สถานะ : 
                             @if(!empty($user_odd_info) && $user_odd_info->status=='1' && $user_odd_info->espa_id)
@@ -49,7 +49,7 @@
             </div>
             @if(empty($user_odd_info) || $user_odd_info->espa_id=='')
                 <div class="row">
-                    <div class="col-sm-4 mb-3 pr-0">
+                    <div class="col-sm-6 mb-3 pr-0">
                         <div class="form-group">
                             <label>หมายเลขโทรศัพท์มือถือ (ที่ผูกกับบัญชี K-Bank)</label>
                             <input type="text" name="ph_number" value="{{$userDetail->ph_number}}" required="required">
@@ -60,7 +60,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-4 mb-3 pr-0">
+                    <div class="col-sm-6 mb-3 pr-0">
                         <div class="form-group">
                             <label>รหัสบัตรประชาชน 13 หลัก (ที่ผูกกับบัญชี K-Bank)</label>
                             <input type="text" name="citizen_id" value="" required="required">
