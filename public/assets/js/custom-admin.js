@@ -340,12 +340,14 @@ jQuery(document).ready(function() {
                 if(action == 'checked'){
                   $elem.parents('.switch-vertical').find('.toggle-outside').removeClass('switch-close');
                   $('.cng-text').text("Open").css("color", "#1DDB5D");        
-                  $('.toggle-inside').removeClass('trv-bottom');
+                  //$('.toggle-inside').removeClass('trv-bottom');
+                  $elem.parents('.switch-vertical').find('.toggle-inside').removeClass('trv-bottom');
                 }else if(action == 'unchecked'){
                   $elem.prop("checked", false);
                   $elem.parents('.switch-vertical').find('.toggle-outside').addClass('switch-close');
                   $('.cng-text').text("Close").css("color", "#ff0000");
-                  $('.toggle-inside').addClass('trv-bottom');
+                  //$('.toggle-inside').addClass('trv-bottom');
+                  $elem.parents('.switch-vertical').find('.toggle-inside').addClass('trv-bottom');
                 }                              
             }else{
               swal("Error",response.msg, "error");
@@ -380,12 +382,13 @@ jQuery(document).ready(function() {
                 if(action == 'checked'){
                   $elem.parents('.switch-vertical').find('.toggle-outside').removeClass('switch-close');
                   $('.cng-text-1').text("Open").css("color", "#1DDB5D");        
-                  $('.toggle-inside').removeClass('trv-bottom');
+                  //$('.toggle-inside').removeClass('trv-bottom');
+                  $elem.parents('.switch-vertical').find('.toggle-inside').removeClass('trv-bottom');
                 }else if(action == 'unchecked'){
                   $elem.prop("checked", false);
                   $elem.parents('.switch-vertical').find('.toggle-outside').addClass('switch-close');
-                  $('.cng-text-1').text("Close").css("color", "#ff0000");
-                  $('.toggle-inside').addClass('trv-bottom');
+                  $('.cng-text-1').text("Close").css("color", "#ff0000"); $elem.parents('.switch-vertical').find('.toggle-outside').addClass('switch-close');
+                  $elem.parents('.switch-vertical').find('.toggle-inside').addClass('trv-bottom');
                 }                              
             }else{
               swal("Error",response.msg, "error");
