@@ -87,7 +87,7 @@
             </div>
 
             <div class="header-search-block">
-                <div class="on-off-block">
+                <div class="on-off-block d-flex pr-2">
                         <div class="switch switch-vertical">
                             @if(empty(websiteMaintenanceMode()))
                                 <input id="switchonoff" type="checkbox" value="1" name="second-switch" checked="checked" />
