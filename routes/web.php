@@ -79,7 +79,7 @@
         /*Website Mainenance Start | By Satish Anand | Date 14-02-2019       
         */         
         Route::resource('website_configuration', 'Admin\WebsiteMaintenance\WebsiteMaintenanceController');
-        Route::get('api_index', 'Admin\WebsiteMaintenance\WebsiteMaintenanceController@apiindex');
+        Route::get('api_configuration', 'Admin\WebsiteMaintenance\WebsiteMaintenanceController@apiindex');
         Route::post('api_maintenance_store', 'Admin\WebsiteMaintenance\WebsiteMaintenanceController@apistore');
 
         Route::post('website_maintenance_update', 'Admin\WebsiteMaintenance\WebsiteMaintenanceController@updateMaintenance');  
