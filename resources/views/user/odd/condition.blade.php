@@ -62,7 +62,7 @@
                 </div>
                 
                     
-                    <div class="form-group">
+                    <div class="form-group mt-3">
                         <label class="chk-wrap">
                             <input type="checkbox" name="term_cond" value="1" required="required">
                             <span class="chk-mark">@lang('customer.accept_term_condition')</span>
