@@ -2,6 +2,11 @@
 
 @section('header_style')
     {!! CustomHelpers::combineCssJs(['css/myaccount'],'css') !!}
+    <style type="text/css">
+        @media all and (max-width:767px) {
+            .left-sidebar .account-nav { display:none; }
+        }
+    </style> 
 @endsection
 
 @section('header_script')
