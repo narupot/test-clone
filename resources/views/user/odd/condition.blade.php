@@ -39,7 +39,7 @@
             {{ csrf_field() }}
             <div class="form-profile-setting">
                 <div class="row">
-                    <div class="col-sm-4 mb-3 pr-0">
+                    <div class="col-sm-6 mb-3 pr-0">
                         <div class="form-group">
                             <label>@lang('common.status') : 
                                     @lang('customer.odd_registered')
