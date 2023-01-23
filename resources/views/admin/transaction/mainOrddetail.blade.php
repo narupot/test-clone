@@ -215,11 +215,11 @@
 
                                                     <li>
                                                         {{numberFormat($val->total_price) }} @lang('common.baht')
-                                                    </li>  
+                                                    </li>
+
+                                                    <li>{{$val->description}}</li>   
 
                                                     <li>{{ $val->payment_type=='credit'? numberFormat($val->total_price):'' }} @lang('common.baht')</li> 
-
-                                                    <li>{{$val->description}}</li>    
 
                                                     <li>{{$detail_json['payment_method'][session('default_lang')] ?? str_replace('_',' ',strtoupper($val->payment_slug)) }}</li>
                                                     <li class="red" id="item_status_{{ $val->id }}">{{ $val->getOrderStatus->status??'' }}</li>
