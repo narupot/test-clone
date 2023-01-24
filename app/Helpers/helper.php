@@ -306,7 +306,7 @@ if (! function_exists('numberFormat')) {
 }
 
 if (! function_exists('convertString')) {
-    public function convertString($price){
+    function convertString($price){
         $price = number_format(floatval($price), 2);
         $price  = (String) $price;
         $price  = str_replace('.00', '', $price);
