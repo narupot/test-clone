@@ -113,6 +113,7 @@
                                         <li>@lang('checkout.unit_price')</li>
                                         <li>@lang('checkout.qty')</li>
                                         <li>@lang('checkout.price')</li>
+                                        <li>@lang('checkout.details')</li>
                                         <li>@lang('checkout.credit_from_shop')</li>
                                         <li>@lang('checkout.payment_method')</li>
                                         <li>@lang('common.status')</li>
@@ -147,14 +148,20 @@
                                                 </div>
                                                 </a>
                                             </li>                                      
-                                            <li>{{numberFormat($val->last_price) }} @lang('common.baht') /{{ $detail_json['package'][session('default_lang')] ?? $val->package_name }}</li>
+                                            <li>{{numberFormat($val->last_price) }} @lang('common.baht') /{{ $detail_json['package'][session('default_lang')] ?? $val->package_name }}
+                                                <br/>
+                                            {{convertString($val->total_weight) }} {{$val->base_unit}} / 
+                                                        {{$val->package_name}}             
+                                            </li>
                                             <li class="add-rem-qty">
                                                 {{ $val->quantity }} {{ $detail_json['package'][session('default_lang')] ?? $val->package_name }}
                                             </li>
 
                                             <li>
                                                 {{numberFormat($val->total_price) }} @lang('common.baht')
-                                            </li>  
+                                            </li>
+
+                                            <li>{{$val->description}}</li>   
 
                                             <li>{{ $val->payment_type=='credit'? numberFormat($val->total_price):'' }} @lang('common.baht')</li>     
 
