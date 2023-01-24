@@ -204,7 +204,7 @@
                                                     <li>
                                                         {{numberFormat($val->last_price) }} @lang('common.baht') /{{ $detail_json['package'][session('default_lang')] ?? $val->package_name }}
                                                         <br/>
-                                                        {{$val->total_weight }}
+                                                        {{convertString($val->total_weight) }}
                                                         {{$val->base_unit}} / 
                                                         {{$val->package_name}}
 
