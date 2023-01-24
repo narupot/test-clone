@@ -305,6 +305,16 @@ if (! function_exists('numberFormat')) {
 	}
 }
 
+if (! function_exists('convertString')) {
+    public function convertString($price){
+        $price = number_format(floatval($price), 2);
+        $price  = (String) $price;
+        $price  = str_replace('.00', '', $price);
+        return $price;
+
+    }
+}	
+
 if (! function_exists('isMobile')) {
 	function isMobile() {
 		if(isset($_SERVER["HTTP_USER_AGENT"])){
