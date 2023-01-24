@@ -79,7 +79,7 @@ class OrderDetail extends Model
         }
 
         $description_arr = []; $description = '';
-        $description_data  = App\ProductDesc::where('product_id',$detail->product_id)->get();
+        $description_data  = \App\ProductDesc::where('product_id',$detail->product_id)->get();
         if(count($description_data)){
             foreach ($description_data as $key => $value) {
                 $description_arr[$value->lang_id]=$value->description;
