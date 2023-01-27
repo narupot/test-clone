@@ -61,7 +61,12 @@ class OrderController extends MarketPlace
 
         try{
             
-            $query = Order::select('*');
+            //Order::select('*');
+            $prefix = DB::getTablePrefix();
+            $query = DB::table(with(new Order)->getTable().' as o')->select("o.*", DB::raw("(SELECT sum(total_weight*quantity) FROM ".$prefix.with(new OrderDetail)->getTable()." WHERE order_id = ".$prefix."o.id) as total_weight"));
+
+            //OrderDetail::select(DB::raw('sum(total_weight*quantity) as sum_total_weight') )->where('order_id', $value->id)->value('sum_total_weight');
+
             
             if(isset($request->pq_filter)){
                 $filter_req = json_decode($request->pq_filter,true);
@@ -121,7 +126,7 @@ class OrderController extends MarketPlace
                 $response[$key]->payment_status = ($value->payment_status == 1)?'c-tot':'';
                 $to_weight = OrderDetail::select(DB::raw('sum(total_weight*quantity) as sum_total_weight') )->where('order_id', $value->id)->value('sum_total_weight');
                 //dd($to_weight);
-                $response[$key]->total_weight = $to_weight;
+                //$response[$key]->total_weight = $to_weight;
 
 
             }
