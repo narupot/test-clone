@@ -134,6 +134,7 @@
             {   
                 title: "@lang('admin_order.paid')", 
                 minWidth: 60,
+                dataIndx:'payment_status',
                 align : 'center',
                 render : function(ui) {                        
                     return {

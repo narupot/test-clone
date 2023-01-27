@@ -209,9 +209,9 @@
                                                     <li class="add-rem-qty">
                                                         {{ $val->quantity }} {{ $detail_json['package'][session('default_lang')] ?? $val->package_name }}
                                                          <br/>
-                                                        {{convertString($val->total_weight) }}
+                                                        <span class="red">{{convertString($val->total_weight) }}
                                                         {{$val->base_unit}} / 
-                                                        {{$val->package_name}}
+                                                        {{$val->package_name}}</span>
                                                     </li>
 
                                                     <li>
