@@ -215,6 +215,17 @@
                     // conditionList: ['begin', 'contain', 'notbegin', 'notcontain'], 
                 },
             },
+            {   
+                title: "@lang('admin_customer.shop_status')", 
+                minWidth: 60,
+                dataIndx:'shop_status',
+                align : 'center',
+                render : function(ui) {                        
+                    return {
+                        text:'<span class="circle '+ui.rowData.shop_status+'"></span>',
+                    };                
+                },
+            },
             
             {   title: "@lang('admin_customer.register_from')", 
                 dataIndx:'register_from', 
