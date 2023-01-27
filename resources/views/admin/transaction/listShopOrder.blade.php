@@ -129,14 +129,14 @@
                 },
             },*/
             {   title: "@lang('admin_order.shop_name')", 
-                dataIndx:'seller_id', 
+                dataIndx:'shop_name', 
                 minWidth: 140,
                 filter : {
                     attr : "@lang('admin_order.enter_name')",                        
                     crules: [
                         {
-                            condition: getFilter('seller_id', 'condition') ||  'contain',
-                            value : getFilter('seller_id', 'value')  || "",
+                            condition: getFilter('shop_name', 'condition') ||  'contain',
+                            value : getFilter('shop_name', 'value')  || "",
                         }
                     ],
                     type: 'textbox', 
