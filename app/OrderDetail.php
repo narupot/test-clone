@@ -77,11 +77,23 @@ class OrderDetail extends Model
         if($detail->getCat){
             $product_detail_arr['cat_url'] = $detail->getCat->url;
         }
+
+        $description_arr = []; $description = '';
+        $description_data  = \App\ProductDesc::where('product_id',$detail->product_id)->get();
+        if(count($description_data)){
+            foreach ($description_data as $key => $value) {
+                $description_arr[$value->lang_id]=$value->description;
+                if($value->lang_id == 0){
+                    $description = $value->description;
+                }
+            }
+        }
         
         $product_detail_arr['name'] = $name_arr;
         $product_detail_arr['package'] = $package_name_arr;
         $product_detail_arr['badge'] = $badge_arr;
         $product_detail_arr['payment_method'] = $pay_name_arr;
+        $product_detail_arr['description'] = $description_arr;
         $product_detail_arr = array_merge($product_detail_arr,$shop_data);
         
         $order_detail = new OrderDetail;
@@ -94,6 +106,7 @@ class OrderDetail extends Model
         $order_detail->total_weight     = $weight_per_unit;
         $order_detail->category_name    = $cat_name;
         $order_detail->package_name     = $package_name;
+        $order_detail->description     =  $description;
         $order_detail->base_unit        = $base_unit;
         $order_detail->sku              = $sku;
         $order_detail->quantity         = $detail->quantity;

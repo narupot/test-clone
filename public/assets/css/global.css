@@ -1795,10 +1795,12 @@ td {
   padding: 2px 5px;
   font-size: 0.75rem; }
 .table .inactive {
+  background: #495057;
   color: #fff;
   border-radius: 5px;
   padding: 2px 5px;
-  font-size: 0.75rem; }
+  font-size: 0.75rem;
+  opacity:.5; }
 .table .spinner {
   display: inline-block; }
 .table .product img {
@@ -4062,7 +4064,13 @@ strong {
       position: absolute;
       top: 0;
       width: 9px; }
-
+.circle.close {
+  background: #ff0000; float: none;
+  opacity: 1;
+}
+.circle.open {
+  background: #00ff00;
+}
 .nav-search-wrapper {
   position: relative; }
 

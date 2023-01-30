@@ -761,10 +761,12 @@ textarea, select, .date-select, .btn, .btn-blue, .btn-grey, .btn-default, .btn-g
     #header .login-link .user a:hover {
       color: #00B9FF !important; }
     #header .login-link .user img {
-      height: 20px;
+      height: 24px;
+      width: 24px;
       -webkit-border-radius: 50%;
       -ms-border-radius: 50%;
       border-radius: 50%;
+      object-fit: cover;
       line-height: 1;
       float: left;
       margin-right: 5px; }

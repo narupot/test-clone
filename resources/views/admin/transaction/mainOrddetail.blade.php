@@ -13,6 +13,9 @@
     <div class="header-title">
         <h1 class="title">@lang('checkout.order_no'). {{ $main_order->formatted_id }}</h1>       
         <div class="float-right">
+            @if($main_order->logistic_status != '1' && $main_order->end_shopping_date!=null && $main_order->shipping_method !=2)
+                <button id="btn-resend" class="btn-primary">Resend to logistic</button>
+            @endif
             <a href="{{ action('Admin\Transaction\OrderController@index') }}" class="btn-back">@lang('admin_common.back')</a>
         </div>
     </div>
@@ -163,6 +166,7 @@
                                                 <li>@lang('checkout.unit_price')</li>
                                                 <li>@lang('checkout.qty')</li>
                                                 <li>@lang('checkout.price')</li>
+                                                <li>@lang('checkout.details')</li>
                                                 <li>@lang('checkout.credit_from_shop')</li>
                                                 <li>@lang('checkout.payment_method')</li>
                                                 <li>@lang('common.status')</li>
@@ -199,16 +203,24 @@
                                                     </li>                                      
                                                     <li>
                                                         {{numberFormat($val->last_price) }} @lang('common.baht') /{{ $detail_json['package'][session('default_lang')] ?? $val->package_name }}
+                                                       
+
                                                     </li>
                                                     <li class="add-rem-qty">
                                                         {{ $val->quantity }} {{ $detail_json['package'][session('default_lang')] ?? $val->package_name }}
+                                                         <br/>
+                                                        <span class="red">{{convertString($val->total_weight) }}
+                                                        {{$val->base_unit}} / 
+                                                        {{$val->package_name}}</span>
                                                     </li>
 
                                                     <li>
                                                         {{numberFormat($val->total_price) }} @lang('common.baht')
-                                                    </li>  
+                                                    </li>
 
-                                                    <li>{{ $val->payment_type=='credit'? numberFormat($val->total_price):'' }} @lang('common.baht')</li>     
+                                                    <li>{{$val->description}}</li>   
+
+                                                    <li>{{ $val->payment_type=='credit'? numberFormat($val->total_price):'' }} @lang('common.baht')</li> 
 
                                                     <li>{{$detail_json['payment_method'][session('default_lang')] ?? str_replace('_',' ',strtoupper($val->payment_slug)) }}</li>
                                                     <li class="red" id="item_status_{{ $val->id }}">{{ $val->getOrderStatus->status??'' }}</li>
@@ -304,6 +316,7 @@
     var update_status_confirm = "@lang('admin_order.are_you_sure_to_update_status')";
     var update_status_error = "@lang('admin_order.select_order_status_to_update')";
     var change_url = "{{ action('Admin\Transaction\OrderController@ordChangeItemStatus') }}";
+    var resend_url = "{{ action('Admin\Transaction\OrderController@resendLogistic') }}";
 
     jQuery('#btn-remark').click(function(evt) {
         evt.preventDefault();
@@ -330,6 +343,26 @@
                 }
         });
     });
+
+    //for re send order to logistic
+    jQuery('#btn-resend').click(function(evt) {
+        evt.preventDefault();
+        
+        var order_id = {{$main_order->id}};
+        var data = {'order_id':order_id};
+        callAjax(resend_url, 'post', data, function(result) {
+
+                if(result.status=='fail'){
+                    showSweetAlertError(result.msg);
+                   
+                    return false;
+
+                }else if(result.status=='success'){
+                    swal('success', result.msg, "success");       
+                }
+        });
+    });
+
 
     $('body').on('click','#update_order_status',function() {
 

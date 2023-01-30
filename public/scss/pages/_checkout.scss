@@ -69,18 +69,21 @@
 	p {
 		margin-bottom: 0px;
 	}
+	.label {
+		color: $grey-dark;
+	}
 }
 
 .address-border {
 	border-right: 1px solid $border;
-	.post-address {
-		color: $grey3; line-height: 1.5;
-		a {
-			color: $grey3;
-		}
-		p {
-			margin-bottom: 0px;
-		}
+}
+.post-address {
+	color: $grey3; line-height: 1.5;
+	a {
+		color: $grey3;
+	}
+	p {
+		margin-bottom: 0px;
 	}
 }
 .block-add-address {
@@ -135,6 +138,7 @@
 				white-space: nowrap; text-overflow: ellipsis;
 				overflow: hidden; max-width: 150px;
 				color: $skyblue;
+				display: inline-block;
 				font-size: 16px;
 				text-decoration: underline;
 				span {
@@ -355,9 +359,9 @@
 	}
 	li {
 		margin-bottom: 10px; 
-
-		.skyblue {
-			display: inline-block; 
+		line-height: 1.5;
+		.skyblue, a {
+			display: inline-block; vertical-align: top;
 			max-width: 300px;  white-space: nowrap;
 			text-overflow: ellipsis; overflow: hidden;
 		}
@@ -385,6 +389,110 @@
 			display: block; padding-bottom: 2px;
 		}
 	}
+
+	/*  Cartpage responsive table  */	
+  	.cartpage-tbl {
+  		.table-header {	
+  			display: none; 
+  		}
+  		.table-content {
+  			display: block;
+
+  			ul {
+  				display: block;
+  				padding-bottom: 5px;
+  				li {
+  					padding-left: 0;
+  					padding-right: 0;
+  					&:after {
+  						display: none;
+  					}
+  					&:last-child {
+  						padding-bottom: 12px;
+  					}
+  					&:not(:last-child) {
+  						border-bottom: none;
+  					}
+  				}
+  			}
+  			.goods-tbl, .sel-tbl, .unit-tbl, .num-tbl, .total-tbl, .paymethod-tbl {
+  				display: block;
+  			}
+  			.unit-tbl, .num-tbl, .total-tbl, .paymethod-tbl {
+				padding-left: 50%;	
+				position: relative;	
+				text-align: right;
+				&:before {
+					width: 48%;	
+					position: absolute;	
+					left: 0;	
+					top: 10px;	
+					text-align: left;
+				}
+  			}
+  			.sel-tbl {
+  				.prod-img {
+  					display: none;
+  				}
+  				a {
+					color: $skyblue;	
+					font-size: $font-18;
+  				}
+  			}
+  			.goods-tbl {
+  				.prod-img {
+  					min-width: 70px;
+  					img {
+						max-height: 60px;	
+						width: auto;
+  					}
+  				}
+  				.dbox-flex {
+  					align-items: flex-start;
+  				}
+  				.dbox-flex + .ml-2 {
+					width: 100%;
+					@include flex;
+					justify-content: space-between;	
+					line-height: 30px;  
+  				}
+  			}
+  			.unit-tbl {
+  				&:before {
+  					content: "ราคาต่อหน่วย";
+  				}
+  			}
+  			.num-tbl {
+  				&:before {
+  					content: "จำนวน";
+  				}
+  			}
+  			.total-tbl {
+  				&:before {
+  					content: "ราคารวม";
+  				}
+  			}
+  			.paymethod-tbl {
+  				&:before {
+  					content: "ช่องทางการชำระเงิน";
+  				}
+  			}
+  		}
+  		.checkout-table-footer {
+  			& > .col-sm-5 {
+  				max-width: 100%;
+  			}     
+  		}
+  	}
+
+  	.table {
+  		.table-content{
+  		 	.add-rem-qty {	
+		   		min-width: 180px;	
+		    	white-space: nowrap; 
+  			}
+  		}
+	} 	
 
 }
 

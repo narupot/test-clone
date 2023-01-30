@@ -113,7 +113,7 @@
                     listeners: ['change'],
                 },
             },
-            {   title: "@lang('admin_order.seller_id')", 
+            /*{   title: "@lang('admin_order.seller_id')", 
                 dataIndx:'seller_id', 
                 minWidth: 140,
                 filter : {
@@ -122,6 +122,21 @@
                         {
                             condition: getFilter('seller_id', 'condition') ||  'contain',
                             value : getFilter('seller_id', 'value')  || "",
+                        }
+                    ],
+                    type: 'textbox', 
+                    listeners: ['change'],
+                },
+            },*/
+            {   title: "@lang('admin_order.shop_name')", 
+                dataIndx:'shop_name', 
+                minWidth: 140,
+                filter : {
+                    attr : "@lang('admin_order.enter_name')",                        
+                    crules: [
+                        {
+                            condition: getFilter('shop_name', 'condition') ||  'contain',
+                            value : getFilter('shop_name', 'value')  || "",
                         }
                     ],
                     type: 'textbox', 

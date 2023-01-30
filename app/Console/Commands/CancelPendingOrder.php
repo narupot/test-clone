@@ -3,8 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\TempProductImage;
-use App\Http\Controllers\MarketPlace;
+use App\Helpers\GeneralFunctions;
 
 class CancelPendingOrder extends Command {
     /**
@@ -58,7 +57,9 @@ class CancelPendingOrder extends Command {
                     $update_details = \App\OrderDetail::where(['order_id'=>$value->id])->update(['status'=>4]);
 
                     //cteating order transaction
-                    $transaction_arr = ['order_id'=>$value->id,'order_shop_id'=>0,'order_detail_id'=>0,'event'=>'cancel','updated_by_id'=>0,'updated_by'=>'cron','comment'=>'Online Order cancelled'];
+                    //$comment = 'Online Order cancelled'
+                    $comment = GeneralFunctions::getOrderText('order_cancelled');
+                    $transaction_arr = ['order_id'=>$value->id,'order_shop_id'=>0,'order_detail_id'=>0,'event'=>'cancel','updated_by_id'=>0,'comment'=>$comment,'updated_by'=>'cron'];
 
                     $update_transaction = \App\OrderTransaction::updateOrdTrans($transaction_arr);
                 }

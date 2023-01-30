@@ -129,7 +129,7 @@
                     </div> --}}
                     <div class="form-group row">
                         <div class="col-md-7">
-                            <label for="form-text-input">@lang('admin_slider.design')<i class="strick">*</i> <span href="javascript:;" class="popovertxt" data-toggle="modal" data-target="#SliderModalDesign">?</span></label>
+                            <label for="form-text-input">@lang('admin_slider.design')<i class="strick">*</i> <span href="javascript:;" class="popovertxt" data-toggle="modal" data-target="#SliderModalDesign"></span></label>
                             <select name="prd_design">
                                 @foreach(prdSliderDesign() as $key => $val )
                                     <option value="{{ $key }}">{{ $val }}</option>

@@ -2,6 +2,11 @@
 
 @section('header_style')
     {!! CustomHelpers::combineCssJs(['css/myaccount'],'css') !!}
+    <style type="text/css">
+        @media all and (max-width:767px) {
+            .left-sidebar .account-nav { display:none; }
+        }
+    </style> 
 @endsection
 
 @section('header_script')
@@ -33,9 +38,9 @@
         
         <div class="form-profile-setting">
             <div class="row">
-                <div class="col-sm-4 mb-3 pr-0">
+                <div class="col-sm-6 mb-3 pr-0">
                     <div class="form-group">
-                        <label>@lang('common.status') : 
+                        <label>สถานะ : 
                             @if(!empty($user_odd_info) && $user_odd_info->status=='1' && $user_odd_info->espa_id)
                                 @lang('customer.odd_registered')
                             @else
@@ -49,9 +54,9 @@
             </div>
             @if(empty($user_odd_info) || $user_odd_info->espa_id=='')
                 <div class="row">
-                    <div class="col-sm-4 mb-3 pr-0">
+                    <div class="col-sm-6 mb-3">
                         <div class="form-group">
-                            <label>@lang('customer.mobile_no')</label>
+                            <label>หมายเลขโทรศัพท์มือถือ (ที่ผูกกับบัญชี K-Bank)</label>
                             <input type="text" name="ph_number" value="{{$userDetail->ph_number}}" required="required">
                             @if ($errors->has('ph_number'))
                                 <p class="error error-msg">{{ $errors->first('ph_number') }}</p>
@@ -60,9 +65,9 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-4 mb-3 pr-0">
+                    <div class="col-sm-6 mb-3">
                         <div class="form-group">
-                            <label>@lang('customer.citizen_id')</label>
+                            <label>รหัสบัตรประชาชน 13 หลัก (ที่ผูกกับบัญชี K-Bank)</label>
                             <input type="text" name="citizen_id" value="" required="required">
                             @if ($errors->has('citizen_id'))
                                 <p class="error error-msg">{{ $errors->first('citizen_id') }}</p>
@@ -71,7 +76,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <button type="submit" id="" class="btn">@lang('customer.register')</button>
+                    <button type="submit" id="" class="btn">ยืนยัน</button>
                 </div>
             @endif
         </div>

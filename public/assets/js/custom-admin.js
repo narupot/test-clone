@@ -340,12 +340,14 @@ jQuery(document).ready(function() {
                 if(action == 'checked'){
                   $elem.parents('.switch-vertical').find('.toggle-outside').removeClass('switch-close');
                   $('.cng-text').text("Open").css("color", "#1DDB5D");        
-                  $('.toggle-inside').removeClass('trv-bottom');
+                  //$('.toggle-inside').removeClass('trv-bottom');
+                  $elem.parents('.switch-vertical').find('.toggle-inside').removeClass('trv-bottom');
                 }else if(action == 'unchecked'){
                   $elem.prop("checked", false);
                   $elem.parents('.switch-vertical').find('.toggle-outside').addClass('switch-close');
                   $('.cng-text').text("Close").css("color", "#ff0000");
-                  $('.toggle-inside').addClass('trv-bottom');
+                  //$('.toggle-inside').addClass('trv-bottom');
+                  $elem.parents('.switch-vertical').find('.toggle-inside').addClass('trv-bottom');
                 }                              
             }else{
               swal("Error",response.msg, "error");
@@ -355,6 +357,47 @@ jQuery(document).ready(function() {
         return false;
       });
     };   
+
+
+    $(document).on('click', '#mobileswitchonoff', function(evt){
+        var $that = $(this);
+        if($that.is(':checked')){
+          mobileMaintenanceMode("Are you sure want to open mobile api ?", 'checked', '0', $that);
+        }else{
+          mobileMaintenanceMode("Are you sure want to close mobile api ?", 'unchecked', '1', $that);
+        }
+    });
+
+    function mobileMaintenanceMode(titleText, action, statusVal, $elem){
+
+      swal({
+        title: titleText,
+        type: "warning",
+        showCancelButton: true,
+      }).then(function(isDone){
+        callAjax(mobile_maintenance_url, 'post', {'MOBILE_MAINTENANCE':statusVal}, function(response){
+            if(response.status == 'success'){  
+                swal("Success", response.msg, "success");
+                $elem.val(statusVal);
+                if(action == 'checked'){
+                  $elem.parents('.switch-vertical').find('.toggle-outside').removeClass('switch-close');
+                  $('.cng-text-1').text("Open").css("color", "#1DDB5D");        
+                  //$('.toggle-inside').removeClass('trv-bottom');
+                  $elem.parents('.switch-vertical').find('.toggle-inside').removeClass('trv-bottom');
+                }else if(action == 'unchecked'){
+                  $elem.prop("checked", false);
+                  $elem.parents('.switch-vertical').find('.toggle-outside').addClass('switch-close');
+                  $('.cng-text-1').text("Close").css("color", "#ff0000"); $elem.parents('.switch-vertical').find('.toggle-outside').addClass('switch-close');
+                  $elem.parents('.switch-vertical').find('.toggle-inside').addClass('trv-bottom');
+                }                              
+            }else{
+              swal("Error",response.msg, "error");
+            } 
+        });
+      }, function(notDone){
+        return false;
+      });
+    };  
 });
 
 // Auto Search
