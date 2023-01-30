@@ -195,8 +195,6 @@
                         }
                     ],
                     options: {!! $shipping_method !!},
-                    type: 'textbox', 
-                    listeners: ['change'],
                 },
             },
             {   title: "@lang('admin_order.pickup_time')", 
