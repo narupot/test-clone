@@ -36,7 +36,8 @@ class OrderController extends MarketPlace
                 $status_arr[] = [$value->order_status_id=>$value->status];
             }
 
-            $shipping_method = ['1'=>Lang::get('checkout.pick_up_at_center'), '2'=>Lang::get('checkout.pick_up_at_the_store'), '3'=>Lang::get('checkout.delivery_at_the_address')];
+ 
+            $shipping_method = [['1'=>Lang::get('checkout.pick_up_at_center')], ['2'=>Lang::get('checkout.pick_up_at_the_store')], ['3'=>Lang::get('checkout.delivery_at_the_address')]];
 
 
             return view('admin.transaction.listOrder', ['filter'=>$filter,'ord_status'=>json_encode($status_arr), 'shipping_method'=>json_encode($shipping_method)]);
