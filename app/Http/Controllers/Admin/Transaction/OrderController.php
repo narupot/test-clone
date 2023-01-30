@@ -110,7 +110,7 @@ class OrderController extends MarketPlace
                                 $query->whereIn('shipping_method', $searchval);
                             break;
                             case 'total_weight':
-                               $query->where('total_weight','=',$searchval); 
+                               $query->where(DB::raw("(SELECT sum(total_weight*quantity) FROM ".$prefix.with(new OrderDetail)->getTable()." WHERE order_id = ".$prefix."o.id)"),'=',$searchval); 
                             break;
                             
                         }
@@ -118,6 +118,8 @@ class OrderController extends MarketPlace
                     }
                 }
             }
+
+            //dd( $query->toSql());
             $response = $query->orderBy($order_by,$order_by_val)->paginate($perpage,['*'],'page',$current_page);
             $totrec = $response->total();
             //dd($response);
