@@ -190,7 +190,7 @@
                     attr : "@lang('admin_order.shipping_method')",
                     crules: [
                         {
-                            condition: getFilter('shipping_method', 'condition') ||  'contain',
+                            condition: getFilter('shipping_method', 'condition') ||  'range',
                             value : getFilter('shipping_method', 'value')  || "",
                         }
                     ],
