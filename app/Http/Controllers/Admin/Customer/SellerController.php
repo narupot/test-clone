@@ -98,6 +98,7 @@ class SellerController extends MarketPlace
                                 $to_date = $fvalue['value2']??'';
                                 createDateFilter($query,'u.dob',$from_date,$to_date);
                             break;
+                            case 'shop_status':$query->whereIn('s.shop_status',$searchval); break;
                             case 'created_at':
                                 $from_date = $fvalue['value']??'';
                                 $to_date = $fvalue['value2']??'';
