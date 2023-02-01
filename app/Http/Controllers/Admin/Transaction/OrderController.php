@@ -36,7 +36,11 @@ class OrderController extends MarketPlace
                 $status_arr[] = [$value->order_status_id=>$value->status];
             }
 
-            return view('admin.transaction.listOrder', ['filter'=>$filter,'ord_status'=>json_encode($status_arr)]);
+ 
+            $shipping_method = [['1'=>Lang::get('checkout.pick_up_at_center')], ['2'=>Lang::get('checkout.pick_up_at_the_store')], ['3'=>Lang::get('checkout.delivery_at_the_address')]];
+
+
+            return view('admin.transaction.listOrder', ['filter'=>$filter,'ord_status'=>json_encode($status_arr), 'shipping_method'=>json_encode($shipping_method)]);
         }      
     }
 
@@ -61,7 +65,12 @@ class OrderController extends MarketPlace
 
         try{
             
-            $query = Order::select('*');
+            //Order::select('*');
+            $prefix = DB::getTablePrefix();
+            $query = DB::table(with(new Order)->getTable().' as o')->select("o.*", DB::raw("(SELECT sum(total_weight*quantity) FROM ".$prefix.with(new OrderDetail)->getTable()." WHERE order_id = ".$prefix."o.id) as total_weight"));
+
+            //OrderDetail::select(DB::raw('sum(total_weight*quantity) as sum_total_weight') )->where('order_id', $value->id)->value('sum_total_weight');
+
             
             if(isset($request->pq_filter)){
                 $filter_req = json_decode($request->pq_filter,true);
@@ -92,12 +101,25 @@ class OrderController extends MarketPlace
                                 $to_date = $fvalue['value2']??'';
                                 createDateFilter($query,'end_shopping_date',$from_date,$to_date);
                             break;
+                            case 'pickup_time':
+                                $from_date = $fvalue['value']??'';
+                                $to_date = $fvalue['value2']??'';
+                                createDateFilter($query,'pickup_time',$from_date,$to_date);
+                            break;
+                            case 'shipping_method':
+                                $query->whereIn('shipping_method', $searchval);
+                            break;
+                            case 'total_weight':
+                               $query->where(DB::raw("(SELECT sum(total_weight*quantity) FROM ".$prefix.with(new OrderDetail)->getTable()." WHERE order_id = ".$prefix."o.id)"),'=',$searchval); 
+                            break;
                             
                         }
                         
                     }
                 }
             }
+
+            //dd( $query->toSql());
             $response = $query->orderBy($order_by,$order_by_val)->paginate($perpage,['*'],'page',$current_page);
             $totrec = $response->total();
             //dd($response);
@@ -119,9 +141,9 @@ class OrderController extends MarketPlace
 
                 $response[$key]->detail_url = action('Admin\Transaction\OrderController@orderDetail',$value->formatted_id);
                 $response[$key]->payment_status = ($value->payment_status == 1)?'c-tot':'';
-                $to_weight = OrderDetail::select(DB::raw('sum(total_weight*quantity) as sum_total_weight') )->where('order_id', $value->id)->value('sum_total_weight');
+                //$to_weight = OrderDetail::select(DB::raw('sum(total_weight*quantity) as sum_total_weight') )->where('order_id', $value->id)->value('sum_total_weight');
                 //dd($to_weight);
-                $response[$key]->total_weight = $to_weight;
+                //$response[$key]->total_weight = $to_weight;
 
 
             }
@@ -279,10 +301,21 @@ class OrderController extends MarketPlace
             return ['status'=>'fail','msg'=>'Invalid order id'];
         }
 
-    }       
+    }  
+    /**resend order to logistic */
+    public function resendLogistic(Request $request) {
+        $order_id = $request->order_id;
+        $order = Order::where('id',$request->order_id)->first();
+        if($order) {
+            $order->logistic_status = '0';
+            $order->save();
+
+            return ['status'=>'success','msg'=>'Success ! It will send after one min'];
+        }
+        return ['status'=>'fail','msg'=>\Lang::get('admin_common.something_went_wrong')];
+    }     
 
     public function updateRemark(Request $request) {
-
         $order_id = $request->order_id;
         $order = Order::where('id',$request->order_id)->first();
         if($order) {

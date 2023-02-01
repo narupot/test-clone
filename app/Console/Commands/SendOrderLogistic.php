@@ -98,6 +98,7 @@ class SendOrderLogistic extends Command
                             //$detail_arr['panel_id'] = $detail_arr['panel_id'][0]??'';
                             $detail_arr['pickup_time'] = $main_order->pickup_time;
                             $detail_arr['payment_method'] = $detail_arr['payment_method'][0]??'';
+                            $detail_arr['remark'] = (float)$dvalue['total_weight'].' '.$dvalue['base_unit'].'/'.$dvalue['package_name'];
                             $order_detail[$dkey]['base_unit_type'] = '';
                             $order_detail[$dkey]['base_unit'] = '';
                             $order_detail[$dkey]['item_detail_json'] = [$detail_arr];

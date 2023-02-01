@@ -80,7 +80,7 @@
 
 		.d-block {
 			text-align: center; white-space: nowrap;
-			overflow: hidden; text-overflow: ellipsis;
+			/*overflow: hidden; text-overflow: ellipsis;*/
 		}
 		i {
 			font-size: $font-30; margin-top: 5px;
@@ -89,10 +89,13 @@
 
 	.cancel {			
 		.step-icon {
-			background: $red;
+			background: $red !important;
 		}
 		.step-name {
 			color: $red;
+		}
+		i {
+			font-weight: bold;
 		}
 	}
 	
@@ -139,6 +142,12 @@
 	margin-bottom: 6px;
 	.label {
 		color: $grey-dark;
+	}
+	h4 {
+		margin-top: 15px; margin-bottom: 2px;
+	}
+	p {
+		margin-bottom: 2px;
 	}
 } 
 
@@ -274,25 +283,30 @@
 @media all and(max-width: 556px) { 
 
 	.order-step-wrap {
-
-		padding-top: 15px;
-		
+		.step-icon {
+			width: 60px;	
+    		height: 60px;
+    		i {
+    			font-size: $font-20;	
+      			line-height: 32px;
+    		}
+		}
+		.current-status  {
+			font-size: $font-12;
+		}
 		li {
-			width: 100%; margin-bottom: 15px;
-
-			&:before, &:after {
-				display:none;
+			&:before,&:after {
+				top: 26px;
 			}
-
-			&.active {
-				padding-top: 60px; 
-
-				.current-status {
-					top: 5px;
-				}
+			.step-name {
+				font-size: $font-12;	
+				padding-left: 2px;	
+				padding-right: 2px;
 			}
 		}
 	}
-
-
+}
+/**/
+.seller-panneltab {	
+	width: 100%; 
 }

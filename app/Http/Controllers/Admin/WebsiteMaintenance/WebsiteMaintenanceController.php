@@ -65,7 +65,7 @@ class WebsiteMaintenanceController extends MarketPlace
             
         }
         $postArr = $request->all();
-        $configAllData = WebsiteConfiguration::all();
+        $configAllData = WebsiteConfiguration::where('website_config_type', 'website_configuration')->get();
 
         foreach ($configAllData as $configVal) {            
             if(isset($postArr[$configVal->website_config_name])) {
@@ -100,7 +100,54 @@ class WebsiteMaintenanceController extends MarketPlace
         }
 
         return redirect()->action($action)->with('succMsg', Lang::get('common.records_updated_successfully'));
-    }                   
+    }
+
+    public function apiindex()
+    {  
+        $permission = $this->checkUrlPermission('api_configuration');
+        if($permission === true) {   
+
+            $config_arr = $this->getWebsiteConfiguration('api_configuration');
+            $config_arr_search = $this->getWebsiteConfigurationSearch('api_configuration');
+            return view('admin.websiteMaintenance.apiConfiguration', ['config_arr'=>$config_arr,'config_arr_search'=>$config_arr_search]);
+        }
+    }  
+
+    public function apistore(Request $request)
+    {                
+        
+        
+        $postArr = $request->all();
+        $configAllData = WebsiteConfiguration::where('website_config_type', 'api_configuration')->get();
+
+        foreach ($configAllData as $configVal) {            
+            if(isset($postArr[$configVal->website_config_name])) {
+                $config = WebsiteConfiguration::find($configVal->id); 
+                $config->website_config_name = $configVal->website_config_name;                
+                $config->website_config_value = $postArr[$configVal->website_config_name];                
+                $config->save();           
+            }  
+        }
+
+        /*update activity log start*/
+        $action_type = "updated"; 
+        $module_name = "apimaintenance";            
+        $logdetails = "Admin has updated Api maintenance configuration";
+        $old_data = "";
+        $new_data = "";
+        $logdata = array('action_type' =>$action_type,'module_name' =>$module_name,'logdetails' =>$logdetails,'old_data' =>$old_data,'new_data' =>$new_data );
+        $this->updateLogActivity($logdata);
+        /*update activity log End*/ 
+
+        if(!empty($request->redirect_path)) {
+            $action = $request->redirect_path;
+        }
+        else {
+            $action = 'Admin\WebsiteMaintenance\WebsiteMaintenanceController@apiindex';
+        }
+
+        return redirect()->action($action)->with('succMsg', Lang::get('common.records_updated_successfully'));
+    }                 
 
     public function getWebsiteConfiguration($type) {
 
@@ -175,4 +222,24 @@ class WebsiteMaintenanceController extends MarketPlace
 
         return ['status'=>'success','msg'=> Lang::get('common.records_updated_successfully')];
     }
+
+    public function updateMobileMaintenance(Request $request){
+        $value = $request->MOBILE_MAINTENANCE;
+
+        $update = WebsiteConfiguration::where('website_config_name','MOBILE_MAINTENANCE')->update(['website_config_value'=>$value]);
+
+        /*update activity log start*/
+        $action_type = "updated"; 
+        $module_name = "mobilemaintenance";            
+        $logdetails = "Admin has updated mobile maintenance configuration";
+        $old_data = "";
+        $new_data = "";
+        $logdata = array('action_type' =>$action_type,'module_name' =>$module_name,'logdetails' =>$logdetails );
+        $this->updateLogActivity($logdata);
+        /*update activity log End*/
+
+        return ['status'=>'success','msg'=> Lang::get('common.records_updated_successfully')];
+    }
+
+
 }

@@ -215,6 +215,32 @@
                     // conditionList: ['begin', 'contain', 'notbegin', 'notcontain'], 
                 },
             },
+            {   
+                title: "@lang('admin_customer.shop_status')", 
+                minWidth: 60,
+                dataIndx:'shop_status',
+                align : 'center',
+                render : function(ui) {                        
+                    return {
+                        text:'<span class="circle '+ui.rowData.shop_status+'"></span>',
+                    };                
+                },
+                filter: { 
+                    attr: "placeholder='@lang('admin_common.please_select')'",
+                    crules: [
+                        { 
+                           condition: getFilter('shop_status', 'condition') || 'range',
+                           value : getFilter('shop_status', 'value') || "",
+                        }
+                    ],
+                    options: [ 
+                        {"open": "{{Lang::get('admin_customer.open')}}"}, 
+                        {"close": "{{Lang::get('admin_customer.close')}}"},
+                    ],                        
+                },
+
+
+            },
             
             {   title: "@lang('admin_customer.register_from')", 
                 dataIndx:'register_from', 

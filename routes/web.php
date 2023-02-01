@@ -79,7 +79,11 @@
         /*Website Mainenance Start | By Satish Anand | Date 14-02-2019       
         */         
         Route::resource('website_configuration', 'Admin\WebsiteMaintenance\WebsiteMaintenanceController');
-        Route::post('website_maintenance_update', 'Admin\WebsiteMaintenance\WebsiteMaintenanceController@updateMaintenance');     
+        Route::get('api_configuration', 'Admin\WebsiteMaintenance\WebsiteMaintenanceController@apiindex');
+        Route::post('api_maintenance_store', 'Admin\WebsiteMaintenance\WebsiteMaintenanceController@apistore');
+
+        Route::post('website_maintenance_update', 'Admin\WebsiteMaintenance\WebsiteMaintenanceController@updateMaintenance');  
+        Route::post('mobile_maintenance_url', 'Admin\WebsiteMaintenance\WebsiteMaintenanceController@updateMobileMaintenance');    
         /*
         * Website Mainenance End 
         */
@@ -169,6 +173,7 @@
             Route::get('/', 'Admin\Transaction\OrderController@index');
             Route::get('listOrderData', 'Admin\Transaction\OrderController@listOrderData');
             Route::get('/{oid}/detail', 'Admin\Transaction\OrderController@orderDetail');
+            Route::post('resend-order-logistic', 'Admin\Transaction\OrderController@resendLogistic');
             Route::post('ordChangeItemStatus', 'Admin\Transaction\OrderController@ordChangeItemStatus');
             Route::post('updateRemark', 'Admin\Transaction\OrderController@updateRemark');
             Route::post('update-order-status', 'Admin\Transaction\OrderController@updateOrderStatus');
@@ -473,6 +478,7 @@
         Route::get('register-odd', 'User\ODDController@index');
         Route::get('register-odd-condition', 'User\ODDController@oddCondition');
         Route::post('save-condition', 'User\ODDController@oddConditionStore');
+        Route::post('odd-unregister', 'User\ODDController@oddUnregister');
         Route::post('register-odd-token', 'User\ODDController@oddToken');
 
         Route::group(['prefix' => 'order','middleware' => 'escape-back-history'], function () {
