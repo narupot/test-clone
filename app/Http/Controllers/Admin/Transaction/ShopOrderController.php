@@ -58,9 +58,10 @@ class ShopOrderController extends MarketPlace
             $query = \DB::table(with(new OrderShop)->getTable().' as sord')
                   ->join(with(new Order)->getTable().' as ord', 'sord.order_id', '=', 'ord.id')
                   ->join(with(new \App\Shop)->getTable().' as shop', 'sord.shop_id', '=', 'shop.id')
+                  ->join(with(new \App\ShopDesc)->getTable().' as shopdesc', 'shop.id', '=', 'shopdesc.shop_id')
                   ->join(with(new \App\User)->getTable().' as seller', 'shop.user_id', '=', 'seller.id')
                   ->join(with(new \App\OrderStatusDesc)->getTable().' as osd', 'sord.order_status','=', 'osd.order_status_id')
-                  ->select('seller.display_name as seller_name','seller.id as seller_id','sord.shop_formatted_id','ord.formatted_id','sord.total_final_price','sord.end_shopping_date','osd.status','sord.admin_remark','sord.payment_status');
+                  ->select('seller.display_name as seller_name','seller.id as seller_id','sord.shop_formatted_id','ord.formatted_id','sord.total_final_price','sord.end_shopping_date','osd.status','sord.admin_remark','sord.payment_status','shopdesc.shop_name');
             
             if(isset($request->pq_filter)){
                 $filter_req = json_decode($request->pq_filter,true);
@@ -73,6 +74,7 @@ class ShopOrderController extends MarketPlace
                             case 'formatted_id':$query->where('ord.formatted_id','like', '%'.$searchval.'%'); break;
                             case 'shop_formatted_id':$query->where('sord.shop_formatted_id','like', '%'.$searchval.'%'); break;
                             case 'seller_id':$query->where('seller.id','=',$searchval); break;
+                            case 'shop_name':$query->where('shopdesc.shop_name','like', '%'.$searchval.'%'); break;
                             case 'admin_remark':$query->where('sord.admin_remark','like', '%'.$searchval.'%'); break;
                             case 'seller_name':$query->where('seller.display_name','like', '%'.$searchval.'%'); break;
                             case 'total_final_price':$query->where('sord.total_final_price','=', $searchval); break;

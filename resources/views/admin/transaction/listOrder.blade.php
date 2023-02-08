@@ -186,17 +186,47 @@
                 dataIndx:'shipping_method', 
                 minWidth: 160,
                 align : 'center',
-        
+                filter : {
+                    attr : "@lang('admin_order.shipping_method')",
+                    crules: [
+                        {
+                            condition: getFilter('shipping_method', 'condition') ||  'range',
+                            value : getFilter('shipping_method', 'value')  || "",
+                        }
+                    ],
+                    options: {!! $shipping_method !!},
+                },
             },
             {   title: "@lang('admin_order.pickup_time')", 
                 dataIndx:'pickup_time', 
                 minWidth: 160,
                 align : 'center',
+                filter: { 
+                    init: pqDatePicker,
+                    crules :[
+                        {
+                            condition: getFilter('pickup_time', 'condition') ||  "between",
+                            value : getFilter('pickup_time', 'value') || "",
+                            value2 : getFilter('pickup_time', 'value2') || ""
+                        }
+                    ]           
+                },
         
             },{   title: "@lang('admin_order.total_weight')", 
                 dataIndx:'total_weight', 
                 minWidth: 100,
                 align : 'center',
+                filter : {
+                    attr : "@lang('admin_order.total_weight')",                        
+                    crules: [
+                        {
+                            condition: getFilter('total_weight', 'condition') ||  'contain',
+                            value : getFilter('total_weight', 'value')  || "",
+                        }
+                    ],
+                    type: 'textbox', 
+                    listeners: ['change'],
+                },
         
             },
             {   title: "@lang('admin_order.remark')", 
