@@ -9,22 +9,27 @@
 		font-weight: normal;
 	}
 	ul {
-		padding:0 15px;
+		padding:0px;
 		margin-bottom: 15px;
 		background: $grey-lighter;
 		@include border-radius(0 0 10px 10px);
 	}
-	li {
-		border-bottom: solid 1px $border;		
-		padding: 10px 0;
+	li {				
+		/*padding: 10px 0;*/
 		a {
 			color: $grey-dark;
+			border-bottom: solid 1px $border;
+			display: block;
+			padding: 10px;
 			@extend .transition;
+			&:hover {
+				background: silver;
+			}
 			&:hover, &.active {
 				color:$red;
 			}			
 		}
-		&:last-child {
+		&:last-child a {
 			border-bottom: none;
 		}	
 	}
@@ -601,8 +606,7 @@
 		background: $grey-lighter;
 		padding:15px;					
 		display: flex;
-		border-radius: 10px;
-		/*border:solid 1px $border;*/					
+		border-radius: 10px;				
 		.user-img {
 			display: inline-block;
 			vertical-align: middle;
@@ -755,6 +759,13 @@
 
 
 @media all and (max-width: 767px) {
+	.dataTables_wrapper {	
+	    display: block;	
+	    width: 100%;	
+	    overflow-x: auto;	
+	    -webkit-overflow-scrolling: touch;	
+	    -ms-overflow-style: -ms-autohiding-scrollbar; 
+	}
 	.date-search {
 		display: block;
 		margin-bottom: 15px;
