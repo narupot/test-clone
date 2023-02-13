@@ -61,3 +61,52 @@
 		}		
 	}
 }
+
+/*  override */
+.user-reviews {
+	table {
+		&.dataTable {
+			margin-top: 15px !important;
+		}
+	}
+	div.dataTables_wrapper div.dataTables_filter {	
+		top: -10px; 
+	}	
+}	
+	
+.table-shoplist .table-content > ul + .no-product {	
+	display: none; 
+}	
+@media all and (max-width: 767px) {	
+  .user-reviews div.dataTables_wrapper div.dataTables_filter {
+  	top: 0px; 
+  } 
+}
+
+
+/*  Odd page  */
+
+.form-profile-odd {
+	text-align: center;
+	h2 {
+		margin-bottom: 1rem;
+	}
+}
+.odd-desc {
+	text-align: left; max-height: 350px;
+	overflow-y: auto; border:1px solid $border;
+	padding: 1rem; margin-bottom: 1rem;
+}
+.btn-groups {
+	.btn-link {
+		&:hover {
+			background: transparent;
+		}
+	}
+}
+.btn-en-dis {
+	&.disabled {
+		background: $grey-lighter; border-color: $grey-lighter;
+		color: $black;
+	}
+}
