@@ -168,7 +168,7 @@
 
                                             <li>{{ $val->payment_type=='credit'? numberFormat($val->total_price):'' }} @lang('common.baht')</li>     
 
-                                            <li>{{$detail_json['payment_method'][session('default_lang')] ?? str_replace('_',' ',strtoupper($val->payment_slug)) }}</li>   
+                                            <li>{!! $detail_json['payment_method'][session('default_lang')] ?? str_replace('_',' ',strtoupper($val->payment_slug)) !!}</li>   
                                             <li class="red" id="item_status_{{ $val->id }}">{{ $val->getOrderStatus->status??'' }}</li> 
 
                                             @if(!$order_shop->end_shopping_date || $order_shop->order_status ==3 || $order_shop->order_status ==4)
