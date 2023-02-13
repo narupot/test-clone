@@ -75,6 +75,7 @@
 	}*/
 	.product-wrap {
 		display: flex;
+		align-items: center;
 	}
 	.prod-img {		
 		margin-bottom: 0px;
@@ -120,6 +121,9 @@
 			i {
 				font-size: $font-20;
 				color: $grey;
+				&.active {
+					color: $red;
+				}
 			}			
 		}
 		.wrap-box {

@@ -31,7 +31,8 @@
 			}
 			
 			img {
-				height: 20px; @include border-radius(50%);
+				height: 24px; width:24px; @include border-radius(50%);
+				object-fit: cover;
 				line-height: 1; float: left; margin-right: 5px;
 			}
 			.dropdown-menu {

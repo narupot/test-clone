@@ -2,7 +2,6 @@
 /*  Font Variable  */
 /*  Font-family  Variable  */
 /*  Mixin and Inheritance */
-/* Transition */
 .transition, .account-nav li a, .address-wrap .address-row li, .address-wrap .address-row .action-wrap, .favorite-shop .table-content ul, .wishlist-cont .table-content ul, .select-product-img li .radio-wrap, .select-product-img li .img-block img, .prod-review-tbl .table-content ul, .best-seller-table .table-content ul, .prod-review-tbl .link, .tblseller-pannel .del-action, .tblseller-pannel .table-content ul, .seller-panneltab li a, .bargain-order-table .offer-buy table .btn-white, .bargain-order-table .wrap-arrow a, .seller-paybanktab li a {
   -webkit-transition: all 0.30s ease-in-out;
   -moz-transition: all 0.30s ease-in-out;
@@ -43,9 +42,8 @@
     display: block;
     padding: 10px; }
     .account-nav li a:hover {
-      background: silver;
-      color: #ED1B24; }
-    .account-nav li a.active {
+      background: silver; }
+    .account-nav li a:hover, .account-nav li a.active {
       color: #ED1B24; }
   .account-nav li:last-child a {
     border-bottom: none; }
@@ -74,25 +72,6 @@
   line-height: 30px;
   color: #fff; }
 
-/*.order-no {
-    #shop_status_34, #shop_status_33 {
-        color: $green;
-    }
-    #shop_status_26 {
-        color: #FF9100;
-    }
-}
-.table {
-    .item_status_34, .item_status_33 {
-        color: $green;
-    }
-    .item_status_31 {
-        color: $red;
-    }
-    .item_status_26 {
-        color: #FF9100;
-    }
-}*/
 /*global header table*/
 .order-history-wrapper {
   overflow: auto; }
@@ -1439,7 +1418,7 @@
     background: #E6E6E6; }
     .best-seller-table .table-header li {
       border: none;
-      /*border-top: 1px solid $border;			*/ }
+      /*border-top: 1px solid $border;*/ }
       .best-seller-table .table-header li:first-child {
         /*border-left:1px solid $border;*/
         border-top-left-radius: 10px; }
@@ -2515,9 +2494,9 @@ ul.buyer-head {
 #product_review_table tbody td:last-child {
   text-align: center; }
 
-.ui-grid-cell .la, .ui-grid-cell .sa, .ui-grid-cell .xsa, .ui-grid-cell .xla, .ui-grid-cell .ma, .ui-grid-cell .xlb, .ui-grid-cell .lb, .ui-grid-cell .mb, .ui-grid-cell .sb, .ui-grid-cell .xsb, .ui-grid-cell .xlc, .ui-grid-cell .lc,
-.ui-grid-cell .mc, .ui-grid-cell .sc, .ui-grid-cell .xsc, .ui-grid-cell .xlr, .ui-grid-cell .lr, .ui-grid-cell .mr, .ui-grid-cell .sr, .ui-grid-cell .xsr, .table-content .la, .table-content .sa, .table-content .xsa, .table-content .xla, .table-content .ma, .table-content .xlb, .table-content .lb, .table-content .mb, .table-content .sb, .table-content .xsb, .table-content .xlc, .table-content .lc,
-.table-content .mc, .table-content .sc, .table-content .xsc, .table-content .xlr, .table-content .lr, .table-content .mr, .table-content .sr, .table-content .xsr {
+.ui-grid-cell .la, .ui-grid-cell .sa, .ui-grid-cell .xsa, .ui-grid-cell .xla, .ui-grid-cell .ma, .ui-grid-cell .xlb, .ui-grid-cell .lb, .ui-grid-cell .mb, .ui-grid-cell .sb, .ui-grid-cell .xsb, .ui-grid-cell .xlc, .ui-grid-cell .lc, .ui-grid-cell .mc,
+.ui-grid-cell .sc, .ui-grid-cell .xsc, .ui-grid-cell .xlr, .ui-grid-cell .lr, .ui-grid-cell .mr, .ui-grid-cell .sr, .ui-grid-cell .xsr, .table-content .la, .table-content .sa, .table-content .xsa, .table-content .xla, .table-content .ma, .table-content .xlb, .table-content .lb, .table-content .mb, .table-content .sb, .table-content .xsb, .table-content .xlc, .table-content .lc, .table-content .mc,
+.table-content .sc, .table-content .xsc, .table-content .xlr, .table-content .lr, .table-content .mr, .table-content .sr, .table-content .xsr {
   width: auto; }
 
 @media all and (max-width: 1023px) {
@@ -2530,8 +2509,8 @@ ul.buyer-head {
       float: left;
       width: 150px; }
     .seller-menu a {
-      /*min-width: 115px;*/
-      /*white-space: nowrap;*/
+      /*min-width: 115px;
+      white-space: nowrap;*/
       padding-left: 7px;
       padding-right: 7px;
       margin-right: 0;
@@ -2545,52 +2524,54 @@ ul.buyer-head {
       padding-top: 20px; }
 
   .end-shopping-wrap .btn.more-height {
-    min-width: inherit; } }
-/*bills*/
-.seller-paybanktab {
-  margin-bottom: 15px; }
-  .seller-paybanktab ul {
+    min-width: inherit; }
+
+  /*bills*/
+  .seller-paybanktab {
     margin-bottom: 15px; }
-  .seller-paybanktab li {
-    text-align: center;
-    margin-right: 14px;
-    display: inline-flex;
-    position: relative; }
-    .seller-paybanktab li:last-child {
-      margin-right: 0px; }
-    .seller-paybanktab li a {
-      padding: 18px;
-      min-width: 115px;
-      display: inline-block;
-      background: #E6E6E6;
-      border-radius: 10px;
-      border: solid 5px #E6E6E6;
-      margin-bottom: 10px; }
-      .seller-paybanktab li a:hover, .seller-paybanktab li a.active {
+    .seller-paybanktab ul {
+      margin-bottom: 15px; }
+    .seller-paybanktab li {
+      text-align: center;
+      margin-right: 14px;
+      display: inline-flex;
+      position: relative; }
+      .seller-paybanktab li:last-child {
+        margin-right: 0px; }
+      .seller-paybanktab li a {
+        padding: 18px;
+        min-width: 115px;
+        display: inline-block;
+        background: #E6E6E6;
+        border-radius: 10px;
+        border: solid 5px #E6E6E6;
+        margin-bottom: 10px; }
+        .seller-paybanktab li a:hover {
+          border: solid 5px #ED1B24; }
+      .seller-paybanktab li a.active {
         border: solid 5px #ED1B24; }
-    .seller-paybanktab li input {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      left: 50%;
-      top: 50%;
-      z-index: 3;
-      transform: translate(-50%, -50%);
-      opacity: 0; }
-  .seller-paybanktab .bank-img {
-    display: block; }
-  .seller-paybanktab .bank-name {
-    display: block;
-    margin-top: 10px; }
-  .seller-paybanktab .tab-content {
-    max-width: 338px; }
+      .seller-paybanktab li input {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 50%;
+        top: 50%;
+        z-index: 3;
+        transform: translate(-50%, -50%);
+        opacity: 0; }
+    .seller-paybanktab .bank-img {
+      display: block; }
+    .seller-paybanktab .bank-name {
+      display: block;
+      margin-top: 10px; }
+    .seller-paybanktab .tab-content {
+      max-width: 338px; }
 
-.delivery-list .table-content li {
-  padding: 10px 5px !important; }
-.delivery-list .pd-box {
-  display: flex;
-  align-items: center; }
-
+  .delivery-list .table-content li {
+    padding: 10px 5px !important; }
+  .delivery-list .pd-box {
+    display: flex;
+    align-items: center; } }
 @media all and (max-width: 767px) {
   .mb-hide {
     display: none; }
@@ -2670,9 +2651,8 @@ ul.buyer-head {
       border-top-right-radius: 0; }
     .seller-panneltab li:nth-child(even) a:before {
       display: none; }
-
-  .select-product-img li .radio-wrap {
-    visibility: visible; }
+    .seller-panneltab li .radio-wrap {
+      visibility: visible; }
 
   .shipmenu-title {
     display: block;
@@ -2804,7 +2784,11 @@ ul.buyer-head {
       color: #fff !important; }
     .bargin-inner-row .action-ans-buyer {
       justify-content: center !important; }
-    .bargin-inner-row .latest-offer-buy td, .bargin-inner-row .last-sell-price td {
+    .bargin-inner-row .latest-offer-buy td {
+      font-size: 16px !important;
+      padding-left: 1px;
+      padding-right: 1px; }
+    .bargin-inner-row .last-sell-price td {
       font-size: 16px !important;
       padding-left: 1px;
       padding-right: 1px; }
@@ -2818,7 +2802,10 @@ ul.buyer-head {
         padding-right: 5px; }
     .last-sell-price h3 {
       font-weight: 600; }
-    .last-sell-price .price-txt, .last-sell-price .totol-txt {
+    .last-sell-price .price-txt {
+      font-size: 18px;
+      margin: 4px 0 10px 0; }
+    .last-sell-price .totol-txt {
       font-size: 18px;
       margin: 4px 0 10px 0; }
     .last-sell-price .price-lable {
@@ -2830,17 +2817,32 @@ ul.buyer-head {
     .offer-buy h3 {
       font-weight: 600;
       text-align: center; }
-    .offer-buy td, .offer-buy .price-lable, .offer-buy .price-txt {
+    .offer-buy td {
       padding: 5px 1px; }
-    .offer-buy .price-txt, .offer-buy .total-txt {
+    .offer-buy .price-lable {
+      padding: 5px 1px; }
+    .offer-buy .price-txt {
+      padding: 5px 1px;
+      font-size: 18px; }
+    .offer-buy .total-txt {
       font-size: 18px; }
     .offer-buy .offer-buy-info {
       font-size: 14px; }
-    .offer-buy .btn, .offer-buy .btn-dark-grey {
-      color: #fff !important; }
+    .offer-buy .btn {
+      color: #fff !important;
+      min-width: 100px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      line-height: 1.25; }
+    .offer-buy .btn-dark-grey {
+      color: #fff !important;
+      min-width: 100px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      line-height: 1.25; }
     .offer-buy input[type="text"] {
       width: 82px; }
-    .offer-buy .btn-dark-grey, .offer-buy .btn, .offer-buy .btn-default {
+    .offer-buy .btn-default {
       min-width: 100px;
       padding-top: 5px;
       padding-bottom: 5px;
@@ -2848,15 +2850,63 @@ ul.buyer-head {
     .offer-buy .status td {
       padding: 5px 7.5px; }
 
-  .table .table-content li, .table .table-header li {
+  .table .table-content li {
     min-width: 70px; }
-    .table .table-content li.product, .table .table-header li.product {
-      min-width: 125px; }
+  .table .table-content li.product {
+    min-width: 125px; }
   .table .table-header li {
+    min-width: 70px;
     white-space: nowrap; }
+  .table .table-header li.product {
+    min-width: 125px; }
 
   .table-footer {
     min-width: 290px; } }
+/*bills*/
+.seller-paybanktab {
+  margin-bottom: 15px; }
+  .seller-paybanktab ul {
+    margin-bottom: 15px; }
+  .seller-paybanktab li {
+    text-align: center;
+    margin-right: 14px;
+    display: inline-flex;
+    position: relative; }
+    .seller-paybanktab li:last-child {
+      margin-right: 0px; }
+    .seller-paybanktab li a {
+      padding: 18px;
+      min-width: 115px;
+      display: inline-block;
+      background: #E6E6E6;
+      border-radius: 10px;
+      border: solid 5px #E6E6E6;
+      margin-bottom: 10px; }
+      .seller-paybanktab li a:hover, .seller-paybanktab li a.active {
+        border: solid 5px #ED1B24; }
+    .seller-paybanktab li input {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 50%;
+      top: 50%;
+      z-index: 3;
+      transform: translate(-50%, -50%);
+      opacity: 0; }
+  .seller-paybanktab .bank-img {
+    display: block; }
+  .seller-paybanktab .bank-name {
+    display: block;
+    margin-top: 10px; }
+  .seller-paybanktab .tab-content {
+    max-width: 338px; }
+
+.delivery-list .table-content li {
+  padding: 10px 5px !important; }
+.delivery-list .pd-box {
+  display: flex;
+  align-items: center; }
+
 @media all and (max-width: 576px) {
   .rating-review-wrap .prod-review-star ul {
     display: block; }
@@ -2995,5 +3045,24 @@ ul.buyer-head {
 @media all and (max-width: 767px) {
   .user-reviews div.dataTables_wrapper div.dataTables_filter {
     top: 0px; } }
+/*  Odd page  */
+.form-profile-odd {
+  text-align: center; }
+  .form-profile-odd h2 {
+    margin-bottom: 1rem; }
 
-/*# sourceMappingURL=myaccount.css.map */
+.odd-desc {
+  text-align: left;
+  max-height: 350px;
+  overflow-y: auto;
+  border: 1px solid #C4C4C4;
+  padding: 1rem;
+  margin-bottom: 1rem; }
+
+.btn-groups .btn-link:hover {
+  background: transparent; }
+
+.btn-en-dis.disabled {
+  background: #E6E6E6;
+  border-color: #E6E6E6;
+  color: #000; }
