@@ -222,7 +222,7 @@
 
                                                     <li>{{ $val->payment_type=='credit'? numberFormat($val->total_price):'' }} @lang('common.baht')</li> 
 
-                                                    <li>{{$detail_json['payment_method'][session('default_lang')] ?? str_replace('_',' ',strtoupper($val->payment_slug)) }}</li>
+                                                    <li>{!!$detail_json['payment_method'][session('default_lang')] ?? str_replace('_',' ',strtoupper($val->payment_slug)) !!}</li>
                                                     <li class="red" id="item_status_{{ $val->id }}">{{ $val->getOrderStatus->status??'' }}</li>
                                                     {{-- <li><a href="javascript:;" data-type='cancel' data-val="{{ $val->id }}" class="ord_item_change">@lang('common.cancel')</a> | <a href="javascript:;" data-type='receive' data-val="{{ $val->id }}" class="ord_item_change">@lang('admin_order.center_received')</a></li>      --}}
                                                     <li>
