@@ -166,7 +166,7 @@
                                                 <li>@lang('checkout.unit_price')</li>
                                                 <li>@lang('checkout.qty')</li>
                                                 <li>@lang('checkout.price')</li>
-                                                <li>@lang('checkout.details')</li>
+                                                <!--li>@lang('checkout.details')</li-->
                                                 <li>@lang('checkout.credit_from_shop')</li>
                                                 <li>@lang('checkout.payment_method')</li>
                                                 <li>@lang('common.status')</li>
@@ -218,7 +218,7 @@
                                                         {{numberFormat($val->total_price) }} @lang('common.baht')
                                                     </li>
 
-                                                    <li>{{$val->description}}</li>   
+                                                    <!--li>{{$val->description}}</li-->   
 
                                                     <li>{{ $val->payment_type=='credit'? numberFormat($val->total_price):'' }} @lang('common.baht')</li> 
 
