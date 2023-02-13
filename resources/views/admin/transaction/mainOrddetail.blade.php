@@ -343,6 +343,7 @@
                 }
         });
     });
+
     //for re send order to logistic
     jQuery('#btn-resend').click(function(evt) {
         evt.preventDefault();
@@ -361,6 +362,7 @@
                 }
         });
     });
+
 
     $('body').on('click','#update_order_status',function() {
 

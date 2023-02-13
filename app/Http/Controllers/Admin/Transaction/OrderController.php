@@ -304,7 +304,6 @@ class OrderController extends MarketPlace
     }  
     /**resend order to logistic */
     public function resendLogistic(Request $request) {
-
         $order_id = $request->order_id;
         $order = Order::where('id',$request->order_id)->first();
         if($order) {
@@ -317,7 +316,6 @@ class OrderController extends MarketPlace
     }     
 
     public function updateRemark(Request $request) {
-
         $order_id = $request->order_id;
         $order = Order::where('id',$request->order_id)->first();
         if($order) {
