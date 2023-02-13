@@ -60,13 +60,13 @@
             <div class="form-profile-setting">
                 <div class="row">
                     <div class="col-sm-12">
-                        
                         {!! getStaticBlock('odd-register') !!}
                     </div>
                                                   
                 </div>
-                
-                    
+                <div class="odd-condition">
+                    {!! getStaticBlock('odd-register-details') !!}
+                </div>
                     <div class="form-group mt-3">
                         <label class="chk-wrap">
                             <input type="checkbox" name="term_cond" value="1" required="required">
