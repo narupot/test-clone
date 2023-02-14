@@ -105,10 +105,10 @@
             return newWindow;
         }
 
-        function CheckPayment(invoice,newWindow) {
+        function CheckPayment(invoice) {
             $.get(check_url+'/'+invoice,function (data,status) {
                 if(data.status == "success"){
-                    newWindow.close();
+                    showHideLoader('hideLoader');
                     window.location.href = data.url;
                 }else{
                     setTimeout(function () {
@@ -132,10 +132,11 @@
                             phone : number
                         },function (data, status) {
                             console.log(data);
-                            url = window.location.href.replace("checkout","");
+                            /*url = window.location.href.replace("checkout","");
                             newWindow = PopupCenter(waiting_url+'/'+data,'Payment',400,500);
-                            object = JSON.parse(atob(data));
-                            CheckPayment(object.invoice,newWindow);
+                            object = JSON.parse(atob(data));*/
+                            CheckPayment(object.invoice);
+                            showHideLoader('showLoader');
                         });
 
                     }
