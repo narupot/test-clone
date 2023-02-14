@@ -112,7 +112,7 @@
                     window.location.href = data.url;
                 }else{
                     setTimeout(function () {
-                        CheckPayment(invoice,newWindow);
+                        CheckPayment(invoice);
                     },3000);
                 }
             });
@@ -133,8 +133,8 @@
                         },function (data, status) {
                             console.log(data);
                             /*url = window.location.href.replace("checkout","");
-                            newWindow = PopupCenter(waiting_url+'/'+data,'Payment',400,500);
-                            object = JSON.parse(atob(data));*/
+                            newWindow = PopupCenter(waiting_url+'/'+data,'Payment',400,500);*/
+                            object = JSON.parse(atob(data));
                             CheckPayment(object.invoice);
                             showHideLoader('showLoader');
                         });
