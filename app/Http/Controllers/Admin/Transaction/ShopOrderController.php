@@ -215,13 +215,16 @@ class ShopOrderController extends MarketPlace
         return ['status'=>'fail','msg'=>\Lang::get('admin_common.something_went_wrong')];
     }
     
-    public function sellerOrder(){
+    public function sellerOrder(Request $request){
         $permission = $this->checkUrlPermission('seller_order_export');
         if($permission === true) {
-            
+            $filter_date = null;
+            if (!empty($request->refresh)) {
+                $filter_date = $request->filter_date;
+            }
             $filter = $this->getFilter('seller_order_export');
-
-            return view('admin.transaction.listSellerOrder', ['filter'=>$filter]);
+           
+            return view('admin.transaction.listSellerOrder', ['filter'=>$filter,'filter_date'=>$filter_date]);
         }
     }
 
@@ -244,12 +247,14 @@ class ShopOrderController extends MarketPlace
         }
 
         try{
+            $filter_date = $request->filter_date;
             $prefix = DB::getTablePrefix();
             $default_lang = 0;
             $query = \DB::table(with(new OrderShop)->getTable().' as sord')
-                  ->join(with(new \App\Seller)->getTable().' as seller', 'sord.shop_user_id', '=', 'seller.user_id ')
+                  ->join(with(new \App\Seller)->getTable().' as seller', 'sord.shop_user_id', '=', 'seller.user_id')
                   ->leftjoin(with(new \App\PaymentBankDesc)->getTable().' as pbd', [['seller.bank_id', '=', 'pbd.payment_bank_id'], ['pbd.lang_id', '=', DB::raw($default_lang)]])
-                  ->select(DB::raw('sum(' . $prefix . 'sord.total_final_price) as tot_amount'),'sord.shop_id','sord.shop_json,','pbd.bank_name');
+                  ->select(DB::raw('sum(' . $prefix . 'sord.total_final_price) as tot_amount'),'sord.shop_id','sord.shop_json','pbd.bank_name')
+                  ->whereDate('sord.end_shopping_date',$filter_date);
             
             if(isset($request->pq_filter)){
                 $filter_req = json_decode($request->pq_filter,true);
@@ -269,6 +274,7 @@ class ShopOrderController extends MarketPlace
                     }
                 }
             }
+            $query->groupBy('sord.shop_id');
             $response = $query->orderBy($order_by,$order_by_val)->paginate($perpage,['*'],'page',$current_page);
             $totrec = $response->total();
             //dd($response);
