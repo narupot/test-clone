@@ -81,6 +81,7 @@ class CartNotificationForExpire extends Command
                 //dd($sendNoti);
                 if($sendNoti == 1){
                     $post_arr = ['user_id'=>$order->user_id, 'title'=>$messageTitle,'body'=>$messageBody, 'type_redirect'=>'cart_notify']; 
+                    
                     $requestHandler  = new MarketPlace;
                     $responce = $requestHandler->handleCurlRequest($url,$post_arr);
                     $order->save();
