@@ -183,6 +183,9 @@
             Route::post('change-status', 'Admin\Transaction\ExportOrderController@changeStatus');
         });
 
+        Route::get('seller-order-export', 'Admin\Transaction\ShopOrderController@sellerOrder');
+        Route::get('listSellerOrderData', 'Admin\Transaction\ShopOrderController@listSellerOrderData');
+
         Route::group(array('prefix' => 'shop-order'), function() {
             Route::get('/', 'Admin\Transaction\ShopOrderController@index');
             Route::get('listOrderData', 'Admin\Transaction\ShopOrderController@listOrderData');
