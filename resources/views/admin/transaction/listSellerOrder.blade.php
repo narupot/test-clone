@@ -5,6 +5,7 @@
 @stop
 
 @section('header_styles')
+    <link rel="stylesheet" type="text/css" href="{{Config('constants.css_url') }}flatpickr.min.css">
    {!! CustomHelpers::dataTableCss() !!}
     <script type="text/javascript">
         var filter_data = {!! $filter !!};    
@@ -25,7 +26,26 @@
                 <ul class="bredcrumb-menu">
                     {!!getBreadcrumbAdmin('shoporder', 'shoporder', 'list')!!}
                 </ul>
-            </div>                             
+            </div>         
+            <form action="{{action('Admin\Transaction\ShopOrderController@sellerOrder')}}" method="GET" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-sm-4 form-group">
+                        <label>@lang('admin_report.date') <i class="red">*</i></label>
+                        <input type="text" class="date-select-new date-picker" name="filter_date" id="reservationtime" value="{{$filter_date}}">
+                        @if($errors->has('dateRange'))
+                            <p class="error red error-msg">{{ $errors->first('dateRange') }}</p>
+                        @endif
+                    </div>
+                    <div class="col-sm-2">
+                        <a class="btn btn-danger" href="{{Request::url()}}">@lang('admin_report.clear_all')</a>
+                    </div>
+                    <div class="col-sm-2 text-right">
+                       <button class="btn btn-primary" value="refresh" name="refresh">@lang('admin_report.submit')</button>
+                    </div>
+                </div>
+                
+            </form>
+
            <div id="jq_grid_table" class="table table-bordered">                 
                 
 
@@ -35,11 +55,18 @@
 @stop
 
 @section('footer_scripts')
-
+    <script src="{{ Config('constants.admin_js_url') }}flatpickr.min.js"></script>
+    <!-- begining of page level js -->
+    <script>
+        var csrftoken = window.Laravel.csrfToken;
+           $(document).ready(function() {
+            $(".date-picker").flatpickr({});
+        });
+    </script>
     {!! CustomHelpers::dataTableJs() !!}
     <!-- end grid table js files -->  
     <script>
-        let JQ_GRID_DATA_URL = "{{ action('Admin\Transaction\ShopOrderController@listSellerOrderData') }}";     
+        let JQ_GRID_DATA_URL = "{{ action('Admin\Transaction\ShopOrderController@listSellerOrderData') }}?filter_date={{$filter_date}}";     
         
         const JQ_GRID_TITLE = "@lang('admin_order.shop_order_list')";    
         /*
