@@ -1,7 +1,7 @@
 @extends('layouts/admin/default')
 
 @section('title')
-    @lang('admin_product.product_list')
+    @lang('admin_order.shop_order_list')
 @stop
 
 @section('header_styles')
@@ -36,14 +36,17 @@
                             <p class="error red error-msg">{{ $errors->first('dateRange') }}</p>
                         @endif
                     </div>
-                    <div class="col-sm-2">
-                        <a class="btn btn-danger" href="{{Request::url()}}">@lang('admin_report.clear_all')</a>
-                    </div>
-                    <div class="col-sm-2 text-right">
+                    <div class="col-sm-2 form-group">
+                        <label>&nbsp;</label>
                        <button class="btn btn-primary" value="refresh" name="refresh">@lang('admin_report.submit')</button>
                     </div>
+                    <div class="col-sm-2  form-group text-right">
+                        <label>&nbsp;</label>
+                        <a class="btn btn-danger" href="{{Request::url()}}">@lang('admin_report.clear_all')</a>
+                    </div>
+                    
                 </div>
-                
+                <input type="text" name="" id="assigned_product_ids">
             </form>
 
            <div id="jq_grid_table" class="table table-bordered">                 

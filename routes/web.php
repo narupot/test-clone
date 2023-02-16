@@ -183,6 +183,10 @@
             Route::post('change-status', 'Admin\Transaction\ExportOrderController@changeStatus');
         });
 
+        Route::get('generate-txt', 'Admin\Transaction\ExportOrderController@generateTxt');
+        
+        Route::get('shop-detail', 'Admin\Transaction\ShopOrderController@sellerDetail');
+
         Route::get('seller-order-export', 'Admin\Transaction\ShopOrderController@sellerOrder');
         Route::get('listSellerOrderData', 'Admin\Transaction\ShopOrderController@listSellerOrderData');
 

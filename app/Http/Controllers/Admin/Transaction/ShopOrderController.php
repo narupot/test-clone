@@ -290,13 +290,13 @@ class ShopOrderController extends MarketPlace
                 $shop_name = $json_data->shop_name[0];
                 $panel_no = $json_data->panel_no;
                 $amount = numberFormat($value->tot_amount);
-                
+                $response[$key]->id = $value->shop_id;
                 $response[$key]->seller_name = $seller_name;
                 $response[$key]->shop_name = $shop_name;
                 
                 $response[$key]->panel_no = $panel_no;
                 $response[$key]->amount = $amount;
-                $response[$key]->detail_url = action('Admin\Transaction\ShopOrderController@orderDetail',$value->shop_id);
+                $response[$key]->detail_url = action('Admin\Transaction\ShopOrderController@sellerDetail').'?shop_id='.$value->shop_id.'&order_date='.$filter_date;
             }
 
             /***save filter****/
@@ -311,7 +311,20 @@ class ShopOrderController extends MarketPlace
         return $response;
     }
     
-    function store(Request $request){
+    public function sellerDetail(Request $request) {
+
+        $shop_id = $request->shop_id; 
+        $date = $request->order_date;
+        $shop_details = \App\Shop::where('id',$shop_id)->with(['shopDesc'])->first();
+        if(!$shop_details){
+            abort(404);
+        }
+        $order_shop = [];
+        if($date){
+            $order_shop = \App\OrderShop::where('shop_id',$shop_id)->whereDate('end_shopping_date',$date)->get();
+        }
+        
+        return view('admin.transaction.sellerDetail',['shop_details'=>$shop_details,'order_shop'=>$order_shop,'order_date'=>$date]);
     }
     
     function edit($group_id){
