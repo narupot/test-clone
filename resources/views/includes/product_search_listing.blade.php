@@ -19,7 +19,7 @@
                     <li class="col-sm-4 <%list_class%>"  data-ng-repeat="item in product_Items | limitTo:pagination.itemsPerPage">
                         <div class="product-container">
                             <div class="prod-img">
-                                <a href="<%item.url%>">
+                                <a href="<%item.shop.shop_url%>">
                                     <img ng-src="<%loader.img_load%>"  data-original="<%item.thumbnail_image%>" jq-lazy>
                                 </a>
                                 @if(Auth::check())
@@ -119,7 +119,7 @@
                             <ul data-ng-repeat="item in product_Items | limitTo:pagination.itemsPerPage">
                                 <li>
                                     <div class="product">
-                                        <a href="<%item.url%>">
+                                        <a href="<%item.shop.shop_url%>">
                                         <div class="prod-img">
                                             <img ng-src="<%loader.img_load%>"  data-original="<%item.thumbnail_image%>" jq-lazy>
                                             @if(Auth::check())
