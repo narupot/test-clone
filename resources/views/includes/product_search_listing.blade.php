@@ -64,7 +64,7 @@
                                     <!-- <span class="size">@lang('product.badge_size') : <%item.badge.size%></span> -->
                                     <!-- <span class="quality">@lang('product.badge_quality') : <%item.badge.grade%></span> -->
                                </div>
-                               @if(Auth::check())
+                               {{--@if(Auth::check())
                                    <div class="add-shippinglist d-none" ng-if="((item.show_price.toString()=='1' && item.stock == 1) || (item.show_price.toString()=='1' && item.stock == 0 && item.quantity>=1))">
                                         <a href="javascript:void(0);" data-url="<%item.shopping_url%>" ng-click="addToShoppinglistHandler($event, item)" ><i class="fas fa-pencil-alt"></i>  + @lang('product.add_to_shopping_list')</a>
                                    </div>
@@ -93,7 +93,7 @@
                                     <span class="action-btn" ng-if="item.show_price.toString()=='0'">
                                         <a href="javascript:void(0);" data-toggle="modal" data-target="#loginModal" class="btn-grey"><i class="fas fa-comments"></i> @lang('product.quote')</a>
                                     </span>
-                                @endif
+                                @endif--}}
                                 <!-- product sold out -->
                             </div>
                         </div>
