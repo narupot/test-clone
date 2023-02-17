@@ -158,6 +158,10 @@ class ExportOrderController extends MarketPlace
         $order_date = $request->order_date;
         $shop_ids = $request->shop_ids;
         $shop_id_arr = explode(',',$shop_ids);
+        if(!count($shop_id_arr) || !strtotime($order_date)){
+            return false;
+        }
+        $eny_type = $request->eny_type;
         $data_h = "H";
         $data_p = "P";
         $data_p_product_code = "DCT";
@@ -317,8 +321,10 @@ class ExportOrderController extends MarketPlace
         $t_data = $record_identifier . $no_use_2 . $no_use_3 . $no_use_4 . $no_use_5;
 
         $main_data = $h_data."\n".$p_data."\n".$i_data.$t_data;
-        $main_data = iconv('utf8', 'tis620', $main_data);
-
+        if($eny_type=='with_enc'){
+            $main_data = iconv('utf8', 'tis620', $main_data);
+        }
+        
         if($tot_order){
             $exp_log_count = \App\OrderExportLog::where(DB::raw('date(order_date)'),$export_date)->count();
             $exp_no = $exp_log_count ? $exp_log_count : 0;
