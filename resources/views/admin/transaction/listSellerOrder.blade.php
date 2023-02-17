@@ -17,6 +17,10 @@
     <div class="content">
         <div class="header-title">
             <h1 class="title">@lang('admin_order.shop_order_list')</h1>
+            @if($filter_date)
+                <button class="btn btn-primary generate_txt" val="without_enc" id="without_enc">Without Encrypt</button>
+                <button class="btn btn-primary generate_txt" val="with_enc" id="generate_txt">@lang('admin_order.generate_txt')</button>
+            @endif
         </div>
              
         <!-- Main content -->         
@@ -30,25 +34,23 @@
             <form action="{{action('Admin\Transaction\ShopOrderController@sellerOrder')}}" method="GET" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-sm-4 form-group">
-                        <label>@lang('admin_report.date') <i class="red">*</i></label>
-                        <input type="text" class="date-select-new date-picker" name="filter_date" id="reservationtime" value="{{$filter_date}}">
-                        @if($errors->has('dateRange'))
-                            <p class="error red error-msg">{{ $errors->first('dateRange') }}</p>
-                        @endif
+                        <label>@lang('admin_order.date') <i class="red">*</i></label>
+                        <input type="text" class="date-select-new date-picker" name="filter_date" id="order_date" value="{{$filter_date}}">
+                        
                     </div>
-                    <div class="col-sm-2 form-group">
+                    <div class="col-sm-1 form-group">
                         <label>&nbsp;</label>
-                       <button class="btn btn-primary" value="refresh" name="refresh">@lang('admin_report.submit')</button>
+                       <button class="btn btn-primary" value="refresh" name="refresh">@lang('admin_common.submit')</button>
                     </div>
-                    <div class="col-sm-2  form-group text-right">
+                    <div class="col-sm-1  form-group">
                         <label>&nbsp;</label>
-                        <a class="btn btn-danger" href="{{Request::url()}}">@lang('admin_report.clear_all')</a>
+                        <a class="btn btn-danger" href="{{Request::url()}}">@lang('admin_common.clear_all')</a>
                     </div>
                     
                 </div>
-                <input type="text" name="" id="assigned_product_ids">
+                
             </form>
-
+            <input type="hidden" name="brand_product" id="brand_product">
            <div id="jq_grid_table" class="table table-bordered">                 
                 
 
@@ -61,9 +63,25 @@
     <script src="{{ Config('constants.admin_js_url') }}flatpickr.min.js"></script>
     <!-- begining of page level js -->
     <script>
+        var generate_txt_url  = "{{action('Admin\Transaction\ExportOrderController@generateTxt')}}";
         var csrftoken = window.Laravel.csrfToken;
            $(document).ready(function() {
             $(".date-picker").flatpickr({});
+
+            $('.generate_txt').click(function(e){
+                var order_date = $('#order_date').val();
+                var shop_ids = $('#brand_product').val();
+                var eny_type = $(this).data('val');
+                if(!order_date){
+                    alert('Please select date');
+                    return false;
+                }
+                if(!shop_ids){
+                    alert('Please select shop');
+                    return false;
+                }
+                window.location.href = generate_txt_url+"?order_date="+order_date+"&shop_ids="+shop_ids+"&eny_type="+eny_type;
+            });
         });
     </script>
     {!! CustomHelpers::dataTableJs() !!}
