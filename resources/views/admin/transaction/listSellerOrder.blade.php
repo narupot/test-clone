@@ -18,8 +18,8 @@
         <div class="header-title">
             <h1 class="title">@lang('admin_order.shop_order_list')</h1>
             @if($filter_date)
-                <button class="btn btn-primary generate_txt" val="without_enc" id="without_enc">Without Encrypt</button>
-                <button class="btn btn-primary generate_txt" val="with_enc" id="generate_txt">@lang('admin_order.generate_txt')</button>
+                <button class="btn btn-primary generate_txt" data-val="without_enc" id="without_enc">Without Encrypt</button>
+                <button class="btn btn-primary generate_txt" data-val="with_enc" id="generate_txt">@lang('admin_order.generate_txt')</button>
             @endif
         </div>
              
