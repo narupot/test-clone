@@ -354,7 +354,70 @@ class ExportOrderController extends MarketPlace
 
     }
     
-    function edit($group_id){
+    public function importTxt(Request $request){
+        $file_data = $request->import_file;
+        if($file_data){
+            $file_path = Config::get('constants.public_path').'/seller-payment-response';
+            if(!is_dir($file_path)) {               
+                mkdir($file_path, 0777, true);               
+            }
+            $ext = pathinfo($file_data->getClientOriginalName(), PATHINFO_EXTENSION);
+            if($ext){
+                $ret_url = action('Admin\Transaction\ShopOrderController@sellerOrder');
+                if($request->filter_date){
+                    $ret_url .='?filter_date='.$request->filter_date;
+                }
+                return redirect($ret_url)->with('errorMsg', Lang::get('admin_order.invalid_file'));
+            }
+            $file_name = $file_data->getClientOriginalName().'_'.date('Ymdhis');
+
+            $file_data->move($file_path, $file_name);
+
+            $handle = fopen($file_path."/".$file_name, "r");
+            if ($handle) {
+                while (($line = fgets($handle)) !== false) {
+                    $line = str_replace("\n", "", $line);
+                    $part_identifier = substr($line, 0,1);
+                    echo 'part_identifier : '.$part_identifier.'<br>';
+                    $credit_detail_no = substr($line, 1,20);
+                    echo 'credit_detail_no : '.$credit_detail_no.'<br>';
+                    $payee_name = substr($line, 21,120);
+                    echo 'payee_name : '.$payee_name.'<br>';
+                    $credit_amount = substr($line, 141,13);
+                    echo 'credit_amount : '.$credit_amount.'<br>';
+                    $amount_ccy = substr($line, 154,3);
+                    echo 'amount_ccy : '.$amount_ccy.'<br>';
+                    $account_no = substr($line, 157,20);
+                    echo 'account_no : '.$account_no.'<br>';
+                    $ref_no = substr($line, 177,16);
+                    echo 'ref_no : '.$ref_no.'<br>';
+                    $status = substr($line, 193,2);
+                    echo 'status : '.$status.'<br>';
+                    $status_desc = substr($line, 195,35);
+                    echo 'status_desc : '.$status_desc.'<br>';
+                    $batch_ref = substr($line, 303,16);
+                    echo 'batch_ref : '.$batch_ref.'<br>';
+                    $client_code = substr($line, 319,10);
+                    echo 'client_code : '.$client_code.'<br>';
+                    $product_code = substr($line, 329,3);
+                    echo 'product_code : '.$product_code.'<br>';
+                    exit;
+                }
+                fclose($handle);
+                
+            }
+
+            $log_obj = new \App\OrderExportLog;
+            $log_obj->file_name = $file_name;
+            $log_obj->file_type = 'response';
+            $log_obj->status = 'response';
+            $log_obj->save();
+            $log_id = $log_obj->id;
+
+            return redirect($ret_url)->with('succMsg', Lang::get('admin_order.file_import_successfully'));
+
+            dd($file_data);
+        }
     }
     
     function update(Request $request){

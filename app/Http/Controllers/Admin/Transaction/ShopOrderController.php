@@ -219,7 +219,7 @@ class ShopOrderController extends MarketPlace
         $permission = $this->checkUrlPermission('seller_order_export');
         if($permission === true) {
             $filter_date = null;
-            if (!empty($request->refresh)) {
+            if (!empty($request->filter_date)) {
                 $filter_date = $request->filter_date;
             }
             $filter = $this->getFilter('seller_order_export');
