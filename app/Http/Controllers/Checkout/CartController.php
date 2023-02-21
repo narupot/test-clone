@@ -1218,7 +1218,9 @@ class CartController extends MarketPlace {
 
 	function payplusWaiting(Request $request, $order=null){
 		if($order){
-			return view('checkout.payplusWaiting')->with(["order"=>json_decode(base64_decode($order))]);
+			$userid = Auth::User()->id;
+			$order = Order::where(['user_id'=>$userid,'payment_status'=>0,'order_status'=>1,'formatted_id'=>$order])->whereNull('end_shopping_date')->first();
+			return view('checkout.payplusWaiting')->with(["order"=>$order]);
 		}else{
 			abort(404);
 		}
