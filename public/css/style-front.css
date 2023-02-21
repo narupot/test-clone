@@ -716,9 +716,6 @@ left:0;*/ }
     .table-productlist .action-btn a i {
       color: #707070; }
 
-.category-products .product-info .shop-name a {
-  cursor: auto; }
-
 /*product shop list*/
 .product-shoplist {
   padding: 0px;
