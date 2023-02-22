@@ -15,10 +15,21 @@
 
 @section('content')
     <div class="content">
+        @if(Session::has('succMsg'))    
+        <script type="text/javascript">               
+            _toastrMessage('success', "{{ Session::get('succMsg') }}");    
+        </script>                              
+        @endif
+        @if(Session::has('errorMsg'))
+        <script type="text/javascript">               
+            _toastrMessage('error', "{{ Session::get('errorMsg') }}");    
+        </script>    
+        @endif 
         <div class="header-title">
             <h1 class="title">@lang('admin_order.shop_order_list')</h1>
             @if($filter_date)
                 <button class="btn btn-primary generate_txt" data-val="without_enc" id="without_enc">Without Encrypt</button>
+                <a href="javascript:;" class="btn btn-primary" data-toggle="modal" data-target="#importModal">@lang('admin_order.import_file')</a>
                 <button class="btn btn-primary generate_txt" data-val="with_enc" id="generate_txt">@lang('admin_order.generate_txt')</button>
             @endif
         </div>
@@ -56,6 +67,32 @@
 
             </div>
         </div>
+
+        <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form method="post" action="{{action('Admin\Transaction\ExportOrderController@importTxt')}}" enctype="multipart/form-data">
+                    {{csrf_field()}}
+                    <input type="hidden" name="filter_date" value="{{$filter_date}}">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">@lang('admin_order.import_file')</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <input type="file" name="import_file" required="required">
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">@lang('admin_common.submit')</button>
+                  </div>
+                </form>
+              
+            </div>
+          </div>
+        </div>
+
     </div>
 @stop
 

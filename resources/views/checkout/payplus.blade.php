@@ -87,7 +87,7 @@
     <script>
         var submit_url = "{{action('Checkout\CartController@createPayPlusOrder',$orderInfo->formatted_id)}}";
         var check_url = "{{action('Checkout\PaymentGatewayController@payplusCheck')}}";
-        var waiting_url = "{{action('Checkout\CartController@payplusWaiting')}}";
+        var waiting_url = "{{action('Checkout\CartController@payplusWaiting',$orderInfo->formatted_id)}}";
         function PopupCenter(url, title, w, h) {
 
             var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : window.screenX;
@@ -132,6 +132,7 @@
                             phone : number
                         },function (data, status) {
                             console.log(data);
+                            window.location.href = waiting_url;
                             /*url = window.location.href.replace("checkout","");
                             newWindow = PopupCenter(waiting_url+'/'+data,'Payment',400,500);*/
                             object = JSON.parse(atob(data));

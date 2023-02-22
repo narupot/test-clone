@@ -185,6 +185,8 @@
 
         Route::get('generate-txt', 'Admin\Transaction\ExportOrderController@generateTxt');
         
+        Route::post('import-txt', 'Admin\Transaction\ExportOrderController@importTxt');
+
         Route::get('shop-detail', 'Admin\Transaction\ShopOrderController@sellerDetail');
 
         Route::get('seller-order-export', 'Admin\Transaction\ShopOrderController@sellerOrder');
