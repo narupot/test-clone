@@ -1771,6 +1771,8 @@ left:0;*/ }
 
 .shop-content .view-mode {
   display: none; }
+.shop-content .product-info .shop-name a {
+  text-decoration: underline !important; }
 
 .respon-update {
   display: -webkit-box;
