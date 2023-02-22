@@ -105,6 +105,13 @@
 	.view-mode {
 		display: none;
 	}
+	.product-info {
+		.shop-name {
+			a {
+				text-decoration: underline !important;
+			}
+		}
+	}
 }
 
 .respon-update {
