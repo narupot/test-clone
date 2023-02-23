@@ -378,9 +378,9 @@
             showSweetAlertError(error_str);     
             return false;
         }else{
+            $("#btn_checkout").prop("disabled", true);
             var formAction = $('#checkout_form').attr('action');
             var form = $('#checkout_form').serialize();
-
             callAjaxRequest(formAction,'post',form,function(response){
                 if(response.status == "success"){
                     window.location.href=response.url;
@@ -392,15 +392,19 @@
                             error +='<p class="error">'+val+'</p>'
                             $('#e_'+key).html(val);
                         });
+                        $("#btn_checkout").prop("disabled", false);
                         showSweetAlertError(error);
                     }else if(response.type=='price'){
                         $('#cart_'+response.cart_id).css("background-color","yellow");
                         $('#cart_'+response.cart_id+' li.price_li').append('<br><a href="javascript:;" class="update_cart_price text-primary">'+error_msg.update_price+'</a>')
+                        $("#btn_checkout").prop("disabled",false);
                         showSweetAlertError(response.msg);
                     }else{
+                        $("#btn_checkout").prop("disabled", false);
                         showSweetAlertError(response.msg);
                     }
                 }else{
+                    $("#btn_checkout").prop("disabled", false);
                     showSweetAlertError(response.msg);
                 }
             });

@@ -198,7 +198,7 @@
                     // conditionList: ['begin', 'contain', 'notbegin', 'notcontain'], 
                 },
             },
-                        {   title: "@lang('admin_customer.panel')", 
+            {   title: "@lang('admin_customer.panel')", 
                 dataIndx:'panel_no',
                 minWidth: 140,
                 menuIcon : !2,
@@ -239,9 +239,7 @@
                     ],                        
                 },
 
-
             },
-            
             {   title: "@lang('admin_customer.register_from')", 
                 dataIndx:'register_from', 
                 minWidth: 140,
