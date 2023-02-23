@@ -105,6 +105,13 @@
 	.view-mode {
 		display: none;
 	}
+	.product-info {
+		.shop-name {
+			a {
+				text-decoration: underline !important;
+			}
+		}
+	}
 }
 
 .respon-update {
@@ -186,6 +193,29 @@
 		&:hover {
 			background:$red-dark;
 		}
+	}
+}
+.side-innder-heading {
+	@include flex; justify-content: space-between;
+	align-items: center; position: relative;
+	&:before {
+		content: "";
+		border-left: 2px solid $border;
+		width: 1px;
+		height: 46px;
+		left: 47%;
+		position: absolute;
+	}
+	h3, a {
+		margin:5px 0;
+	}
+	a {
+		text-decoration: none;
+	}
+	.btn-blue {
+		font-size: $font-14;
+		padding-left: .6rem;
+		padding-right: .6rem;
 	}
 }
 

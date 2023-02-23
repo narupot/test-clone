@@ -119,8 +119,13 @@
                     @endif
                 </div>
                 <div class="side-heading">
-                    <h3>@lang('shop.shop_information')</h3>
+                    <div class="side-innder-heading">
+                        <h3>@lang('shop.shop_information')</h3>
+                        <a class="btn-blue" href={{action('ShopController@index',$shop_details->shop_url)}}>ดูสินค้าทั้งหมด</a>
+                    </div>
+                    
                 </div>
+                
                 <div class="side-content">
                     <span class="side-label">@lang('shop.shop_open_close_time')</span>
                     <time class="time">{{$shop_details->open_time}} - {{$shop_details->close_time}}</time>
