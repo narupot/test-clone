@@ -238,7 +238,18 @@ class ExportOrderController extends MarketPlace
         if($seller_order_data && count($seller_order_data)){
             foreach ($seller_order_data as $key => $value) {
                 $total_order_amt = $total_order_amt + $value->totPrice;
+                $shop_user_id = $value->shop_user_id;
+                $bank_id = $value->getSellerDetail->bank_id;
+                $bank_branch_id = $value->getSellerDetail->bank_branch_id;
+                $bank_code = $bank_branch_code = '';
+                if($bank_id){
+                    $bank_code = \App\PaymentBank::where('id',$bank_id)->value('bank_code');
+                }
 
+                if($bank_branch_id){
+                    $bank_branch_code = \App\PaymentBankBranch::where('id',$bank_branch_id)->value('branch_code');
+                }
+                
                 $record_identifier = $data_i = "I";
                 $no_use_2 = str_repeat(' ', 20);
                 $no_use_3 = str_repeat(' ', 10);
@@ -260,8 +271,8 @@ class ExportOrderController extends MarketPlace
                 
                 $inst_date = str_pad(date('d/m/Y',strtotime($value->end_shopping_date)), 10, " ", STR_PAD_RIGHT);
 
-                $benef_bank_code = str_pad($data_benef_bank_code, 10, " ", STR_PAD_RIGHT);
-                $benef_branch_code = str_pad($data_benef_branch_code, 10, " ", STR_PAD_RIGHT);
+                $benef_bank_code = str_pad($bank_code, 10, " ", STR_PAD_RIGHT);
+                $benef_branch_code = str_pad($bank_branch_code, 10, " ", STR_PAD_RIGHT);
 
                 $benef_bank_acc_no = str_pad($value->getSellerDetail->account_no, 20, " ", STR_PAD_RIGHT);
 
