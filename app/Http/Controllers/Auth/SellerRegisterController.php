@@ -314,6 +314,7 @@ class SellerRegisterController extends MarketPlace {
         $rules['account_name'] = nameRule();
         $rules['account_no'] = numericRule('r');
         $rules['branch'] = nameRule();
+        $rules['branch_code'] = reqRule();
         //$rules['account_image'] = imageRule();
         
         $error_msg['bank_id.required'] = Lang::get('shop.bank_is_required');
@@ -321,6 +322,7 @@ class SellerRegisterController extends MarketPlace {
         $error_msg['account_name.required'] = Lang::get('shop.account_name_is_required');
         $error_msg['account_no.required'] = Lang::get('shop.account_no_is_required');
         $error_msg['branch.required'] = Lang::get('shop.branch_is_required');
+        $error_msg['branch_code.required'] = Lang::get('shop.branch_code_is_required');
         $error_msg['account_image.required'] = Lang::get('shop.account_image_is_required');
 
         unset($input['_token']);
@@ -355,12 +357,14 @@ class SellerRegisterController extends MarketPlace {
                 /****if shop name and url pass*****/
                 $seller_temp->bank_id = $request->bank_id;
                 if($request->branch_id){
-                    $seller_temp->bank_branch_id = $request->branch_id;
+                    $branch_arr = explode("##",$request->branch_id);
+                    $seller_temp->bank_branch_id = $branch_arr[0];
                 }
                 
                 $seller_temp->account_name = cleanValue($request->account_name);
                 $seller_temp->account_no = cleanValue($request->account_no);
                 $seller_temp->branch = createUrl($request->branch);
+                $seller_temp->branch_code = $request->branch_code;
 
                 if(!empty($request->account_image)){
                     $uploadDetails['path'] = Config::get('constants.seller_img_path');
