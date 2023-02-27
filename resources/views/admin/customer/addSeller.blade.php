@@ -162,7 +162,7 @@
                         <div class="form-group">
                             <label>@lang('admin_shop.branch')<i class="red">*</i></label>
                             <select data-placeholder="Choose Branch List..." id="branch_select" style="width:250px;" tabindex="2" name="branch_id">
-                    
+                            <option value="">@lang('admin_shop.select_branch')</option>
                             </select>
                             <p class="error" id="e_branch_id">{{ $errors->first('branch_id') }}</p>
                         </div>
@@ -196,6 +196,11 @@
                             <label>@lang('admin_shop.branch')<i class="red">*</i></label>
                             <input type="text" name="branch" value="{{ old('branch') }}">
                             <p class="error" id="e_branch">{{ $errors->first('branch') }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label>@lang('admin_shop.branch_code')<i class="red">*</i></label>
+                            <input type="text" name="branch_code" value="{{ old('branch_code') }}">
+                            <p class="error" id="e_branch_code">{{ $errors->first('branch_code') }}</p>
                         </div>
                         <div class="form-group">
                             <label>@lang('admin_shop.account_image')<i class="red">*</i></label>                     
@@ -272,7 +277,7 @@
                         var opt_html='';
                         $.each(result.data, function(key,val){
 
-                            opt_html +='<option value="'+val.id+'">'+val.branch_name.branch_name+'</option>';
+                            opt_html +='<option value="'+val.id+'##'+val.branch_code+'">'+val.branch_name.branch_name+'</option>';
                           
                         });
                         $('#branch_select').html(opt_html);
@@ -286,6 +291,19 @@
                     }
                 });
             });
+
+            jQuery('select[name="branch_id"]').change(function(e){
+                var val_arr = $(this).val().split("##");
+                var branch_name = $(this).find('option:selected').text();
+                if(val_arr){
+                    $('input[name="branch"]').val(branch_name);
+                    $('input[name="branch_code"]').val(val_arr[1]);
+                }else{
+                    $('input[name="branch"]').val('');
+                    $('input[name="branch_code"]').val('');
+                }
+                });
+
         });
     </script>    
     <!-- end of page level js -->   
