@@ -356,11 +356,21 @@ class SellerRegisterController extends MarketPlace {
 
                 /****if shop name and url pass*****/
                 $seller_temp->bank_id = $request->bank_id;
-                if($request->branch_id){
-                    $branch_arr = explode("##",$request->branch_id);
+                if ($request->branch_id) {
+                    $branch_arr = explode("##", $request->branch_id);
                     $seller_temp->bank_branch_id = $branch_arr[0];
+                } else {
+                    $pay_bank = new \App\PaymentBankBranch();
+                    $pay_bank->payment_bank_id = $request->bank_id;
+                    $pay_bank->branch_code = $request->branch_code;
+                    $pay_bank->save();
+                    $bank_branch_id = $pay_bank->id;
+                    $payment_bank_name_arr[] = ['bank_branch_id' => $bank_branch_id, 'lang_id' => 0, 'branch_name' => $request->branch];
+                    $payment_bank_name_arr[] = ['bank_branch_id' => $bank_branch_id, 'lang_id' => 1, 'branch_name' => $request->branch];
+                    \App\PaymentBankBranchDesc::insert($payment_bank_name_arr);
+                    $seller_temp->bank_branch_id = $bank_branch_id;
                 }
-                
+
                 $seller_temp->account_name = cleanValue($request->account_name);
                 $seller_temp->account_no = cleanValue($request->account_no);
                 $seller_temp->branch = createUrl($request->branch);

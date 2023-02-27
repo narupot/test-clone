@@ -165,8 +165,13 @@ jQuery('select[name="bank_id"]').change(function(e){
 jQuery('select[name="branch_id"]').change(function(e){
    var val_arr = $(this).val().split("##");
    var branch_name = $(this).find('option:selected').text();
-   $('input[name="branch"]').val(branch_name);
-   $('input[name="branch_code"]').val(val_arr[1]);
+   if(val_arr){
+    $('input[name="branch"]').val(branch_name);
+    $('input[name="branch_code"]').val(val_arr[1]);
+   }else{
+    $('input[name="branch"]').val('');
+    $('input[name="branch_code"]').val('');
+   }
 });
 
 /***submit account info data******/
