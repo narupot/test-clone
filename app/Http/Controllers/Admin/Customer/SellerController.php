@@ -197,14 +197,31 @@ class SellerController extends MarketPlace
 
                     $panel_citizen = \App\SellerData::where(['panel_id'=>$request->panel_no,'citizen_id'=>$request->citizen_id])->first();
                     // save data in seller db
+                    $branch_id = $request->branch_id;
+                    if (empty($request->branch_id)) {
+                        $check_branch_code = \App\PaymentBankBranch::where('branch_code', $request->branch_code)->get();
+                        if (count($check_branch_code) == 0) {
+                            $pay_bank = new \App\PaymentBankBranch();
+                            $pay_bank->payment_bank_id = $request->bank_id;
+                            $pay_bank->branch_code = $request->branch_code;
+                            $pay_bank->save();
+                            $bank_branch_id = $pay_bank->id;
+                            $branch_id = $bank_branch_id;
+                            $payment_bank_name_arr[] = ['bank_branch_id' => $bank_branch_id, 'lang_id' => 0, 'branch_name' => $request->branch];
+                            $payment_bank_name_arr[] = ['bank_branch_id' => $bank_branch_id, 'lang_id' => 1, 'branch_name' => $request->branch];
+                            \App\PaymentBankBranchDesc::insert($payment_bank_name_arr);
+                        }
+                    }
+
                     $sellerObj = new \App\Seller;
                     $sellerObj->user_id = $user_id;
                     $sellerObj->citizen_id = $request->citizen_id;
                     $sellerObj->bank_id = $request->bank_id;
-                    $sellerObj->bank_branch_id = $request->branch_id;
+                    $sellerObj->bank_branch_id = $branch_id;
                     $sellerObj->account_name = $request->account_name;
                     $sellerObj->account_no = $request->account_no;
                     $sellerObj->branch = $request->branch;
+                    $sellerObj->branch_code = $request->branch_code;
                     
                     $path = Config::get('constants.customer_path');
                     if(isset($request->citizen_id_image)){
