@@ -42,7 +42,7 @@ class ClearCartItem extends Command
 
         $date = date('Y-m-d H:i:s');
         //$new_time = date("Y-m-d H:i:s", strtotime('-3 hours', strtotime($date)));
-        $new_time = date("Y-m-d H:i:s", strtotime($clear_hr, strtotime($date)));
+        $new_time = date("Y-m-d H:i:s", strtotime('-'.$clear_hr, strtotime($date)));
 
         if($new_time){
             \App\OrdersTemp::where('created_at','<=',$new_time)
