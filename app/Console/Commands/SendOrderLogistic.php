@@ -43,7 +43,7 @@ class SendOrderLogistic extends Command
         if(count($order_data)){
             foreach ($order_data as $ordkey => $ordvalue) {
                 $main_order = $ordvalue;
-
+                $end_shopping_date = $ordvalue->end_shopping_date;
                 $json_arr = json_decode($main_order->order_json,true);
                 $key_arr = ['first_name','last_name','provice','district','address','road','zip_code','ph_number','company_name','branch','tax_id','company_address','name','location','contact','estimate'];
                 $arr_json = [];
@@ -82,6 +82,7 @@ class SendOrderLogistic extends Command
 
                         $order_shop[$key]['shop_formatter_id'] = $value['shop_formatted_id'];
                         $order_shop[$key]['seller_send_prodcut_time'] = $seller_send_prodcut_time;
+                        $order_shop[$key]['end_shopping_date'] = $end_shopping_date;
 
                         unset($order_shop[$key]['shop_formatted_id'],$order_shop[$key]['shipping_method'],$order_shop[$key]['total_discount'],$order_shop[$key]['total_final_weight'],$order_shop[$key]['seller_status'],$order_shop[$key]['shop_json'],$order_shop[$key]['order_json'],$order_shop[$key]['user_email']);
 
@@ -101,6 +102,8 @@ class SendOrderLogistic extends Command
                             $detail_arr['remark'] = (float)$dvalue['total_weight'].' '.$dvalue['base_unit'].'/'.$dvalue['package_name'];
                             $order_detail[$dkey]['base_unit_type'] = '';
                             $order_detail[$dkey]['base_unit'] = '';
+                            $order_detail[$dkey]['payment_date'] = $end_shopping_date;
+                            $order_detail[$dkey]['payment_status'] = 1;
                             $order_detail[$dkey]['item_detail_json'] = [$detail_arr];
 
                             unset($order_detail[$dkey]['order_shop_id'],$order_detail[$dkey]['order_detail_json'],$order_detail[$dkey]['user_id'],$order_detail[$dkey]['shop_id'],$order_detail[$dkey]['order_id'],$order_detail[$dkey]['status'],$order_detail[$dkey]['credit_paid_status'],$order_detail[$dkey]['total_weight']);
