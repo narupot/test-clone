@@ -36,7 +36,6 @@ class Kernel extends ConsoleKernel
         $cart_notification_expire = base_path("storage/logs/cart_notification_expire.log");
 
         $schedule->command('sendOrderLogistic:sendOrderLogistic')->everyMinute()->sendOutputTo($send_order_logistic); 
-
         $schedule->command('ClearCartItem:clearCartItem')->everyMinute()->sendOutputTo($send_clear_cart); 
         $schedule->command('ExportOrder:exportOrder')->dailyAt('01:00')->sendOutputTo($send_export_order); 
         //cancel online pending order whose payment pending
