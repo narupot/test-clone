@@ -336,7 +336,7 @@ class CityController extends MarketPlace
         $rules['country'] = 'Required';
         $rules['province'] = 'Required';
         if($input['district_type'] == '1' && $input['country'] == '1') {
-            $rules['zip'] = zipRule();
+            //$rules['zip'] = zipRule();
         }
         elseif($input['district_type'] == '2') {
             $rules['city'] = 'Required';
