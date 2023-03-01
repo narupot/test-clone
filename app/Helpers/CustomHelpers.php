@@ -1593,5 +1593,25 @@ class CustomHelpers {
         }
         return $html;
     }
+    public static function getZipCodeDD($district_id, $zip_code='') {
+        //echo '====>'.$district_id.'==='.$zip_code;die;
+        $zip_code_list = \App\CountryCityDistrictZip::where('district_id', $district_id)->get();
+        $option_str = '';
+        $selected_flag = 0;
+        if($zip_code_list) {
+            foreach ($zip_code_list as $detail) {
+                $selected = '';
+                if($detail->zip == $zip_code) {
+                    $selected = 'selected="selected"';
+                    $selected_flag = 1;
+                }
+                $option_str .= '<option value="'.$detail->zip.'" '.$selected.'>'.$detail->zip.'</option>';
+            }            
+        }
+        if($selected_flag === 0) {
+            $option_str .= '<option value="" selected="selected">'.$zip_code.'</option>';
+        }        
+        return $option_str;
+    }  
 
 }
