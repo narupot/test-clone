@@ -146,7 +146,7 @@ class CityController extends MarketPlace
                 $city->country_id = $request->country;
                 $city->province_state_id = $request->province;
                 $city->status = $request->status;
-                $city->zip = $request->zip;
+                //$city->zip = $request->zip;
                 $city->created_by = Auth::guard('admin_user')->user()->id;
                 $city->save();
 
@@ -284,7 +284,7 @@ class CityController extends MarketPlace
                     $city->country_id = $request->country;
                     $city->province_state_id = $request->province;
                     $city->status = $request->status;
-                    $city->zip = $request->zip;
+                    //$city->zip = $request->zip;
                     $city->updated_by = Auth::guard('admin_user')->user()->id;
                     $city->save();
 
