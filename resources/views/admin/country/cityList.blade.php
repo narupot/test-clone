@@ -100,7 +100,8 @@
                                 <td>{{ $city_detail->subDistrictName->sub_district_name }}</td>
                             @else
                                 <td>{{ $city_detail->cityName->city_district_name }}</td>
-                                <td>{{ $city_detail->zip }}</td>
+                                {{--<td>{{ $city_detail->zip }}</td>--}}
+                                <td>{{ getZip($city_detail->id) }}</td>
                             @endif                            
                             @if($city_detail->status == '1')
                                 <td>@lang('common.active')</td>
