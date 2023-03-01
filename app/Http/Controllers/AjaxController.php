@@ -86,7 +86,7 @@ class AjaxController extends MarketPlace
 
         $opt_str = '<option value="">--'.Lang::get('common.select').'--</option>';
         $status = 'success';
-
+        $zip_data ='';
         if(($request->address_type == 'country' || $request->address_type == 'billing_country') && $request->address_id > 0) {
             $result = \App\CountryProvinceState::getProvinceList($request->address_id);
             if(count($result) > 0) {
@@ -119,6 +119,12 @@ class AjaxController extends MarketPlace
 
                 $zip_code = \App\CountryCityDistrict::getZipCode($request->address_id);
                 $data_arr['zip_code'] = $zip_code;
+                $zip_all = \App\CountryCityDistrictZip::where('district_id',$request->address_id)->get();
+                if(count($zip_all) > 0) {
+                    foreach ($zip_all as $zipdata) {
+                        $zip_data .= '<option value="'.$zipdata->zip.'">'.$zipdata->zip.'</option>';
+                    }                
+                } 
             }                        
         }
         else {
@@ -128,7 +134,7 @@ class AjaxController extends MarketPlace
 
         $data_arr['opt_str'] = $opt_str;
         $data_arr['status'] = $status;        
-
+        $data_arr['zip_data'] = $zip_data;
         echo json_encode($data_arr);
     }
 
