@@ -235,7 +235,7 @@ class CityController extends MarketPlace
                 $zip_all = CountryCityDistrictZip::where('district_id',$city_subcity_id)->get();
             }
             
-            return view('admin.country.cityEdit', ['country_list'=>$country_list, 'country_id'=>$country_id, 'province_list'=>$province_list, 'province_id'=>$province_id, 'city_list'=>$city_list, 'city_id'=>$city_id, 'city_detail'=>$city_detail, 'tblCountryCityDistrictDesc'=>$tblCountryCityDistrictDesc, 'type'=>$type]);
+            return view('admin.country.cityEdit', ['country_list'=>$country_list, 'country_id'=>$country_id, 'province_list'=>$province_list, 'province_id'=>$province_id, 'city_list'=>$city_list, 'city_id'=>$city_id, 'city_detail'=>$city_detail, 'tblCountryCityDistrictDesc'=>$tblCountryCityDistrictDesc, 'type'=>$type,'zip_all'=>$zip_all]);
         }            
     }
 
