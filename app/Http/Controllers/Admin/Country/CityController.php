@@ -16,6 +16,7 @@ use App\CountryCityDistrict;
 use App\CountryCityDistrictDesc;
 use App\CountrySubDistrict;
 use App\CountrySubDistrictDesc;
+use App\CountryCityDistrictZip;
 
 use Lang;
 use Auth;
@@ -161,7 +162,15 @@ class CityController extends MarketPlace
                     $city_desc->lang_id = $lang;
                     $city_desc->city_district_name = $city_nm;
                     $city_desc->save();
-                }                
+                }  
+                if ($request->zip) {
+                    foreach($request->zip as $key=>$zip_data) {
+                        $zip_d = new CountryCityDistrictZip;
+                        $zip_d->district_id = $city->id;
+                        $zip_d->zip = $zip_data;
+                        $zip_d->save();
+                    }
+                }              
             }
 
             /*update activity log start*/
@@ -292,7 +301,16 @@ class CityController extends MarketPlace
                         $city_desc->lang_id = $lang;
                         $city_desc->city_district_name = $city_nm;
                         $city_desc->save();
-                    }                
+                    }
+                    if ($request->zip) {
+                        CountryCityDistrictZip::where('district_id', '=', $id)->delete();    
+                        foreach($request->zip as $key=>$zip_data) {
+                            $zip_d = new CountryCityDistrictZip;
+                            $zip_d->district_id = $id;
+                            $zip_d->zip = $zip_data;
+                            $zip_d->save();
+                        }
+                    }                 
                 }
 
                 /*update activity log start*/
