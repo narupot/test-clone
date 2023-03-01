@@ -112,7 +112,7 @@ class AjaxController extends MarketPlace
         }
         elseif(($request->address_type == 'city_district' || $request->address_type == 'billing_city_district') && $request->address_id > 0) {
             $result = \App\CountrySubDistrict::getSubDistList($request->address_id);
-            if(count($result) > 0) {
+            if($result) {
                 foreach ($result as $value) {
                     $opt_str .= '<option value="'.$value->id.'">'.$value->subDistrictName->sub_district_name.'</option>';
                 }
@@ -120,7 +120,7 @@ class AjaxController extends MarketPlace
                 $zip_code = \App\CountryCityDistrict::getZipCode($request->address_id);
                 $data_arr['zip_code'] = $zip_code;
                 $zip_all = \App\CountryCityDistrictZip::where('district_id',$request->address_id)->get();
-                if(count($zip_all) > 0) {
+                if($zip_all) {
                     foreach ($zip_all as $zipdata) {
                         $zip_data .= '<option value="'.$zipdata->zip.'">'.$zipdata->zip.'</option>';
                     }                
