@@ -131,7 +131,35 @@
                             @if ($errors->has('zip'))
                                 <p class="error error-msg">{{ $errors->first('zip') }}</p>
                             @endif                               
-                        </div>  --}}                              
+                        </div>  --}} 
+                        @if(isset($zip_all) && is_object($zip_all))
+                            <div class="form-group">
+                                <div class="input_fields_wrap">
+                                    <label class="control-label">@lang('admin_country.zip_code') </label>
+                                    <div class="form-group"><a href="javascript:;" class="btn btn-primary add_field_button"><i class="fa fa-plus align-baseline"></i></a></div>
+                                    <ul class="css-board ui-sortable">
+                                    @foreach($zip_all as $keyes=>$dataes)
+                                        @if(!empty($dataes))
+                                        <div class="row mb-4 align-items-center">
+                                            <div class="col-sm-1">
+                                                <span class="ui-icon ui-icon-arrowthick-2-n-s mt10" ></span>
+                                            </div>
+                                            <div class="col-sm-10">
+                                                <input type="text" name="zip[]" value="{{$dataes->zip}}">
+                                            </div>
+                                            <div class="col-sm-1">
+                                                <span class="ui-icon ui-icon-minusthick removeCss cursor-pointer mt10"></span>
+                                            </div> 
+                                        </div>
+                                        @endif 
+                                    @endforeach 
+                                    </ul>
+                                </div>
+                                @if ($errors->has('zip'))
+                                    <p class="error error-msg">{{ $errors->first('zip') }}</p>
+                                @endif 
+                            </div>
+                        @endif                               
                         <div class="form-group">
                             <label>@lang('common.status')</label>
                             <select name="status">
