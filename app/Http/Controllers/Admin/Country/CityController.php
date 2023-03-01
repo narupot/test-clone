@@ -213,7 +213,7 @@ class CityController extends MarketPlace
                 $country_id = $request->country;
                 $province_list = CountryProvinceState::getProvinceList($country_id);
             }
-
+            $zip_all = '';
             $province_id = '';
             $city_list = '';
             if(isset($request->province) && $request->province > 0) {
@@ -232,6 +232,7 @@ class CityController extends MarketPlace
                 $type = 'city_district';
                 $city_detail = CountryCityDistrict::getCityDetail($city_subcity_id);
                 $tblCountryCityDistrictDesc = $this->tblCountryCityDistrictDesc;
+                $zip_all = CountryCityDistrictZip::where('district_id',$city_subcity_id)->get();
             }
             
             return view('admin.country.cityEdit', ['country_list'=>$country_list, 'country_id'=>$country_id, 'province_list'=>$province_list, 'province_id'=>$province_id, 'city_list'=>$city_list, 'city_id'=>$city_id, 'city_detail'=>$city_detail, 'tblCountryCityDistrictDesc'=>$tblCountryCityDistrictDesc, 'type'=>$type]);
