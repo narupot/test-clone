@@ -127,7 +127,7 @@
                                         <p id="" class="error">{{ $errors->first('citizen_id_image') }}</p>
                                         <span class="file-img btn-default"><img src="images/file-upload.png"></span>
                                     </div> 
-                                    <span class="image-preview"><img id="blah" src=""/></span>
+                                    <span class="image-preview"><img id="blah1" src=""/></span>
                                 </div>
                             </div> 
                             <div class="form-group">
@@ -305,7 +305,35 @@
                 });
 
         });
-    </script>    
+    </script>  
+    <script type="text/javascript">
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                
+                reader.onload = function (e) {
+                    $('#blah').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        $("#account_image").change(function(){
+            readURL(this);
+        });
+        function readURLS(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                
+                reader.onload = function (e) {
+                    $('#blah').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        $("#citizen_id_image").change(function(){
+            readURLS(this);
+        });
+    </script>  
     <!-- end of page level js -->   
     
 @stop
