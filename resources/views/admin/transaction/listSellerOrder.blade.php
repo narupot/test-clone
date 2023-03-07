@@ -57,7 +57,12 @@
                         <label>&nbsp;</label>
                         <a class="btn btn-danger" href="{{Request::url()}}">@lang('admin_common.clear_all')</a>
                     </div>
-                    
+                    @if(!empty($_GET['zip_file']))
+                        <div class="col-sm-1  form-group">
+                            <label>&nbsp;</label>
+                            <a class="btn btn-primary" href="{{Config::get('constants.public_url').'/seller-payment/'.$_GET['zip_file']}}">@lang('admin_common.download')</a>
+                        </div>
+                    @endif
                 </div>
                 
             </form>
