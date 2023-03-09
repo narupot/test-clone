@@ -291,8 +291,8 @@ class ExportOrderController extends MarketPlace
 
                     $benef_bank_code = str_pad($bank_code, 10, " ", STR_PAD_RIGHT);
                     $benef_branch_code = str_pad($bank_branch_code, 10, " ", STR_PAD_RIGHT);
-
-                    $benef_bank_acc_no = str_pad($value->getSellerDetail->account_no, 20, " ", STR_PAD_RIGHT);
+                    $acc_no = str_replace('-', '', $value->getSellerDetail->account_no);
+                    $benef_bank_acc_no = str_pad($acc_no, 20, " ", STR_PAD_RIGHT);
 
                     $no_use_15 = str_repeat(' ', 16);
                     $no_use_16 = str_repeat(' ', 4);
