@@ -115,7 +115,7 @@ class ExportOrderController extends MarketPlace
             $file_data = OrderExportLog::where('id',$id)->first();
             if($file_data){
                 $file_path = Config::get('constants.public_path').'/seller-payment/';
-                $filename = $file_data->file_name.'.txt';
+                $filename = $file_data->file_name.'.gpg';
                 $file_full_path = $file_path.$filename;
 
                 if(file_exists($file_full_path)){
@@ -267,10 +267,7 @@ class ExportOrderController extends MarketPlace
                         $bank_code = \App\PaymentBank::where('id',$bank_id)->value('bank_code');
                     }
 
-                    if($bank_branch_id){
-                        $bank_branch_code = \App\PaymentBankBranch::where('id',$bank_branch_id)->value('branch_code');
-                    }
-                    
+                    $bank_branch_code = $value->getSellerDetail->branch_code;
                     $record_identifier = $data_i = "I";
                     $no_use_2 = str_repeat(' ', 20);
                     $no_use_3 = str_repeat(' ', 10);
@@ -368,7 +365,7 @@ class ExportOrderController extends MarketPlace
                 $client_code = $data_client_code;
                 $date = str_replace('-', '', $export_date);
                 $file_name = 'P-'.$client_code.'-'.$date.'-'.$ref_no;
-                $file = $file_path.'/seller-payment/'.$file_name.'.txt';
+                $file = $file_path.'/seller-payment/'.$file_name.'.gpg';
                 \File::put($file,$main_data);
                 $all_file_path[] = $file;
 
