@@ -197,7 +197,6 @@
             var searchUrl = "{{url('/')}}/shop?search="; */
 
           var searchUrl = "{{action('ProductsController@search')}}?search="; 
-          
           $("form#searchForm #searchProduct").autocomplete({
             source: availableTags+'?searchtype='+$('.searchtype').val(),
             autoFocus: false,
@@ -209,6 +208,10 @@
             }, 
             classes: {
               "ui-autocomplete": "search-dropdown"
+            },
+            change: function( event, ui ) {
+               totalCount = 0;  
+               $("input[name='totalCount']").val(totalCount);  
             },
             open: function(event, ui) {
                 var searchtext =  $('#searchProduct').val();
@@ -252,7 +255,11 @@
         // $('#searchProduct').keypress(function(){
         //     resetAutocomplete();
         // }); 
-        $("#searchProduct").keypress(function(){  
+        $("#searchProduct").keypress(function(e){
+            /*if (e.key !== "Enter") {
+                totalCount = 0;  
+                $("input[name='totalCount']").val(totalCount);
+            }*/    
             resetAutocomplete();
         });   
 
@@ -277,6 +284,8 @@
                   var searchUrl = "{{url('/')}}/shop?search=";  */
 
                 var totalCountf = $("input[name='totalCount']").val();
+                //alert(totalCountf);
+                //return false;
                 if(totalCountf == 1){
                     var searchUrl = $("ul#ui-id-1 li.product_0 a").attr('href');
                     if(searchUrl == ''){
