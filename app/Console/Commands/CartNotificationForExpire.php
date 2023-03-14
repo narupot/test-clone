@@ -74,9 +74,12 @@ class CartNotificationForExpire extends Command
 
 
                 }else if($order_time_in_mint > 178 && $order_time_in_mint <= 180){
-                     $messageTitle = $title. 'ตระกร้าของคุณหมดอายุ';
-                     $messageBody = $body. 'ตระกร้าของคุณหมดอายุ';
-                     $sendNoti = 1; 
+                     /*$messageTitle = $title. 'ตระกร้าของคุณหมดอายุ';
+                     $messageBody = $body. 'ตระกร้าของคุณหมดอายุ';*/
+                    
+                    $messageTitle = 'ตะกร้าสินค้าของคุณหมดเวลา กรุณากดสั่งสินค้าใหม่';
+                    $messageBody =  'ตะกร้าสินค้าของคุณหมดเวลา กรุณากดสั่งสินค้าใหม่';
+                    $sendNoti = 1; 
                 }
                 //dd($sendNoti);
                 if($sendNoti == 1){
