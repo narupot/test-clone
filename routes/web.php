@@ -786,3 +786,4 @@ Route::post('pagelimit', 'JsonController@pageLimit');
 Route::get('seller-item-scv', 'SyncController@itemcsv');
 Route::get('seller-customer-scv', 'SyncController@customercsv');
 Route::get('seller-data', 'SyncController@sellerdata');
+Route::get('new-seller-data', 'SyncController@newsellerdata');
