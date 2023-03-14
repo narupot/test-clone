@@ -200,6 +200,40 @@ class SyncController extends MarketPlace
             dd('ff');    //dd($data);
 
     }
+
+    public function newsellerdata(Request $request){
+        
+        $public_path = \Config('constants.public_path');
+        $item_csv = $public_path.'/seller_csv/insert_seller_data_new.csv';
+        $row = 1;
+        $fp = fopen('duplicate_seller.csv', 'w');
+        if (($handle = fopen($item_csv, "r")) !== FALSE) {
+            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                if($row == 1){ $row++; continue; }
+                $row++;
+                $panel_id = $data[3];
+                $citizen_id = $data[7];
+                $check_duplicate = \App\SellerData::where(['panel_id'=>$panel_id,'citizen_id'=>$citizen_id])->count();
+                if($check_duplicate){
+                    fputcsv($fp, $data);
+                }
+                $insert_arr = [];
+                $insert_arr['sales_status'] = $data[0];
+                $insert_arr['area_code'] = $data[1];
+                $insert_arr['area_group_code'] = $data[2];
+                $insert_arr['panel_id'] = $data[3];
+                $insert_arr['description'] = $data[4];
+                $insert_arr['customer_name'] = $data[5];
+                $insert_arr['seller_unique_id'] = $data[6];
+                $insert_arr['citizen_id'] = $data[7];
+                
+                $insert = \App\SellerData::insert($insert_arr);
+                
+            }
+        }
+        fclose($fp);
+        dd('success');
+    }
              
 }
 

@@ -288,9 +288,9 @@ class ExportOrderController extends MarketPlace
                     $no_use_10 = str_repeat(' ', 20);
                     
                     $inst_date = str_pad(date('d/m/Y',strtotime($value->end_shopping_date)), 10, " ", STR_PAD_RIGHT);
-
+                    $branch_code_format = $bank_code.sprintf('%04d', $bank_branch_code);
                     $benef_bank_code = str_pad($bank_code, 10, " ", STR_PAD_RIGHT);
-                    $benef_branch_code = str_pad($bank_branch_code, 10, " ", STR_PAD_RIGHT);
+                    $benef_branch_code = str_pad($branch_code_format, 10, " ", STR_PAD_RIGHT);
                     $acc_no = str_replace('-', '', $value->getSellerDetail->account_no);
                     $benef_bank_acc_no = str_pad($acc_no, 20, " ", STR_PAD_RIGHT);
 
