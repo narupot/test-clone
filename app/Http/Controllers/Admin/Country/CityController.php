@@ -16,6 +16,7 @@ use App\CountryCityDistrict;
 use App\CountryCityDistrictDesc;
 use App\CountrySubDistrict;
 use App\CountrySubDistrictDesc;
+use App\CountryCityDistrictZip;
 
 use Lang;
 use Auth;
@@ -145,7 +146,7 @@ class CityController extends MarketPlace
                 $city->country_id = $request->country;
                 $city->province_state_id = $request->province;
                 $city->status = $request->status;
-                $city->zip = $request->zip;
+                //$city->zip = $request->zip;
                 $city->created_by = Auth::guard('admin_user')->user()->id;
                 $city->save();
 
@@ -161,7 +162,15 @@ class CityController extends MarketPlace
                     $city_desc->lang_id = $lang;
                     $city_desc->city_district_name = $city_nm;
                     $city_desc->save();
-                }                
+                }  
+                if ($request->zip) {
+                    foreach($request->zip as $key=>$zip_data) {
+                        $zip_d = new CountryCityDistrictZip;
+                        $zip_d->district_id = $city->id;
+                        $zip_d->zip = $zip_data;
+                        $zip_d->save();
+                    }
+                }              
             }
 
             /*update activity log start*/
@@ -204,7 +213,7 @@ class CityController extends MarketPlace
                 $country_id = $request->country;
                 $province_list = CountryProvinceState::getProvinceList($country_id);
             }
-
+            $zip_all = '';
             $province_id = '';
             $city_list = '';
             if(isset($request->province) && $request->province > 0) {
@@ -223,9 +232,10 @@ class CityController extends MarketPlace
                 $type = 'city_district';
                 $city_detail = CountryCityDistrict::getCityDetail($city_subcity_id);
                 $tblCountryCityDistrictDesc = $this->tblCountryCityDistrictDesc;
+                $zip_all = CountryCityDistrictZip::where('district_id',$city_subcity_id)->get();
             }
             
-            return view('admin.country.cityEdit', ['country_list'=>$country_list, 'country_id'=>$country_id, 'province_list'=>$province_list, 'province_id'=>$province_id, 'city_list'=>$city_list, 'city_id'=>$city_id, 'city_detail'=>$city_detail, 'tblCountryCityDistrictDesc'=>$tblCountryCityDistrictDesc, 'type'=>$type]);
+            return view('admin.country.cityEdit', ['country_list'=>$country_list, 'country_id'=>$country_id, 'province_list'=>$province_list, 'province_id'=>$province_id, 'city_list'=>$city_list, 'city_id'=>$city_id, 'city_detail'=>$city_detail, 'tblCountryCityDistrictDesc'=>$tblCountryCityDistrictDesc, 'type'=>$type,'zip_all'=>$zip_all]);
         }            
     }
 
@@ -274,7 +284,7 @@ class CityController extends MarketPlace
                     $city->country_id = $request->country;
                     $city->province_state_id = $request->province;
                     $city->status = $request->status;
-                    $city->zip = $request->zip;
+                    //$city->zip = $request->zip;
                     $city->updated_by = Auth::guard('admin_user')->user()->id;
                     $city->save();
 
@@ -292,7 +302,16 @@ class CityController extends MarketPlace
                         $city_desc->lang_id = $lang;
                         $city_desc->city_district_name = $city_nm;
                         $city_desc->save();
-                    }                
+                    }
+                    if ($request->zip) {
+                        CountryCityDistrictZip::where('district_id', '=', $id)->delete();    
+                        foreach($request->zip as $key=>$zip_data) {
+                            $zip_d = new CountryCityDistrictZip;
+                            $zip_d->district_id = $id;
+                            $zip_d->zip = $zip_data;
+                            $zip_d->save();
+                        }
+                    }                 
                 }
 
                 /*update activity log start*/
@@ -317,7 +336,7 @@ class CityController extends MarketPlace
         $rules['country'] = 'Required';
         $rules['province'] = 'Required';
         if($input['district_type'] == '1' && $input['country'] == '1') {
-            $rules['zip'] = zipRule();
+            //$rules['zip'] = zipRule();
         }
         elseif($input['district_type'] == '2') {
             $rules['city'] = 'Required';

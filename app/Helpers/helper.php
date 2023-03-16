@@ -1616,3 +1616,22 @@ function getCurrency($cur_id){
 	}
     
 }
+function getZip($id=null)
+{
+	$return_obj = \App\CountryCityDistrictZip::Select('zip')->where(['district_id'=>$id])->get();
+	$str='';
+	if ($return_obj) {
+		
+		foreach ($return_obj as $key => $value) {
+			if ($key=="0") {
+				$str =$value->zip;
+			}else{
+				$str =$str.','.$value->zip;
+			}
+			
+		}
+		
+	}
+	return $str;
+	//dd($str);
+}

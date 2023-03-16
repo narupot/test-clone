@@ -1321,6 +1321,9 @@ textarea, select, .date-select, .btn, .btn-blue, .btn-grey, .btn-default, .btn-g
 .grey-light2 {
   color: #004CFF; }
 
+.text-underline {
+  text-decoration: underline !important; }
+
 /* Modal override */
 .modal-header h3 {
   margin-bottom: 0; }

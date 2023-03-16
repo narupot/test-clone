@@ -71,7 +71,8 @@
                     <div class="form-group row"> 
                         <div class="col-sm-6">                          
                             <label>@lang('common.zip')<i class="red">*</i></label>
-                            <input type="text" name="zip_code" id="zip_code">
+                            <!-- <input type="text" name="zip_code" id="zip_code"> -->
+                            <select class="address_dd" name="zip_code" id="zip_code" address_seq="5"></select>
                             <span id="error_zip_code" class="error-msg"></span>
                         </div>
                         <div class="col-sm-6">
