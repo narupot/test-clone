@@ -63,7 +63,7 @@
                         <form action="{{action('ProductsController@search')}}" method="GET" id="searchForm" accept-charset="UTF-8">
                             <div class="search-group">
                                 <input type="hidden" name="searchtype" value="all" class="searchtype">
-                                <input type="hidden" name="totalCount" value="" class="totalCount">
+                                <input type="hidden" name="totalCount" value="0" class="totalCount">
                                 <!--div class="nav-search-select">
                                     <div class="nav-search-selected">
                                         <span class="nav-search-text">@lang('product.product')</span> 
@@ -209,7 +209,7 @@
             classes: {
               "ui-autocomplete": "search-dropdown"
             },
-            change: function( event, ui ) {
+            response: function( event, ui ) {
                totalCount = 0;  
                $("input[name='totalCount']").val(totalCount);  
             },
@@ -288,7 +288,7 @@
                 //return false;
                 if(totalCountf == 1){
                     var searchUrl = $("ul#ui-id-1 li.product_0 a").attr('href');
-                    if(searchUrl == ''){
+                    if(searchUrl === undefined){
                        var searchUrl = $("ul#ui-id-1 li.shop_0 a").attr('href');  
                     }
                     window.location.href = searchUrl;
