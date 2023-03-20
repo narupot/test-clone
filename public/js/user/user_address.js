@@ -191,7 +191,8 @@ function dropDownHandler(address_id, address_type, address_seq){
         if(address_type == 'province_state') {
             $('#zip_code').val('');
         }else if(address_type == 'city_district') {
-            $('#zip_code').val(response.zip_code);
+            //$('#zip_code').val(response.zip_code);
+            $('#zip_code').html(response.zip_data);
         }
 
         cleanChildSelectBox(address_seq);        

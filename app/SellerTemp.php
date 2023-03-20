@@ -54,6 +54,7 @@ class SellerTemp extends Model
                 $seller_obj->account_name   = $temp_data->account_name;
                 $seller_obj->account_no     = $temp_data->account_no;
                 $seller_obj->branch         = $temp_data->branch;
+                $seller_obj->branch_code    = $temp_data->branch_code;
                 $seller_obj->account_image  = $temp_data->account_image;
                 $seller_obj->status         = '1';
                 $seller_obj->save();
