@@ -57,8 +57,8 @@ class CartNotificationForExpire extends Command
                 $order_time_in_mint = floor(abs($current_time-$order_time_in_cart)/60);
                 if($order_time_in_mint >= 120 && $order_time_in_mint < 150){
                      //dd($order, $order_time_in_cart, $current_time, $order_time_in_mint);
-                     $messageTitle = $title. '1 ชม';
-                     $messageBody = $body. '1 ชม';
+                     $messageTitle = $title. '1 ชั่วโมง';
+                     $messageBody = $body. '1 ชั่วโมง';
                      if($order->noti_60 == '2'){
                          $sendNoti = 1; 
                          $order->noti_60 = '1';
