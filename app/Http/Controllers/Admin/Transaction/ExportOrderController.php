@@ -352,6 +352,17 @@ class ExportOrderController extends MarketPlace
             $main_data = $h_data."\n".$p_data."\n".$i_data.$t_data;
             if($eny_type=='with_enc'){
                 $main_data = iconv('utf8', 'tis620', $main_data);
+                $pub_path = Config::get('constants.public_path');
+                $key_path = @file_get_contents($pub_path.'/KBankH2HPGPProdKey.asc');
+                $gpg = new \gnupg();
+                $gpg->seterrormode(\gnupg::ERROR_EXCEPTION);
+                $info_key = $gpg->import($key_path);
+                $fingerprint = $info_key['fingerprint'];
+                $gpg->addencryptkey($fingerprint);
+                $main_data = $gpg->encrypt($main_data);
+
+                /*$dec_check = $gpg_dep->adddecryptkey($fingerprint,'');
+                $dec =  $gpg_dep->decrypt($main_data);*/
             }
             
             if($tot_order){
