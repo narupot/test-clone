@@ -34,7 +34,6 @@
             <div class="col-sm-12"> 
                 <div class="shadow-box">
                     <form action="{{action('Admin\Transaction\ShopOrderController@sellerDetail')}}" method="GET" enctype="multipart/form-data">
-                        <h2>Start Design</h2>
                         <div class="row">
                             <div class="col-sm-2 form-group">
                                 <input type="text" class="date-picker" name="startDate" />
@@ -46,8 +45,6 @@
                                 <button type="button" class="btn btn-primary">@lang('admin_report.apply')</button>
                             </div>
                         </div>
-                        <h2>End Design</h2>
-
                         <div class="row">
                             <div class="col-sm-4 form-group">
                                 <label>@lang('admin_report.date') <i class="red">*</i></label>
@@ -117,30 +114,32 @@
 
                     <h2 class="mb-2">@lang('admin_order.shop_order') </h2>
                     <div class="border-box order-table border-none">
-                        <div class="table-wrapper cart-col col-sm-6">
-                            <div class="table">
-                                <div class="table-header">
-                                    <ul>
-                                        <li class="text-center font-weight-bold">@lang('admin_order.shop_order_id')</li>
-                                        <li class="text-center font-weight-bold">@lang('checkout.grand_total')</li>
-                                    </ul>
-                                </div>
-                                <div class="table-content">
-                                    @foreach($order_shop as $key => $val)
-                                        
-                                        <ul class="rowWrap">
-                                            <li>{{$val->shop_formatted_id}}</li> 
-                                            <li>
-                                                {{numberFormat($val->total_final_price) }} @lang('common.baht')
-                                            </li> 
-                                            
-                                                   
+                        <div class="row">
+                            <div class="table-wrapper cart-col col-sm-6">
+                                <div class="table">
+                                    <div class="table-header">
+                                        <ul>
+                                            <li class="text-center font-weight-bold">@lang('admin_order.shop_order_id')</li>
+                                            <li class="text-center font-weight-bold">@lang('checkout.grand_total')</li>
                                         </ul>
-                                    @endforeach                     
-                                    
+                                    </div>
+                                    <div class="table-content">
+                                        @foreach($order_shop as $key => $val)
+                                            
+                                            <ul class="rowWrap">
+                                                <li>{{$val->shop_formatted_id}}</li> 
+                                                <li>
+                                                    {{numberFormat($val->total_final_price) }} @lang('common.baht')
+                                                </li> 
+                                                
+                                                       
+                                            </ul>
+                                        @endforeach                     
+                                        
+                                    </div>
                                 </div>
+                                
                             </div>
-                            
                         </div>
                     </div>
                     
