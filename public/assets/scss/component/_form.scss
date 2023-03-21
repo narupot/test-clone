@@ -3,7 +3,7 @@
 }
 input[type="text"],input[type="email"],input[type="password"],
 input[type="tel"],input[type="number"], input[type="search"] , textarea, select {
-	display: block;
+
 	width: 100%;	
 	padding: $input-padding-y $input-padding-x; 
 	font-size: $input-font-size;
@@ -15,6 +15,14 @@ input[type="tel"],input[type="number"], input[type="search"] , textarea, select 
 	border-radius: $input-border-radius;
 	@include box-shadow($input-box-shadow);
 	@include transition($input-transition);	
+	&.fc-lg {
+		line-height: $input-line-height;
+		border-radius: 0.3rem;
+	}
+	&.fc-sm {
+		line-height: $input-line-height;
+		border-radius: 0.3rem;
+	}
 	&:disabled, &.disabled, {
 		background-color: $default;
 		opacity: 1;
@@ -24,16 +32,16 @@ input[type="tel"],input[type="number"], input[type="search"] , textarea, select 
 		}	
 	}
 	&:focus, &.focus {
-		/*color: $input-focus-color;*/
-		/*background-color: $input-focus-bg;*/
-		/*border-color: $input-focus-border-color;*/
+		color: $input-focus-color;
+		background-color: $input-focus-bg;
+		border-color: $input-focus-border-color;
 		outline: 0;
 		box-shadow: 0 0 0 0.2rem rgba(197,197,197,.25);
 	}
 	&:hover, &.hover {
-		/*color: $input-hover-color;*/
-		/*background-color: $input-hover-bg;*/
-		/*border-color: $input-hover-border-color;*/
+		color: $input-hover-color;
+		background-color: $input-hover-bg;
+		border-color: $input-hover-border-color;
 		outline: 0;
 	}
 	&.error, &.is-invalid {
@@ -51,7 +59,7 @@ input[type="tel"],input[type="number"], input[type="search"] , textarea, select 
 	color: $error;
 	margin-top: $error-msg-mt;
 	font-size: $error-msg-font-size;
-	display: none;
+	/*display: none;*/
 }
 .inputgroup {
 	position: relative;
@@ -265,7 +273,7 @@ textarea {
 input[type="submit"], button[type="button"], input[type="button"],
 .btn-primary, .btn-success, .btn-secondary, .btn-danger, .btn-warning, .btn-info,
 .btn-outline-primary, .btn-outline-secondary, .btn-outline-info, .btn-outline-success,
-.btn-outline-warning, .btn-outline-danger, .btn-outline, .btn-default {
+.btn-outline-warning, .btn-outline-danger, .btn-outline, .btn-default, .btn-dark, .btn-back, .btn-create {
 	display: inline-block;
 	font-weight: 100;
 	text-align: center;
@@ -279,7 +287,7 @@ input[type="submit"], button[type="button"], input[type="button"],
 	border-radius: $input-border-radius;
 	@include button-size($btn-padding-y, $btn-padding-x, $btn-font-size, $btn-line-height, $btn-border-radius);
 	@include transition(background-color 0.4s .3s, color 0.8s);	
-	min-width: 85px;
+	/*min-width: 85px;*/
 	  &:not(:disabled):not(.disabled) {
 	    cursor: pointer;
 	  }	  
