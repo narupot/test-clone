@@ -139,7 +139,7 @@
     $(document).ready(function() {
         $('#table').dataTable();
 
-        $('select.selectpicker').selectpicker();
+        // jQuery('select.selectpicker').selectpicker();
 
     });
     </script>
