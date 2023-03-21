@@ -7,6 +7,12 @@
 @section('header_styles')
     <link rel="stylesheet" type="text/css" href="{{Config('constants.admin_css_url') }}order.css">
     <link rel="stylesheet" type="text/css" href="{{Config('constants.css_url') }}flatpickr.min.css">
+    <style type="text/css">
+        .order-table .table-content ul:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+    </style>
 @stop
 
 @section('content')
@@ -28,6 +34,20 @@
             <div class="col-sm-12"> 
                 <div class="shadow-box">
                     <form action="{{action('Admin\Transaction\ShopOrderController@sellerDetail')}}" method="GET" enctype="multipart/form-data">
+                        <h2>Start Design</h2>
+                        <div class="row">
+                            <div class="col-sm-2 form-group">
+                                <input type="text" class="date-picker" name="startDate" />
+                            </div>
+                            <div class="col-sm-2 form-group">
+                                <input type="text" class="date-picker" name="endDate" />
+                            </div>
+                            <div class="col-sm-2 form-group">
+                                <button type="button" class="btn btn-primary">@lang('admin_report.apply')</button>
+                            </div>
+                        </div>
+                        <h2>End Design</h2>
+
                         <div class="row">
                             <div class="col-sm-4 form-group">
                                 <label>@lang('admin_report.date') <i class="red">*</i></label>
@@ -45,7 +65,7 @@
                         <div class="col-sm-12">
                             <div class="border-box mb-5">
                                 <div class="clearfix buy-pay-add">
-                                    <h3 class="buy-title">@lang('admin_shop.shop_detail')</h3>
+                                    <h3 class="buy-title font-weight-bold">@lang('admin_shop.shop_detail')</h3>
                                     <div class="row">
                                         <div class="col-sm-3">
                                             <div class="tInfo-row">
@@ -58,31 +78,31 @@
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="tInfo-row">
-                                                <label>@lang('shop.market') : </label>
+                                                <label class="font-weight-bold">@lang('shop.market') : </label>
                                                 {{$shop_details->market}}
                                             </div>
                                             <div class="tInfo-row">
-                                                <label>@lang('shop.panel') : </label>
+                                                <label class="font-weight-bold">@lang('shop.panel') : </label>
                                                 {{$shop_details->panel_no}}
                                             </div>
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="tInfo-row">
-                                                <label>@lang('shop.store_url') : </label>
+                                                <label class="font-weight-bold">@lang('shop.store_url') : </label>
                                                 {{$shop_details->shop_url}}
                                             </div>
                                             <div class="tInfo-row">
-                                                <label>@lang('common.phone_number') : </label>
+                                                <label class="font-weight-bold">@lang('common.phone_number') : </label>
                                                 {{$shop_details->ph_number}}
                                             </div>
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="tInfo-row">
-                                                <label>@lang('admin_customer.seller_description') : </label>
+                                                <label class="font-weight-bold">@lang('admin_customer.seller_description') : </label>
                                                 {{$shop_details->shopDesc->description}}
                                             </div>
                                             <div class="tInfo-row">
-                                                <label>@lang('shop.shop_status') : </label>
+                                                <label class="font-weight-bold">@lang('shop.shop_status') : </label>
                                                 {{$shop_details->shop_status}}
                                             </div>
                                         </div>
@@ -101,13 +121,14 @@
                             <div class="table">
                                 <div class="table-header">
                                     <ul>
-                                        <li>@lang('admin_order.shop_order_id')</li> <li>@lang('checkout.grand_total')</li>
+                                        <li class="text-center font-weight-bold">@lang('admin_order.shop_order_id')</li>
+                                        <li class="text-center font-weight-bold">@lang('checkout.grand_total')</li>
                                     </ul>
                                 </div>
                                 <div class="table-content">
                                     @foreach($order_shop as $key => $val)
                                         
-                                        <ul>
+                                        <ul class="rowWrap">
                                             <li>{{$val->shop_formatted_id}}</li> 
                                             <li>
                                                 {{numberFormat($val->total_final_price) }} @lang('common.baht')

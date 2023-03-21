@@ -18,6 +18,9 @@
              @if($permission_arr['add'] === true)
             <div class="float-right">
                 <a class="btn btn-create" href="{{ action('Admin\Config\PaymentBankController@create') }}"> @lang('admin_common.create_new')</a> 
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bankPaymentOption">
+                  Add Bank
+                </button>
             </div>
           
             @endif
@@ -61,11 +64,11 @@
                     <tr>
                         <td>{{ ++$key }}</td>
                         <td>{{ $bank_dtl->paymentBankName->bank_name }}</td>
-                        <td>@if($bank_dtl->bank_image) <img style="max-width: 48px;max-height: 48px;border-radius: 8px;float: none;margin: 0 auto;" src="{{ Config::get('constants.payment_bank_url').$bank_dtl->bank_image }}"> @endif</td>
+                        <td>@if($bank_dtl->bank_image) <img style="max-width: 48px;max-height: 48px;border-radius: 8px;float: none;margin: 0 auto;" src="{{ Config::get('constants.payment_bank_url').$bank_dtl->bank_image }}"></a> @endif</td>
                         <td> {{ getDateFormat($bank_dtl->created_at, '1') }}</td>
                         <td>{{ getDateFormat($bank_dtl->updated_at, '1') }}</td>
                         <th>
-                            <label class="button-switch mr-2 mb-0" style="height: 1.5rem;">
+                            <label class="button-switch mb-0" style="height: 1.5rem;">
                                <input type="checkbox" class="switch switch-orange" checked="checked" value="" name="status">
                                <span for="switch-orange" class="lbl-off">Off</span>
                                <span for="switch-orange" class="lbl-on">On</span>
@@ -93,6 +96,37 @@
             </table>
         </div>
     </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="bankPaymentOption" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <span class="close fa fa-times" data-dismiss="modal"></span>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+                <select title="Select your surfboard" class="selectpicker">
+                  <option>กสิกรไทย</option>
+                  <option data-thumbnail="images/icon-chrome.png">กสิกรไทย</option>
+                  <option data-thumbnail="images/icon-firefox.png">กสิกรไทย</option>
+                  <option data-thumbnail="images/icon-ie.png">กสิกรไทย</option>
+                  <option data-thumbnail="images/icon-opera.png">กสิกรไทย</option>
+                  <option data-thumbnail="images/icon-safari.png">กสิกรไทย</option>
+                </select>
+            </div>
+            <div>
+                <div class="bankCode">BANK CODE: - HSBC1</div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary">Create New</button>
+          </div>
+        </div>
+      </div>
+    </div>
 @stop
 
 @section('footer_scripts')
@@ -104,6 +138,9 @@
     <script>
     $(document).ready(function() {
         $('#table').dataTable();
+
+        $('select.selectpicker').selectpicker();
+
     });
     </script>
     <!-- end of page level js -->
