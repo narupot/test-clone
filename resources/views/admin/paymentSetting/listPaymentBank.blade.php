@@ -62,7 +62,7 @@
                         <td>{{ ++$key }}</td>
                         <td>{{ $bank_dtl->paymentBankName->bank_name }}</td>
                         <td>@if($bank_dtl->bank_image) <img style="max-width: 48px;max-height: 48px;border-radius: 8px;float: none;margin: 0 auto;" src="{{ Config::get('constants.payment_bank_url').$bank_dtl->bank_image }}"> @endif</td>
-                        <td>{{ getDateFormat($bank_dtl->created_at, '1') }}</td>
+                        <td> {{ getDateFormat($bank_dtl->created_at, '1') }}</td>
                         <td>{{ getDateFormat($bank_dtl->updated_at, '1') }}</td>
                         <th>
                             <label class="button-switch mr-2 mb-0" style="height: 1.5rem;">
