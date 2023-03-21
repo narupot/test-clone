@@ -183,6 +183,15 @@
             Route::post('change-status', 'Admin\Transaction\ExportOrderController@changeStatus');
         });
 
+        Route::get('generate-txt', 'Admin\Transaction\ExportOrderController@generateTxt');
+        
+        Route::post('import-txt', 'Admin\Transaction\ExportOrderController@importTxt');
+
+        Route::get('shop-detail', 'Admin\Transaction\ShopOrderController@sellerDetail');
+
+        Route::get('seller-order-export', 'Admin\Transaction\ShopOrderController@sellerOrder');
+        Route::get('listSellerOrderData', 'Admin\Transaction\ShopOrderController@listSellerOrderData');
+
         Route::group(array('prefix' => 'shop-order'), function() {
             Route::get('/', 'Admin\Transaction\ShopOrderController@index');
             Route::get('listOrderData', 'Admin\Transaction\ShopOrderController@listOrderData');
@@ -777,3 +786,4 @@ Route::post('pagelimit', 'JsonController@pageLimit');
 Route::get('seller-item-scv', 'SyncController@itemcsv');
 Route::get('seller-customer-scv', 'SyncController@customercsv');
 Route::get('seller-data', 'SyncController@sellerdata');
+Route::get('new-seller-data', 'SyncController@newsellerdata');

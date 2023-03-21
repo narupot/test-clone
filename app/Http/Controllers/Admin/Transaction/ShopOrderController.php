@@ -215,10 +215,116 @@ class ShopOrderController extends MarketPlace
         return ['status'=>'fail','msg'=>\Lang::get('admin_common.something_went_wrong')];
     }
     
-    public function create(){
+    public function sellerOrder(Request $request){
+        $permission = $this->checkUrlPermission('seller_order_export');
+        if($permission === true) {
+            $filter_date = null;
+            if (!empty($request->filter_date)) {
+                $filter_date = $request->filter_date;
+            }
+            $filter = $this->getFilter('seller_order_export');
+           
+            return view('admin.transaction.listSellerOrder', ['filter'=>$filter,'filter_date'=>$filter_date]);
+        }
+    }
+
+    public function listSellerOrderData(Request $request){
+        $perpage = !empty($request->pq_rpp) ? $request->pq_rpp : 10;
+        $request->page = $current_page = !empty($request->pq_curpage)?$request->pq_curpage:0;
+
+        $start_index = ($current_page - 1) * $perpage;
+        //dd($perpage,$request->page);
+        
+        $order_by = 'sord.id';
+        $order_by_val = 'desc';
+        if(isset($request->pq_sort)){
+            $sort_data = jsonDecodeArr($request->pq_sort);
+            $order_by = $sort_data[0]['dataIndx'];
+            $order_by_val = ($sort_data[0]['dir']=='up')?'asc':'desc';
+            if($order_by=='end_shopping_date_time'){
+                $order_by = 'end_shopping_date';
+            }
+        }
+
+        try{
+            $filter_date = $request->filter_date;
+            $prefix = DB::getTablePrefix();
+            $default_lang = 0;
+            $query = \DB::table(with(new OrderShop)->getTable().' as sord')
+                  ->join(with(new \App\Seller)->getTable().' as seller', 'sord.shop_user_id', '=', 'seller.user_id')
+                  ->leftjoin(with(new \App\PaymentBankDesc)->getTable().' as pbd', [['seller.bank_id', '=', 'pbd.payment_bank_id'], ['pbd.lang_id', '=', DB::raw($default_lang)]])
+                  ->select(DB::raw('sum(' . $prefix . 'sord.total_final_price) as tot_amount'),'sord.shop_id','sord.shop_json','pbd.bank_name')
+                  ->whereDate('sord.end_shopping_date',$filter_date);
+            
+            if(isset($request->pq_filter)){
+                $filter_req = json_decode($request->pq_filter,true);
+                if(!empty($filter_req['data'])){
+                    $filter_arr = $filter_req['data'];
+                    foreach ($filter_arr as $fkey => $fvalue) {
+
+                        $searchval = $fvalue['value'];
+                        switch ($fvalue['dataIndx']) {
+                            
+                            case 'shop_name':$query->where('sord.shop_json','like', '%'.$searchval.'%'); break;
+                            
+                            case 'seller_name':$query->where('sord.shop_json','like', '%'.$searchval.'%'); break;
+
+                        }
+                        
+                    }
+                }
+            }
+            $query->groupBy('sord.shop_id');
+            $response = $query->orderBy($order_by,$order_by_val)->paginate($perpage,['*'],'page',$current_page);
+            $totrec = $response->total();
+            //dd($response);
+            if($start_index >= $totrec) {
+                $current_page = ceil($totrec/$perpage);
+                
+                $response = $query->orderBy($order_by,$order_by_val)->paginate($perpage,['*'],'page',$current_page);
+            }
+
+            foreach ($response as $key => $value) {
+                $json_data = json_decode($value->shop_json);
+                $seller_name = $json_data->seller_name;
+                $shop_name = $json_data->shop_name[0];
+                $panel_no = $json_data->panel_no;
+                $amount = numberFormat($value->tot_amount);
+                $response[$key]->id = $value->shop_id;
+                $response[$key]->seller_name = $seller_name;
+                $response[$key]->shop_name = $shop_name;
+                
+                $response[$key]->panel_no = $panel_no;
+                $response[$key]->amount = $amount;
+                $response[$key]->detail_url = action('Admin\Transaction\ShopOrderController@sellerDetail').'?shop_id='.$value->shop_id.'&order_date='.$filter_date;
+            }
+
+            /***save filter****/
+            $this->setFilter('seller_order_export',$request);
+
+            
+        }catch(QueryException $e){
+            $response = ['status'=>'fail','msg'=>$e->getMessage()];
+        }
+        
+
+        return $response;
     }
     
-    function store(Request $request){
+    public function sellerDetail(Request $request) {
+
+        $shop_id = $request->shop_id; 
+        $date = $request->order_date;
+        $shop_details = \App\Shop::where('id',$shop_id)->with(['shopDesc'])->first();
+        if(!$shop_details){
+            abort(404);
+        }
+        $order_shop = [];
+        if($date){
+            $order_shop = \App\OrderShop::where('shop_id',$shop_id)->whereDate('end_shopping_date',$date)->get();
+        }
+        
+        return view('admin.transaction.sellerDetail',['shop_details'=>$shop_details,'order_shop'=>$order_shop,'order_date'=>$date]);
     }
     
     function edit($group_id){

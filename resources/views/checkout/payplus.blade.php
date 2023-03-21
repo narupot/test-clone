@@ -87,7 +87,7 @@
     <script>
         var submit_url = "{{action('Checkout\CartController@createPayPlusOrder',$orderInfo->formatted_id)}}";
         var check_url = "{{action('Checkout\PaymentGatewayController@payplusCheck')}}";
-        var waiting_url = "{{action('Checkout\CartController@payplusWaiting')}}";
+        var waiting_url = "{{action('Checkout\CartController@payplusWaiting',$orderInfo->formatted_id)}}";
         function PopupCenter(url, title, w, h) {
 
             var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : window.screenX;
@@ -105,14 +105,14 @@
             return newWindow;
         }
 
-        function CheckPayment(invoice,newWindow) {
+        function CheckPayment(invoice) {
             $.get(check_url+'/'+invoice,function (data,status) {
                 if(data.status == "success"){
-                    newWindow.close();
+                    showHideLoader('hideLoader');
                     window.location.href = data.url;
                 }else{
                     setTimeout(function () {
-                        CheckPayment(invoice,newWindow);
+                        CheckPayment(invoice);
                     },3000);
                 }
             });
@@ -132,10 +132,12 @@
                             phone : number
                         },function (data, status) {
                             console.log(data);
-                            url = window.location.href.replace("checkout","");
-                            newWindow = PopupCenter(waiting_url+'/'+data,'Payment',400,500);
+                            window.location.href = waiting_url;
+                            /*url = window.location.href.replace("checkout","");
+                            newWindow = PopupCenter(waiting_url+'/'+data,'Payment',400,500);*/
                             object = JSON.parse(atob(data));
-                            CheckPayment(object.invoice,newWindow);
+                            CheckPayment(object.invoice);
+                            showHideLoader('showLoader');
                         });
 
                     }

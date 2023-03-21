@@ -50,7 +50,7 @@ var branch_list_url = "{{action('Auth\SellerRegisterController@getBranchList')}}
 
                     <div class="form-group seller-paybanktab" id="slrbankBranchTab">
                              <select data-placeholder="Choose Branch List..." id="branch_select" style="width:250px;" tabindex="2" name="branch_id">
-                    
+                                 <option value="">@lang('shop.select_branch')</option>     
                             </select>
                             <p class="error" id="e_branch_id"></p> 
                     </div>
@@ -67,8 +67,13 @@ var branch_list_url = "{{action('Auth\SellerRegisterController@getBranchList')}}
                     </div>
                     <div class="form-group">
                         <label>@lang('shop.branch')<i class="red">*</i></label>
-                        <input type="text" name="branch">
+                        <input type="text" name="branch" value="">
                         <p class="error" id="e_branch"></p>
+                    </div>
+                    <div class="form-group">
+                        <label>@lang('shop.branch_code')<i class="red">*</i></label>
+                        <input type="text" name="branch_code" value="">
+                        <p class="error" id="e_branch_code"></p>
                     </div>
                     <div class="form-group">
                         <label>@lang('common.attach') @lang('shop.book_bank')</label>                     
@@ -91,7 +96,9 @@ var branch_list_url = "{{action('Auth\SellerRegisterController@getBranchList')}}
 
 <script type="text/javascript">
 
-
+   var langMsg = {
+        "select_branch":"@lang('shop.select_branch')"        
+    };
     $(document).ready(function(){
         $(".my-select").chosenImage({
           disable_search_threshold: 10 

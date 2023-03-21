@@ -63,6 +63,7 @@
                         <form action="{{action('ProductsController@search')}}" method="GET" id="searchForm" accept-charset="UTF-8">
                             <div class="search-group">
                                 <input type="hidden" name="searchtype" value="all" class="searchtype">
+                                <input type="hidden" name="totalCount" value="0" class="totalCount">
                                 <!--div class="nav-search-select">
                                     <div class="nav-search-selected">
                                         <span class="nav-search-text">@lang('product.product')</span> 
@@ -159,6 +160,7 @@
        var availableTags = "{{action('ProductsController@autosearch')}}";
        var searchUrl = "{{action('ProductsController@search')}}?search=";   
        var stype = 'product';
+       var totalCount = 0;
        //Listen on hightliter
        function highlighter (item) {
            var word = $('#searchProduct').val();
@@ -171,7 +173,9 @@
                        });
                    }
             }
-            return html;                    
+            
+            return html;
+                                
        };
         
         $('#searchtype').on('change', function() {
@@ -193,7 +197,6 @@
             var searchUrl = "{{url('/')}}/shop?search="; */
 
           var searchUrl = "{{action('ProductsController@search')}}?search="; 
-          
           $("form#searchForm #searchProduct").autocomplete({
             source: availableTags+'?searchtype='+$('.searchtype').val(),
             autoFocus: false,
@@ -205,6 +208,10 @@
             }, 
             classes: {
               "ui-autocomplete": "search-dropdown"
+            },
+            response: function( event, ui ) {
+               totalCount = 0;  
+               $("input[name='totalCount']").val(totalCount);  
             },
             open: function(event, ui) {
                 var searchtext =  $('#searchProduct').val();
@@ -235,6 +242,9 @@
               }else{
                 var html = $("<li class='shop-wrap "+item.type+"_"+item.i+"'>").append('<a href="'+item.url+'"><div class="search-img"><img src="'+item.image+'" width="60"></div><div class="search-prod-desc clearfix"><span class="name link-product-name">'+names+'</span> <div class="price-wrap">'+specialhtml+'</div><div class="inner-info">'+item.shop_name+'</div></div></a>').appendTo(ul);  
               }
+
+              totalCount++;
+              $("input[name='totalCount']").val(totalCount);
               
               //var html = $("<li>").append('<a href="'+item.url+'"><div class="search-img"><img src="'+item.image+'" width="60"></div><div class="search-prod-desc clearfix"><span class="name d-block link-product-name">'+names+'</span> <div class="price-wrap">'+specialhtml+'</div></div></a>').appendTo(ul);  
               return html;
@@ -245,7 +255,11 @@
         // $('#searchProduct').keypress(function(){
         //     resetAutocomplete();
         // }); 
-        $("#searchProduct").keypress(function(){  
+        $("#searchProduct").keypress(function(e){
+            /*if (e.key !== "Enter") {
+                totalCount = 0;  
+                $("input[name='totalCount']").val(totalCount);
+            }*/    
             resetAutocomplete();
         });   
 
@@ -269,8 +283,23 @@
                 else
                   var searchUrl = "{{url('/')}}/shop?search=";  */
 
-                var searchUrl = "{{action('ProductsController@search')}}?search=";
-
+                var totalCountf = $("input[name='totalCount']").val();
+                //alert(totalCountf);
+                //return false;
+                if(totalCountf == 1){
+                    var searchUrl = $("ul#ui-id-1 li.product_0 a").attr('href');
+                    if(searchUrl === undefined){
+                       var searchUrl = $("ul#ui-id-1 li.shop_0 a").attr('href');  
+                    }
+                    window.location.href = searchUrl;
+                    return false;
+                }
+                else{
+                  //var searchUrl = "{{url('/')}}/shop?search=";
+                  var searchUrl = "{{action('ProductsController@search')}}?search=";
+                }
+                
+                //var searchUrl = "{{action('ProductsController@search')}}?search=";
                 $('#searchForm').attr('action', searchUrl);
             }); 
         })

@@ -22,9 +22,8 @@ class SyncMongoController extends MarketPlace
         $prd = \App\Product::count();
         
         $mon = \App\MongoProduct::count();
-        $unit_c = \App\MongoUnit::count();
-        //dd($category);
-        //dd($request->all(),$prd,$mon);
+        
+        dd($request->all(),$prd,$mon);
         
         if(isset($request->sync)){
             $sync = explode(',',$request->sync);
@@ -70,6 +69,7 @@ class SyncMongoController extends MarketPlace
     public function unitSync(){
 
         $data = \App\Unit::with('unitdescAll')->get();
+        $delete = \App\MongoUnit::where('_id','>',0)->delete();
         foreach ($data as $key => $value) {
             $up = \App\MongoUnit::updateData($value);
         }
@@ -79,6 +79,7 @@ class SyncMongoController extends MarketPlace
     public function badgeSync(){
 
         $data = \App\Badge::with('descAll')->get();
+        $delete = \App\MongoBadge::where('_id','>',0)->delete();
         foreach ($data as $key => $value) {
             $up = \App\MongoBadge::updateData($value);
         }
@@ -86,7 +87,7 @@ class SyncMongoController extends MarketPlace
     }
 
     public function packageSync(){
-
+        $delete = \App\MongoPackage::where('_id','>',0)->delete();
         $data = \App\Package::with('packagedescAll')->get();
         foreach ($data as $key => $value) {
             $up = \App\MongoPackage::updateData($value);
@@ -95,7 +96,7 @@ class SyncMongoController extends MarketPlace
     }
 
     public function categorySync(){
-
+        $delete = \App\MongoCategory::where('_id','>',0)->delete();
         $data = \App\Category::with('descAll')->with('Units')->get();
 
         foreach ($data as $key => $value) {
@@ -106,6 +107,7 @@ class SyncMongoController extends MarketPlace
     }
 
     public function shopSync(){
+        $delete = \App\MongoShop::where('_id','>',0)->delete();
         $shop_data = \App\Shop::with('allDesc')->with('shopUser')->get();
         foreach ($shop_data as $key => $value) {
             $check_cat = \App\ShopAssignCategory::where(['shop_id'=>$value->id])->pluck('category_id')->toArray();
@@ -115,6 +117,7 @@ class SyncMongoController extends MarketPlace
     }
 
     public function productSync(){
+        $delete = \App\MongoProduct::where('_id','>',0)->delete();
         $products = \App\Product::get();
         foreach ($products as $key => $product) {
             $product_id = $product->id;

@@ -19,7 +19,7 @@
                     <li class="col-sm-4 <%list_class%>"  data-ng-repeat="item in product_Items | limitTo:pagination.itemsPerPage">
                         <div class="product-container">
                             <div class="prod-img">
-                                <a href="<%item.url%>">
+                                <a href="<%item.shop.shop_url%>">
                                     <img ng-src="<%loader.img_load%>"  data-original="<%item.thumbnail_image%>" jq-lazy>
                                 </a>
                                 @if(Auth::check())
@@ -47,7 +47,7 @@
                                   <div class="filled-stars" style="width: <% item.avg_star*20%>%"></div>
                                </div>
                                <div class="shop-name">
-                                    <a ng-href="<%item.shop.shop_url%>" ng-bind="item.shop.shop_name"></a>
+                                    <a href="javascript:void(0);" class="" ng-bind="item.shop.shop_name"></a>
                                </div>
                                <div class="price-wrap" ng-if="item.show_price == 1">
                                     <div class="price"><%item.weight_per_unit%> <%item.unit_name%>/<%item.package_name%> <br><%item.unit_price%> @lang('common.baht')</div>
@@ -64,7 +64,7 @@
                                     <!-- <span class="size">@lang('product.badge_size') : <%item.badge.size%></span> -->
                                     <!-- <span class="quality">@lang('product.badge_quality') : <%item.badge.grade%></span> -->
                                </div>
-                               @if(Auth::check())
+                               {{--@if(Auth::check())
                                    <div class="add-shippinglist d-none" ng-if="((item.show_price.toString()=='1' && item.stock == 1) || (item.show_price.toString()=='1' && item.stock == 0 && item.quantity>=1))">
                                         <a href="javascript:void(0);" data-url="<%item.shopping_url%>" ng-click="addToShoppinglistHandler($event, item)" ><i class="fas fa-pencil-alt"></i>  + @lang('product.add_to_shopping_list')</a>
                                    </div>
@@ -93,7 +93,7 @@
                                     <span class="action-btn" ng-if="item.show_price.toString()=='0'">
                                         <a href="javascript:void(0);" data-toggle="modal" data-target="#loginModal" class="btn-grey"><i class="fas fa-comments"></i> @lang('product.quote')</a>
                                     </span>
-                                @endif
+                                @endif--}}
                                 <!-- product sold out -->
                             </div>
                         </div>
@@ -119,7 +119,7 @@
                             <ul data-ng-repeat="item in product_Items | limitTo:pagination.itemsPerPage">
                                 <li>
                                     <div class="product">
-                                        <a href="<%item.url%>">
+                                        <a href="<%item.shop.shop_url%>">
                                         <div class="prod-img">
                                             <img ng-src="<%loader.img_load%>"  data-original="<%item.thumbnail_image%>" jq-lazy>
                                             @if(Auth::check())
@@ -141,7 +141,7 @@
                                                 </div>
                                             </div>
                                             <div class="shop-name">
-                                                <a ng-href="<%item.shop.shop_url%>" ng-bind="item.shop.shop_name"></a>
+                                                <a href="<%item.shop.shop_url%>" class="text-underline" ng-bind="item.shop.shop_name"></a>
                                             </div>
                                             {{--
                                             <div class="desc">
@@ -177,26 +177,26 @@
                                                 <a href="javascript:void(0);" data-url="<%item.shopping_url%>" ng-click="addToShoppinglistHandler($event, item)" ><i class="fas fa-pencil-alt"></i>  + @lang('product.add_to_shopping_list')</a>
                                             </div>
                                             <div class="action-btn">                                 
-                                                <span class="chat-wrap btn-buyer-chat" data-val="<%item._id%>" ng-if="item.show_price.toString()=='1' ">
+                                                <!-- <span class="chat-wrap btn-buyer-chat" data-val="<%item._id%>" ng-if="item.show_price.toString()=='1' ">
                                                     <a href="javascript:void(0);" class="btn-default">
                                                         <i class="fas fa-comments"></i>
                                                     </a>  
-                                                </span> 
+                                                </span>  -->
                                                 <span class="" ng-if="item.show_price.toString()=='0'">
                                                     <a class="btn-grey" href="javascript:void(0)"><i class="fas fa-comments"></i> @lang('product.quote')</a>
                                                 </span>                                
-                                                <a class="btn-default btn-buyer-chat" data-val="<%item._id%>" ng-if="((item.show_price.toString()=='1' && item.stock == 1) || (item.show_price.toString()=='1' && item.stock == 0 && item.quantity>=1))"  href="javascript:void(0);" qty="<%item.order_qty_limit>0?'1':item.min_order_qty%>" rel="<%item._id%>"><i class="fas fa-comments"></i> @lang('product.talk_to_shop')</a>
-                                                <a href="javascript:void(0);" data-url="<%item.url%>" class="btn-blue" ng-click="addToCartHandler($event,'addtocart', item)" ng-if="((item.show_price.toString()=='1' && item.stock == 1) || (item.show_price.toString()=='1' && item.stock == 0 && item.quantity>=1))" ng-disabled="loader.disableBtn">@lang('product.add_to_cart')</a>
-                                                <a href="javascript:void(0);" data-url="<%item.url%>" ng-if="((item.show_price.toString()=='1' && item.stock == 1) || (item.show_price.toString()=='1' && item.stock == 0 && item.quantity>=1))" class="btn d-none" ng-click="addToCartHandler($event,'buynow', item)" ng-disabled="loader.disableBtn">@lang('product.buy_now')</a>
+                                                <!-- <a class="btn-default btn-buyer-chat" data-val="<%item._id%>" ng-if="((item.show_price.toString()=='1' && item.stock == 1) || (item.show_price.toString()=='1' && item.stock == 0 && item.quantity>=1))"  href="javascript:void(0);" qty="<%item.order_qty_limit>0?'1':item.min_order_qty%>" rel="<%item._id%>"><i class="fas fa-comments"></i> @lang('product.talk_to_shop')</a>
+                                                <a href="javascript:void(0);" data-url="<%item.url%>" class="btn-blue" ng-click="addToCartHandler($event,'addtocart', item)" ng-if="((item.show_price.toString()=='1' && item.stock == 1) || (item.show_price.toString()=='1' && item.stock == 0 && item.quantity>=1))" ng-disabled="loader.disableBtn">@lang('product.add_to_cart')</a>-->
+                                                <a href="javascript:void(0);" data-url="<%item.url%>" ng-if="((item.show_price.toString()=='1' && item.stock == 1) || (item.show_price.toString()=='1' && item.stock == 0 && item.quantity>=1))" class="btn d-none" ng-click="addToCartHandler($event,'buynow', item)" ng-disabled="loader.disableBtn">@lang('product.buy_now')</a> 
                                             </div> 
                                             <span ng-if="item.show_price.toString()=='1' && item.stock == 0 && item.quantity < 1" class="red"> @lang('product.out_of_stock')</span>
                                         @else
                                             <a href="#" data-toggle="modal" data-target="#loginModal" class="addshop-link" ng-if="((item.show_price.toString()=='1' && item.stock == 1) || (item.show_price.toString()=='1' && item.stock == 0 && item.quantity>=1))"><i class="fas fa-pencil-alt"></i> <span>+ @lang('product.add_to_shopping_list')</span></a>
                                             <div class="action-btn">
-                                                <a href="javascript:void(0);" data-toggle="modal" data-target="#loginModal" class="btn-default chat" ng-if="item.show_price.toString()=='1'"><i class="fas fa-comments"></i></a>
+                                                <!-- <a href="javascript:void(0);" data-toggle="modal" data-target="#loginModal" class="btn-default chat" ng-if="item.show_price.toString()=='1'"><i class="fas fa-comments"></i></a>
                                                 <a href="javascript:void(0)" data-toggle="modal" data-target="#loginModal" class="btn-default chat" ng-if="item.show_price.toString()=='0'">@lang('product.quote')</a>
                                                 <a href="javascript:void(0);" data-toggle="modal" data-target="#loginModal" class="btn-default bargain" ng-if="((item.show_price.toString()=='1' && item.stock == 1) || (item.show_price.toString()=='1' && item.stock == 0 && item.quantity>=1))"><i class="fas fa-comments"></i> @lang('product.talk_to_shop')</a>
-                                                <a href="javascript:void(0);" data-toggle="modal" data-target="#loginModal" class="btn-blue" ng-if="((item.show_price.toString()=='1' && item.stock == 1) || (item.show_price.toString()=='1' && item.stock == 0 && item.quantity>=1))">@lang('product.add_to_cart')</a>
+                                                <a href="javascript:void(0);" data-toggle="modal" data-target="#loginModal" class="btn-blue" ng-if="((item.show_price.toString()=='1' && item.stock == 1) || (item.show_price.toString()=='1' && item.stock == 0 && item.quantity>=1))">@lang('product.add_to_cart')</a> -->
                                                 <a href="javascript:void(0);" data-toggle="modal" data-target="#loginModal" class="btn d-none" ng-if="((item.show_price.toString()=='1' && item.stock == 1) || (item.show_price.toString()=='1' && item.stock == 0 && item.quantity>=1))">@lang('product.buy_now')</a>
                                             </div>
                                             <span ng-if="item.show_price.toString()=='1' && item.stock == 0 && item.quantity < 1" class="red"> @lang('product.out_of_stock')</span>

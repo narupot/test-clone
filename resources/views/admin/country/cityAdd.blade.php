@@ -108,7 +108,7 @@
                         <div class="form-group @if($errors->has('city_dn')) error @endif">
                             {!! CustomHelpers::fieldstabWithLanuage([['field'=>'text', 'name'=>'city_district_name','label'=>Lang::get('country.city_district_name').' <i class="strick">*</i>', 'cssClass'=>'city_dn', 'errorkey'=>'city_dn']], '1', $errors) !!}                       
                         </div>
-                        <div id="zip_div" class="form-group @if($errors->has('zip')) error @endif"
+                        {{--<div id="zip_div" class="form-group @if($errors->has('zip')) error @endif"
                             @if(($country_id=='1' || old('country') == '1') && ($district_type == '1' || old('district_type') == '1')) 
                             style="display: block;" 
                             @else 
@@ -120,7 +120,24 @@
                                 <p class="error error-msg">{{ $errors->first('zip') }}</p>
                             @endif                              
                                
-                        </div>                
+                        </div>  --}} 
+                        <div class="form-group" id="zip_div" class="form-group @if($errors->has('zip')) error @endif"
+                            @if(($country_id=='1' || old('country') == '1') && ($district_type == '1' || old('district_type') == '1')) 
+                            style="display: block;" 
+                            @else 
+                            style="display: none;" 
+                            @endif >
+                            <div class="row">
+                                <div class="col-md-8 col-lg-6 input_fields_wrap">
+                                    <label>@lang('admin_country.zip_code')</label>
+                                    <div class="col"><a href="javascript:;" class="btn btn-primary add_field_button" style="margin-bottom: 5px;"><i class="fa fa-plus align-baseline"></i></a></div>
+                                    <ui class="css-board"></ui>
+                                </div>
+                                @if ($errors->has('zip'))
+                                    <p class="error error-msg">{{ $errors->first('zip') }}</p>
+                                @endif 
+                            </div>
+                        </div>             
                         <div class="form-group">
                             <label>@lang('common.status')</label>
                             <select name="status">
@@ -144,5 +161,26 @@
     var ajax_url_province_list = "{{ action('Admin\Country\CityController@getProvinceList') }}";
     var ajax_url_city_list = "{{ action('Admin\Country\CityController@getCityList') }}";             
     </script>
-    <script type="text/javascript" src="{{ Config('constants.admin_js_url') }}cityAddEdit.js"></script>    
+    <script type="text/javascript" src="{{ Config('constants.admin_js_url') }}cityAddEdit.js"></script>
+    <script>
+        $(document).ready(function() {
+            var max_fields      = 10; //maximum input boxes allowed
+            var wrapper         = $(".input_fields_wrap .css-board"); //Fields wrapper
+            var add_button      = $(".add_field_button"); //Add button ID
+            
+            var x = 1; //initlal text box count
+            $(add_button).click(function(e){ //on add input button click
+                e.preventDefault();
+                if(x < max_fields){ //max input box allowed
+                    x++; //text box increment
+                    $(wrapper).append('<div class="row"><div class="col-sm-1"><span class="ui-icon ui-icon-arrowthick-2-n-s mt10"></span></div><div class="col-sm-10"><input type="text" name="zip[]" style="margin-bottom: 10px;"/></div><div class="col-sm-1"><span class="ui-icon ui-icon-minusthick removeCss cursor-pointer mt10"></span></div></div>'); //add input box
+                }
+            });
+            
+            $(wrapper).on("click",".removeCss", function(e){ //user click on remove text
+                e.preventDefault(); 
+                $(this).parent().parent().remove();
+            })
+        });   
+    </script>      
 @stop

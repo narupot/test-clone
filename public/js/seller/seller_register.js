@@ -140,13 +140,14 @@ jQuery('select[name="bank_id"]').change(function(e){
         return false;
     }
     var data = {bank_id:bank_id};
-
+    $('input[name="branch"]').val('');
+    $('input[name="branch_code"]').val('');
     callAjaxRequest(branch_list_url,'post',data,function(result){
         if(result.status=='success'){
-            var opt_html='';
+            var opt_html='<option value="">'+langMsg.select_branch+'</option>';
             $.each(result.data, function(key,val){
 
-                opt_html +='<option value="'+val.id+'">'+val.branch_name.branch_name+'</option>';
+                opt_html +='<option value="'+val.id+'##'+val.branch_code+'">'+val.branch_name.branch_name+'</option>';
               
             });
             $('#branch_select').html(opt_html);
@@ -159,6 +160,18 @@ jQuery('select[name="bank_id"]').change(function(e){
             jQuery('#e_store_name').html(result.msg);
         }
     });
+});
+
+jQuery('select[name="branch_id"]').change(function(e){
+   var val_arr = $(this).val().split("##");
+   var branch_name = $(this).find('option:selected').text();
+   if(val_arr){
+    $('input[name="branch"]').val(branch_name);
+    $('input[name="branch_code"]').val(val_arr[1]);
+   }else{
+    $('input[name="branch"]').val('');
+    $('input[name="branch_code"]').val('');
+   }
 });
 
 /***submit account info data******/
