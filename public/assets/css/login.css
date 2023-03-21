@@ -4,114 +4,52 @@
 	2) Header css
 	3) Footer css
 =========================*/
-@font-face {
-  font-family: 'helveticaneuemedium';
-  src: url("../fonts/helveticaneue_medium-webfont.eot");
-  src: url("../fonts/helveticaneue_medium-webfont.eot?#iefix") format("embedded-opentype"), url("../fonts/helveticaneue_medium-webfont.woff2") format("woff2"), url("../fonts/helveticaneue_medium-webfont.woff") format("woff"), url("../fonts/helveticaneue_medium-webfont.ttf") format("truetype"), url("../fonts/helveticaneue_medium-webfont.svg#helveticaneuemedium") format("svg");
-  font-weight: normal;
-  font-style: normal;
-  font-display: block; }
-@font-face {
-  font-family: 'helveticaneuelight';
-  src: url("../fonts/helveticaneue_light-webfont.eot");
-  src: url("../fonts/helveticaneue_light-webfont.eot?#iefix") format("embedded-opentype"), url("../fonts/helveticaneue_light-webfont.woff2") format("woff2"), url("../fonts/helveticaneue_light-webfont.woff") format("woff"), url("../fonts/helveticaneue_light-webfont.ttf") format("truetype"), url("../fonts/helveticaneue_light-webfont.svg#helveticaneuelight") format("svg");
-  font-weight: normal;
-  font-style: normal;
-  font-display: block; }
-@font-face {
-  font-family: 'helveticaneuebold';
-  src: url("../fonts/helvetica_neu_bold-webfont.eot");
-  src: url("../fonts/helvetica_neu_bold-webfont.eot?#iefix") format("embedded-opentype"), url("../fonts/helvetica_neu_bold-webfont.woff2") format("woff2"), url("../fonts/helvetica_neu_bold-webfont.woff") format("woff"), url("../fonts/helvetica_neu_bold-webfont.ttf") format("truetype"), url("../fonts/helvetica_neu_bold-webfont.svg#helveticaneuebold") format("svg");
-  font-weight: bold;
-  font-style: normal;
-  font-display: block; }
+@import url(../css/fonts.css);
 /*  Variable */
-
-html, body, .main-container {
-  height: 100%; }
-
-.container {
-  position: relative; }
+/*  Font size  */
+/*40px;*/
+/*36px;*/
+/*32px;*/
+/*30px;*/
+/*28px;*/
+/*24px;*/
+/*16px;*/
+/*14px;*/
+/*12px;*/
+/*10px;*/
+/*Border radius*/
+/* Global Section Variables */
+/* Mixin start here  
+=====================================*/
+/*Border Radius*/
+/* Transition */
+/* Padding */
+/* Modal Transition misin */
+/* Button variant */
+/* Button outline variant */
+/* button with custom colors */
+/* button with custom colors */
+/* Button Size variant */
+/* Pagination Mixin */
+body {
+  /*background: $grey-light;*/ }
 
 #wrapper {
-  /*padding:80px 0 10px 0;*/
-  /*	width: 100%; height: calc(100% - 160px);
-  	display: flex; align-items: center;*/ }
+  padding: 0 15px; }
   #wrapper #login {
     background: #fff;
-    box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
-    padding: 50px;
-    border-radius: 20px; }
-    #wrapper #login .check-wrap .chk-label {
-      color: #8A8A8A; }
-
-.powerby {
-  color: #E6E6E6;
-  font-size: 0.875rem;
-  text-align: center;
-  line-height: 20px;
-  margin-top: 12px; }
-  .powerby a {
-    color: #E6E6E6;
-    transition: all 0.5s; }
-    .powerby a:hover {
-      color: #2d99c2; }
-  .powerby .fa-phone-volume {
-    font-size: 1.125rem;
-    transform: rotate(-40deg); }
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    margin: 0 auto;
+    position: absolute;
+    border-radius: 10px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%); }
 
 .admin-logo {
-  padding: 40px;
-  position: relative;
-  z-index: 1; }
-  .admin-logo img {
-    max-width: 200px; }
-
-body {
-  background: url("../../assets/images/login-bg.svg");
-  background-size: contain;
-  height: auto;
-  background-position: center;
-  background-attachment: fixed; }
-
-h2 {
-  color: #2d99c2;
-  font-size: 1.125rem;
-  margin-bottom: 25px; }
-
-.form-group {
-  margin-bottom: 30px;
-  position: relative; }
-
-
-input[type="text"], input[type="password"], input[type="email"] {
-  border-left: none;
-  border-top: none;
-  border-right: none;
-  border-radius: 0;
-  padding-left: 35px;
-  padding-right: 30px; }
-  input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus {
-    box-shadow: none !important; }
-
-.licon, .ricon {
-  position: absolute;
-  top: 2px;
-  color: #bcbcbc;
-  font-size: 16px;
-  line-height: 30px; }
-
-.licon {
-  left: 5px; }
-
-.ricon {
-  right: 5px;
-  cursor: pointer; }
-
-.help-block {
-  display: block;
-  color: #e20; }
-
-@media (min-width: 1200px) {
-  .container {
-    max-width: 1170px; } }
+  text-align: center;
+  margin: 10px 0 30px 0; }

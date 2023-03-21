@@ -28,9 +28,11 @@
         <div class="header-title">
             <h1 class="title">@lang('admin_order.shop_order_list')</h1>
             @if($filter_date)
+            <div class="float-right">
                 <button class="btn btn-primary generate_txt" data-val="without_enc" id="without_enc">Without Encrypt</button>
                 <a href="javascript:;" class="btn btn-primary" data-toggle="modal" data-target="#importModal">@lang('admin_order.import_file')</a>
                 <button class="btn btn-primary generate_txt" data-val="with_enc" id="generate_txt">@lang('admin_order.generate_txt')</button>
+            </div>
             @endif
         </div>
              
