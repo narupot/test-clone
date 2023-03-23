@@ -382,11 +382,15 @@ class ExportOrderController extends MarketPlace
 
                 $log_obj = new \App\OrderExportLog;
                 $log_obj->total_order = $tot_order;
+                if($tot_order){
+                    $log_obj->shop_ids = implode(',', $shop_id_arr);
+                    $log_obj->bank_type = $bank_name_key;
+                }
                 $log_obj->file_name = $file_name;
                 $log_obj->total_seller = count($seller_order_data);
                 $log_obj->total_amount = $total_order_amt;
                 $log_obj->status = 'pending';
-                $log_obj->order_date = date('Y-m-d H:i:s',strtotime($export_date.date('H:i:s')));
+                $log_obj->order_date = date('Y-m-d',strtotime($export_date));
                 $log_obj->save();
                 $log_id = $log_obj->id;
                 $log_id_arr[] = $log_id;
