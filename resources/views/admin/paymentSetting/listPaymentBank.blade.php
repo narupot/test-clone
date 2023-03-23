@@ -20,7 +20,6 @@
                 <a class="btn btn-create" href="{{ action('Admin\Config\PaymentBankController@create') }}"> @lang('admin_common.create_new')</a> 
                 
             </div>
-          
             @endif
         </div>
             
