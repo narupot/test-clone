@@ -115,7 +115,7 @@ class ExportOrderController extends MarketPlace
             $file_data = OrderExportLog::where('id',$id)->first();
             if($file_data){
                 $file_path = Config::get('constants.public_path').'/seller-payment/';
-                $filename = $file_data->file_name.'.gpg';
+                $filename = $file_data->file_name.'.txt.gpg';
                 $file_full_path = $file_path.$filename;
 
                 if(file_exists($file_full_path)){
@@ -376,7 +376,7 @@ class ExportOrderController extends MarketPlace
                 $client_code = $data_client_code;
                 $date = str_replace('-', '', $export_date);
                 $file_name = 'P-'.$client_code.'-'.$date.'-'.$ref_no;
-                $file = $file_path.'/seller-payment/'.$file_name.'.gpg';
+                $file = $file_path.'/seller-payment/'.$file_name.'.txt.gpg';
                 \File::put($file,$main_data);
                 $all_file_path[] = $file;
 
