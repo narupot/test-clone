@@ -625,7 +625,6 @@ class CmsSlider extends Model
         } 
         
         if(count($badge_id_arr) && count($sub_cat_ids) && count($package_id_arr)){
-
             $newdate = date("Y-m-d", strtotime("-6 months"));
             $prefix = DB::getTablePrefix();
             $result_arr  = [];
