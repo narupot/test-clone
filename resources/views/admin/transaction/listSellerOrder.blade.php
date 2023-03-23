@@ -6,6 +6,15 @@
 
 @section('header_styles')
     <link rel="stylesheet" type="text/css" href="{{Config('constants.css_url') }}flatpickr.min.css">
+    <style type="text/css">
+        .form-controlselect {
+            min-width: 100px;
+        }
+        .topFilter .form-control, .topFilter .form-controlselect {
+            min-width: 150px;
+            max-width: 150px;
+        }
+    </style>
    {!! CustomHelpers::dataTableCss() !!}
     <script type="text/javascript">
         var filter_data = {!! $filter !!};    
@@ -45,6 +54,41 @@
                 </ul>
             </div>         
             <form action="{{action('Admin\Transaction\ShopOrderController@sellerOrder')}}" method="GET" enctype="multipart/form-data">
+                <div class="row align-items-center topFilter">
+                      <div class="col-auto form-group">
+                        <input type="text" class="form-control date-select-new datte-select" name="">
+                      </div>
+
+                      <div class="col-auto form-group">
+                        <label class="col-form-label">Shop Name</label>
+                      </div>
+                      <div class="col-auto form-group">
+                        <input type="text" class="form-control" name="">
+                      </div>
+                      <div class="col-auto form-group">
+                        <label class="col-form-label">Shop Owner Name</label>
+                      </div>
+                      <div class="col-auto form-group">
+                        <input type="text" class="form-control" name="">
+                      </div>
+                      <div class="col-auto form-group">
+                        <label class="col-form-label">Loggen text file</label>
+                      </div>
+                      <div class="col-auto form-group">
+                        <select class="form-controlselect">
+                            <option>Text File</option>
+                        </select>
+                      </div>
+                      <div class="col-auto form-group">
+                        <label class="col-form-label">Bank Name</label>
+                      </div>
+                      <div class="col-auto form-group">
+                        <select class="form-controlselect">
+                            <option>kBank</option>
+                        </select>
+                      </div>
+                </div>
+
                 <div class="row">
                     <div class="col-sm-4 form-group">
                         <label>@lang('admin_order.date') <i class="red">*</i></label>

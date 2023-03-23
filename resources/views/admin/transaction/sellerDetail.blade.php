@@ -35,24 +35,14 @@
                 <div class="shadow-box">
                     <form action="{{action('Admin\Transaction\ShopOrderController@sellerDetail')}}" method="GET" enctype="multipart/form-data">
                         <div class="row">
-                            <div class="col-sm-2 form-group">
-                                <input type="text" class="date-picker" name="startDate" />
-                            </div>
-                            <div class="col-sm-2 form-group">
-                                <input type="text" class="date-picker" name="endDate" />
-                            </div>
-                            <div class="col-sm-2 form-group">
-                                <button type="button" class="btn btn-primary">@lang('admin_report.apply')</button>
-                            </div>
-                        </div>
-                        <div class="row">
                             <div class="col-sm-4 form-group">
                                 <label>@lang('admin_report.date') <i class="red">*</i></label>
                                 <input type="hidden" name="shop_id" value="{{$shop_details->id}}">
                                 <input type="text" class="date-select-new date-picker" name="order_date" id="reservationtime" value="{{$order_date}}">
                                 
                             </div>
-                            <div class="col-sm-2 text-right">
+                            <div class="col-sm-2 form-group text-right">
+                                <label>&nbsp;</label>
                                <button class="btn btn-primary" name="refresh">@lang('admin_report.submit')</button>
                             </div>
                         </div>
