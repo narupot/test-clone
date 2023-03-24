@@ -269,6 +269,8 @@ class ShopOrderController extends MarketPlace
                             
                             case 'seller_name':$query->where('sord.shop_json','like', '%'.$searchval.'%'); break;
 
+                            case 'bank_name':$query->where('pbd.bank_name','like', '%'.$searchval.'%'); break;
+
                         }
                         
                     }

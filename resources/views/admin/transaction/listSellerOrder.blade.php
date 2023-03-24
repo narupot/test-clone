@@ -54,7 +54,7 @@
                 </ul>
             </div>         
             <form action="{{action('Admin\Transaction\ShopOrderController@sellerOrder')}}" method="GET" enctype="multipart/form-data">
-                <div class="row align-items-center topFilter d-none">
+                <!-- <div class="row align-items-center topFilter">
                       <div class="col-auto form-group">
                         <input type="text" class="form-control date-select-new date-picker" name=""/>
                       </div>
@@ -85,7 +85,7 @@
                             <option>kBank</option>
                         </select>
                       </div>
-                </div>
+                </div> -->
 
                 <div class="row">
                     <div class="col-sm-4 form-group">
@@ -236,6 +236,17 @@
             {   title: "@lang('admin_order.bank_name')", 
                 dataIndx:'bank_name', 
                 minWidth: 140,
+                filter : {
+                    attr : "@lang('admin_order.enter_name')",                        
+                    crules: [
+                        {
+                            condition: getFilter('bank_name', 'condition') ||  'contain',
+                            value : getFilter('bank_name', 'value')  || "",
+                        }
+                    ],
+                    type: 'textbox', 
+                    listeners: ['change'],
+                },
             },
             {   title: "@lang('admin_order.grand_total')", 
                 dataIndx:'amount', 
