@@ -54,7 +54,7 @@
                 </ul>
             </div>         
             <form action="{{action('Admin\Transaction\ShopOrderController@sellerOrder')}}" method="GET" enctype="multipart/form-data">
-                <div class="row align-items-center topFilter">
+                <div class="row align-items-center topFilter d-none">
                       <div class="col-auto form-group">
                         <input type="text" class="form-control date-select-new date-picker" name=""/>
                       </div>
