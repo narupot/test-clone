@@ -115,7 +115,7 @@ class ExportOrderController extends MarketPlace
             $file_data = OrderExportLog::where('id',$id)->first();
             if($file_data){
                 $file_path = Config::get('constants.public_path').'/seller-payment/';
-                $filename = $file_data->file_name.'.txt.gpg';
+                $filename = $file_data->file_name;
                 $file_full_path = $file_path.$filename;
 
                 if(file_exists($file_full_path)){
@@ -375,18 +375,22 @@ class ExportOrderController extends MarketPlace
             
                 $client_code = $data_client_code;
                 $date = str_replace('-', '', $export_date);
-                $file_name = 'P-'.$client_code.'-'.$date.'-'.$ref_no;
-                $file = $file_path.'/seller-payment/'.$file_name.'.txt.gpg';
+                $file_name = 'P-'.$client_code.'-'.$date.'-'.$ref_no.'.txt.gpg';
+                $file = $file_path.'/seller-payment/'.$file_name;
                 \File::put($file,$main_data);
                 $all_file_path[] = $file;
 
                 $log_obj = new \App\OrderExportLog;
                 $log_obj->total_order = $tot_order;
+                if($tot_order){
+                    $log_obj->shop_ids = implode(',', $shop_id_arr);
+                    $log_obj->bank_type = $bank_name_key;
+                }
                 $log_obj->file_name = $file_name;
                 $log_obj->total_seller = count($seller_order_data);
                 $log_obj->total_amount = $total_order_amt;
                 $log_obj->status = 'pending';
-                $log_obj->order_date = date('Y-m-d H:i:s',strtotime($export_date.date('H:i:s')));
+                $log_obj->order_date = date('Y-m-d',strtotime($export_date));
                 $log_obj->save();
                 $log_id = $log_obj->id;
                 $log_id_arr[] = $log_id;
