@@ -56,7 +56,7 @@
             <form action="{{action('Admin\Transaction\ShopOrderController@sellerOrder')}}" method="GET" enctype="multipart/form-data">
                 <div class="row align-items-center topFilter">
                       <div class="col-auto form-group">
-                        <input type="text" class="form-control date-select-new datte-select" name="">
+                        <input type="text" class="form-control date-select-new date-picker" name=""/>
                       </div>
 
                       <div class="col-auto form-group">
@@ -75,9 +75,7 @@
                         <label class="col-form-label">Loggen text file</label>
                       </div>
                       <div class="col-auto form-group">
-                        <select class="form-controlselect">
-                            <option>Text File</option>
-                        </select>
+                            <input type="text" class="form-control date-select-new date-picker" name=""/>
                       </div>
                       <div class="col-auto form-group">
                         <label class="col-form-label">Bank Name</label>
