@@ -64,7 +64,7 @@
                             {!! CustomHelpers::fieldstabWithLanuage([['field'=>'text', 'name'=>'bank_name', 'label'=>'', 'errorkey'=>'bnk_name']], '1', $errors) !!}
                         </div>    
 
-                        <div class="form-group">
+                        {{--<div class="form-group">
                             <label>@lang('admin_payment.account_no') <i class="strick">*</i></label> 
                             <input  name="account_no" type="text">
                             @if ($errors->has('account_no'))
@@ -78,13 +78,13 @@
                             @if ($errors->has('account_name'))
                                 <p class="error error-msg">{{ $errors->first('account_name') }} </p>
                             @endif                           
-                        </div>
+                        </div>--}}
 
                         <div class="form-group">
-                            <label>@lang('admin_payment.branch') </label>
-                            <input name="branch" type="text">
-                            @if ($errors->has('branch'))
-                                <p class="error error-msg">{{ $errors->first('branch') }}</p>
+                            <label>@lang('admin_payment.bank_code') </label>
+                            <input name="bank_code" type="text">
+                            @if ($errors->has('bank_code'))
+                                <p class="error error-msg">{{ $errors->first('bank_code') }}</p>
                             @endif
                         </div>     
 
