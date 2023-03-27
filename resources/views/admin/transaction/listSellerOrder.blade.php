@@ -142,7 +142,7 @@
           </div>
         </div>
 
-        <div class="modal" id="generated_file" tabindex="-1" role="dialog">
+        <div class="modal" id="generatedFileModal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -152,9 +152,12 @@
                     </button>
                     </div>
                     <div class="modal-body" id="file_modal_body">
-                    <p>Modal body text goes here.</p>
-                    </div>
                     
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    
+                  </div>
                 </div>
             </div>
         </div>
@@ -220,11 +223,6 @@
             {   title: "@lang('admin_order.shop_name')", 
                 dataIndx:'shop_name', 
                 minWidth: 140,
-                render : function(ui) {
-                    return {
-                        text:'<a href="javascript:;" data-val="'+ui.rowData.shop_id+'" class="shop_name">'+ui.rowData.shop_name+'</a>',    
-                    };                
-                },
                 filter : {
                     attr : "@lang('admin_order.enter_name')",                        
                     crules: [
@@ -276,12 +274,17 @@
                 minWidth: 100,
                 align : "right",
             },
+            {   title: "@lang('admin_order.log_gen_file')", 
+                dataIndx:'latest_log_date', 
+                minWidth: 100,
+                align : "right",
+            },
             {   title: "@lang('admin_common.actions')", 
                     dataIndx:'detail_url', 
-                    minWidth: 75,
+                    minWidth: 200,
                     render : function(ui) {
                         return {
-                            text:'<a href="'+ui.cellData+'" class="btn-primary">@lang("admin_common.view")</a>',    
+                            text:'<a href="'+ui.cellData+'" class="btn-primary">@lang("admin_common.view")</a> <a href="javascript:;" data-val="'+ui.rowData.shop_id+'" class="btn-primary shop_name">Check log</a>',    
                         };                
                     },
                     sortable : !1,
@@ -295,15 +298,17 @@
             $.ajax({
                 url: log_date_url,
                 type:'GET',
-                data:{'order_date':order_date,'shop_id':shop_id},
-                processData: false, 
-                contentType: false,   
+                data:{'order_date':order_date,'shop_id':shop_id}, 
                 success:function(result){  
-                     console.log(result);
+                    var txt_html = '';
                     if(result.status=='success'){
                         $(result.data).each(function(key,val){
-                            console.log(val.file_name);
+                            txt_html+='<div class="row"><div class="col-sm-4">'+val.file_name+'</div><div class="col-sm-4">'+val.log_at+'</div></div>';
                         });
+                        $('#file_modal_body').html(txt_html);
+                        $('#generatedFileModal').modal('show');
+                    }else{
+                        alert('No log generated');
                     }
                 }
             });

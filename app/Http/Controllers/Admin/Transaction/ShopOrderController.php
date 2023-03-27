@@ -292,10 +292,16 @@ class ShopOrderController extends MarketPlace
                 $shop_name = $json_data->shop_name[0];
                 $panel_no = $json_data->panel_no;
                 $amount = numberFormat($value->tot_amount);
+                $last_exp_log = \App\OrderExportLog::whereDate('order_date',$filter_date)->whereRaw('FIND_IN_SET(?, shop_ids)', [$value->shop_id])->orderBy('created_at','desc')->value('created_at');
+                if($last_exp_log){
+                    $latest_log_date = getDateFormat($last_exp_log,4);
+                }else{
+                    $latest_log_date = 'N/A';
+                }
                 $response[$key]->id = $value->shop_id;
                 $response[$key]->seller_name = $seller_name;
                 $response[$key]->shop_name = $shop_name;
-                
+                $response[$key]->latest_log_date = $latest_log_date;
                 $response[$key]->panel_no = $panel_no;
                 $response[$key]->amount = $amount;
                 $response[$key]->detail_url = action('Admin\Transaction\ShopOrderController@sellerDetail').'?shop_id='.$value->shop_id.'&order_date='.$filter_date;
@@ -329,11 +335,14 @@ class ShopOrderController extends MarketPlace
         return view('admin.transaction.sellerDetail',['shop_details'=>$shop_details,'order_shop'=>$order_shop,'order_date'=>$date]);
     }
     
-    public function expGeneratedLog(Request $request){
+    public function getGeneratedLog(Request $request){
         $shop_id = $request->shop_id;
         $order_date = $request->order_date;
-        $exp_log = \App\OrderExportLog::select('file_name','created_at','bank_type')->whereDate('order_date',$order_date)->whereRaw('FIND_IN_SET(?, Tags)', [$shop_id])->get();
+        $exp_log = \App\OrderExportLog::select('file_name','created_at','bank_type')->whereDate('order_date',$order_date)->whereRaw('FIND_IN_SET(?, shop_ids)', [$shop_id])->get();
         if($exp_log){
+            foreach ($exp_log as $key => $value) {
+                $exp_log[$key]->log_at = getDateFormat($value->created_at,4);                
+            }
             return ['status'=>'success','data'=>$exp_log];
         }
         else{
