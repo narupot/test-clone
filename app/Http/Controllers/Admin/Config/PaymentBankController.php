@@ -146,7 +146,7 @@ class PaymentBankController extends MarketPlace
         $input = $request->all();
         $input['bnk_name'] = $def_bank_name;      
 
-        $validate = $this->validatePaymentBank($input);
+        $validate = $this->validatePaymentBank($input, $id);
 
         if ($validate->passes()) {
 
