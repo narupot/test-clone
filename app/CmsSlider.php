@@ -49,7 +49,11 @@ class CmsSlider extends Model
                     }else{
                        $data = Self::getSliderProduct($slider_data);
                     }
-                    $slider_data->slider = $data;
+                    if($data){
+                      $slider_data->slider = $data;   
+                    }else{
+                      $slider_data->slider = []; 
+                    }
                     break;
                 case 'blog':
                     $data = Self::getSliderBlog($slider_data);
