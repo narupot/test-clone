@@ -329,7 +329,16 @@ class ShopOrderController extends MarketPlace
         return view('admin.transaction.sellerDetail',['shop_details'=>$shop_details,'order_shop'=>$order_shop,'order_date'=>$date]);
     }
     
-    function edit($group_id){
+    public function expGeneratedLog(Request $request){
+        $shop_id = $request->shop_id;
+        $order_date = $request->order_date;
+        $exp_log = \App\OrderExportLog::select('file_name','created_at','bank_type')->whereDate('order_date',$order_date)->whereRaw('FIND_IN_SET(?, Tags)', [$shop_id])->get();
+        if($exp_log){
+            return ['status'=>'success','data'=>$exp_log];
+        }
+        else{
+            return ['status'=>'fail'];
+        }
     }
     
     function update(Request $request){

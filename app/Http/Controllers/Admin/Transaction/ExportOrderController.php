@@ -188,7 +188,7 @@ class ExportOrderController extends MarketPlace
             $data_p_product_code = "DCT";
 
             $data_client_code = getConfigValue('CLIENT_CODE_FOR_ORDER_EXPORT_FILE');
-            $data_client_account_no = "0683431869";
+            $data_client_account_no = getConfigValue('CLIENT_ACC_NO_ORDER_EXPORT_FILE');
 
             /*****H row data****/
             $record_identifier = $data_h;
