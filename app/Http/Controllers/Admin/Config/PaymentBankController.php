@@ -79,9 +79,10 @@ class PaymentBankController extends MarketPlace
 
             $pay_bank->status = $request->status;
             //$pay_bank->payment_option_id = $request->payment_option_id;
-            $pay_bank->account_no = ($request->account_no !='') ? cleanValue($request->account_no) : '';
-            $pay_bank->account_name = ($request->account_name !='') ? cleanValue($request->account_name) : '';
-            $pay_bank->branch = ($request->branch !='') ? cleanValue($request->branch) : '';
+            //$pay_bank->account_no = ($request->account_no !='') ? cleanValue($request->account_no) : '';
+            //$pay_bank->account_name = ($request->account_name !='') ? cleanValue($request->account_name) : '';
+            //$pay_bank->branch = ($request->branch !='') ? cleanValue($request->branch) : '';
+            $pay_bank->bank_code = ($request->bank_code !='') ? cleanValue($request->bank_code) : '';
             $pay_bank->account_type = ($request->account_type !='') ? $request->account_type : '';
             $pay_bank->created_by = Auth::guard('admin_user')->user()->id;
             $pay_bank->save();
@@ -165,9 +166,10 @@ class PaymentBankController extends MarketPlace
 
             $paybank->status = $request->status;
             //$paybank->payment_option_id = $request->payment_option_id;
-            $paybank->account_no = ($request->account_no !='') ? cleanValue($request->account_no) : '';
-            $paybank->account_name = ($request->account_name !='') ? cleanValue($request->account_name) : '';
-            $paybank->branch = ($request->branch !='') ? cleanValue($request->branch) : '';
+            // $paybank->account_no = ($request->account_no !='') ? cleanValue($request->account_no) : '';
+            // $paybank->account_name = ($request->account_name !='') ? cleanValue($request->account_name) : '';
+            // $paybank->branch = ($request->branch !='') ? cleanValue($request->branch) : '';
+            $pay_bank->bank_code = ($request->bank_code !='') ? cleanValue($request->bank_code) : '';
             $paybank->account_type = ($request->account_type !='') ? $request->account_type : '';
             $paybank->updated_by = Auth::guard('admin_user')->user()->id;
             $paybank->save();
@@ -211,15 +213,15 @@ class PaymentBankController extends MarketPlace
 
         //$rules['payment_option_id'] = 'Required';
         $rules['bnk_name'] = 'Required|Min:3';
-        $rules['account_no'] = 'Required|Min:3';
-        $rules['account_name'] = 'Required|Min:3';
+        //$rules['account_no'] = 'Required|Min:3';
+        $rules['bank_code'] = 'Required';
         $rules['account_type'] = 'Required';
         
         $error_msg['payment_option_id.required'] = Lang::get('payment.select_payment_option');
         $error_msg['bnk_name.required'] = Lang::get('payment.enter_bank_name');
-        $error_msg['account_no.required'] = Lang::get('payment.enter_bank_account_no');
-        $error_msg['account_name.required'] = Lang::get('payment.enter_bank_account_name');
-        //$error_msg['branch.required'] = Lang::get('payment.enter_bank_branch_name');
+        //$error_msg['account_no.required'] = Lang::get('payment.enter_bank_account_no');
+        //$error_msg['account_name.required'] = Lang::get('payment.enter_bank_account_name');
+        $error_msg['bank_code.required'] = Lang::get('payment.enter_bank_code');
         $error_msg['account_type.required'] = Lang::get('payment.enter_bank_acc_type');
         
 
