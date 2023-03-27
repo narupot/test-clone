@@ -563,7 +563,14 @@ function emailRule($table_name='', $field='') {
 		return 'Required|email';
 	}
 }
-
+function bankCodeRule($table_name='', $field='') {
+	if($table_name != '' && $field != '') {
+		return 'Required|unique:'.$table_name.','.$field;
+	}
+	else {
+		return 'Required';
+	}
+}
 function phoneRule($table_name='', $field='') {
 	if($table_name != '' && $field != '') {
 		return 'Required|digits:10|numeric|unique:'.$table_name.','.$field;

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin\Config;
-
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
@@ -18,11 +18,12 @@ use Lang;
 class PaymentBankController extends MarketPlace
 {
     private $tblPaymentBankDesc;
-
+    private $tblPaymentBank;
     public function __construct()
     {   
         $this->middleware('admin.user');
         $this->tblPaymentBankDesc = with(new PaymentBankDesc)->getTable();  
+        $this->tblPaymentBank = with(new PaymentBank)->getTable(); 
     }     
 
     public function index()
@@ -209,12 +210,15 @@ class PaymentBankController extends MarketPlace
         //return redirect()->action('LanguageController@index')->with('succMsg', 'Language Deleted Successfully!');
     //} 
 
-    private function validatePaymentBank($input, $type='') {
+    private function validatePaymentBank($input, $bank_id='') {
 
         //$rules['payment_option_id'] = 'Required';
         $rules['bnk_name'] = 'Required|Min:3';
         //$rules['account_no'] = 'Required|Min:3';
-        $rules['bank_code'] = 'Required';
+        $rules['bank_code'] = bankCodeRule($this->tblPaymentBank, 'bank_code');
+        if(!empty($bank_id) && !empty(trim($input['bank_code']))) {
+            $rules['bank_code'] = Rule::unique($this->tblPaymentBank)->ignore($bank_id);
+        }
         $rules['account_type'] = 'Required';
         
         $error_msg['payment_option_id.required'] = Lang::get('payment.select_payment_option');
