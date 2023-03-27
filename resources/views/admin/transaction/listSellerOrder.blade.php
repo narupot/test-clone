@@ -142,6 +142,23 @@
           </div>
         </div>
 
+        <div class="modal" id="generated_file" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title">@lang('admin_order.generated_file')</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body" id="file_modal_body">
+                    <p>Modal body text goes here.</p>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
     </div>
 @stop
 
@@ -150,6 +167,7 @@
     <!-- begining of page level js -->
     <script>
         var generate_txt_url  = "{{action('Admin\Transaction\ExportOrderController@generateTxt')}}";
+        var log_date_url = "{{action('Admin\Transaction\ShopOrderController@getGeneratedLog')}}";
         var csrftoken = window.Laravel.csrfToken;
            $(document).ready(function() {
             $(".date-picker").flatpickr({});
@@ -202,6 +220,11 @@
             {   title: "@lang('admin_order.shop_name')", 
                 dataIndx:'shop_name', 
                 minWidth: 140,
+                render : function(ui) {
+                    return {
+                        text:'<a href="javascript:;" data-val="'+ui.rowData.shop_id+'" class="shop_name">'+ui.rowData.shop_name+'</a>',    
+                    };                
+                },
                 filter : {
                     attr : "@lang('admin_order.enter_name')",                        
                     crules: [
@@ -264,7 +287,27 @@
                     sortable : !1,
             }, 
             
-        ];    
+        ];   
+
+        $('body').on('click','.shop_name',function(e){
+            var order_date = "{{$filter_date}}";
+            var shop_id = $(this).data('val');
+            $.ajax({
+                url: log_date_url,
+                type:'GET',
+                data:{'order_date':order_date,'shop_id':shop_id},
+                processData: false, 
+                contentType: false,   
+                success:function(result){  
+                     console.log(result);
+                    if(result.status=='success'){
+                        $(result.data).each(function(key,val){
+                            console.log(val.file_name);
+                        });
+                    }
+                }
+            });
+        });
     </script>
     
 @stop
