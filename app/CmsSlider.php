@@ -559,11 +559,9 @@ class CmsSlider extends Model
     }
 
     public static function productForYou($slider_data){
-
         if(!Auth::check()){
           return false;
         }
-        
         $badge_id_arr = $slider_data->badge_id?array_map('intval', explode(',', $slider_data->badge_id)):[];
 
         $package_id_arr = $slider_data->package_id?array_map('intval', explode(',', $slider_data->package_id)):[];
