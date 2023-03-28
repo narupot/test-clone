@@ -14,6 +14,9 @@
             background-position: right 10px top 20px;
             background-repeat: no-repeat;
         }
+        .chosen-container-single .chosen-single span {
+            background-position:0 10px !important;
+        }
         .chosen-container-single .chosen-single div b {
             background-position: 0 10px;
         }
