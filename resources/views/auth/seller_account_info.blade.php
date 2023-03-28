@@ -8,10 +8,16 @@
         .chosenImage-container .chosen-results li, .chosenImage-container .chosen-single span {
             text-align: left;
         }
-        .chosen-container-single .chosen-single { height:40px; padding:8px 0 8px 8px; }
+        .chosen-container-single .chosen-single {
+            height: 50px; padding: 5px 0 5px 10px; line-height: 40px;
+            background-image: url(../images/arrow-select.png) !important;
+            background-position: right 10px top 20px;
+            background-repeat: no-repeat;
+        }
         .chosen-container-single .chosen-single div b {
             background-position: 0 10px;
         }
+        .chosen-container-single .chosen-single div b { display:none !important; }
     </style>
 @endsection
 
@@ -60,19 +66,9 @@ var branch_list_url = "{{action('Auth\SellerRegisterController@getBranchList')}}
                     </div>
 
                     <div class="form-group">
-                        <label>@lang('shop.account_name')<i class="red">*</i></label>
-                        <input type="text" name="account_name">
-                        <p class="error" id="e_account_name"></p>
-                    </div>
-                    <div class="form-group">
-                        <label>@lang('shop.account_no')<i class="red">*</i></label>
-                        <input type="text" name="account_no">
-                        <p class="error" id="e_account_no"></p>
-                    </div>
-                    <div class="form-group">
                         <label class="chk-wrap">
                             <input type="checkbox" name="" id="branchCheck">
-                            <span class="chk-mark">lorem ipsum </span>
+                            <span class="chk-mark">@lang('shop.other_branches_branch_not_found_in_the_list')</span>
                         </label>
                         <p class="error" id=""></p>
                     </div>                    
@@ -86,6 +82,18 @@ var branch_list_url = "{{action('Auth\SellerRegisterController@getBranchList')}}
                         <input type="text" name="branch" value="">
                         <p class="error" id="e_branch"></p>
                     </div>
+
+                    <div class="form-group">
+                        <label>@lang('shop.account_name')<i class="red">*</i></label>
+                        <input type="text" name="account_name">
+                        <p class="error" id="e_account_name"></p>
+                    </div>
+                    <div class="form-group">
+                        <label>@lang('shop.account_no')<i class="red">*</i></label>
+                        <input type="text" name="account_no">
+                        <p class="error" id="e_account_no"></p>
+                    </div>
+                    
                     
                     <div class="form-group">
                         <label>@lang('common.attach') @lang('shop.book_bank')</label>                     
@@ -141,10 +149,10 @@ var branch_list_url = "{{action('Auth\SellerRegisterController@getBranchList')}}
             $("#branchCheck").click(function () {
                 if ($(this).is(":checked")) {
                     $("#branch_names").show();
-                    $('#slrbankBranchTab').addClass('disable');
+                    $('#slrbankBranchTab select').addClass('disabled');
                 } else {
                     $("#branch_names").hide();
-                    $('#slrbankBranchTab').removeClass('disable');
+                    $('#slrbankBranchTab select').removeClass('disabled');
                 }
             });
         });   
