@@ -103,6 +103,7 @@ var branch_list_url = "{{action('Auth\SellerRegisterController@getBranchList')}}
                         <div class="file-wrapper">
                             <div class="custom-img-file">
                                     <input type="file" name="account_image" accept="image/*" id="img-input">
+                                    <p class="error" id="e_account_image"></p>
                                     <span class="file-img btn-default"><img src="images/file-upload.png"></span>
                             </div> 
                             <span class="image-preview"><img id="blah" src=""/></span>                         
