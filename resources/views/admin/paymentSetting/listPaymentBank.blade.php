@@ -48,6 +48,8 @@
                         <th>@lang('admin_common.slno')</th>
                         <th>@lang('admin_payment.bank_name')</th>
                         <th>@lang('admin_payment.bank_image')</th>
+                        <th>@lang('admin_payment.bank_code')</th>
+                        <th>@lang('admin_payment.account_type')</th>
                         <th>@lang('admin_common.created_at')</th>
                         <th>@lang('admin_common.updated_at')</th>
                         <th>@lang('admin_common.status')</th>
@@ -62,6 +64,12 @@
                         <td>{{ ++$key }}</td>
                         <td>{{ $bank_dtl->paymentBankName->bank_name }}</td>
                         <td>@if($bank_dtl->bank_image) <img style="max-width: 48px;max-height: 48px;border-radius: 8px;float: none;margin: 0 auto;" src="{{ Config::get('constants.payment_bank_url').$bank_dtl->bank_image }}"></a> @endif</td>
+                        <td> {{ $bank_dtl->bank_code }}</td>
+                        @if($bank_dtl->account_type == '1')
+                            <td>@lang('admin_payment.saving')</td>
+                        @else
+                            <td>@lang('admin_payment.current')</td>
+                        @endif
                         <td> {{ getDateFormat($bank_dtl->created_at, '1') }}</td>
                         <td>{{ getDateFormat($bank_dtl->updated_at, '1') }}</td>
                         <th>
