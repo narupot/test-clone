@@ -99,7 +99,7 @@ var branch_list_url = "{{action('Auth\SellerRegisterController@getBranchList')}}
                     
                     
                     <div class="form-group">
-                        <label>@lang('common.attach') @lang('shop.book_bank')</label>                     
+                        <label>@lang('common.attach') @lang('shop.book_bank')<i class="red">*</i></label>                     
                         <div class="file-wrapper">
                             <div class="custom-img-file">
                                     <input type="file" name="account_image" accept="image/*" id="img-input">

@@ -315,7 +315,7 @@ class SellerRegisterController extends MarketPlace {
         $rules['account_no'] = numericRule('r');
         $rules['branch'] = nameRule();
         $rules['branch_code'] = reqRule();
-        //$rules['account_image'] = imageRule();
+        $rules['account_image'] = imageRule();
         
         $error_msg['bank_id.required'] = Lang::get('shop.bank_is_required');
         $error_msg['branch_id.required'] = Lang::get('shop.branch_is_required');
