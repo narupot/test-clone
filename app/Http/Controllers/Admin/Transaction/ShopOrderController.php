@@ -271,6 +271,7 @@ class ShopOrderController extends MarketPlace
 
                             case 'bank_name':$query->where('pbd.bank_name','like', '%'.$searchval.'%'); break;
 
+                            case 'seller_ph_number':$query->where('sord.shop_json','like', '%'.$searchval.'%'); break;
                         }
                         
                     }
@@ -289,6 +290,7 @@ class ShopOrderController extends MarketPlace
             foreach ($response as $key => $value) {
                 $json_data = json_decode($value->shop_json);
                 $seller_name = $json_data->seller_name;
+                $seller_ph_number = $json_data->seller_ph_number;
                 $shop_name = $json_data->shop_name[0];
                 $panel_no = $json_data->panel_no;
                 $amount = numberFormat($value->tot_amount);
@@ -300,10 +302,12 @@ class ShopOrderController extends MarketPlace
                 }
                 $response[$key]->id = $value->shop_id;
                 $response[$key]->seller_name = $seller_name;
+                $response[$key]->seller_ph_number = $seller_ph_number;
                 $response[$key]->shop_name = $shop_name;
                 $response[$key]->latest_log_date = $latest_log_date;
                 $response[$key]->panel_no = $panel_no;
                 $response[$key]->amount = $amount;
+                $response[$key]->status = 'N/A';
                 $response[$key]->detail_url = action('Admin\Transaction\ShopOrderController@sellerDetail').'?shop_id='.$value->shop_id.'&order_date='.$filter_date;
             }
 

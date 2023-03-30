@@ -250,6 +250,21 @@
                     listeners: ['change'],
                 },
             },
+            {   title: "@lang('admin_order.seller_ph_number')", 
+                dataIndx:'seller_ph_number', 
+                minWidth: 140,
+                filter : {
+                    attr : "@lang('admin_order.enter_name')",                        
+                    crules: [
+                        {
+                            condition: getFilter('seller_ph_number', 'condition') ||  'contain',
+                            value : getFilter('seller_ph_number', 'value')  || "",
+                        }
+                    ],
+                    type: 'textbox', 
+                    listeners: ['change'],
+                },
+            },
             {   title: "@lang('admin_order.panel_no')", 
                 dataIndx:'panel_no', 
                 minWidth: 140,
@@ -271,6 +286,11 @@
             },
             {   title: "@lang('admin_order.grand_total')", 
                 dataIndx:'amount', 
+                minWidth: 100,
+                align : "right",
+            },
+            {   title: "@lang('admin_order.status')", 
+                dataIndx:'status', 
                 minWidth: 100,
                 align : "right",
             },
