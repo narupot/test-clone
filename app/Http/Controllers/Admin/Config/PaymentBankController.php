@@ -84,7 +84,7 @@ class PaymentBankController extends MarketPlace
             //$pay_bank->account_name = ($request->account_name !='') ? cleanValue($request->account_name) : '';
             //$pay_bank->branch = ($request->branch !='') ? cleanValue($request->branch) : '';
             $pay_bank->bank_code = ($request->bank_code !='') ? cleanValue($request->bank_code) : '';
-            $pay_bank->account_type = ($request->account_type !='') ? $request->account_type : '';
+            //$pay_bank->account_type = ($request->account_type !='') ? $request->account_type : '';
             $pay_bank->created_by = Auth::guard('admin_user')->user()->id;
             $pay_bank->save();
 
@@ -171,7 +171,7 @@ class PaymentBankController extends MarketPlace
             // $paybank->account_name = ($request->account_name !='') ? cleanValue($request->account_name) : '';
             // $paybank->branch = ($request->branch !='') ? cleanValue($request->branch) : '';
             $paybank->bank_code = ($request->bank_code !='') ? cleanValue($request->bank_code) : '';
-            $paybank->account_type = ($request->account_type !='') ? $request->account_type : '';
+            //$paybank->account_type = ($request->account_type !='') ? $request->account_type : '';
             $paybank->updated_by = Auth::guard('admin_user')->user()->id;
             $paybank->save();
 
