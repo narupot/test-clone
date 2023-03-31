@@ -91,7 +91,7 @@
                             @endif
                             
                         </div>  
-                        <div class="form-group">
+                        {{--<div class="form-group">
                             <label>@lang('admin_payment.account_type') <i class="strick">*</i></label> 
                             <select name="account_type">
                                 <option value="">@lang('admin_common.select')</option>
@@ -101,7 +101,7 @@
                             @if ($errors->has('account_type'))
                             <p class="error error-msg">{{ $errors->first('account_type') }}</p>
                             @endif
-                        </div>
+                        </div>--}}
                     </div> 
                 </div>                                                      
             </div>
