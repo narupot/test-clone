@@ -1021,7 +1021,7 @@ input[type="submit"], button[type="button"], input[type="button"],
     /*background: $gray-800;*/ }
   .alert-toaster:active {
     color: #fff;
-    /*	background: $gray-800;*/ }
+    /*  background: $gray-800;*/ }
 
 .close {
   float: right;
@@ -2041,7 +2041,7 @@ td {
   font-weight: bold;
   font-style: normal; }
 /*
-	common css
+  common css
 ======================*/
 body {
   color: #000;
@@ -2140,7 +2140,7 @@ strong {
 
 .error, .error-msg {
   color: #e20;
-  /*	box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.50);
+  /*  box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.50);
       -moz-box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.50);
       -webkit-box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.50);*/
   border-radius: 5px;
@@ -2236,7 +2236,7 @@ strong {
   width: 100%; }
 
 /*.flatpickr-input {
-	background: $white !important;
+  background: $white !important;
 }*/
 .primary-color {
   color: #007bff; }
@@ -2446,7 +2446,7 @@ strong {
     @include border-radius(50%); background:rgba(0,0,0,0.8);
     font-size:$font-20; text-align:center; line-height:100%; color:$white;
     &:hover {
-    	color:$white;
+      color:$white;
     }
 }
 .popup-close:hover {
@@ -2604,11 +2604,11 @@ strong {
   animation: spin 2s linear infinite; margin:0 auto;
 
   &.loader-medium {
-  	width: 40px; height: 40px; border-width: 6px; display: inline-block;
+    width: 40px; height: 40px; border-width: 6px; display: inline-block;
   }
   &.loader-small {
-  	width: 20px; height: 20px; border-width: 3px; vertical-align: middle; display: inline-block;
-  	margin:1px 5px;
+    width: 20px; height: 20px; border-width: 3px; vertical-align: middle; display: inline-block;
+    margin:1px 5px;
   }
 }
 @-webkit-keyframes spin {

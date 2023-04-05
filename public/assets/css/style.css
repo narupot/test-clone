@@ -1,7 +1,7 @@
 /*
-	1) Import css
-	2) Header css
-	3) Footer css
+        1) Import css
+        2) Header css
+        3) Footer css
 =========================*/
 /*  Variable */
 /*  Font size  */
@@ -161,22 +161,22 @@
     margin-right: 15px; }
     .content-right.grey-bg .lang-nav-tabs > li {
       margin-right: 5px;
-      /*				&.active {
-      					> a {
-      						background: $white;
-      						border-top-left-radius: 10px;
-      						border-top-right-radius: 10px;
-      						border: none;
-      						outline: none;
-      						&:hover, &:focus {
-      							background: $white;
-      							outline: 0;
-      							border: none;
-      							border-top-left-radius: 10px;
-      							border-top-right-radius: 10px;
-      						}
-      					}
-      				}*/ }
+      /*                                &.active {
+                                        > a {
+                                                background: $white;
+                                                border-top-left-radius: 10px;
+                                                border-top-right-radius: 10px;
+                                                border: none;
+                                                outline: none;
+                                                &:hover, &:focus {
+                                                        background: $white;
+                                                        outline: 0;
+                                                        border: none;
+                                                        border-top-left-radius: 10px;
+                                                        border-top-right-radius: 10px;
+                                                }
+                                        }
+                                }*/ }
       .content-right.grey-bg .lang-nav-tabs > li > a {
         background-image: linear-gradient(#fff, #E2E2E2);
         border: none;
@@ -850,9 +850,9 @@ droplet {
   margin-bottom: 10px; }
 
 #product_bundle {
-  /*	.sal-req-img {
-  		width: calc(30% - 38px);
-  	}*/ }
+  /*    .sal-req-img {
+                width: calc(30% - 38px);
+        }*/ }
   #product_bundle .thumber {
     float: left;
     width: 30px; }
@@ -1083,7 +1083,7 @@ h2.title {
   padding-bottom: 5px;
   margin-bottom: 5px;
   /*&:last-child {
-  	border:none; margin-bottom: 0; padding-bottom: 0;
+        border:none; margin-bottom: 0; padding-bottom: 0;
   }*/ }
   .attr-row:hover {
     box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.4);
@@ -1220,7 +1220,7 @@ h2.title {
     vertical-align: middle;
     color: #000;
     /*.attr-name {
-    	max-width: 100%;
+        max-width: 100%;
     }*/ }
     .attribute-wrap-table .attr-row .col.glyphicon-menu-hamburger {
       width: 20px;
@@ -1250,7 +1250,7 @@ h2.title {
     position: relative; }
     .drag-attr-table .select-color-row:last-child {
       /*.col, .pull-right.glyphicon, .icon-close {
-      	border-bottom:none;
+        border-bottom:none;
       }*/ }
     .drag-attr-table .select-color-row .col {
       display: table-cell;
@@ -4047,7 +4047,7 @@ select[multiple] {
   padding-bottom: 10px; }
 
 /*
-	For Setting page and Shopping page
+        For Setting page and Shopping page
 ============================================*/
 .setting-wrap {
   border: 1px solid #bcbcbc;
@@ -4439,89 +4439,89 @@ select[multiple] {
     margin-top: 5px; }
 
 /*.theme-box {
-	padding: 15px 0;
-	li {
-		width: 33.33%;
-		text-align: center;
-		vertical-align: middle;
-		position: relative;
-		float: left;
-		padding-right: 15px;
-		margin:7.5px 0;
-		&:hover {
-			.theme-btn-box {
-				visibility: visible;
-				opacity: 1;
-			}
-		}
-		.theme-btn-box {
-			position: absolute;
-			left: 0;
-			top: 0;
-			background: rgba(0, 0, 0, 0.5);
-			width: 100%;
-			height: 100%;
-			transition: all 0.4s ease-in-out;
-			-webkit-transition: all 0.4s ease-in-out;
-			visibility: hidden;
-			opacity: 0;
-		}
-		.theme-img-box {
-			position: relative;
-			width: 100%;
-			height: 100%;
-			display: block;
-			margin-bottom: 15px;
-			max-height: 240px;
-			overflow: hidden;
-			.btnhvr {
-				position: absolute;
-				bottom: 15px;
-				left: 15px;
-				min-width: 100px;
-			}
-		}
-		.themename {
-			margin-bottom: 15px;
-			display: block;
-			a {
-				color: $black;
-				&:hover {
-					color: $skyblue2;
-				}
-			}
-		}
-		.btn-view {
-			max-width: 125px;
-			width: 100%;
-			background: $grey-light1;
-			color: $black;
-			display: block;
-			margin-bottom: 10px;
-			transition: all 0.4s ease-in-out;
-			-webkit-transition: all 0.4s ease-in-out;
-			&:hover {
-				background: $grey;
-				color: $white;
-			}
-		}
-		.btn-choose {
-			max-width: 125px;
-			width: 100%;
-			background: $skyblue;
-			color: $white;
-			display: block;
-			transition: all 0.4s ease-in-out;
-			-webkit-transition: all 0.4s ease-in-out;
-			&:hover {
-				background: $skyblue2;
-			}
-			label {
-				padding-bottom: 0;
-			}
-		}
-		&:last-child {padding-right: 0;}
-	}
+        padding: 15px 0;
+        li {
+                width: 33.33%;
+                text-align: center;
+                vertical-align: middle;
+                position: relative;
+                float: left;
+                padding-right: 15px;
+                margin:7.5px 0;
+                &:hover {
+                        .theme-btn-box {
+                                visibility: visible;
+                                opacity: 1;
+                        }
+                }
+                .theme-btn-box {
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        background: rgba(0, 0, 0, 0.5);
+                        width: 100%;
+                        height: 100%;
+                        transition: all 0.4s ease-in-out;
+                        -webkit-transition: all 0.4s ease-in-out;
+                        visibility: hidden;
+                        opacity: 0;
+                }
+                .theme-img-box {
+                        position: relative;
+                        width: 100%;
+                        height: 100%;
+                        display: block;
+                        margin-bottom: 15px;
+                        max-height: 240px;
+                        overflow: hidden;
+                        .btnhvr {
+                                position: absolute;
+                                bottom: 15px;
+                                left: 15px;
+                                min-width: 100px;
+                        }
+                }
+                .themename {
+                        margin-bottom: 15px;
+                        display: block;
+                        a {
+                                color: $black;
+                                &:hover {
+                                        color: $skyblue2;
+                                }
+                        }
+                }
+                .btn-view {
+                        max-width: 125px;
+                        width: 100%;
+                        background: $grey-light1;
+                        color: $black;
+                        display: block;
+                        margin-bottom: 10px;
+                        transition: all 0.4s ease-in-out;
+                        -webkit-transition: all 0.4s ease-in-out;
+                        &:hover {
+                                background: $grey;
+                                color: $white;
+                        }
+                }
+                .btn-choose {
+                        max-width: 125px;
+                        width: 100%;
+                        background: $skyblue;
+                        color: $white;
+                        display: block;
+                        transition: all 0.4s ease-in-out;
+                        -webkit-transition: all 0.4s ease-in-out;
+                        &:hover {
+                                background: $skyblue2;
+                        }
+                        label {
+                                padding-bottom: 0;
+                        }
+                }
+                &:last-child {padding-right: 0;}
+        }
 }*/
 .theme-box {
   padding: 15px 0; }

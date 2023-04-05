@@ -44,8 +44,16 @@ class CmsSlider extends Model
             //dd($slider_data->toArray());
             switch ($slider_data->type) {
                 case 'product':
-                    $data = Self::getSliderProduct($slider_data);
-                    $slider_data->slider = $data;
+                    if($slider_data->name == 'product-for-you'){
+                       $data = Self::productForYou($slider_data);
+                    }else{
+                       $data = Self::getSliderProduct($slider_data);
+                    }
+                    if($data){
+                      $slider_data->slider = $data;   
+                    }else{
+                      $slider_data->slider = []; 
+                    }
                     break;
                 case 'blog':
                     $data = Self::getSliderBlog($slider_data);
@@ -553,4 +561,164 @@ class CmsSlider extends Model
         return $prd_data_arr;
 
     }
+
+    public static function productForYou($slider_data){
+        if(!Auth::check()){
+          return false;
+        }
+        $badge_id_arr = $slider_data->badge_id?array_map('intval', explode(',', $slider_data->badge_id)):[];
+
+        $package_id_arr = $slider_data->package_id?array_map('intval', explode(',', $slider_data->package_id)):[];
+
+        if(isset($slider_data->slider_option['sort_by'])){
+            switch ($slider_data->slider_option['sort_by']) {
+                case 'name':
+                    $sort_by = 'name.'.session('lang_code');
+                    break;
+                case 'updated_at':
+                    $sort_by = 'updated_at';
+                    break;
+                case 'created_at':
+                    $sort_by = 'created_at';
+                    break;
+                case 'price':
+                    $sort_by = 'unit_price';
+                    break;
+                default:
+                    $sort_by = '_id';
+                    break;
+            }
+        }else{
+            $sort_by = '_id';
+        }
+
+        if(isset($slider_data->slider_option['sort_by_val'])){
+            $sort_by_val = $slider_data->slider_option['sort_by_val'];
+        }else{
+            $sort_by_val = 'desc';
+        }
+        $sort_by_val_int = $sort_by_val=='asc'?1:-1;
+
+        $sub_cat_ids = [];
+        $sub_cat_data = [];
+        $prd_data_arr = [];
+        $slider_con = $slider_data->slider_condition;
+        //dd($slider_con);
+        if($slider_con == 'master_level_1'){
+            $parent_cat_ids = $slider_data->sliderCat->pluck('category_id')->toArray();
+            if(count($parent_cat_ids)){
+               
+                $sub_cat_ids_data = MongoCategory::getSubCat($parent_cat_ids,null)->toArray();
+                if(count($sub_cat_ids_data)){
+                    foreach ($sub_cat_ids_data as $key => $value) {
+                        $sub_cat_data[$value['_id']] = $value;
+                        $sub_cat_ids[] = $value['_id'];
+                    }
+                }
+                
+            }
+        }else{
+            if($slider_data->custom_id){
+                $id_arr = array_map('intval', explode(',', $slider_data->custom_id));
+                $sub_cat_ids_data = MongoCategory::getSubCat(null,$id_arr)->toArray();
+                if(count($sub_cat_ids_data)){
+                    foreach ($sub_cat_ids_data as $key => $value) {
+                        $sub_cat_data[$value['_id']] = $value;
+                        $sub_cat_ids[] = $value['_id'];
+                    }
+                }
+            }
+        } 
+        
+        if(count($badge_id_arr) && count($sub_cat_ids) && count($package_id_arr)){
+            $newdate = date("Y-m-d", strtotime("-6 months"));
+            $prefix = DB::getTablePrefix();
+            $result_arr  = [];
+            $user_id = Auth::id();
+            $product_data = DB::table(with(new \App\OrderDetail)->getTable() . ' as od')
+                ->join(with(new \App\Product)->getTable() . ' as p', [['od.product_id', '=', 'p.id']])
+                ->join(with(new \App\Shop)->getTable() . ' as s', [['p.shop_id', '=', 's.id']])
+                ->select(DB::raw('count(' . $prefix . 'od.sku) as totord'), 'od.sku','od.order_detail_json','p.unit_price','p.base_unit_id','p.thumbnail_image','p.badge_id','p.package_id','p.id', 'p.weight_per_unit', 'p.cat_id')
+                ->whereDate('od.created_at','>=',$newdate)
+                ->where('od.user_id',$user_id)
+                ->whereIn('p.cat_id', $sub_cat_ids)
+                ->whereIn('p.badge_id', $badge_id_arr)
+                ->whereIn('p.package_id', $package_id_arr)
+                ->where('p.status','1')
+                ->where('s.shop_status','open')
+                ->groupBy('od.sku')
+                ->orderBy('totord','desc')->limit(20)
+                ->get()->toArray();
+            
+            if($product_data){ 
+                $tot_data = count($product_data);
+                if($tot_data < 20){
+                    $remain = 20-$tot_data;
+                    $remain_record = DB::table(with(new \App\OrderDetail)->getTable() . ' as od')
+                    ->join(with(new \App\Product)->getTable() . ' as p', [['od.product_id', '=', 'p.id']])
+                    ->join(with(new \App\Shop)->getTable() . ' as s', [['p.shop_id', '=', 's.id']])
+                    ->select(DB::raw('count(' . $prefix . 'od.sku) as totord'), 'od.sku','od.order_detail_json','p.unit_price','p.base_unit_id','p.thumbnail_image','p.badge_id','p.package_id','p.id', 'p.weight_per_unit','p.cat_id')
+                    ->whereDate('od.created_at','>=',$newdate)
+                    ->where('od.user_id','!=',$user_id)
+                    ->whereIn('p.cat_id', $sub_cat_ids)
+                    ->whereIn('p.badge_id', $badge_id_arr)
+                    ->whereIn('p.package_id', $package_id_arr)
+                    ->where('p.status','1')
+                    ->where('s.shop_status','open')
+                    ->groupBy('od.sku')
+                    ->orderBy('totord','desc')
+                    ->limit($remain)
+                    ->get()->toArray();
+                    if($remain_record){
+                        $product_data = array_merge($product_data, $remain_record);
+                    }
+
+                }    
+
+            }else{
+                
+                $newdate = date("Y-m-d", strtotime("-3 months"));
+                $product_data = DB::table(with(new \App\OrderDetail)->getTable() . ' as od')
+                    ->join(with(new \App\Product)->getTable() . ' as p', [['od.product_id', '=', 'p.id']])
+                    ->join(with(new \App\Shop)->getTable() . ' as s', [['p.shop_id', '=', 's.id']])
+                    ->select(DB::raw('count(' . $prefix . 'od.sku) as totord'), 'od.sku','od.order_detail_json','p.unit_price','p.base_unit_id','p.thumbnail_image','p.badge_id','p.package_id','p.id', 'p.weight_per_unit','p.cat_id')
+                    ->whereDate('od.created_at','>=',$newdate)
+                    ->where('p.status','1')
+                    ->whereIn('p.cat_id', $sub_cat_ids)
+                    ->whereIn('p.badge_id', $badge_id_arr)
+                    ->whereIn('p.package_id', $package_id_arr)
+                    ->where('s.shop_status','open')
+                    ->groupBy('od.sku')
+                    ->orderBy('totord','desc')
+                    ->limit(20)
+                    ->get()->toArray();
+
+
+
+            }   
+            
+            if(count($product_data)){
+                foreach ($product_data as $key => $value) {
+                    $id_arr = [];
+                    $id_arr['_id'] = $value->id;
+                    $id_arr['unit_price'] = $value->unit_price;
+                    $cat_data = $sub_cat_data[$value->cat_id];
+                    $id_arr['cat_name'] = $cat_data['name'][session('lang_code')];
+                    $id_arr['cat_url'] = getCategoryUrl($cat_data['url']);
+                    $id_arr['cat_img'] = getCategoryImageUrl($cat_data['img']);
+                    $id_arr['badge_img'] = getBadgeImage($value->badge_id);
+                    $id_arr['package_name'] = getPackageName($value->package_id);
+                    $prd_data_arr[] = $id_arr;
+                    
+                    
+                }
+            }
+            
+        }
+        //dd($prd_data_arr);
+        return $prd_data_arr;
+
+    }
+
+
 }

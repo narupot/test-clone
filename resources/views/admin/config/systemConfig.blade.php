@@ -82,6 +82,14 @@
                             <label>@lang('admin.clear_cart_time_in_hour')</label>
                             <input type="text" name="CART_CLEAR_TIME" value="{{ $config_arr['CART_CLEAR_TIME'] }}" class="form-control">
                         </div>
+                        <div class="form-group">
+                            <label>@lang('admin.client_code_for_order_export_file')</label>
+                            <input type="text" name="CLIENT_CODE_FOR_ORDER_EXPORT_FILE" value="{{ $config_arr['CLIENT_CODE_FOR_ORDER_EXPORT_FILE'] }}" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>@lang('admin.client_acc_no_for_order_export_file')</label>
+                            <input type="text" name="CLIENT_ACC_NO_ORDER_EXPORT_FILE" value="{{ $config_arr['CLIENT_ACC_NO_ORDER_EXPORT_FILE'] }}" class="form-control">
+                        </div>
                     </div>
                   
                 </div>

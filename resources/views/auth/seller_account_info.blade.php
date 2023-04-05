@@ -8,6 +8,19 @@
         .chosenImage-container .chosen-results li, .chosenImage-container .chosen-single span {
             text-align: left;
         }
+        .chosen-container-single .chosen-single {
+            height: 50px; padding: 5px 0 5px 10px; line-height: 40px;
+            background-image: url(../images/arrow-select.png) !important;
+            background-position: right 10px top 20px;
+            background-repeat: no-repeat;
+        }
+        .chosen-container-single .chosen-single span {
+            background-position:0 10px !important;
+        }
+        .chosen-container-single .chosen-single div b {
+            background-position: 0 10px;
+        }
+        .chosen-container-single .chosen-single div b { display:none !important; }
     </style>
 @endsection
 
@@ -38,7 +51,7 @@ var branch_list_url = "{{action('Auth\SellerRegisterController@getBranchList')}}
                     {{ csrf_field() }}                            
 
                     <div class="form-group seller-paybanktab" id="slrbankTab">
-                             <select data-placeholder="Choose Bank List..." class="my-select" style="width:250px;" tabindex="2" name="bank_id">
+                             <select data-placeholder="Choose Bank List..." class="my-select" style="width:100%;" tabindex="2" name="bank_id">
                     @if(count($bank_list))
                         @foreach($bank_list as $key => $val)
                                 <option value="{{$val->id}}" data-img-src="{{ getBankImageUrl($val->bank_image) }}">{{ isset($val->paymentBankName)?$val->paymentBankName->bank_name:'' }}</option> 
@@ -49,10 +62,28 @@ var branch_list_url = "{{action('Auth\SellerRegisterController@getBranchList')}}
                     </div>
 
                     <div class="form-group seller-paybanktab" id="slrbankBranchTab">
-                             <select data-placeholder="Choose Branch List..." id="branch_select" style="width:250px;" tabindex="2" name="branch_id">
+                             <select data-placeholder="Choose Branch List..." id="branch_select" tabindex="2" name="branch_id">
                                  <option value="">@lang('shop.select_branch')</option>     
                             </select>
                             <p class="error" id="e_branch_id"></p> 
+                    </div>
+
+                    <div class="form-group">
+                        <label class="chk-wrap">
+                            <input type="checkbox" name="" id="branchCheck">
+                            <span class="chk-mark">@lang('shop.other_branches_branch_not_found_in_the_list')</span>
+                        </label>
+                        <p class="error" id=""></p>
+                    </div>                    
+                    <div class="form-group">
+                        <label>@lang('shop.branch_code')<i class="red">*</i></label>
+                        <input type="text" name="branch_code" value="">
+                        <p class="error" id="e_branch_code"></p>
+                    </div>
+                    <div class="form-group" id="branch_names" style="display:none;">
+                        <label>@lang('shop.branch')<i class="red">*</i></label>
+                        <input type="text" name="branch" value="">
+                        <p class="error" id="e_branch"></p>
                     </div>
 
                     <div class="form-group">
@@ -65,21 +96,14 @@ var branch_list_url = "{{action('Auth\SellerRegisterController@getBranchList')}}
                         <input type="text" name="account_no">
                         <p class="error" id="e_account_no"></p>
                     </div>
+                    
+                    
                     <div class="form-group">
-                        <label>@lang('shop.branch')<i class="red">*</i></label>
-                        <input type="text" name="branch" value="">
-                        <p class="error" id="e_branch"></p>
-                    </div>
-                    <div class="form-group">
-                        <label>@lang('shop.branch_code')<i class="red">*</i></label>
-                        <input type="text" name="branch_code" value="">
-                        <p class="error" id="e_branch_code"></p>
-                    </div>
-                    <div class="form-group">
-                        <label>@lang('common.attach') @lang('shop.book_bank')</label>                     
+                        <label>@lang('common.attach') @lang('shop.book_bank')<i class="red">*</i></label>                     
                         <div class="file-wrapper">
                             <div class="custom-img-file">
                                     <input type="file" name="account_image" accept="image/*" id="img-input">
+                                    <p class="error" id="e_account_image"></p>
                                     <span class="file-img btn-default"><img src="images/file-upload.png"></span>
                             </div> 
                             <span class="image-preview"><img id="blah" src=""/></span>                         
@@ -123,6 +147,19 @@ var branch_list_url = "{{action('Auth\SellerRegisterController@getBranchList')}}
             $("#img-input").change(function(){
                 readURL(this);
             });
+
+         // hide show field 
+         $(function () {
+            $("#branchCheck").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#branch_names").show();
+                    $('#slrbankBranchTab select').addClass('disabled');
+                } else {
+                    $("#branch_names").hide();
+                    $('#slrbankBranchTab select').removeClass('disabled');
+                }
+            });
+        });   
     });
 </script>
     

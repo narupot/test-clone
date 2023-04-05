@@ -115,7 +115,7 @@ class ExportOrderController extends MarketPlace
             $file_data = OrderExportLog::where('id',$id)->first();
             if($file_data){
                 $file_path = Config::get('constants.public_path').'/seller-payment/';
-                $filename = $file_data->file_name.'.gpg';
+                $filename = $file_data->file_name;
                 $file_full_path = $file_path.$filename;
 
                 if(file_exists($file_full_path)){
@@ -188,7 +188,7 @@ class ExportOrderController extends MarketPlace
             $data_p_product_code = "DCT";
 
             $data_client_code = getConfigValue('CLIENT_CODE_FOR_ORDER_EXPORT_FILE');
-            $data_client_account_no = "3731037174";
+            $data_client_account_no = getConfigValue('CLIENT_ACC_NO_ORDER_EXPORT_FILE');
 
             /*****H row data****/
             $record_identifier = $data_h;
@@ -352,6 +352,17 @@ class ExportOrderController extends MarketPlace
             $main_data = $h_data."\n".$p_data."\n".$i_data.$t_data;
             if($eny_type=='with_enc'){
                 $main_data = iconv('utf8', 'tis620', $main_data);
+                $pub_path = Config::get('constants.public_path');
+                $key_path = @file_get_contents($pub_path.'/KBankH2HPGPProdKey.asc');
+                $gpg = new \gnupg();
+                $gpg->seterrormode(\gnupg::ERROR_EXCEPTION);
+                $info_key = $gpg->import($key_path);
+                $fingerprint = $info_key['fingerprint'];
+                $gpg->addencryptkey($fingerprint);
+                $main_data = $gpg->encrypt($main_data);
+
+                /*$dec_check = $gpg_dep->adddecryptkey($fingerprint,'');
+                $dec =  $gpg_dep->decrypt($main_data);*/
             }
             
             if($tot_order){
@@ -364,18 +375,22 @@ class ExportOrderController extends MarketPlace
             
                 $client_code = $data_client_code;
                 $date = str_replace('-', '', $export_date);
-                $file_name = 'P-'.$client_code.'-'.$date.'-'.$ref_no;
-                $file = $file_path.'/seller-payment/'.$file_name.'.gpg';
+                $file_name = 'P-'.$client_code.'-'.$date.'-'.$ref_no.'.txt.gpg';
+                $file = $file_path.'/seller-payment/'.$file_name;
                 \File::put($file,$main_data);
                 $all_file_path[] = $file;
 
                 $log_obj = new \App\OrderExportLog;
                 $log_obj->total_order = $tot_order;
+                if($tot_order){
+                    $log_obj->shop_ids = implode(',', $shop_id_arr);
+                    $log_obj->bank_type = $bank_name_key;
+                }
                 $log_obj->file_name = $file_name;
                 $log_obj->total_seller = count($seller_order_data);
                 $log_obj->total_amount = $total_order_amt;
                 $log_obj->status = 'pending';
-                $log_obj->order_date = date('Y-m-d H:i:s',strtotime($export_date.date('H:i:s')));
+                $log_obj->order_date = date('Y-m-d',strtotime($export_date));
                 $log_obj->save();
                 $log_id = $log_obj->id;
                 $log_id_arr[] = $log_id;
@@ -429,29 +444,45 @@ class ExportOrderController extends MarketPlace
                 while (($line = fgets($handle)) !== false) {
                     $line = str_replace("\n", "", $line);
                     $part_identifier = substr($line, 0,1);
-                    echo 'part_identifier : '.$part_identifier.'<br>';
-                    $credit_detail_no = substr($line, 1,20);
-                    echo 'credit_detail_no : '.$credit_detail_no.'<br>';
-                    $payee_name = substr($line, 21,120);
-                    echo 'payee_name : '.$payee_name.'<br>';
-                    $credit_amount = substr($line, 141,13);
-                    echo 'credit_amount : '.$credit_amount.'<br>';
-                    $amount_ccy = substr($line, 154,3);
-                    echo 'amount_ccy : '.$amount_ccy.'<br>';
-                    $account_no = substr($line, 157,20);
-                    echo 'account_no : '.$account_no.'<br>';
-                    $ref_no = substr($line, 177,16);
-                    echo 'ref_no : '.$ref_no.'<br>';
-                    $status = substr($line, 193,2);
-                    echo 'status : '.$status.'<br>';
-                    $status_desc = substr($line, 195,35);
-                    echo 'status_desc : '.$status_desc.'<br>';
-                    $batch_ref = substr($line, 303,16);
-                    echo 'batch_ref : '.$batch_ref.'<br>';
-                    $client_code = substr($line, 319,10);
-                    echo 'client_code : '.$client_code.'<br>';
-                    $product_code = substr($line, 329,3);
-                    echo 'product_code : '.$product_code.'<br>';
+                        echo 'part_identifier : '.$part_identifier.'<br>';
+                        $credit_detail_no = substr($line, 1,20);
+                        echo 'credit_detail_no : '.$credit_detail_no.'<br>';
+                        $payee_name = substr($line, 21,120);
+                        echo 'payee_name : '.$payee_name.'<br>';
+                        $credit_amount = substr($line, 141,13);
+                        echo 'credit_amount : '.$credit_amount.'<br>';
+                        $amount_ccy = substr($line, 154,3);
+                        echo 'amount_ccy : '.$amount_ccy.'<br>';
+                        $account_no = substr($line, 157,20);
+                        echo 'account_no : '.$account_no.'<br>';
+                        $ref_no = substr($line, 177,16);
+                        echo 'ref_no : '.$ref_no.'<br>';
+                        $status = substr($line, 193,2);
+                        echo 'status : '.$status.'<br>';
+                        $status_desc = substr($line, 195,35);
+                        echo 'status_desc : '.$status_desc.'<br>';
+                        $cheque_no = substr($line, 230,16);
+                        echo 'cheque_no : '.$cheque_no.'<br>';
+                        $paid_date = substr($line, 246,10);
+                        echo 'paid_date : '.$paid_date.'<br>';
+                        $instrument_date = substr($line, 256,10);
+                        echo 'instrument_date : '.$instrument_date.'<br>';
+                        $pickup_date = substr($line, 266,10);
+                        echo 'pickup_date : '.$pickup_date.'<br>';
+                        $upload_date = substr($line, 276,10);
+                        echo 'upload_date : '.$upload_date.'<br>';
+                        $debit_date = substr($line, 286,10);
+                        echo 'debit_date : '.$debit_date.'<br>';
+                        $payee_bank_code = substr($line, 296,3);
+                        echo 'payee_bank_code : '.$payee_bank_code.'<br>';
+                        $payee_branch_code = substr($line, 299,4);
+                        echo 'payee_branch_code : '.$payee_branch_code.'<br>';
+                        $batch_ref = substr($line, 303,16);
+                        echo 'batch_ref : '.$batch_ref.'<br>';
+                        $client_code = substr($line, 319,10);
+                        echo 'client_code : '.$client_code.'<br>';
+                        $product_code = substr($line, 329,3);
+                        echo 'product_code : '.$product_code.'<br>';
                     exit;
                 }
                 fclose($handle);

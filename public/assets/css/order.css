@@ -11,7 +11,6 @@
 /*30px;*/
 /*28px;*/
 /*24px;*/
-/*18px;*/
 /*16px;*/
 /*14px;*/
 /*12px;*/
@@ -175,7 +174,6 @@
       .order-status-wrap .order-status-content .user-detail .name, .order-status-wrap .order-status-content .user-detail a {
         display: block; }
     .order-status-wrap .order-status-content .processing {
-      background: #ffcd59;
       padding: 5px 10px;
       margin-top: 1px;
       display: inline-block;
@@ -291,7 +289,7 @@
       height: 0;
       border-left: 8px solid transparent;
       border-right: 10px solid transparent;
-      border-top: 8px solid #e9e9e8;
+      border-top: 8px solid #6c757d;
       margin-left: -7px; }
     .order-info-table .table-header li:first-child {
       text-align: left; }
@@ -479,7 +477,7 @@
     .order-table .table-header li:after {
       border-left: 8px solid transparent;
       border-right: 10px solid transparent;
-      border-top: 8px solid #e9e9e8;
+      border-top: 8px solid #bcbcbc;
       bottom: -7px;
       content: "";
       height: 0;
@@ -516,8 +514,6 @@
     width: 130px; }
   .order-table .product {
     text-align: left; }
-    .order-table .product img {
-      max-width: 100px; }
   .order-table li + li {
     text-align: center; }
   .order-table .search-wrap {
@@ -881,12 +877,3 @@ ul.steplist {
       padding-bottom: 0px; }
   .shadow-box .order-comment {
     margin-bottom: 0px; }
-
-.seller-shop-img {
-  min-width: 50px;
-  margin-right: 10px;
-  display: block; }
-  .seller-shop-img img {
-    min-width: 50px; }
-
-/*# sourceMappingURL=order.css.map */

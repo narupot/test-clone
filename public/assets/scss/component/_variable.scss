@@ -1,7 +1,7 @@
 /*  Variable */  
 $kanit 			:'Kanit', sans-serif;
 
-$default		:#d1d2d2;
+$default		:#E2E2E2;
 $primary		:#007bff;
 $secondary		:#6c757d;
 $success		:#28a745;
@@ -16,6 +16,8 @@ $overlay-light 		: #495057;
 $overlay-dark  		: #212529;
 
 $border         :#bcbcbc;
+
+$grey           :#eee;
 
 /*  Font size  */
 $main_title 		: 2.5rem;/*40px;*/
@@ -73,6 +75,14 @@ $input-btn-padding-y-lg:      .5rem;
 $input-btn-padding-x-lg:      1rem;
 $input-btn-font-size-lg:      $font-size-lg;
 $input-btn-line-height-lg:    $line-height-lg;
+
+$input-focus-color:           $overlay-light;
+$input-focus-bg:              $white;
+$input-focus-border-color:    #80bdff;
+
+$input-hover-color:           $overlay-light;
+$input-hover-bg:              $white;
+$input-hover-border-color:    #80bdff;
 
 $btn-padding-y:               $input-btn-padding-y;
 $btn-padding-x:               $input-btn-padding-x;

@@ -69,7 +69,7 @@
                                 <p class="error error-msg">{{ $errors->first('bank_name') }}</p>
                             @endif 
                         </div>  
-                        <div class="form-group">
+                        {{--<div class="form-group">
                             <label>@lang('admin_payment.account_no') <i class="strick">*</i></label>                     
                             <input  name="account_no" type="text" value="{{ $bank_detail->account_no }}">
                             @if ($errors->has('account_no'))
@@ -82,16 +82,16 @@
                             @if ($errors->has('account_name'))
                                 <p class="error error-msg">{{ $errors->first('account_name') }}</p>
                             @endif
-                        </div>
+                        </div>--}}
                         <div class="form-group">
-                            <label>@lang('admin_payment.branch')</label> 
-                            <input name="branch" type="text" value="{{ $bank_detail->branch }}">
-                            @if ($errors->has('branch'))
-                                <p class="error error-msg">{{ $errors->first('branch') }}</p>
+                            <label>@lang('admin_payment.bank_code')</label> 
+                            <input name="bank_code" type="text" value="{{ $bank_detail->bank_code }}">
+                            @if ($errors->has('bank_code '))
+                                <p class="error error-msg">{{ $errors->first('bank_code') }}</p>
                             @endif
                             
                         </div>  
-                        <div class="form-group">
+                        {{--<div class="form-group">
                             <label>@lang('admin_payment.account_type') <i class="strick">*</i></label> 
                             <select name="account_type">
                                 <option value="">@lang('admin_common.select')</option>
@@ -101,7 +101,7 @@
                             @if ($errors->has('account_type'))
                             <p class="error error-msg">{{ $errors->first('account_type') }}</p>
                             @endif
-                        </div>
+                        </div>--}}
                     </div> 
                 </div>                                                      
             </div>
