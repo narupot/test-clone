@@ -191,6 +191,7 @@
 
         Route::get('seller-order-export', 'Admin\Transaction\ShopOrderController@sellerOrder');
         Route::get('listSellerOrderData', 'Admin\Transaction\ShopOrderController@listSellerOrderData');
+        Route::get('get-generated-log', 'Admin\Transaction\ShopOrderController@getGeneratedLog');
 
         Route::group(array('prefix' => 'shop-order'), function() {
             Route::get('/', 'Admin\Transaction\ShopOrderController@index');

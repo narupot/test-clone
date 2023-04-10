@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin\Config;
-
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
@@ -18,11 +18,12 @@ use Lang;
 class PaymentBankController extends MarketPlace
 {
     private $tblPaymentBankDesc;
-
+    private $tblPaymentBank;
     public function __construct()
     {   
         $this->middleware('admin.user');
         $this->tblPaymentBankDesc = with(new PaymentBankDesc)->getTable();  
+        $this->tblPaymentBank = with(new PaymentBank)->getTable(); 
     }     
 
     public function index()
@@ -79,10 +80,11 @@ class PaymentBankController extends MarketPlace
 
             $pay_bank->status = $request->status;
             //$pay_bank->payment_option_id = $request->payment_option_id;
-            $pay_bank->account_no = ($request->account_no !='') ? cleanValue($request->account_no) : '';
-            $pay_bank->account_name = ($request->account_name !='') ? cleanValue($request->account_name) : '';
-            $pay_bank->branch = ($request->branch !='') ? cleanValue($request->branch) : '';
-            $pay_bank->account_type = ($request->account_type !='') ? $request->account_type : '';
+            //$pay_bank->account_no = ($request->account_no !='') ? cleanValue($request->account_no) : '';
+            //$pay_bank->account_name = ($request->account_name !='') ? cleanValue($request->account_name) : '';
+            //$pay_bank->branch = ($request->branch !='') ? cleanValue($request->branch) : '';
+            $pay_bank->bank_code = ($request->bank_code !='') ? cleanValue($request->bank_code) : '';
+            //$pay_bank->account_type = ($request->account_type !='') ? $request->account_type : '';
             $pay_bank->created_by = Auth::guard('admin_user')->user()->id;
             $pay_bank->save();
 
@@ -144,7 +146,7 @@ class PaymentBankController extends MarketPlace
         $input = $request->all();
         $input['bnk_name'] = $def_bank_name;      
 
-        $validate = $this->validatePaymentBank($input);
+        $validate = $this->validatePaymentBank($input, $id);
 
         if ($validate->passes()) {
 
@@ -165,10 +167,11 @@ class PaymentBankController extends MarketPlace
 
             $paybank->status = $request->status;
             //$paybank->payment_option_id = $request->payment_option_id;
-            $paybank->account_no = ($request->account_no !='') ? cleanValue($request->account_no) : '';
-            $paybank->account_name = ($request->account_name !='') ? cleanValue($request->account_name) : '';
-            $paybank->branch = ($request->branch !='') ? cleanValue($request->branch) : '';
-            $paybank->account_type = ($request->account_type !='') ? $request->account_type : '';
+            // $paybank->account_no = ($request->account_no !='') ? cleanValue($request->account_no) : '';
+            // $paybank->account_name = ($request->account_name !='') ? cleanValue($request->account_name) : '';
+            // $paybank->branch = ($request->branch !='') ? cleanValue($request->branch) : '';
+            $paybank->bank_code = ($request->bank_code !='') ? cleanValue($request->bank_code) : '';
+            //$paybank->account_type = ($request->account_type !='') ? $request->account_type : '';
             $paybank->updated_by = Auth::guard('admin_user')->user()->id;
             $paybank->save();
 
@@ -207,19 +210,22 @@ class PaymentBankController extends MarketPlace
         //return redirect()->action('LanguageController@index')->with('succMsg', 'Language Deleted Successfully!');
     //} 
 
-    private function validatePaymentBank($input, $type='') {
+    private function validatePaymentBank($input, $bank_id='') {
 
         //$rules['payment_option_id'] = 'Required';
         $rules['bnk_name'] = 'Required|Min:3';
-        $rules['account_no'] = 'Required|Min:3';
-        $rules['account_name'] = 'Required|Min:3';
+        //$rules['account_no'] = 'Required|Min:3';
+        $rules['bank_code'] = bankCodeRule($this->tblPaymentBank, 'bank_code');
+        if(!empty($bank_id) && !empty(trim($input['bank_code']))) {
+            $rules['bank_code'] = Rule::unique($this->tblPaymentBank)->ignore($bank_id);
+        }
         $rules['account_type'] = 'Required';
         
         $error_msg['payment_option_id.required'] = Lang::get('payment.select_payment_option');
         $error_msg['bnk_name.required'] = Lang::get('payment.enter_bank_name');
-        $error_msg['account_no.required'] = Lang::get('payment.enter_bank_account_no');
-        $error_msg['account_name.required'] = Lang::get('payment.enter_bank_account_name');
-        //$error_msg['branch.required'] = Lang::get('payment.enter_bank_branch_name');
+        //$error_msg['account_no.required'] = Lang::get('payment.enter_bank_account_no');
+        //$error_msg['account_name.required'] = Lang::get('payment.enter_bank_account_name');
+        $error_msg['bank_code.required'] = Lang::get('payment.enter_bank_code');
         $error_msg['account_type.required'] = Lang::get('payment.enter_bank_acc_type');
         
 

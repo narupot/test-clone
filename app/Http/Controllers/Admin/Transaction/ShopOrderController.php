@@ -269,6 +269,9 @@ class ShopOrderController extends MarketPlace
                             
                             case 'seller_name':$query->where('sord.shop_json','like', '%'.$searchval.'%'); break;
 
+                            case 'bank_name':$query->where('pbd.bank_name','like', '%'.$searchval.'%'); break;
+
+                            case 'seller_ph_number':$query->where('sord.shop_json','like', '%'.$searchval.'%'); break;
                         }
                         
                     }
@@ -287,15 +290,24 @@ class ShopOrderController extends MarketPlace
             foreach ($response as $key => $value) {
                 $json_data = json_decode($value->shop_json);
                 $seller_name = $json_data->seller_name;
+                $seller_ph_number = $json_data->seller_ph_number;
                 $shop_name = $json_data->shop_name[0];
                 $panel_no = $json_data->panel_no;
                 $amount = numberFormat($value->tot_amount);
+                $last_exp_log = \App\OrderExportLog::whereDate('order_date',$filter_date)->whereRaw('FIND_IN_SET(?, shop_ids)', [$value->shop_id])->orderBy('created_at','desc')->value('created_at');
+                if($last_exp_log){
+                    $latest_log_date = getDateFormat($last_exp_log,4);
+                }else{
+                    $latest_log_date = 'N/A';
+                }
                 $response[$key]->id = $value->shop_id;
                 $response[$key]->seller_name = $seller_name;
+                $response[$key]->seller_ph_number = $seller_ph_number;
                 $response[$key]->shop_name = $shop_name;
-                
+                $response[$key]->latest_log_date = $latest_log_date;
                 $response[$key]->panel_no = $panel_no;
                 $response[$key]->amount = $amount;
+                $response[$key]->status = 'N/A';
                 $response[$key]->detail_url = action('Admin\Transaction\ShopOrderController@sellerDetail').'?shop_id='.$value->shop_id.'&order_date='.$filter_date;
             }
 
@@ -327,7 +339,19 @@ class ShopOrderController extends MarketPlace
         return view('admin.transaction.sellerDetail',['shop_details'=>$shop_details,'order_shop'=>$order_shop,'order_date'=>$date]);
     }
     
-    function edit($group_id){
+    public function getGeneratedLog(Request $request){
+        $shop_id = $request->shop_id;
+        $order_date = $request->order_date;
+        $exp_log = \App\OrderExportLog::select('file_name','created_at','bank_type')->whereDate('order_date',$order_date)->whereRaw('FIND_IN_SET(?, shop_ids)', [$shop_id])->get();
+        if($exp_log){
+            foreach ($exp_log as $key => $value) {
+                $exp_log[$key]->log_at = getDateFormat($value->created_at,4);                
+            }
+            return ['status'=>'success','data'=>$exp_log];
+        }
+        else{
+            return ['status'=>'fail'];
+        }
     }
     
     function update(Request $request){

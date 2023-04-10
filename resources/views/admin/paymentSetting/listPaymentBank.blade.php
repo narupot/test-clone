@@ -18,8 +18,8 @@
              @if($permission_arr['add'] === true)
             <div class="float-right">
                 <a class="btn btn-create" href="{{ action('Admin\Config\PaymentBankController@create') }}"> @lang('admin_common.create_new')</a> 
+                
             </div>
-          
             @endif
         </div>
             
@@ -48,6 +48,8 @@
                         <th>@lang('admin_common.slno')</th>
                         <th>@lang('admin_payment.bank_name')</th>
                         <th>@lang('admin_payment.bank_image')</th>
+                        <th>@lang('admin_payment.bank_code')</th>
+                        <!-- <th>@lang('admin_payment.account_type')</th> -->
                         <th>@lang('admin_common.created_at')</th>
                         <th>@lang('admin_common.updated_at')</th>
                         <th>@lang('admin_common.status')</th>
@@ -61,10 +63,17 @@
                     <tr>
                         <td>{{ ++$key }}</td>
                         <td>{{ $bank_dtl->paymentBankName->bank_name }}</td>
-                        <td>@if($bank_dtl->bank_image) <img src="{{ Config::get('constants.payment_bank_url').$bank_dtl->bank_image }}"> @endif</td>                                                                     
-                        <td>{{ getDateFormat($bank_dtl->created_at, '1') }}</td>
+                        <td>@if($bank_dtl->bank_image) <img style="max-width: 48px;max-height: 48px;border-radius: 8px;float: none;margin: 0 auto;" src="{{ Config::get('constants.payment_bank_url').$bank_dtl->bank_image }}"></a> @endif</td>
+                        <td> {{ $bank_dtl->bank_code }}</td>
+                        <td> {{ getDateFormat($bank_dtl->created_at, '1') }}</td>
                         <td>{{ getDateFormat($bank_dtl->updated_at, '1') }}</td>
-                        <th><a id="status_{{ $bank_dtl->id }}" href="javascript:void(0);" onclick="callForAjax('{{ action('Admin\Config\PaymentBankController@changeBankStatus', $bank_dtl->id) }}', 'status_{{ $bank_dtl->id }}')" class="{{($bank_dtl->status == 1)?'status active':'status inactive'}}">
+                        <th>
+                            <!-- <label class="button-switch mb-0" style="height: 1.5rem;">
+                               <input type="checkbox" class="switch switch-orange" checked="checked" value="" name="status">
+                               <span for="switch-orange" class="lbl-off">Off</span>
+                               <span for="switch-orange" class="lbl-on">On</span>
+                            </label> -->
+                            <a id="status_{{ $bank_dtl->id }}" href="javascript:void(0);" onclick="callForAjax('{{ action('Admin\Config\PaymentBankController@changeBankStatus', $bank_dtl->id) }}', 'status_{{ $bank_dtl->id }}')" class="{{($bank_dtl->status == 1)?'status active':'status inactive'}}">
                         @if($bank_dtl->status == '0')
                             @lang('admin_common.inactive')
                         @else
@@ -87,6 +96,7 @@
             </table>
         </div>
     </div>
+
 @stop
 
 @section('footer_scripts')
@@ -98,6 +108,9 @@
     <script>
     $(document).ready(function() {
         $('#table').dataTable();
+
+        // jQuery('select.selectpicker').selectpicker();
+
     });
     </script>
     <!-- end of page level js -->

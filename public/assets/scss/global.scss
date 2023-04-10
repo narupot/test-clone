@@ -2478,7 +2478,7 @@ fileupload-buttonbar .btn,
 
 /* Start Switch On/Off*/
 .button-switch {
-  font-size: 1rem;
+  font-size: 14px;
   line-height: 1.5;
   height: calc(2.25rem + 2px);
   margin-bottom: 0.625em;
@@ -2494,13 +2494,13 @@ fileupload-buttonbar .btn,
     padding: 3px 0px
   }
   .lbl-off {
-    right: 20px;
+    right: 7px;
     
   }
   .lbl-on {
     color: $white;
     opacity: 0;
-    left: 15px;    
+    left: 7px;    
   }
   .switch {
     -webkit-appearance: none;
