@@ -151,8 +151,16 @@ class CmsSlider extends Model
         } 
         
         if(count($badge_id_arr) && count($sub_cat_ids) && count($package_id_arr)){
+            $product_id_arr = $product_price= [];
+            $data = \App\MongoProduct::select('_id', 'unit_price', 'shop_id')->whereIn('cat_id',$sub_cat_ids)->where('status',"1")->OrderBy('shop_id','ASC')->get();
+            foreach ($data as $key => $val){
+                if(!isset($product_price[$val['shop_id']]) || ( $val['unit_price'] > 0 && $product_price[$val['shop_id']] > $val['unit_price'])){
+                    $product_price[$val['shop_id']] = $val['unit_price']; 
+                    $product_id_arr[$val['shop_id']] = $val['_id'];
+                }  
+            }
             
-            $product_data = \App\MongoProduct::where('status','1')->raw(function($collection) use ($sub_cat_ids,$badge_id_arr,$package_id_arr,$sort_by,$sort_by_val_int)
+            $product_data = \App\MongoProduct::where('status','1')->whereIn('_id', $product_id_arr)->raw(function($collection) use ($sub_cat_ids,$badge_id_arr,$package_id_arr,$sort_by,$sort_by_val_int)
             {
                 return $collection->aggregate([
                          [
