@@ -174,9 +174,14 @@ class CmsSlider extends Model
                         [
                             '$group' => [
                                 '_id' =>[
+                                    'product_id'=>'$_id',
                                     'cat_id'=>'$cat_id',
                                     'badge_id'=>'$badge_id',
-                                    'package_id'=>'$package_id'
+                                    'package_id'=>'$package_id',
+                                    'thumbnail_image'=>'$thumbnail_image',
+                                    'base_unit_id'=>'$base_unit_id',
+                                    'unit_price' => '$unit_price',
+                                    'weight_per_unit'=>'$weight_per_unit'
                                 ],
                                 'unit_price'=>[
                                     '$avg'=> '$unit_price'
@@ -195,26 +200,78 @@ class CmsSlider extends Model
             })->toArray();
             //dd($product_data,$badge_id_arr,$sub_cat_ids,$package_id_arr);
             $product_price_low = [];
+            // if(count($product_data)){
+            //     foreach ($product_data as $key => $value) {
+            //         $id_arr = (array)$value['_id'];
+            //         $id_arr['unit_price'] = $value['unit_price'];
+            //         if($id_arr['unit_price']<1){
+            //             //dd($value);
+            //         }
+            //         if(!isset($product_price_low[$id_arr['cat_id']]) || ( $value['unit_price'] > 0 && $product_price_low[$id_arr['cat_id']] > $value['unit_price'])){
+            //             $product_price_low[$id_arr['cat_id']] = $value['unit_price']; 
+                        
+            //             if(isset($sub_cat_data[$id_arr['cat_id']]) && $id_arr['unit_price']>0){
+            //                 $cat_data = $sub_cat_data[$id_arr['cat_id']];
+            //                 $id_arr['cat_name'] = $cat_data['name'][session('lang_code')];
+            //                 $id_arr['cat_url'] = getCategoryUrl($cat_data['url']);
+            //                 $id_arr['cat_img'] = getCategoryImageUrl($cat_data['img']);
+            //                 $id_arr['badge_img'] = getBadgeImage($id_arr['badge_id']);
+            //                 $id_arr['package_name'] = getPackageName($id_arr['package_id']);
+            //                 $prd_data_arr[] = $id_arr;
+            //             }
+            //         }    
+                    
+            //     }
+            // }
             if(count($product_data)){
                 foreach ($product_data as $key => $value) {
-                    $id_arr = (array)$value['_id'];
-                    $id_arr['unit_price'] = $value['unit_price'];
-                    if($id_arr['unit_price']<1){
-                        //dd($value);
+                    if($value['unit_price'] > 0){
+                        $id_arr = (array)$value['_id'];
+                        $id_arr['product_id'] = $id_arr['product_id'];
+                        $id_arr['unit_price'] = $value['unit_price'];
+
+                        if(!isset($product_price_low[$id_arr['cat_id']]) || ( $value['unit_price'] > 0 && $product_price_low[$id_arr['cat_id']] > $value['unit_price'])){
+                            $product_price_low[$id_arr['cat_id']] = $value['unit_price'];
+                            if(isset($sub_cat_data[$id_arr['cat_id']])){
+                                $cat_data = $sub_cat_data[$id_arr['cat_id']];
+                                $id_arr['product_name'] = $cat_data['name'][session('lang_code')];
+                                if($id_arr['thumbnail_image']){
+                                   //$id_arr['product_image'] = env('APP_WEB_URL').'files/product/original/' . $id_arr['thumbnail_image']; 
+                                    $id_arr['product_image'] = env('APP_WEB_URL').'files/category/' . $cat_data['img'];
+
+                                }else{
+                                   $id_arr['product_image'] = '';
+
+                                }
+                                
+                                $badge_data = \App\MongoBadge::getAllBadge($id_arr['badge_id']);
+                                if($badge_data){
+                                   $id_arr['badge_image'] = env('APP_WEB_URL') . 'files/standard_badge/' . $badge_data->icon;
+                                }else{
+                                   $id_arr['badge_image'] = '';  
+                                }
+
+                                $package_name = \App\MongoPackage::getAllPackage($id_arr['package_id']);
+                                $id_arr['package_name'] = $package_name->package_name;
+
+                                $base_unit = \App\MongoUnit::getAllUnit($id_arr['base_unit_id']);
+                                $id_arr['base_unit_id'] = convert_string($id_arr['base_unit_id']);
+                                $id_arr['base_unit'] = $base_unit->unit_name;
+                                
+                                $id_arr['weight_per_unit'] = str_replace('.00', '', $id_arr['weight_per_unit']);
+
+
+                                 
+                            
+                             
+                                //$id_arr['cat_url'] = getCategoryUrl($cat_data['url']);
+                                //$id_arr['cat_img'] = getCategoryImageUrl($cat_data['img']);
+                                //$id_arr['badge_img'] = getBadgeImage($id_arr['badge_id']);
+                                //$id_arr['package_name'] = getPackageName($id_arr['package_id']);
+                                $prd_data_arr[] = $id_arr;
+                            }
+                        }     
                     }
-                    if(!isset($product_price_low[$id_arr['cat_id']]) || ( $value['unit_price'] > 0 && $product_price_low[$id_arr['cat_id']] > $value['unit_price'])){
-                        $product_price_low[$id_arr['cat_id']] = $value['unit_price']; 
-                        
-                        if(isset($sub_cat_data[$id_arr['cat_id']]) && $id_arr['unit_price']>0){
-                            $cat_data = $sub_cat_data[$id_arr['cat_id']];
-                            $id_arr['cat_name'] = $cat_data['name'][session('lang_code')];
-                            $id_arr['cat_url'] = getCategoryUrl($cat_data['url']);
-                            $id_arr['cat_img'] = getCategoryImageUrl($cat_data['img']);
-                            $id_arr['badge_img'] = getBadgeImage($id_arr['badge_id']);
-                            $id_arr['package_name'] = getPackageName($id_arr['package_id']);
-                            $prd_data_arr[] = $id_arr;
-                        }
-                    }    
                     
                 }
             }
