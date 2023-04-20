@@ -198,7 +198,7 @@
                                                     <div class="price-wrap">
                                                     	<span class="price-label"> ราคาปัจจุบัน </span>
                                                         <span class="normal-price">
-                                                        {{$result['weight_per_unit']}} {{$result['base_unit']}} / {{$result['package_name']}} {{ round($result['unit_price'],2)}} บาท  
+                                                        {{$result['weight_per_unit']}} {{$result['base_unit']}} / {{$result['package_name']}}<br> {{ round($result['unit_price'],2)}} บาท  
                                                         </span>  
                                                                                                                               
                                                     </div>
