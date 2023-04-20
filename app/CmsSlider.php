@@ -264,10 +264,10 @@ class CmsSlider extends Model
                                  
                             
                              
-                                //$id_arr['cat_url'] = getCategoryUrl($cat_data['url']);
-                                //$id_arr['cat_img'] = getCategoryImageUrl($cat_data['img']);
-                                //$id_arr['badge_img'] = getBadgeImage($id_arr['badge_id']);
-                                //$id_arr['package_name'] = getPackageName($id_arr['package_id']);
+                                $id_arr['cat_name'] = $cat_data['name'][session('lang_code')];
+                                $id_arr['cat_url'] = getCategoryUrl($cat_data['url']);
+                                $id_arr['cat_img'] = getCategoryImageUrl($cat_data['img']);
+                                $id_arr['badge_img'] = getBadgeImage($id_arr['badge_id']);
                                 $prd_data_arr[] = $id_arr;
                             }
                         }     
