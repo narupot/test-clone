@@ -196,9 +196,9 @@
                                                     <div class="prod-desc"><img src="{{ $result['badge_img'] }}" /></div>  
                                                     
                                                     <div class="price-wrap">
-                                                    	<span class="price-label"> ราคาเฉลี่ย </span>
+                                                    	<span class="price-label"> ราคาปัจจุบัน </span>
                                                         <span class="normal-price">
-                                                            {{session('default_currency_symbol')}} {{ round($result['unit_price'],2)}} @lang('common.baht')
+                                                        {{$result['weight_per_unit']}} {{$result['base_unit']}} / {{$result['package_name']}} {{ round($result['unit_price'],2)}} บาท  
                                                         </span>  
                                                                                                                               
                                                     </div>

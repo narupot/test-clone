@@ -1642,3 +1642,10 @@ function getZip($id=null)
 	return $str;
 	//dd($str);
 }
+
+function convert_string($price){
+	$price = number_format(floatval($price), 2);
+	$price  = (String) $price;
+	$price  = str_replace('.00', '', $price);
+	return $price;
+}
