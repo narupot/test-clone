@@ -1592,8 +1592,8 @@ class CartController extends MarketPlace {
 			$shippingRes = $this->getShippingFee($shipAddress,$orderDetails,$paid_product);
 			$shipping_fee = $shippingRes['total_deliver_fee'];
 			$discount_fee = $shippingRes['total_logistic_fee'];
-			$final_ship_fee = numberFormat($shipping_fee);
-			$final_discount_fee = numberFormat($discount_fee);
+			$final_ship_fee = convert_string($shipping_fee);
+			$final_discount_fee = convert_string($discount_fee);
 			$total_amount += $shipping_fee;
 			if(!empty($shipAddress)){
 				$str = '<p>'.$shipAddress->first_name.' '.$shipAddress->last_name.'</p><p>'.$shipAddress->address.', '.$shipAddress->road.'</p><p>'.$shipAddress->city_district.', '.$shipAddress->province_state.' '.$shipAddress->zip_code.'</p><p>'.Lang::get("customer.tel").' : '.$shipAddress->ph_number.'</p>';
