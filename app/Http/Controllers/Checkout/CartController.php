@@ -1604,7 +1604,7 @@ class CartController extends MarketPlace {
 			$str = "";
 		}
 		
-		return json_encode(array('status'=>'success','shipVal'=>$str,'shipping_fee'=>$final_ship_fee,'discount_fee'=>$final_discount_fee,'total_amount'=>numberFormat($total_amount),'totAmt'=>$total_amount));
+		return json_encode(array('status'=>'success','shipVal'=>$str,'shipping_fee'=>$final_ship_fee,'discount_fee'=>$final_discount_fee,'total_amount'=>convert_string($total_amount),'totAmt'=>$total_amount));
 	}
 
 	// when user change billing address
