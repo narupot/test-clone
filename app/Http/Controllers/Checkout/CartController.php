@@ -220,7 +220,6 @@ class CartController extends MarketPlace {
 		$cal_time = $cal_hour = $tomorrow = null;
 		if($item_pickup_time > 0){
 			$cal_time = date("Y-m-d H:i:s", strtotime('+'.$item_pickup_time.' hours'));
-			$cal_time = date("Y-m-d H:i:s", strtotime('2019-09-19 16:00:00'));
 			$cal_hour = date('H',strtotime($cal_time)); 
 			if($cal_hour >= 23){
 				$tomorrow = true;
