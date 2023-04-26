@@ -624,7 +624,7 @@ class CartController extends MarketPlace {
 
 				$totQty = Cart::where('order_id',$cartresult->order_id)->sum('quantity');
 
-				return array('status'=>'success','ordAmount'=>numberFormat($orderFinalPrice),'totQty'=>$totQty,'tot_prd_price'=>numberFormat($total_price),'product_price'=>numberFormat($product_price));
+				return array('status'=>'success','ordAmount'=>convert_string($orderFinalPrice),'totQty'=>$totQty,'tot_prd_price'=>convert_string($total_price),'product_price'=>convert_string($product_price));
 			}
 
 		}else{
