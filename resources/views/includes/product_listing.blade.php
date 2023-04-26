@@ -161,6 +161,7 @@
                                 <li>
                                     <div class="action-wrap">
                                         <div class="price-wrap" ng-if="item.show_price == 1">
+                                            <span class="price-label"> ราคาปัจจุบัน </span>
                                             <div class="price"><%item.weight_per_unit%> <%item.unit_name%>/<%item.package_name%> <br><%item.unit_price%> @lang('common.baht')</div>
                                         </div>
                                         <div class="price-wrap" ng-if="item.show_price == 0">
