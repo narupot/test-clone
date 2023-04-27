@@ -104,7 +104,7 @@
                             <span class="price">@lang('product.ask_the_price_from_the_store')</span>
                         @else
                             <span class="price">{{ $productDetail->weight_per_unit }} {{ $productDetail->unit_name }}/{{ $productDetail->package_name }} <br>
-                            {{ numberFormat($productDetail->unit_price) }} @lang('common.baht')</span>
+                            {{ convert_string($productDetail->unit_price) }} @lang('common.baht')</span>
                             
                         @endif
                         <span class="remark">@lang('product.remark') : 1 {{ $productDetail->package_name }} = {{ $productDetail->weight_per_unit }} {{ $productDetail->unit_name }}</span>
@@ -116,7 +116,7 @@
                                     @foreach($productDetail->tierPrices as $tkey => $tval)
                                         <tr>
                                             <td>{{ $tval->start_qty }} - {{ $tval->end_qty }} {{ $productDetail->package_name }}</td>
-                                            <td>{{ numberFormat($tval->unit_price) }} @lang('common.baht')/{{ $productDetail->package_name }}</td>
+                                            <td>{{ convert_string($tval->unit_price) }} @lang('common.baht')/{{ $productDetail->package_name }}</td>
                                         </tr>
                                     @endforeach
                                     

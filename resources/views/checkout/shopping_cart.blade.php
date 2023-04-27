@@ -89,7 +89,7 @@
                                             <li>
                                                 <a href="{{ action('ShopController@index',$cartVal->getShop->shop_url)}}" class="link-skyblue">{{ $cartVal->getShopDesc->shop_name??'' }}</a>
                                             </li>
-                                            <li class="price_li"><label class="prd-unit-price">{{numberFormat($cartVal->cart_price) }} </label> @lang('common.baht') /{{ getPackageName($cartVal->getPrd->package_id) }}</li>
+                                            <li class="price_li"><label class="prd-unit-price">{{convert_string($cartVal->cart_price) }} </label> @lang('common.baht') /{{ getPackageName($cartVal->getPrd->package_id) }}</li>
                                             <li class="add-rem-qty"><span class="spiner" data-cartid="{{$cartVal->id}}">
                                                     <span class="decrease fas fa-minus">  </span>
                                                     <input type="number" class="spinNum" value="{{ $cartVal->quantity }}" min="0" max="{{ $cartVal->getPrd->quantity }}" @if($cartVal->product_from=='bargain') readonly="readonly" @endif>
@@ -98,7 +98,7 @@
                                                 <span class="qty-label">{{ getPackageName($cartVal->getPrd->package_id) }}</span>
                                             </li>
                                             <li>
-                                                <label class="prd-total-price">{{numberFormat($cartVal->total_price) }}</label> @lang('common.baht')
+                                                <label class="prd-total-price">{{convert_string($cartVal->total_price) }}</label> @lang('common.baht')
                                                 @if($cartVal->product_from == 'bargain')
                                                     <div class="bargained-price grey">@lang('checkout.price_has_already_bargained')</div>
                                                 @endif
@@ -138,7 +138,7 @@
                                                         {{ $shop_details[$crd_val->shop_id]['shop_name'] ?? ''}}
                                                     </a>
                                                     
-                                                    {{ numberFormat($crd_val->tot_remain_credit) }} / {{ numberFormat($crd_val->tot_credit) }}
+                                                    {{ convert_string($crd_val->tot_remain_credit) }} / {{ convert_string($crd_val->tot_credit) }}
                                                 </li>
                                             @endif 
                                         @endforeach 
@@ -154,7 +154,7 @@
                                 <div class="bg-grey">
                                     <div class="row">
                                         <span class="col-6">@lang('checkout.grand_total') </span>
-                                        <span class="col-6"><span id="tot_order_amount">{{ numberFormat($orderInfo->total_final_price) }} </span>@lang('common.baht')</span>
+                                        <span class="col-6"><span id="tot_order_amount">{{ convert_string($orderInfo->total_final_price) }} </span>@lang('common.baht')</span>
                                     </div>
                                 </div> 
                                 <div class="dbox-flex1 text-right">

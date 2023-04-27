@@ -53,7 +53,7 @@ class MongoUnit extends Molequent
         Self::where('_id', (int)$unit_id)->delete();
     }
 
-    public static function getAllUnit(){
+    public static function getAllUnit($id=null){
         $cache_key = 'product_unit';
         $unit_arr = [];
         if (cache_hasKey($cache_key) && \Config::get('constants.enable_cache')) {
@@ -67,6 +67,9 @@ class MongoUnit extends Molequent
                 }
                 cache_putData($cache_key,$unit_arr);
             }
+        }
+        if($id){
+            return isset($unit_arr[$id]) ? $unit_arr[$id] : [];
         }
         return $unit_arr;
     }

@@ -220,7 +220,6 @@ class CartController extends MarketPlace {
 		$cal_time = $cal_hour = $tomorrow = null;
 		if($item_pickup_time > 0){
 			$cal_time = date("Y-m-d H:i:s", strtotime('+'.$item_pickup_time.' hours'));
-			$cal_time = date("Y-m-d H:i:s", strtotime('2019-09-19 16:00:00'));
 			$cal_hour = date('H',strtotime($cal_time)); 
 			if($cal_hour >= 23){
 				$tomorrow = true;
@@ -625,7 +624,7 @@ class CartController extends MarketPlace {
 
 				$totQty = Cart::where('order_id',$cartresult->order_id)->sum('quantity');
 
-				return array('status'=>'success','ordAmount'=>numberFormat($orderFinalPrice),'totQty'=>$totQty,'tot_prd_price'=>numberFormat($total_price),'product_price'=>numberFormat($product_price));
+				return array('status'=>'success','ordAmount'=>convert_string($orderFinalPrice),'totQty'=>$totQty,'tot_prd_price'=>convert_string($total_price),'product_price'=>convert_string($product_price));
 			}
 
 		}else{
@@ -1593,8 +1592,8 @@ class CartController extends MarketPlace {
 			$shippingRes = $this->getShippingFee($shipAddress,$orderDetails,$paid_product);
 			$shipping_fee = $shippingRes['total_deliver_fee'];
 			$discount_fee = $shippingRes['total_logistic_fee'];
-			$final_ship_fee = numberFormat($shipping_fee);
-			$final_discount_fee = numberFormat($discount_fee);
+			$final_ship_fee = convert_string($shipping_fee);
+			$final_discount_fee = convert_string($discount_fee);
 			$total_amount += $shipping_fee;
 			if(!empty($shipAddress)){
 				$str = '<p>'.$shipAddress->first_name.' '.$shipAddress->last_name.'</p><p>'.$shipAddress->address.', '.$shipAddress->road.'</p><p>'.$shipAddress->city_district.', '.$shipAddress->province_state.' '.$shipAddress->zip_code.'</p><p>'.Lang::get("customer.tel").' : '.$shipAddress->ph_number.'</p>';
@@ -1605,7 +1604,7 @@ class CartController extends MarketPlace {
 			$str = "";
 		}
 		
-		return json_encode(array('status'=>'success','shipVal'=>$str,'shipping_fee'=>$final_ship_fee,'discount_fee'=>$final_discount_fee,'total_amount'=>numberFormat($total_amount),'totAmt'=>$total_amount));
+		return json_encode(array('status'=>'success','shipVal'=>$str,'shipping_fee'=>$final_ship_fee,'discount_fee'=>$final_discount_fee,'total_amount'=>convert_string($total_amount),'totAmt'=>$total_amount));
 	}
 
 	// when user change billing address

@@ -57,7 +57,7 @@ class MongoBadge extends Molequent
         Self::where('_id', (int)$unit_id)->delete();
     }
 
-    public static function getAllBadge(){
+    public static function getAllBadge($id=null){
         $cache_key = 'standard_badge';
         $badge_arr = [];
         if (cache_hasKey($cache_key) && \Config::get('constants.enable_cache')) {
@@ -71,6 +71,9 @@ class MongoBadge extends Molequent
                 }
                 cache_putData($cache_key,$badge_arr);
             }
+        }
+        if($id){
+            return isset($badge_arr[$id]) ? $badge_arr[$id]: [];
         }
         return $badge_arr;
     }
