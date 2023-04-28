@@ -1184,7 +1184,7 @@ class CustomHelpers {
 
     public static function getBadgeSize($key=null){
 
-        $arr = ['jumbo'=>Lang::get('admin_product.jumbo'),'large'=>Lang::get('admin_product.large'),'medium'=>Lang::get('admin_product.medium'),'small'=>Lang::get('admin_product.small'),'mini'=>Lang::get('admin_product.mini')];
+        $arr = ['jumbo'=>Lang::get('admin_product.jumbo'),'large'=>Lang::get('admin_product.large'),'medium'=>Lang::get('admin_product.medium'),'small'=>Lang::get('admin_product.small'),'mini'=>Lang::get('admin_product.mini'),'free_size'=>Lang::get('admin_product.free_size')];
         if($key){
             return $arr[$key] ?? '';
         }else{
