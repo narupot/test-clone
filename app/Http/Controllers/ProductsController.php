@@ -1056,7 +1056,8 @@ class ProductsController extends MarketPlace {
 
         $query = \App\MongoProduct::query();
         if(!is_null($shop_id))
-            $query->where('shop_id',$shop_id);
+            $query->where('shop_id',$shop_id)
+            ->where('quantity','>',0);
 
         if(!empty($request->badge_id) && is_array($request->badge_id)){
             $badges = array_map('intval', $request->badge_id);
