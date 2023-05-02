@@ -406,7 +406,7 @@ class ProductsController extends MarketPlace {
             }else{
               $all_badges = null;
             }
-            $shop_closed_id = \App\MongoShop::where('shop_status','close')->pluck('_id')->toArray();
+            $shop_closed_id = \App\MongoShop::where('shop_status','close')->orWhere('status','0')->pluck('_id')->toArray();
 
             // $product_data = \App\MongoProduct::where(['cat_id'=>$cat_id,'status'=>'1'])->whereNotIn('shop_id',$shop_closed_id)->with('shop')->with('badge')->when(Auth::check(),function($query){$query->with('wishlist');});
 
