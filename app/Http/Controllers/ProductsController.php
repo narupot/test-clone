@@ -329,7 +329,7 @@ class ProductsController extends MarketPlace {
                 }
             }
 
-            $query->with('shop')->with('badge')->where('cat_id',$cat_id)->where('status',"1");
+            $query->with('shop')->with('badge')->where('cat_id',$cat_id)->where('quantity','>',0)->where('status',"1");
 
             $query2->with('shop')->with('badge')->where('cat_id',$cat_id)->where('status',"1");
 
