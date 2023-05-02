@@ -272,7 +272,7 @@ class ProductsController extends MarketPlace {
         $range_flag = false;
         $order_by = $request->orderBy;
         $order = $request->order;
-
+        $shop_closed_id = \App\MongoShop::where('shop_status','close')->orWhere('status','0')->pluck('_id')->toArray();
         //dd($filter_attributes)
         if(!is_null($filter_attributes)){
             $price_range = isset($filter_attributes['price']) ? $filter_attributes['price'] : null;
@@ -329,9 +329,9 @@ class ProductsController extends MarketPlace {
                 }
             }
 
-            $query->with('shop')->with('badge')->where('cat_id',$cat_id)->where('quantity','>',0)->where('status',"1");
+            $query->with('shop')->with('badge')->where('cat_id',$cat_id)->whereNotIn('shop_id',$shop_closed_id)->where('quantity','>',0)->where('status',"1");
 
-            $query2->with('shop')->with('badge')->where('cat_id',$cat_id)->where('status',"1");
+            $query2->with('shop')->with('badge')->where('cat_id',$cat_id)->whereNotIn('shop_id',$shop_closed_id)->where('status',"1");
 
             $query->when($reviews,function($q,$reviews){
                 return $q->where('avg_star','>=',min($reviews));
@@ -406,7 +406,7 @@ class ProductsController extends MarketPlace {
             }else{
               $all_badges = null;
             }
-            $shop_closed_id = \App\MongoShop::where('shop_status','close')->orWhere('status','0')->pluck('_id')->toArray();
+            
 
             // $product_data = \App\MongoProduct::where(['cat_id'=>$cat_id,'status'=>'1'])->whereNotIn('shop_id',$shop_closed_id)->with('shop')->with('badge')->when(Auth::check(),function($query){$query->with('wishlist');});
 
