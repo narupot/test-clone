@@ -728,7 +728,7 @@ class ProductsController extends MarketPlace {
         $cat_Ids = [];
         $cat_Ids = \App\MongoProduct::where('status','1');
         $cat_Ids = $cat_Ids->whereNotIn('shop_id',$shop_closed_id)->pluck('cat_id','cat_id')->toArray();
-        $cat_data = \App\MongoCategory::whereIn('_id', $cat_Ids)->where('category_name','like','%'.$name.'%')->where('status',"1")->where('parent_id','>',0)->pluck('_id','_id')->toArray(); 
+        $cat_data = \App\MongoCategory::whereIn('_id', $cat_Ids)->where('category_name','like','%'.$name.'%')->where('status',"1")->where('parent_id','>',0)->pluck('_id')->toArray(); 
         
         $shop_ids = [];
         $shop_ids = \App\MongoProduct::where('status','1');
