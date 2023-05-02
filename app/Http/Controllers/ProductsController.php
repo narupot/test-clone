@@ -723,7 +723,19 @@ class ProductsController extends MarketPlace {
 
         //$filter_attributes = $request->fillterAttributes;
         $name = trim($request->search);
-        $product_data = \App\MongoShop::where('shop_name','like','%'.$name.'%')->where('shop_status','open')->where('status','1')->get()->toArray();
+
+        $shop_closed_id = \App\MongoShop::where('shop_status','close')->pluck('_id')->toArray();
+        $cat_Ids = [];
+        $cat_Ids = \App\MongoProduct::where('status','1');
+        $cat_Ids = $cat_Ids->whereNotIn('shop_id',$shop_closed_id)->pluck('cat_id','cat_id')->toArray();
+        $cat_data = \App\MongoCategory::whereIn('_id', $cat_Ids)->where('category_name','like','%'.$name.'%')->where('status',"1")->where('parent_id','>',0)->pluck('_id','_id')->toArray(); 
+        
+        $shop_ids = [];
+        $shop_ids = \App\MongoProduct::where('status','1');
+        $shop_ids = $shop_ids->whereNotIn('shop_id',$shop_closed_id)->whereIn('cat_id',$cat_data)->pluck('shop_id','shop_id')->toArray();
+        //where('shop_name','like','%'.$name.'%')
+        $product_data = \App\MongoShop::whereIn('shop_id', $shop_ids)->where('shop_status','open')->where('status','1')->get()->toArray();
+
             //$data = []; 
             //dd($product_data);
         $i = 0;
@@ -750,9 +762,10 @@ class ProductsController extends MarketPlace {
         if($request->searchtype=='all'){
            
             $shop_closed_id = \App\MongoShop::where('shop_status','close')->pluck('_id')->toArray();
-
             $cat_Ids = \App\MongoProduct::where('status','1');
             $cat_Ids = $cat_Ids->whereNotIn('shop_id',$shop_closed_id)->pluck('cat_id','cat_id')->toArray();
+            
+
 
             /*$cat_data = \App\MongoCategory::where('category_name','like','%'.$term.'%')->where('status',"1")->where('parent_id','>',0)->select('category_name','img','url')->get()->toArray(); 
             
@@ -772,7 +785,7 @@ class ProductsController extends MarketPlace {
             
             //$product_data = \App\MongoCategory::whereIn('_id',$product_cat_ids)->select('category_name','img','url')->get()->toArray();
 
-            $product_data = \App\MongoCategory::whereIn('_id', $cat_Ids)->where('category_name','like','%'.$term.'%')->where('status',"1")->where('parent_id','>',0)->select('category_name','img','url')->get()->toArray(); 
+            $product_data = \App\MongoCategory::whereIn('_id', $cat_Ids)->where('category_name','like','%'.$term.'%')->where('status',"1")->where('parent_id','>',0)->select('_id','category_name','img','url')->get()->toArray(); 
            //dd($cat_data);
 
             //$cat_ids = array_unique(array_column($cat_data, '_id'));
@@ -784,6 +797,7 @@ class ProductsController extends MarketPlace {
             $i=0;
             //Config::get('constants.category_img_url')
             //ProductsController@category
+            $cat_data = [];
             foreach($product_data as $key=>$result){
                 //dd($result->sku);
                 //$package = getPackageName($result['package_id']);
@@ -810,6 +824,7 @@ class ProductsController extends MarketPlace {
                 $data[$i]['shop_name'] = '';//$result['shop']['shop_name'];
                 $data[$i]['type'] = 'product';
                 $data[$i]['i'] = $i;
+                $cat_data[$i] = $result['_id'];
                 $i++;
 
             }
@@ -818,8 +833,11 @@ class ProductsController extends MarketPlace {
                 $autoData['product'] = $data;
             }*/
             //return $data;
-
-            $all_shop = \App\MongoShop::where('shop_name','like','%'.$term.'%')->where('shop_status','open')->where('status','1')->paginate(10)->toArray();
+            $shop_ids = [];
+            $shop_ids = \App\MongoProduct::where('status','1');
+            $shop_ids = $shop_ids->whereNotIn('shop_id',$shop_closed_id)->whereIn('cat_id',$cat_data)->pluck('shop_id','shop_id')->toArray();
+            //where('shop_name','like','%'.$term.'%')
+            $all_shop = \App\MongoShop::whereIn('shop_id', $shop_ids)->where('shop_status','open')->where('status','1')->paginate(10)->toArray();
             //$data = []; 
             //dd($product_data);
             $j = 0;
