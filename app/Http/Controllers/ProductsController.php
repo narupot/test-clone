@@ -732,7 +732,7 @@ class ProductsController extends MarketPlace {
         
         $shop_ids = [];
         $shop_ids = \App\MongoProduct::where('status','1');
-        $shop_ids = $shop_ids->whereNotIn('shop_id',$shop_closed_id)->whereIn('cat_id',$cat_data)->pluck('shop_id','shop_id')->toArray();
+        $shop_ids = $shop_ids->whereNotIn('shop_id',$shop_closed_id)->whereIn('cat_id',$cat_data)->pluck('shop_id')->toArray();
         //where('shop_name','like','%'.$name.'%')
         $product_data = \App\MongoShop::whereIn('shop_id', $shop_ids)->where('shop_status','open')->where('status','1')->get()->toArray();
 
