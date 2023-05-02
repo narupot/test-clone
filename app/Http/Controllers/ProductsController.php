@@ -234,7 +234,7 @@ class ProductsController extends MarketPlace {
 
         $all_badges = null;
         
-        $shop_closed_id = \App\MongoShop::where('shop_status','close')->pluck('_id')->toArray();
+        $shop_closed_id = \App\MongoShop::where('shop_status','close')->orWhere('status','0')->pluck('_id')->toArray();
         
         $product_data = \App\MongoProduct::select('url', 'sku', 'shop_id', 'avg_star', 'cat_id','badge_id','show_price', 'unit_price', 'stock', 'quantity','order_qty_limit','min_order_qty','thumbnail_image','is_tier_price','package_id','base_unit_id','weight_per_unit','status','created_at','updated_at','created_by','updated_by','created_from', 'updated_from', 'description', 'image')
             ->where(['cat_id'=>$cat_id,'status'=>"1"])
