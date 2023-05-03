@@ -234,7 +234,7 @@ class ProductsController extends MarketPlace {
 
         $all_badges = null;
         
-        $shop_closed_id = \App\MongoShop::where('shop_status','close')->pluck('_id')->toArray();
+        $shop_closed_id = \App\MongoShop::where('shop_status','close')->orWhere('status','0')->pluck('_id')->toArray();
         
         $product_data = \App\MongoProduct::select('url', 'sku', 'shop_id', 'avg_star', 'cat_id','badge_id','show_price', 'unit_price', 'stock', 'quantity','order_qty_limit','min_order_qty','thumbnail_image','is_tier_price','package_id','base_unit_id','weight_per_unit','status','created_at','updated_at','created_by','updated_by','created_from', 'updated_from', 'description', 'image')
             ->where(['cat_id'=>$cat_id,'status'=>"1"])
@@ -272,7 +272,7 @@ class ProductsController extends MarketPlace {
         $range_flag = false;
         $order_by = $request->orderBy;
         $order = $request->order;
-
+        $shop_closed_id = \App\MongoShop::where('shop_status','close')->orWhere('status','0')->pluck('_id')->toArray();
         //dd($filter_attributes)
         if(!is_null($filter_attributes)){
             $price_range = isset($filter_attributes['price']) ? $filter_attributes['price'] : null;
@@ -329,9 +329,9 @@ class ProductsController extends MarketPlace {
                 }
             }
 
-            $query->with('shop')->with('badge')->where('cat_id',$cat_id)->where('status',"1");
+            $query->with('shop')->with('badge')->where('cat_id',$cat_id)->whereNotIn('shop_id',$shop_closed_id)->where('quantity','>',0)->where('status',"1");
 
-            $query2->with('shop')->with('badge')->where('cat_id',$cat_id)->where('status',"1");
+            $query2->with('shop')->with('badge')->where('cat_id',$cat_id)->whereNotIn('shop_id',$shop_closed_id)->where('status',"1");
 
             $query->when($reviews,function($q,$reviews){
                 return $q->where('avg_star','>=',min($reviews));
@@ -406,7 +406,7 @@ class ProductsController extends MarketPlace {
             }else{
               $all_badges = null;
             }
-            $shop_closed_id = \App\MongoShop::where('shop_status','close')->pluck('_id')->toArray();
+            
 
             // $product_data = \App\MongoProduct::where(['cat_id'=>$cat_id,'status'=>'1'])->whereNotIn('shop_id',$shop_closed_id)->with('shop')->with('badge')->when(Auth::check(),function($query){$query->with('wishlist');});
 
@@ -723,7 +723,19 @@ class ProductsController extends MarketPlace {
 
         //$filter_attributes = $request->fillterAttributes;
         $name = trim($request->search);
-        $product_data = \App\MongoShop::where('shop_name','like','%'.$name.'%')->where('shop_status','open')->where('status','1')->get()->toArray();
+
+        $shop_closed_id = \App\MongoShop::where('shop_status','close')->pluck('_id')->toArray();
+        $cat_Ids = [];
+        $cat_Ids = \App\MongoProduct::where('status','1');
+        $cat_Ids = $cat_Ids->whereNotIn('shop_id',$shop_closed_id)->pluck('cat_id')->toArray();
+        $cat_data = \App\MongoCategory::whereIn('_id', $cat_Ids)->where('category_name','like','%'.$name.'%')->where('status',"1")->where('parent_id','>',0)->pluck('_id')->toArray(); 
+        
+        $shop_ids = [];
+        $shop_ids = \App\MongoProduct::where('status','1');
+        $shop_ids = $shop_ids->whereNotIn('shop_id',$shop_closed_id)->whereIn('cat_id',$cat_data)->pluck('shop_id')->toArray();
+        //where('shop_name','like','%'.$name.'%')
+        $product_data = \App\MongoShop::whereIn('_id', $shop_ids)->where('shop_status','open')->where('status','1')->get()->toArray();
+
             //$data = []; 
             //dd($product_data);
         $i = 0;
@@ -750,9 +762,10 @@ class ProductsController extends MarketPlace {
         if($request->searchtype=='all'){
            
             $shop_closed_id = \App\MongoShop::where('shop_status','close')->pluck('_id')->toArray();
-
             $cat_Ids = \App\MongoProduct::where('status','1');
             $cat_Ids = $cat_Ids->whereNotIn('shop_id',$shop_closed_id)->pluck('cat_id','cat_id')->toArray();
+            
+
 
             /*$cat_data = \App\MongoCategory::where('category_name','like','%'.$term.'%')->where('status',"1")->where('parent_id','>',0)->select('category_name','img','url')->get()->toArray(); 
             
@@ -772,7 +785,7 @@ class ProductsController extends MarketPlace {
             
             //$product_data = \App\MongoCategory::whereIn('_id',$product_cat_ids)->select('category_name','img','url')->get()->toArray();
 
-            $product_data = \App\MongoCategory::whereIn('_id', $cat_Ids)->where('category_name','like','%'.$term.'%')->where('status',"1")->where('parent_id','>',0)->select('category_name','img','url')->get()->toArray(); 
+            $product_data = \App\MongoCategory::whereIn('_id', $cat_Ids)->where('category_name','like','%'.$term.'%')->where('status',"1")->where('parent_id','>',0)->select('_id','category_name','img','url')->get()->toArray(); 
            //dd($cat_data);
 
             //$cat_ids = array_unique(array_column($cat_data, '_id'));
@@ -784,6 +797,7 @@ class ProductsController extends MarketPlace {
             $i=0;
             //Config::get('constants.category_img_url')
             //ProductsController@category
+            $cat_data = [];
             foreach($product_data as $key=>$result){
                 //dd($result->sku);
                 //$package = getPackageName($result['package_id']);
@@ -810,6 +824,7 @@ class ProductsController extends MarketPlace {
                 $data[$i]['shop_name'] = '';//$result['shop']['shop_name'];
                 $data[$i]['type'] = 'product';
                 $data[$i]['i'] = $i;
+                $cat_data[$i] = $result['_id'];
                 $i++;
 
             }
@@ -818,8 +833,11 @@ class ProductsController extends MarketPlace {
                 $autoData['product'] = $data;
             }*/
             //return $data;
-
-            $all_shop = \App\MongoShop::where('shop_name','like','%'.$term.'%')->where('shop_status','open')->where('status','1')->paginate(10)->toArray();
+            $shop_ids = [];
+            $shop_ids = \App\MongoProduct::where('status','1');
+            $shop_ids = $shop_ids->whereNotIn('shop_id',$shop_closed_id)->whereIn('cat_id',$cat_data)->pluck('shop_id')->toArray();
+            //where('shop_name','like','%'.$term.'%')
+            $all_shop = \App\MongoShop::whereIn('_id', $shop_ids)->where('shop_status','open')->where('status','1')->paginate(10)->toArray();
             //$data = []; 
             //dd($product_data);
             $j = 0;
@@ -1056,7 +1074,8 @@ class ProductsController extends MarketPlace {
 
         $query = \App\MongoProduct::query();
         if(!is_null($shop_id))
-            $query->where('shop_id',$shop_id);
+            $query->where('shop_id',$shop_id)
+            ->where('quantity','>',0);
 
         if(!empty($request->badge_id) && is_array($request->badge_id)){
             $badges = array_map('intval', $request->badge_id);
