@@ -244,8 +244,8 @@
                                     </li>                           
                                     
                                     <li class="num-tbl">{{ $cartVal->quantity }} {{ getpackageName($cartVal->getPrd->package_id) }}</li>
-                                    <li class="price_li unit-tbl">{{numberFormat($cartVal->cart_price) }} @lang('common.baht') /{{ getpackageName($cartVal->getPrd->package_id) }}</li>                            
-                                    <li class="total-tbl">{{numberFormat($cartVal->total_price) }} @lang('common.baht')</li>
+                                    <li class="price_li unit-tbl">{{convert_string($cartVal->cart_price) }} @lang('common.baht') /{{ getpackageName($cartVal->getPrd->package_id) }}</li>                            
+                                    <li class="total-tbl">{{convert_string($cartVal->total_price) }} @lang('common.baht')</li>
                                 </ul>
                             @endforeach
                             
@@ -294,12 +294,12 @@
                                             </div>
                                         </div>                                                
                                     </li>
-                                    <li class="unit-tbl">{{numberFormat($val->last_price) }} @lang('common.baht') /{{ $detail_json['package'][session('default_lang')] ?? $val->package_name }}</li>
+                                    <li class="unit-tbl">{{convert_string($val->last_price) }} @lang('common.baht') /{{ $detail_json['package'][session('default_lang')] ?? $val->package_name }}</li>
                                     <li class="add-rem-qty num-tbl">
                                         {{ $val->quantity }} {{ $detail_json['package'][session('default_lang')] ?? $val->package_name }}
                                     </li>
                                     <li class="total-tbl">
-                                        {{numberFormat($val->total_price) }} @lang('common.baht')
+                                        {{convert_string($val->total_price) }} @lang('common.baht')
                                     </li>  
                                     <li class="paymethod-tbl">{{$detail_json['payment_method'][session('default_lang')] ?? str_replace('_',' ',strtoupper($val->payment_slug)) }}</li>                                           
                                 </ul>
@@ -347,7 +347,7 @@
                         @if($checkout_type == 'buy-now' || $checkout_type == 'buy-now-end-shopping')
                             <div class="row border-bottom">
                                 <span class="col-6">@lang('checkout.total')</span>
-                                <span class="col-6">{{ numberFormat($tot_amount) }} @lang('common.baht')</span>
+                                <span class="col-6">{{ convert_string($tot_amount) }} @lang('common.baht')</span>
                             </div>
                         @endif
                         
@@ -357,7 +357,7 @@
                             <div class="row">
                                 <span class="col-6">@lang('checkout.grand_total') </span>
                                 <span class="col-6">
-                                    <span id="tot_order_amount">{{numberFormat($tot_amount) }}</span> @lang('common.baht')</span>
+                                    <span id="tot_order_amount">{{convert_string($tot_amount) }}</span> @lang('common.baht')</span>
                             </div>
                         </div>
               

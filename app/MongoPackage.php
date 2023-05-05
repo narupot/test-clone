@@ -58,7 +58,7 @@ class MongoPackage extends Molequent
         Self::where('_id', (int)$package_id)->delete();
     }
 
-    public static function getAllPackage(){
+    public static function getAllPackage($id=null){
         $cache_key = 'product_package';
         $package_arr = [];
         if (cache_hasKey($cache_key) && \Config::get('constants.enable_cache')) {
@@ -72,6 +72,9 @@ class MongoPackage extends Molequent
                 }
                 cache_putData($cache_key,$package_arr);
             }
+        }
+        if($id){
+            return isset($package_arr[$id]) ? $package_arr[$id] :[];
         }
         return $package_arr;
     }

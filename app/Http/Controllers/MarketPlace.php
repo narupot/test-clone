@@ -575,7 +575,7 @@ class MarketPlace extends Controller {
 
             $product_data['data'][$key]['package_name'] = isset($value['package_id'])?getPackageName($value['package_id']):'kg';
             $product_data['data'][$key]['unit_name'] = isset($value['base_unit_id'])?getUnitName($value['base_unit_id']):'';
-
+            $product_data['data'][$key]['unit_price'] = convertString($value['unit_price']);
             $product_data['data'][$key]['weight_per_unit'] = (float)$value['weight_per_unit'];
         }
         return $product_data;

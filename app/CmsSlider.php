@@ -151,8 +151,16 @@ class CmsSlider extends Model
         } 
         
         if(count($badge_id_arr) && count($sub_cat_ids) && count($package_id_arr)){
+            $product_id_arr = $product_price = $cat_id_arr =[];
+            $data = \App\MongoProduct::select('_id', 'unit_price', 'cat_id')->whereIn('cat_id',$sub_cat_ids)->where('status',"1")->OrderBy('shop_id','ASC')->get();
+            foreach ($data as $key => $val){
+                if(!isset($product_price[$val['cat_id']]) || ( $val['unit_price'] > 0 && $product_price[$val['cat_id']] > $val['unit_price'])){
+                    $product_price[$val['cat_id']] = $val['unit_price']; 
+                    $product_id_arr[$val['cat_id']] = $val['_id'];
+                }  
+            }
             
-            $product_data = \App\MongoProduct::where('status','1')->raw(function($collection) use ($sub_cat_ids,$badge_id_arr,$package_id_arr,$sort_by,$sort_by_val_int)
+            $product_data = \App\MongoProduct::where('status','1')->whereIn('_id', $product_id_arr)->raw(function($collection) use ($sub_cat_ids,$badge_id_arr,$package_id_arr,$sort_by,$sort_by_val_int)
             {
                 return $collection->aggregate([
                          [
@@ -166,9 +174,14 @@ class CmsSlider extends Model
                         [
                             '$group' => [
                                 '_id' =>[
+                                    'product_id'=>'$_id',
                                     'cat_id'=>'$cat_id',
                                     'badge_id'=>'$badge_id',
-                                    'package_id'=>'$package_id'
+                                    'package_id'=>'$package_id',
+                                    'thumbnail_image'=>'$thumbnail_image',
+                                    'base_unit_id'=>'$base_unit_id',
+                                    'unit_price' => '$unit_price',
+                                    'weight_per_unit'=>'$weight_per_unit'
                                 ],
                                 'unit_price'=>[
                                     '$avg'=> '$unit_price'
@@ -186,22 +199,78 @@ class CmsSlider extends Model
                     ]);
             })->toArray();
             //dd($product_data,$badge_id_arr,$sub_cat_ids,$package_id_arr);
-            
+            $product_price_low = [];
+            // if(count($product_data)){
+            //     foreach ($product_data as $key => $value) {
+            //         $id_arr = (array)$value['_id'];
+            //         $id_arr['unit_price'] = $value['unit_price'];
+            //         if($id_arr['unit_price']<1){
+            //             //dd($value);
+            //         }
+            //         if(!isset($product_price_low[$id_arr['cat_id']]) || ( $value['unit_price'] > 0 && $product_price_low[$id_arr['cat_id']] > $value['unit_price'])){
+            //             $product_price_low[$id_arr['cat_id']] = $value['unit_price']; 
+                        
+            //             if(isset($sub_cat_data[$id_arr['cat_id']]) && $id_arr['unit_price']>0){
+            //                 $cat_data = $sub_cat_data[$id_arr['cat_id']];
+            //                 $id_arr['cat_name'] = $cat_data['name'][session('lang_code')];
+            //                 $id_arr['cat_url'] = getCategoryUrl($cat_data['url']);
+            //                 $id_arr['cat_img'] = getCategoryImageUrl($cat_data['img']);
+            //                 $id_arr['badge_img'] = getBadgeImage($id_arr['badge_id']);
+            //                 $id_arr['package_name'] = getPackageName($id_arr['package_id']);
+            //                 $prd_data_arr[] = $id_arr;
+            //             }
+            //         }    
+                    
+            //     }
+            // }
             if(count($product_data)){
                 foreach ($product_data as $key => $value) {
-                    $id_arr = (array)$value['_id'];
-                    $id_arr['unit_price'] = $value['unit_price'];
-                    if($id_arr['unit_price']<1){
-                        //dd($value);
-                    }
-                    if(isset($sub_cat_data[$id_arr['cat_id']]) && $id_arr['unit_price']>0){
-                        $cat_data = $sub_cat_data[$id_arr['cat_id']];
-                        $id_arr['cat_name'] = $cat_data['name'][session('lang_code')];
-                        $id_arr['cat_url'] = getCategoryUrl($cat_data['url']);
-                        $id_arr['cat_img'] = getCategoryImageUrl($cat_data['img']);
-                        $id_arr['badge_img'] = getBadgeImage($id_arr['badge_id']);
-                        $id_arr['package_name'] = getPackageName($id_arr['package_id']);
-                        $prd_data_arr[] = $id_arr;
+                    if($value['unit_price'] > 0){
+                        $id_arr = (array)$value['_id'];
+                        $id_arr['product_id'] = $id_arr['product_id'];
+                        $id_arr['unit_price'] = $value['unit_price'];
+
+                        if(!isset($product_price_low[$id_arr['cat_id']]) || ( $value['unit_price'] > 0 && $product_price_low[$id_arr['cat_id']] > $value['unit_price'])){
+                            $product_price_low[$id_arr['cat_id']] = $value['unit_price'];
+                            if(isset($sub_cat_data[$id_arr['cat_id']])){
+                                $cat_data = $sub_cat_data[$id_arr['cat_id']];
+                                $id_arr['product_name'] = $cat_data['name'][session('lang_code')];
+                                if($id_arr['thumbnail_image']){
+                                   //$id_arr['product_image'] = env('APP_WEB_URL').'files/product/original/' . $id_arr['thumbnail_image']; 
+                                    $id_arr['product_image'] = env('APP_WEB_URL').'files/category/' . $cat_data['img'];
+
+                                }else{
+                                   $id_arr['product_image'] = '';
+
+                                }
+                                
+                                $badge_data = \App\MongoBadge::getAllBadge($id_arr['badge_id']);
+                                if($badge_data){
+                                   $id_arr['badge_image'] = env('APP_WEB_URL') . 'files/standard_badge/' . $badge_data->icon;
+                                }else{
+                                   $id_arr['badge_image'] = '';  
+                                }
+
+                                $package_name = \App\MongoPackage::getAllPackage($id_arr['package_id']);
+                                $id_arr['package_name'] = $package_name->package_name;
+
+                                $base_unit = \App\MongoUnit::getAllUnit($id_arr['base_unit_id']);
+                                $id_arr['base_unit_id'] = convert_string($id_arr['base_unit_id']);
+                                $id_arr['base_unit'] = $base_unit->unit_name;
+                                
+                                $id_arr['weight_per_unit'] = str_replace('.00', '', $id_arr['weight_per_unit']);
+
+
+                                 
+                            
+                             
+                                $id_arr['cat_name'] = $cat_data['name'][session('lang_code')];
+                                $id_arr['cat_url'] = getCategoryUrl($cat_data['url']);
+                                $id_arr['cat_img'] = getCategoryImageUrl($cat_data['img']);
+                                $id_arr['badge_img'] = getBadgeImage($id_arr['badge_id']);
+                                $prd_data_arr[] = $id_arr;
+                            }
+                        }     
                     }
                     
                 }
