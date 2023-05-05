@@ -762,9 +762,9 @@ class ProductsController extends MarketPlace {
         $data = [];
         if($request->searchtype=='all'){
            
-            $shop_closed_id = \App\MongoShop::where('shop_status','close')->pluck('_id')->toArray();
+            $shop_closed_id = \App\MongoShop::where('shop_status','close')->where('status','0')->pluck('_id')->toArray();
             $cat_Ids = \App\MongoProduct::where('status','1');
-            $cat_Ids = $cat_Ids->whereNotIn('shop_id',$shop_closed_id)->pluck('cat_id','cat_id')->toArray();
+            $cat_Ids = $cat_Ids->whereNotIn('shop_id',$shop_closed_id)->where('quantity','>',0)->where('status','1')->pluck('cat_id','cat_id')->toArray();
             
 
 
