@@ -951,7 +951,7 @@ class CartController extends MarketPlace {
 				if(strrpos($pickup_time,'_n')!==false){
 					$delivery_type = \App\DeliveryTime::getDeliverYType($request->ship_method);
 					$delivery_detail = \App\DeliveryTime::getDeliveryTime($delivery_type);
-					$cur_hr = date('h');
+					$cur_hr = date('H');
 					$time_cal = $cur_hr + $delivery_detail->delivery_time_after;
 					
 					if($ptime >= $time_cal){
