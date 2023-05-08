@@ -185,7 +185,7 @@
                 },
             },
             {    
-                dataIndx:'status',
+                dataIndx:'order_status',
                 title: "@lang('admin_order.order_status')", 
                 minWidth: 160,
                 align : 'center',
