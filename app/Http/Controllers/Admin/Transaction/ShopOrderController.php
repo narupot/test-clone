@@ -83,7 +83,7 @@ class ShopOrderController extends MarketPlace
                             case 'admin_remark':$query->where('sord.admin_remark','like', '%'.$searchval.'%'); break;
                             case 'seller_name':$query->where('seller.display_name','like', '%'.$searchval.'%'); break;
                             case 'total_final_price':$query->where('sord.total_final_price','=', $searchval); break;
-                            case 'status':$query->whereIn('u.status',$searchval); break;
+                            case 'status':$query->whereIn('ord.order_status',$searchval); break;
                             case 'end_shopping_date':
                                 $from_date = $fvalue['value']??'';
                                 $to_date = $fvalue['value2']??'';
