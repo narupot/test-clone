@@ -30,8 +30,13 @@ class ShopOrderController extends MarketPlace
         if($permission === true) {
             
             $filter = $this->getFilter('shop_order');
+            $order_status = \App\OrderStatusDesc::where('lang_id',session('default_lang'))->select('order_status_id','status')->get();
+            $status_arr = [];
+            foreach ($order_status as $key => $value) {
+                $status_arr[] = [$value->order_status_id=>$value->status];
+            }
 
-            return view('admin.transaction.listShopOrder', ['filter'=>$filter]);
+            return view('admin.transaction.listShopOrder', ['filter'=>$filter,'ord_status'=>json_encode($status_arr)]);
         }      
     }
 
