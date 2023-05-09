@@ -214,6 +214,7 @@
                 minWidth: 140,
                 dataType: "date",
                 filter: { 
+                    init: pqDatePicker,
                     crules :[
                         {
                             condition: getFilter('end_shopping_date', 'condition') ||  "between",
