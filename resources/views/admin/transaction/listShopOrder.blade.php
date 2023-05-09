@@ -184,21 +184,29 @@
                     };                
                 },
             },
-            {   title: "@lang('admin_common.status')", 
-                dataIndx:'status', 
-                minWidth: 140,
-                align : "center",
+            {    
+                dataIndx:'order_status',
+                title: "@lang('admin_order.order_status')", 
+                minWidth: 160,
+                align : 'center',
+                render : function(ui) {    
+                    let ord =  {!! $ord_status !!}.filter(o=> {
+                      return (Object.keys(o)[0] == ui.cellData);
+                    });
+                    ord = ord.length && ord[0][ui.cellData] || '';
+                    return {
+                        text:'<span class="'+ui.rowData.order_status_class+'">'+ord+'</span>',
+                    };                
+                }, 
                 filter : {
-                    attr : "@lang('admin_common.status')",                        
+                    attr: "placeholder='admin_common.please_select'",
                     crules: [
                         {
-                            condition: getFilter('status', 'condition') ||  'contain',
-                            value : getFilter('status', 'value')  || "",
+                            condition: getFilter('status', 'condition') || 'range',
+                            value : getFilter('status', 'value') || "",
                         }
-                    ],
-                    type: 'textbox', 
-                    listeners: ['change'],
-                },
+                    ],options: {!! $ord_status !!},                                           
+                },               
             },
            
             {   title: "@lang('admin_order.end_shopping_date')", 

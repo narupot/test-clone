@@ -949,8 +949,18 @@ class CartController extends MarketPlace {
 				$nextday = !empty($request->nexday)?$request->nexday:'';
 				$ptime = str_replace('_n', '', $pickup_time);
 				if(strrpos($pickup_time,'_n')!==false){
-					$tomorrow = date("Y-m-d", strtotime("+1 day"));
-					$pdate = $tomorrow.' '.$ptime.':00:00';
+					$delivery_type = \App\DeliveryTime::getDeliverYType($request->ship_method);
+					$delivery_detail = \App\DeliveryTime::getDeliveryTime($delivery_type);
+					$cur_hr = date('H');
+					$time_cal = $cur_hr + $delivery_detail->delivery_time_after;
+					
+					if($ptime >= $time_cal){
+						$pdate = date('Y-m-d').' '.$ptime.':00:00';
+					}else{
+						$tomorrow = date("Y-m-d", strtotime("+1 day"));
+						$pdate = $tomorrow.' '.$ptime.':00:00';
+					}
+					
 				}else{
 					$pdate = date('Y-m-d').' '.$ptime.':00:00';
 				}
