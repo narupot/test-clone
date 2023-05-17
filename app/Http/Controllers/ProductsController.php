@@ -763,7 +763,7 @@ class ProductsController extends MarketPlace {
         if($request->searchtype=='all'){
            
             $shop_closed_id = \App\MongoShop::where('shop_status','close')->orWhere('status','0')->pluck('_id')->toArray();
-            $cat_Ids = \App\MongoProduct::where('status','1')->where('quantity','>',0);
+            $cat_Ids = \App\MongoProduct::where('status','1')->where('stock','1');
             $cat_Ids = $cat_Ids->whereNotIn('shop_id',$shop_closed_id)->pluck('cat_id','cat_id')->toArray();
             
 
@@ -835,7 +835,7 @@ class ProductsController extends MarketPlace {
             }*/
             //return $data;
             $shop_ids = [];
-            $shop_ids = \App\MongoProduct::where('status','1')->where('quantity','>',0);
+            $shop_ids = \App\MongoProduct::where('status','1')->where('stock','1');
             $shop_ids = $shop_ids->whereNotIn('shop_id',$shop_closed_id)->whereIn('cat_id',$cat_data)->pluck('shop_id')->toArray();
             //where('shop_name','like','%'.$term.'%')
             $all_shop = \App\MongoShop::whereIn('_id', $shop_ids)->where('shop_status','open')->where('status','1')->paginate(10)->toArray();
