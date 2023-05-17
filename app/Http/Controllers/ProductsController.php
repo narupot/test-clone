@@ -240,7 +240,7 @@ class ProductsController extends MarketPlace {
             ->where(['cat_id'=>$cat_id,'status'=>"1"])
             ->whereNotIn('shop_id',$shop_closed_id)
             ->whereIn('_id', $product_ids)
-            ->where('quantity','>',0)
+            ->where('stock',"1")
             ->when(Auth::check(),function($query){$query->with('wishlist');})
             ->orderBy($order_by,$order)->paginate($page_item)->toArray();
         //dd($product_data);
@@ -330,7 +330,7 @@ class ProductsController extends MarketPlace {
                 }
             }
 
-            $query->with('shop')->with('badge')->where('cat_id',$cat_id)->whereNotIn('shop_id',$shop_closed_id)->where('quantity','>',0)->where('status',"1");
+            $query->with('shop')->with('badge')->where('cat_id',$cat_id)->whereNotIn('shop_id',$shop_closed_id)->where('stock',"1")->where('status',"1");
 
             $query2->with('shop')->with('badge')->where('cat_id',$cat_id)->whereNotIn('shop_id',$shop_closed_id)->where('status',"1");
 
