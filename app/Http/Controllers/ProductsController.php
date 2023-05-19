@@ -240,7 +240,7 @@ class ProductsController extends MarketPlace {
             ->where(['cat_id'=>$cat_id,'status'=>"1"])
             ->whereNotIn('shop_id',$shop_closed_id)
             ->whereIn('_id', $product_ids)
-            ->where('quantity','>',0)
+            ->where('stock',"1")
             ->when(Auth::check(),function($query){$query->with('wishlist');})
             ->orderBy($order_by,$order)->paginate($page_item)->toArray();
         //dd($product_data);
@@ -330,7 +330,7 @@ class ProductsController extends MarketPlace {
                 }
             }
 
-            $query->with('shop')->with('badge')->where('cat_id',$cat_id)->whereNotIn('shop_id',$shop_closed_id)->where('quantity','>',0)->where('status',"1");
+            $query->with('shop')->with('badge')->where('cat_id',$cat_id)->whereNotIn('shop_id',$shop_closed_id)->where('stock',"1")->where('status',"1");
 
             $query2->with('shop')->with('badge')->where('cat_id',$cat_id)->whereNotIn('shop_id',$shop_closed_id)->where('status',"1");
 
@@ -693,7 +693,7 @@ class ProductsController extends MarketPlace {
         }*/
 
         $shop_closed_id = \App\MongoShop::where('shop_status','close')->orWhere('status','0')->pluck('_id')->toArray();
-        $cat_Ids = \App\MongoProduct::where('status','1')->where('quantity','>',0);
+        $cat_Ids = \App\MongoProduct::where('status','1')->where('stock','1');
         $cat_Ids = $cat_Ids->whereNotIn('shop_id',$shop_closed_id)->pluck('cat_id','cat_id')->toArray();
         $product_data = \App\MongoCategory::whereIn('_id', $cat_Ids)->where('category_name','like','%'.$name.'%')->where('status',"1")->where('parent_id','>',0)->select('category_name','img','url')->get()->toArray(); 
         
@@ -727,12 +727,12 @@ class ProductsController extends MarketPlace {
 
         $shop_closed_id = \App\MongoShop::where('shop_status','close')->pluck('_id')->toArray();
         $cat_Ids = [];
-        $cat_Ids = \App\MongoProduct::where('status','1')->where('quantity','>',0);
+        $cat_Ids = \App\MongoProduct::where('status','1')->where('stock','1');
         $cat_Ids = $cat_Ids->whereNotIn('shop_id',$shop_closed_id)->pluck('cat_id')->toArray();
         $cat_data = \App\MongoCategory::whereIn('_id', $cat_Ids)->where('category_name','like','%'.$name.'%')->where('status',"1")->where('parent_id','>',0)->pluck('_id')->toArray(); 
         
         $shop_ids = [];
-        $shop_ids = \App\MongoProduct::where('status','1')->where('quantity','>',0);
+        $shop_ids = \App\MongoProduct::where('status','1')->where('stock','1');
         $shop_ids = $shop_ids->whereNotIn('shop_id',$shop_closed_id)->whereIn('cat_id',$cat_data)->pluck('shop_id')->toArray();
         //where('shop_name','like','%'.$name.'%')
         $product_data = \App\MongoShop::whereIn('_id', $shop_ids)->where('shop_status','open')->where('status','1')->get()->toArray();
@@ -763,7 +763,7 @@ class ProductsController extends MarketPlace {
         if($request->searchtype=='all'){
            
             $shop_closed_id = \App\MongoShop::where('shop_status','close')->orWhere('status','0')->pluck('_id')->toArray();
-            $cat_Ids = \App\MongoProduct::where('status','1')->where('quantity','>',0);
+            $cat_Ids = \App\MongoProduct::where('status','1')->where('stock','1');
             $cat_Ids = $cat_Ids->whereNotIn('shop_id',$shop_closed_id)->pluck('cat_id','cat_id')->toArray();
             
 
@@ -835,7 +835,7 @@ class ProductsController extends MarketPlace {
             }*/
             //return $data;
             $shop_ids = [];
-            $shop_ids = \App\MongoProduct::where('status','1')->where('quantity','>',0);
+            $shop_ids = \App\MongoProduct::where('status','1')->where('stock','1');
             $shop_ids = $shop_ids->whereNotIn('shop_id',$shop_closed_id)->whereIn('cat_id',$cat_data)->pluck('shop_id')->toArray();
             //where('shop_name','like','%'.$term.'%')
             $all_shop = \App\MongoShop::whereIn('_id', $shop_ids)->where('shop_status','open')->where('status','1')->paginate(10)->toArray();
@@ -1076,7 +1076,7 @@ class ProductsController extends MarketPlace {
         $query = \App\MongoProduct::query();
         if(!is_null($shop_id))
             $query->where('shop_id',$shop_id)
-            ->where('quantity','>',0);
+            ->where('stock','1');
 
         if(!empty($request->badge_id) && is_array($request->badge_id)){
             $badges = array_map('intval', $request->badge_id);
