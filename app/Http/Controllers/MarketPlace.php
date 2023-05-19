@@ -1179,7 +1179,7 @@ class MarketPlace extends Controller {
         $product->package_id = $request->unit;
         $product->base_unit_id = $request->baseunit;
         $product->weight_per_unit = $request->weight_per_unit;
-        $product->status = $request->status;
+        $product->status = $request->stock;
         $product->unit_convert_price = $request->unit_perprice;
         /*change due to unlimited*/
         $product->stock = $request->stock;
