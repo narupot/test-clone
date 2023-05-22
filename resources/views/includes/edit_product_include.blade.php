@@ -362,7 +362,7 @@
 
 
 
-<div class="form-group row">
+<!-- <div class="form-group row">
     <div class="col-sm-6">
         <label>@lang('product.status')</label>
         <select name="status" id="status">
@@ -370,7 +370,7 @@
             <option value="0" @if($result->status == '0') selected="selected" @endif>@lang('common.inactive')</option>
         </select>
     </div>
-</div>
+</div> -->
 
 @section('footer_scripts_include')
     <script type="text/javascript">

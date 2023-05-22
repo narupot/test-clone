@@ -467,10 +467,12 @@ class ProductController extends MarketPlace
         $prodata = \App\Product::where('id', $id)->where('shop_id',$shop_id)->first();
         if(!empty($prodata)){
             $prodata->status = $status;
+            $prodata->stock = $status;
             $prodata->save();
             $id = $prodata->id;
            
             MongoProduct::updateStatus($id, $status);
+            MongoProduct::updateStock($id, $status);
             if(!empty($id)){
                 $msg_text = Lang::get('product.product_status_has_been_updated_successfully');
                 return json_encode(array('status'=>'success', 'message'=>$msg_text, 'url'=>'#'));   
