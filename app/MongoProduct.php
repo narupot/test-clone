@@ -90,7 +90,13 @@ class MongoProduct extends Molequent
             $obj->save();
         }
     }
-
+    public static function updateStock($id,$status){
+        $obj = Self::where('_id',(int)$id)->first();
+        if($obj){
+            $obj->stock = $status;
+            $obj->save();
+        }
+    }
     public static function updatePrice($id,$unit_price){
         $obj = Self::where('_id',(int)$id)->first();
         if($obj){
