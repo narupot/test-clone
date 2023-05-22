@@ -217,23 +217,23 @@ class ProductDetailController extends MarketPlace
 
         /**check quantity
         **check already added qty**/
-        $chkquantity = $quantity;
-        if($qty > 0){
-          $chkquantity = $chkquantity + $qty;
-        }
+         $chkquantity = $quantity;
+        // if($qty > 0){
+        //   $chkquantity = $chkquantity + $qty;
+        // }
 
-        if($chkquantity > $prdQuantity){
-            $msg = Lang::get('checkout.quantity_not_available');
-            return ['status'=>'fail','msg'=>$msg];
-        }
+        // if($chkquantity > $prdQuantity){
+        //     $msg = Lang::get('checkout.quantity_not_available');
+        //     return ['status'=>'fail','msg'=>$msg];
+        // }
 
-        /*****checking minimum quantity*******/
-        if($productInfo->order_qty_limit == '0' && $productInfo->min_order_qty > 0){
-            if($chkquantity < $productInfo->min_order_qty){
-                $msg = Lang::get('checkout.product_minimum_quantity_should_be').' '.$productInfo->min_order_qty;
-                return ['status'=>'fail','msg'=>$msg];
-            }
-        }
+        // /*****checking minimum quantity*******/
+        // if($productInfo->order_qty_limit == '0' && $productInfo->min_order_qty > 0){
+        //     if($chkquantity < $productInfo->min_order_qty){
+        //         $msg = Lang::get('checkout.product_minimum_quantity_should_be').' '.$productInfo->min_order_qty;
+        //         return ['status'=>'fail','msg'=>$msg];
+        //     }
+        // }
 
         /***check maximum order amount***/
         $totprdprice = $product_price * $chkquantity;

@@ -56,7 +56,7 @@
                                     @lang('product.ask_product_price_to_seller')
                                </div>
                                <div class="prod-standard">
-                                    <span class="remark text-danger">@lang('product.remark') : 1 <%item.package_name%> = <%item.weight_per_unit%> <%item.unit_name%></span>
+                                    <!-- <span class="remark text-danger">@lang('product.remark') : 1 <%item.package_name%> = <%item.weight_per_unit%> <%item.unit_name%></span> -->
                                     <!-- <span>@lang('product.product_standard')</span> -->
                                      <!--span class="la">
                                         <img ng-src="{{Config::get('constants.standard_badge_url')}}<%item.badge.icon%>" />

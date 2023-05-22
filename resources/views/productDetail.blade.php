@@ -107,7 +107,7 @@
                             {{ convert_string($productDetail->unit_price) }} @lang('common.baht')</span>
                             
                         @endif
-                        <span class="remark">@lang('product.remark') : 1 {{ $productDetail->package_name }} = {{ $productDetail->weight_per_unit }} {{ $productDetail->unit_name }}</span>
+                        <!-- <span class="remark">@lang('product.remark') : 1 {{ $productDetail->package_name }} = {{ $productDetail->weight_per_unit }} {{ $productDetail->unit_name }}</span> -->
                     </div>
                     @if($productDetail->tierPrices)
                         <div class="price-list">
