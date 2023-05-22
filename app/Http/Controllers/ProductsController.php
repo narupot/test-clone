@@ -80,7 +80,7 @@ class ProductsController extends MarketPlace {
 
             if(count($child_cat_data)){
                 foreach ($child_cat_data as $key => $value) {
-                    $tot_prd = \App\MongoProduct::where(['cat_id'=>$value->id,'status'=>'1'])->count();
+                    $tot_prd = \App\MongoProduct::where(['cat_id'=>$value->id,'status'=>'1','stock'=>'1'])->count();
                     $child_cat_data[$key]->tot_prd = $tot_prd>0?$tot_prd:0;
                     
                 }
@@ -102,7 +102,7 @@ class ProductsController extends MarketPlace {
         }else{
             /*****getting badge data********/
             $range_flag = false;
-            $data = \App\MongoProduct::where('cat_id',$parent_cat_detail->_id)->select('badge_id','unit_price')->OrderBy('updated_at','DESC')->where('status',"1")->get();
+            $data = \App\MongoProduct::where('cat_id',$parent_cat_detail->_id)->select('badge_id','unit_price')->OrderBy('updated_at','DESC')->where('status',"1")->where('stock',"1")->get();
             
             if(count($data)){
               $data = $data->toArray();
