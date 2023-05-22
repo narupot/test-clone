@@ -322,7 +322,7 @@
 
 
 
-<div class="row">
+<!-- <div class="row">
     <div class="form-group mb-3 col-md-4">
         <label>@lang('product.status')</label>
         <select name="status" id="status">
@@ -331,7 +331,7 @@
         </select>
         
     </div>
-</div>
+</div> -->
 @section('footer_scripts_include')
     <script type="text/javascript">
     $(function(){
