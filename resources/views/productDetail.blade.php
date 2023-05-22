@@ -160,7 +160,7 @@
                             <a href="javascript://" class="addshop-link d-none"   ng-click="rvCtrl.addToShoppinglistHandler($event, rvCtrl.productInfo)"><i class="fas fa-pencil-alt"></i> <span>+ @lang('product.add_to_shopping_list')</span></a>
                             <div class="btn-group">
                                 <a href="#" class="btn-dark-grey chat-link d-none"><i class="fas fa-comments"></i></a>
-                                @if($productDetail->show_price && $productDetail->quantity)
+                                @if($productDetail->show_price && $productDetail->stock == 1)
                                     {{--<a href="{{action('PopUpController@getBargainPopUp', $productDetail->id)}}" qty="{{ $productDetail->order_qty_limit>0?1:$productDetail->min_order_qty }}" rel="{{$productDetail->id}}" class="btn-dark-grey btn-buyer-chat"><i class="fas fa-comments"></i> @lang('product.bargain')</a>--}}
                                     <a href="javascript:;" data-val="{{$productDetail->id}}" class="btn-dark-grey btn-buyer-chat"><i class="fas fa-comments"></i> @lang('product.talk_to_shop')</a>
                                     <a href="javascript:void(0)" class="btn-blue" ng-click="rvCtrl.addToCartHandler($event,'addtocart')" ng-disabled="rvCtrl.loading.disableBtn">@lang('product.add_to_cart')</a>
@@ -172,7 +172,7 @@
                             <a href="#" data-toggle="modal" data-target="#loginModal" class="addshop-link d-none"><i class="fas fa-pencil-alt"></i> <span>+ @lang('product.add_to_shopping_list')</span></a>
                             <div class="btn-group">
                                 <a href="#" class="btn-dark-grey chat-link d-none" data-toggle="modal" data-target="#loginModal" class="btn-default chat"><i class="fas fa-comments"></i></a>
-                                @if($productDetail->show_price && $productDetail->quantity)
+                                @if($productDetail->show_price && $productDetail->stock == 1)
                                     <a href="javascript:void(0);" data-toggle="modal" data-target="#loginModal" class="btn-dark-grey"><i class="fas fa-comments"></i> @lang('product.bargain')</a>
                                     <a href="javascript:void(0);" data-toggle="modal" data-target="#loginModal" class="btn-blue">@lang('product.add_to_cart')</a>
                                     <a href="javascript:void(0);" data-toggle="modal" data-target="#loginModal" class="btn d-none">@lang('product.buy_now')</a>
