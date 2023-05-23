@@ -138,7 +138,7 @@ class ShopOrderController extends MarketPlace
         $order_shop->details = $order_detail;
         $transaction = \App\OrderTransaction::where('order_shop_id',$order_shop->id)->get();
         if(count($transaction) < 2){
-            $transaction = \App\OrderTransaction::where('order_id',$order_shop->order_id)->orderBy('id')->get();
+            $transaction = \App\OrderTransaction::where('order_id',$order_shop->order_id)->where('order_shop_id',0)->orderBy('id')->get();
         }
         return view('admin.transaction.shopOrdDetail',['order_shop'=>$order_shop,'transaction'=>$transaction]);
     }       
