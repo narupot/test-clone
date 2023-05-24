@@ -162,6 +162,9 @@ class PaymentGatewayController extends MarketPlace {
 
                     /*send noti at mobile*/
                     $this->buyerNotification($orderInfo);
+                   
+                   /*Send notification to seller*/
+                    $this->sellerNotification($orderInfo);
                 }
             }
 
@@ -272,6 +275,27 @@ class PaymentGatewayController extends MarketPlace {
         $post_arr = ['user_id'=>$orderInfo->user_id, 'title'=>$title,'body'=>$body, 'type_redirect'=>'payment_success', 'order_id'=>$orderInfo->id, 'formatted_order_id'=>$orderInfo->formatted_id];
         $url = Config::get('constants.mobile_notification_url');
         $responce = $this->handleCurlRequest($url,$post_arr);
+
+    }
+
+    public function sellerNotification($orderInfo){
+        $title = 'New Order';
+        $customer_name = '';
+        $customer_name =  \App\User::where('id', $orderInfo->user_id)->value('display_name');
+        $body = $customer_name .' and order id '. $orderInfo->formatted_id;
+        $shop_ord = \App\OrderShop::where('order_id',$orderInfo->id)->get();
+        if($shop_ord){
+            foreach ($shop_ord as $key => $value) {
+                $post_arr = ['user_id'=>$value->shop_user_id, 'title'=>$title,'body'=>$body, 'type_redirect'=>'order_history'];
+                $url = Config::get('constants.mobile_notification_url');
+                if($value->send_noti == '2'){
+                   $responce = $this->handleCurlRequest($url,$post_arr);
+                   $value->send_noti = '1';
+                   $value->save();
+                }
+            }
+
+        }
 
     }
 
