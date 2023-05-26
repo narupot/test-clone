@@ -58,21 +58,21 @@ class CompleteOrder extends Command {
                     //cteating order transaction
                     //$comment = 'Online Order cancelled'
                     $comment = GeneralFunctions::getOrderText('order_completed');
-                    $transaction_arr = ['order_id'=>$value->id,'order_shop_id'=>0,'order_detail_id'=>0,'event'=>'cancel','updated_by_id'=>0,'comment'=>$comment,'updated_by'=>'cron'];
+                    $transaction_arr = ['order_id'=>$value->id,'order_shop_id'=>0,'order_detail_id'=>0,'event'=>'order','updated_by_id'=>0,'comment'=>$comment,'updated_by'=>'cron'];
 
                     $update_transaction = \App\OrderTransaction::updateOrdTrans($transaction_arr);
 
-                    $order_shop = \App\OrderShop::select('id')->where('order_id',$value->id);
-
+                    $order_shop = \App\OrderShop::select('id')->where('order_id',$value->id)->get();
+                    
                     foreach ($order_shop as $shopkey => $shopvalue) {
-                        $transaction_arr = ['order_id'=>$value->id,'order_shop_id'=>$shopvalue->id,'order_detail_id'=>0,'event'=>'cancel','updated_by_id'=>0,'comment'=>$comment,'updated_by'=>'cron'];
+                        $transaction_arr = ['order_id'=>$value->id,'order_shop_id'=>$shopvalue->id,'order_detail_id'=>0,'event'=>'order','updated_by_id'=>0,'comment'=>$comment,'updated_by'=>'cron'];
 
                         $update_transaction = \App\OrderTransaction::updateOrdTrans($transaction_arr);
                     }
                 }
             }
 
-            echo "Cron run for order ".$order_data;
+            echo "Cron run for order ".count($order_data);
         }
      
     }
