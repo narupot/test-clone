@@ -945,12 +945,13 @@ class CartController extends MarketPlace {
 			/****calculating pickup time*******/
 			$pickup_datetime = null;
 			if(isset($request->pickup_time)){
+				$delivery_type = \App\DeliveryTime::getDeliverYType($request->ship_method);
+				$delivery_detail = \App\DeliveryTime::getDeliveryTime($delivery_type);
 				$pickup_time = $request->pickup_time;
 				$nextday = !empty($request->nexday)?$request->nexday:'';
 				$ptime = str_replace('_n', '', $pickup_time);
 				if(strrpos($pickup_time,'_n')!==false){
-					$delivery_type = \App\DeliveryTime::getDeliverYType($request->ship_method);
-					$delivery_detail = \App\DeliveryTime::getDeliveryTime($delivery_type);
+					
 					$cur_hr = date('H');
 					$time_cal = $cur_hr + $delivery_detail->delivery_time_after;
 					
