@@ -955,7 +955,7 @@ class CartController extends MarketPlace {
 					$cur_hr = date('H');
 					$time_cal = $cur_hr + $delivery_detail->delivery_time_after;
 					
-					if($ptime >= $time_cal){
+					if($cur_hr <=3 && $ptime >= $time_cal){
 						$pdate = date('Y-m-d').' '.$ptime.':00:00';
 					}else{
 						$tomorrow = date("Y-m-d", strtotime("+1 day"));
