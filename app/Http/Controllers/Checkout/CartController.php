@@ -955,7 +955,7 @@ class CartController extends MarketPlace {
 					$cur_hr = date('H');
 					$time_cal = $cur_hr + $delivery_detail->delivery_time_after;
 					
-					if($ptime >= $time_cal){
+					if($cur_hr <=3 && $ptime >= $time_cal){
 						$pdate = date('Y-m-d').' '.$ptime.':00:00';
 					}else{
 						$tomorrow = date("Y-m-d", strtotime("+1 day"));
@@ -970,7 +970,7 @@ class CartController extends MarketPlace {
 				$new_time = date("Y-m-d H:i:s", strtotime('+'.$delivery_detail->delivery_time_after.' hours'));
 
 	            if(strtotime($new_time) > strtotime($pickup_datetime)){
-	            	return ['status'=>'fail','type'=>'pickup_time','msg'=>'กรุณาเลือก เวลาในการรับสินค้า มากกว่า '.$delivery_detail->delivery_time_after.' ชัวโมง'];
+	            	return ['status'=>'fail','type'=>'pickup_time','msg'=>'กรุณาเลือก เวลาในการรับสินค้า มากกว่า '.$delivery_detail->delivery_time_after.' ชั่วโมง'];
 	            }
 				
 			}
