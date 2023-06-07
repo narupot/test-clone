@@ -777,6 +777,8 @@ class CmsSlider extends Model
                     $id_arr['cat_img'] = getCategoryImageUrl($cat_data['img']);
                     $id_arr['badge_img'] = getBadgeImage($value->badge_id);
                     $id_arr['package_name'] = getPackageName($value->package_id);
+                    $id_arr['weight_per_unit'] = $value->weight_per_unit;
+                    $id_arr['base_unit'] = getUnitName($value->base_unit_id);
                     $prd_data_arr[] = $id_arr;
                     
                     
