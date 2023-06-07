@@ -706,8 +706,9 @@ class CmsSlider extends Model
             $user_id = Auth::id();
             $product_data = DB::table(with(new \App\OrderDetail)->getTable() . ' as od')
                 ->join(with(new \App\Product)->getTable() . ' as p', [['od.product_id', '=', 'p.id']])
+                ->join(with(new \App\Category)->getTable() . ' as c', [['p.cat_id', '=', 'c.id']])
                 ->join(with(new \App\Shop)->getTable() . ' as s', [['p.shop_id', '=', 's.id']])
-                ->select(DB::raw('count(' . $prefix . 'od.sku) as totord'), 'od.sku','od.order_detail_json','p.unit_price','p.base_unit_id','p.thumbnail_image','p.badge_id','p.package_id','p.id', 'p.weight_per_unit', 'p.cat_id')
+                ->select(DB::raw('count(' . $prefix . 'od.sku) as totord'), 'od.sku','od.order_detail_json','p.unit_price','p.base_unit_id','p.thumbnail_image','p.badge_id','p.package_id','p.id', 'p.weight_per_unit', 'p.cat_id','c.url')
                 ->whereDate('od.created_at','>=',$newdate)
                 ->where('od.user_id',$user_id)
                 ->whereIn('p.cat_id', $sub_cat_ids)
@@ -725,8 +726,9 @@ class CmsSlider extends Model
                     $remain = 20-$tot_data;
                     $remain_record = DB::table(with(new \App\OrderDetail)->getTable() . ' as od')
                     ->join(with(new \App\Product)->getTable() . ' as p', [['od.product_id', '=', 'p.id']])
+                    ->join(with(new \App\Category)->getTable() . ' as c', [['p.cat_id', '=', 'c.id']])
                     ->join(with(new \App\Shop)->getTable() . ' as s', [['p.shop_id', '=', 's.id']])
-                    ->select(DB::raw('count(' . $prefix . 'od.sku) as totord'), 'od.sku','od.order_detail_json','p.unit_price','p.base_unit_id','p.thumbnail_image','p.badge_id','p.package_id','p.id', 'p.weight_per_unit','p.cat_id')
+                    ->select(DB::raw('count(' . $prefix . 'od.sku) as totord'), 'od.sku','od.order_detail_json','p.unit_price','p.base_unit_id','p.thumbnail_image','p.badge_id','p.package_id','p.id', 'p.weight_per_unit','p.cat_id','c.url')
                     ->whereDate('od.created_at','>=',$newdate)
                     ->where('od.user_id','!=',$user_id)
                     ->whereIn('p.cat_id', $sub_cat_ids)
@@ -749,8 +751,9 @@ class CmsSlider extends Model
                 $newdate = date("Y-m-d", strtotime("-3 months"));
                 $product_data = DB::table(with(new \App\OrderDetail)->getTable() . ' as od')
                     ->join(with(new \App\Product)->getTable() . ' as p', [['od.product_id', '=', 'p.id']])
+                    ->join(with(new \App\Category)->getTable() . ' as c', [['p.cat_id', '=', 'c.id']])
                     ->join(with(new \App\Shop)->getTable() . ' as s', [['p.shop_id', '=', 's.id']])
-                    ->select(DB::raw('count(' . $prefix . 'od.sku) as totord'), 'od.sku','od.order_detail_json','p.unit_price','p.base_unit_id','p.thumbnail_image','p.badge_id','p.package_id','p.id', 'p.weight_per_unit','p.cat_id')
+                    ->select(DB::raw('count(' . $prefix . 'od.sku) as totord'), 'od.sku','od.order_detail_json','p.unit_price','p.base_unit_id','p.thumbnail_image','p.badge_id','p.package_id','p.id', 'p.weight_per_unit','p.cat_id','c.url')
                     ->whereDate('od.created_at','>=',$newdate)
                     ->where('p.status','1')
                     ->whereIn('p.cat_id', $sub_cat_ids)
@@ -773,8 +776,10 @@ class CmsSlider extends Model
                     $id_arr['unit_price'] = $value->unit_price;
                     $cat_data = $sub_cat_data[$value->cat_id];
                     $id_arr['cat_name'] = $cat_data['name'][session('lang_code')];
-                    $id_arr['cat_url'] = getCategoryUrl($cat_data['url']);
-                    $id_arr['cat_img'] = getCategoryImageUrl($cat_data['img']);
+                    //$id_arr['cat_url'] = getCategoryUrl($cat_data['url']);
+                    $id_arr['cat_url'] = action('ProductDetailController@display',['cat_url'=>$value->url,'sku'=>$value->sku]);
+                    //$id_arr['cat_img'] = getCategoryImageUrl($cat_data['img']);
+                    $id_arr['cat_img'] = getProductImageUrlRunTime($value->thumbnail_image,'thumb_265x195');
                     $id_arr['badge_img'] = getBadgeImage($value->badge_id);
                     $id_arr['package_name'] = getPackageName($value->package_id);
                     $id_arr['weight_per_unit'] = $value->weight_per_unit;
