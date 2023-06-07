@@ -970,7 +970,7 @@ class CartController extends MarketPlace {
 				$new_time = date("Y-m-d H:i:s", strtotime('+'.$delivery_detail->delivery_time_after.' hours'));
 
 	            if(strtotime($new_time) > strtotime($pickup_datetime)){
-	            	return ['status'=>'fail','type'=>'pickup_time','msg'=>'กรุณาเลือก เวลาในการรับสินค้า มากกว่า '.$delivery_detail->delivery_time_after.' ชั่วโมง'];
+	            	return ['status'=>'fail','type'=>'pickup_time','msg'=>'รอบการจัดส่งสินค้าที่เลือกไว้หมดเวลาแล้ว กรุณาเลือกรอบการจัดส่งสินค้าใหม่อีกครั้ง'];
 	            }
 				
 			}
