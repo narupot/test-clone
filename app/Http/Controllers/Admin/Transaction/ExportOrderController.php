@@ -185,7 +185,11 @@ class ExportOrderController extends MarketPlace
             $eny_type = $request->eny_type;
             $data_h = "H";
             $data_p = "P";
-            $data_p_product_code = "DCT";
+            if($bank_name_key == 'kbank'){
+                $data_p_product_code = "DCT";
+            }else{
+                $data_p_product_code = "MCS";
+            }
 
             $data_client_code = getConfigValue('CLIENT_CODE_FOR_ORDER_EXPORT_FILE');
             $data_client_account_no = getConfigValue('CLIENT_ACC_NO_ORDER_EXPORT_FILE');
@@ -242,13 +246,23 @@ class ExportOrderController extends MarketPlace
             $tot_order = \App\OrderShop::where(DB::raw('date(end_shopping_date)'),$export_date)
                                 ->where('order_status','!=',4)
                                 ->where('payment_status',1)
-                                ->whereIn('shop_id',$shop_id_arr)
-                                ->count();
+                                ->whereIn('shop_id',$shop_id_arr);
+                                if($bank_name_key == 'kbank'){
+                                    $tot_order->where('payment_slug','kbank');
+                                }else{
+                                    $tot_order->where('payment_slug','!=','kbank');
+                                }
+            $tot_order = $tot_order->count();
 
             $seller_order_data = \App\OrderShop::where(DB::raw('date(end_shopping_date)'),$export_date)
                                 ->where('order_status','!=',4)
-                                ->where('payment_status',1)
-                                ->select(DB::raw('sum(total_final_price) as totPrice ,count(order_id) as totorder'),'shop_user_id','end_shopping_date','shop_json')
+                                ->where('payment_status',1);
+                                if($bank_name_key == 'kbank'){
+                                    $seller_order_data->where('payment_slug','kbank');
+                                }else{
+                                    $seller_order_data->where('payment_slug','!=','kbank');
+                                }
+            $seller_order_data = $seller_order_data->select(DB::raw('sum(total_final_price) as totPrice ,count(order_id) as totorder'),'shop_user_id','end_shopping_date','shop_json')
                                 ->with('getSellerDetail')
                                 ->groupBy('shop_id')
                                 ->whereIn('shop_id',$shop_id_arr)

@@ -399,6 +399,15 @@
                         $('#cart_'+response.cart_id+' li.price_li').append('<br><a href="javascript:;" class="update_cart_price text-primary">'+error_msg.update_price+'</a>')
                         $("#btn_checkout").prop("disabled",false);
                         showSweetAlertError(response.msg);
+                    }else if(response.type=='pickup_time'){
+                        $("#btn_checkout").prop("disabled", false);
+                        swal({
+                            type: 'error',
+                            text: response.msg,
+                            confirmButtonText: lang_ok,
+                        }).then(function () {
+                            location.reload();
+                        });
                     }else{
                         $("#btn_checkout").prop("disabled", false);
                         showSweetAlertError(response.msg);

@@ -29,6 +29,7 @@ public/files/*
 public/files/media_manager/*
 public/files/avtar_images/*
 public/files/site_logo/*
+public/.htaccess
 /storage/logs/*.log
 storage/framework/views/*
 storage/*

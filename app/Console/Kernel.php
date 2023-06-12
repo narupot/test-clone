@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
         '\App\Console\Commands\ClearCartItem',
         '\App\Console\Commands\ExportOrder',
         '\App\Console\Commands\CancelPendingOrder',
+        '\App\Console\Commands\CompleteOrder',
         '\App\Console\Commands\CartNotificationForExpire'
     ];
 
@@ -34,6 +35,7 @@ class Kernel extends ConsoleKernel
         $send_export_order = base_path("storage/logs/send_export_order.log");
         $cancel_pending_order = base_path("storage/logs/cancel_pending_order.log");
         $cart_notification_expire = base_path("storage/logs/cart_notification_expire.log");
+        $cancel_pending_order = base_path("storage/logs/complete_order.log");
 
         $schedule->command('sendOrderLogistic:sendOrderLogistic')->everyMinute()->sendOutputTo($send_order_logistic); 
         $schedule->command('ClearCartItem:clearCartItem')->everyMinute()->sendOutputTo($send_clear_cart); 
@@ -42,6 +44,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('CancelPendingOrder:cancelPendingOrder')->everyMinute()->sendOutputTo($cancel_pending_order);
 
         $schedule->command('CartNotificationForExpire:cartNotificationForExpire')->everyMinute()->sendOutputTo($cart_notification_expire);
+
+        $schedule->command('CompleteOrder:completeOrder')->dailyAt('18:00')->sendOutputTo($send_export_order); 
 
     }
 
