@@ -379,36 +379,34 @@ class ExportOrderController extends MarketPlace
                 $dec =  $gpg_dep->decrypt($main_data);*/
             }
             
+            $exp_log_count = \App\OrderExportLog::where(DB::raw('date(order_date)'),$export_date)->count();
+            $exp_no = $exp_log_count ? $exp_log_count : 0;
+            $ref_no = sprintf("%03d", $exp_no);
+
+            $file_path = Config::get('constants.public_path');
+
+        
+            $client_code = $data_client_code;
+            $date = str_replace('-', '', $export_date);
+            $file_name = 'P-'.$client_code.'-'.$date.'-'.$ref_no.'.txt.gpg';
+            $file = $file_path.'/seller-payment/'.$file_name;
+            \File::put($file,$main_data);
+            $all_file_path[] = $file;
+
+            $log_obj = new \App\OrderExportLog;
+            $log_obj->total_order = $tot_order;
             if($tot_order){
-                $exp_log_count = \App\OrderExportLog::where(DB::raw('date(order_date)'),$export_date)->count();
-                $exp_no = $exp_log_count ? $exp_log_count : 0;
-                $ref_no = sprintf("%03d", $exp_no);
-
-                $file_path = Config::get('constants.public_path');
-
-            
-                $client_code = $data_client_code;
-                $date = str_replace('-', '', $export_date);
-                $file_name = 'P-'.$client_code.'-'.$date.'-'.$ref_no.'.txt.gpg';
-                $file = $file_path.'/seller-payment/'.$file_name;
-                \File::put($file,$main_data);
-                $all_file_path[] = $file;
-
-                $log_obj = new \App\OrderExportLog;
-                $log_obj->total_order = $tot_order;
-                if($tot_order){
-                    $log_obj->shop_ids = implode(',', $shop_id_arr);
-                    $log_obj->bank_type = $bank_name_key;
-                }
-                $log_obj->file_name = $file_name;
-                $log_obj->total_seller = count($seller_order_data);
-                $log_obj->total_amount = $total_order_amt;
-                $log_obj->status = 'pending';
-                $log_obj->order_date = date('Y-m-d',strtotime($export_date));
-                $log_obj->save();
-                $log_id = $log_obj->id;
-                $log_id_arr[] = $log_id;
+                $log_obj->shop_ids = implode(',', $shop_id_arr);
+                $log_obj->bank_type = $bank_name_key;
             }
+            $log_obj->file_name = $file_name;
+            $log_obj->total_seller = count($seller_order_data);
+            $log_obj->total_amount = $total_order_amt;
+            $log_obj->status = 'pending';
+            $log_obj->order_date = date('Y-m-d',strtotime($export_date));
+            $log_obj->save();
+            $log_id = $log_obj->id;
+            $log_id_arr[] = $log_id;
             
         }//end bank_arr foreach
         if($all_file_path){
