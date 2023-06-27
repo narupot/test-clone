@@ -155,18 +155,19 @@ class ShopOrderController extends MarketPlace
                 $status_id = 3;
                 $comment = GeneralFunctions::getOrderText('order_completed');
                 $msg = Lang::get('admin_order.order_completed');
+
+                $update_details = OrderDetail::where(['order_shop_id'=>$order_shop->id])->whereNotIn('status',[4,9,10,11,12])->update(['status'=>$status_id]);
             }elseif($status == 'cancel'){
                 $status_id = 4;
                 $comment = GeneralFunctions::getOrderText('order_cancelled');
                 $msg = Lang::get('admin_order.order_cancelled');
+                
+                $update_details = OrderDetail::where(['order_shop_id'=>$order_shop->id])->whereNotIn('status',[3,5,6,8])->update(['status'=>$status_id]);
             }else{
                 return ['status'=>'fail','msg'=>'Invalid status'];
             }
             $order_shop->order_status = $status_id;
             $order_shop->save();
-
-            /****update order detail status for this shop*******/
-            $update_details = OrderDetail::where(['order_shop_id'=>$order_shop->id])->update(['status'=>$status_id]);
 
             /****update entry in order transaction******/
             $transaction_arr = ['order_id'=>$order_shop->order_id,'order_shop_id'=>$order_shop->id,'order_detail_id'=>0,'event'=>'delivery','comment'=>$comment,'updated_by'=>'admin'];
