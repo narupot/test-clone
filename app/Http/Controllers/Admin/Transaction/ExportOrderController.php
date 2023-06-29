@@ -247,21 +247,21 @@ class ExportOrderController extends MarketPlace
                                 ->where('order_status','!=',4)
                                 ->where('payment_status',1)
                                 ->whereIn('shop_id',$shop_id_arr);
-                                if($bank_name_key == 'kbank'){
+                                /*if($bank_name_key == 'kbank'){
                                     $tot_order->where('payment_slug','kbank');
                                 }else{
                                     $tot_order->where('payment_slug','!=','kbank');
-                                }
+                                }*/
             $tot_order = $tot_order->count();
 
             $seller_order_data = \App\OrderShop::where(DB::raw('date(end_shopping_date)'),$export_date)
                                 ->where('order_status','!=',4)
                                 ->where('payment_status',1);
-                                if($bank_name_key == 'kbank'){
+                                /*if($bank_name_key == 'kbank'){
                                     $seller_order_data->where('payment_slug','kbank');
                                 }else{
                                     $seller_order_data->where('payment_slug','!=','kbank');
-                                }
+                                }*/
             $seller_order_data = $seller_order_data->select(DB::raw('sum(total_final_price) as totPrice ,count(order_id) as totorder'),'shop_user_id','end_shopping_date','shop_json')
                                 ->with('getSellerDetail')
                                 ->groupBy('shop_id')
