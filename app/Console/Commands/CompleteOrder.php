@@ -51,9 +51,9 @@ class CompleteOrder extends Command {
                     /****update order to complete*****/
                     $complete_ord = \App\Order::where('id',$value->id)->update(['order_status'=>3]);
 
-                    $update_details = \App\OrderShop::where(['order_id'=>$value->id])->update(['order_status'=>3]);
+                    $update_details = \App\OrderShop::where(['order_id'=>$value->id])->whereNotIn('order_status',[4,9,10,11,12])->update(['order_status'=>3]);
 
-                    $update_details = \App\OrderDetail::where(['order_id'=>$value->id])->update(['status'=>3]);
+                    $update_details = \App\OrderDetail::where(['order_id'=>$value->id])->whereNotIn('status',[4,9,10,11,12])->update(['status'=>3]);
 
                     //cteating order transaction
                     //$comment = 'Online Order cancelled'
