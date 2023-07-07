@@ -152,6 +152,28 @@ class ExportOrderController extends MarketPlace
             return ['status'=>'fail','msg'=>\Lang::get('admin_common.something_went_wrong')];
         }
     }
+
+    public function testImportTxt(Request $request){
+        $file_path = Config::get('constants.public_path').'/seller-payment-response/HDONMUANGPH2HMIS517062023000036.pgp';
+        if(file_exists($file_path)){
+
+            $main_data = @file_get_contents($file_path);
+            
+            $pub_path = Config::get('constants.public_path');
+            $key_path = @file_get_contents($pub_path.'/smmfresh_import_key.asc');
+
+            $gpg = new \gnupg();
+            $gpg->seterrormode(\gnupg::ERROR_EXCEPTION);
+            $info_key = $gpg->import($key_path);
+            $fingerprint = $info_key['fingerprint'];      
+            
+            $gpg->adddecryptkey($fingerprint,'');
+            dd($gpg);
+            $dec =  $gpg->decrypt($main_data);
+            dd($main_data,$dec);
+        }
+        dd($file_path);
+    }
     
     public function generateTxt(Request $request)
     {
@@ -243,7 +265,7 @@ class ExportOrderController extends MarketPlace
             $record_identifier = $data_i = "I";
             $export_date = $order_date;
 
-            $tot_order = \App\OrderShop::where(DB::raw('date(end_shopping_date)'),$export_date)
+            $tot_order = \App\OrderShop::where(DB::raw('date(pickup_time)'),$export_date)
                                 ->where('order_status','!=',4)
                                 ->where('payment_status',1)
                                 ->whereIn('shop_id',$shop_id_arr);
@@ -254,7 +276,7 @@ class ExportOrderController extends MarketPlace
                                 }*/
             $tot_order = $tot_order->count();
 
-            $seller_order_data = \App\OrderShop::where(DB::raw('date(end_shopping_date)'),$export_date)
+            $seller_order_data = \App\OrderShop::where(DB::raw('date(pickup_time)'),$export_date)
                                 ->where('order_status','!=',4)
                                 ->where('payment_status',1);
                                 /*if($bank_name_key == 'kbank'){
