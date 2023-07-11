@@ -160,15 +160,15 @@ class ExportOrderController extends MarketPlace
             $main_data = @file_get_contents($file_path);
             
             $pub_path = Config::get('constants.public_path');
-            $key_path = @file_get_contents($pub_path.'/smmfresh_import_key.asc');
+            $key_path = @file_get_contents($pub_path.'/simummuangonline_SECRET.asc');
 
             $gpg = new \gnupg();
             $gpg->seterrormode(\gnupg::ERROR_EXCEPTION);
             $info_key = $gpg->import($key_path);
             $fingerprint = $info_key['fingerprint'];      
+
+            $gpg->adddecryptkey($fingerprint,'4MumMu@ng');
             
-            $gpg->adddecryptkey($fingerprint,'');
-            dd($gpg);
             $dec =  $gpg->decrypt($main_data);
             dd($main_data,$dec);
         }
