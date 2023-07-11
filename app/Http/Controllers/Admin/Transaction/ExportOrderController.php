@@ -264,11 +264,13 @@ class ExportOrderController extends MarketPlace
             $data_benef_branch_code = "0040745";
             $record_identifier = $data_i = "I";
             $export_date = $order_date;
-
-            $tot_order = \App\OrderShop::where(DB::raw('date(pickup_time)'),$export_date)
-                                ->where('order_status','!=',4)
-                                ->where('payment_status',1)
-                                ->whereIn('shop_id',$shop_id_arr);
+            $prefix = DB::getTablePrefix();
+            $tot_order = \DB::table(with(new \App\OrderShop)->getTable().' as sord')
+                  ->join(with(new \App\Order)->getTable().' as ord', 'sord.order_id', '=', 'ord.id')
+                                ->whereDate('ord.pickup_time',$export_date)
+                                ->where('sord.order_status','!=',4)
+                                ->where('sord.payment_status',1)
+                                ->whereIn('sord.shop_id',$shop_id_arr);
                                 /*if($bank_name_key == 'kbank'){
                                     $tot_order->where('payment_slug','kbank');
                                 }else{
@@ -276,18 +278,20 @@ class ExportOrderController extends MarketPlace
                                 }*/
             $tot_order = $tot_order->count();
 
-            $seller_order_data = \App\OrderShop::where(DB::raw('date(pickup_time)'),$export_date)
-                                ->where('order_status','!=',4)
-                                ->where('payment_status',1);
+            $seller_order_data = \DB::table(with(new \App\OrderShop)->getTable().' as sord')
+                  ->join(with(new \App\Order)->getTable().' as ord', 'sord.order_id', '=', 'ord.id')
+                  ->join(with(new \App\Seller)->getTable().' as seller', 'sord.shop_user_id', '=', 'seller.user_id')
+                                ->whereDate('ord.pickup_time',$export_date)
+                                ->where('sord.order_status','!=',4)
+                                ->where('sord.payment_status',1);
                                 /*if($bank_name_key == 'kbank'){
                                     $seller_order_data->where('payment_slug','kbank');
                                 }else{
                                     $seller_order_data->where('payment_slug','!=','kbank');
                                 }*/
-            $seller_order_data = $seller_order_data->select(DB::raw('sum(total_final_price) as totPrice ,count(order_id) as totorder'),'shop_user_id','end_shopping_date','shop_json')
-                                ->with('getSellerDetail')
-                                ->groupBy('shop_id')
-                                ->whereIn('shop_id',$shop_id_arr)
+            $seller_order_data = $seller_order_data->select(DB::raw('sum(' . $prefix . 'sord.total_final_price) as totPrice'),'sord.shop_user_id','sord.end_shopping_date','sord.shop_json','seller.bank_id','seller.bank_branch_id','seller.branch_code','seller.account_name','seller.account_no')
+                                ->groupBy('sord.shop_id')
+                                ->whereIn('sord.shop_id',$shop_id_arr)
                                 ->get();
            
             $total_order_amt = 0;
@@ -296,20 +300,20 @@ class ExportOrderController extends MarketPlace
                 foreach ($seller_order_data as $key => $value) {
                     $total_order_amt = $total_order_amt + $value->totPrice;
                     $shop_user_id = $value->shop_user_id;
-                    $bank_id = $value->getSellerDetail->bank_id;
-                    $bank_branch_id = $value->getSellerDetail->bank_branch_id;
+                    $bank_id = $value->bank_id;
+                    $bank_branch_id = $value->bank_branch_id;
                     $bank_code = $bank_branch_code = '';
                     if($bank_id){
                         $bank_code = \App\PaymentBank::where('id',$bank_id)->value('bank_code');
                     }
 
-                    $bank_branch_code = $value->getSellerDetail->branch_code;
+                    $bank_branch_code = $value->branch_code;
                     $record_identifier = $data_i = "I";
                     $no_use_2 = str_repeat(' ', 20);
                     $no_use_3 = str_repeat(' ', 10);
 
                     $shop_json_arr = json_decode($value->shop_json,true);
-                    $seller_name = $value->getSellerDetail->account_name;
+                    $seller_name = $value->account_name;
                     $seller_name_len = mb_strlen($seller_name,'UTF-8');
                     $rest_seller_name = str_repeat(' ', 80-$seller_name_len);
                     $benef_desc = $seller_name.$rest_seller_name;
@@ -327,7 +331,7 @@ class ExportOrderController extends MarketPlace
                     $branch_code_format = $bank_code.sprintf('%04d', $bank_branch_code);
                     $benef_bank_code = str_pad($bank_code, 10, " ", STR_PAD_RIGHT);
                     $benef_branch_code = str_pad($branch_code_format, 10, " ", STR_PAD_RIGHT);
-                    $acc_no = str_replace('-', '', $value->getSellerDetail->account_no);
+                    $acc_no = str_replace('-', '', $value->account_no);
                     $benef_bank_acc_no = str_pad($acc_no, 20, " ", STR_PAD_RIGHT);
 
                     $no_use_15 = str_repeat(' ', 16);
@@ -348,11 +352,11 @@ class ExportOrderController extends MarketPlace
                     $no_use_30 = str_repeat(' ', 20);
                     $no_use_31 = str_repeat(' ', 20);
                     
-                    //$payee_name = str_pad($value->getSellerDetail->account_name, 120, " ", STR_PAD_RIGHT);
+                    //$payee_name = str_pad($value->account_name, 120, " ", STR_PAD_RIGHT);
 
-                    $payee_len = 120 - mb_strlen($value->getSellerDetail->account_name, 'UTF-8');
+                    $payee_len = 120 - mb_strlen($value->account_name, 'UTF-8');
                     $rest_space_name = str_repeat(' ', $payee_len);
-                    $payee_name = $value->getSellerDetail->account_name.$rest_space_name;
+                    $payee_name = $value->account_name.$rest_space_name;
                     
                     $no_use_33 = str_repeat(' ', 20);
                     $no_use_34 = str_repeat(' ', 54);
