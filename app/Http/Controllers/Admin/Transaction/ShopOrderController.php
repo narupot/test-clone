@@ -259,10 +259,12 @@ class ShopOrderController extends MarketPlace
             $prefix = DB::getTablePrefix();
             $default_lang = 0;
             $query = \DB::table(with(new OrderShop)->getTable().' as sord')
-                  ->join(with(new \App\Seller)->getTable().' as seller', 'sord.shop_user_id', '=', 'seller.user_id')
-                  ->leftjoin(with(new \App\PaymentBankDesc)->getTable().' as pbd', [['seller.bank_id', '=', 'pbd.payment_bank_id'], ['pbd.lang_id', '=', DB::raw($default_lang)]])
-                  ->select(DB::raw('sum(' . $prefix . 'sord.total_final_price) as tot_amount'),'sord.shop_id','sord.shop_json','pbd.bank_name')
-                  ->whereDate('sord.end_shopping_date',$filter_date);
+
+                    ->join(with(new \App\Order)->getTable().' as ord', 'sord.order_id', '=', 'ord.id')
+                    ->join(with(new \App\Seller)->getTable().' as seller', 'sord.shop_user_id', '=', 'seller.user_id')
+                    ->leftjoin(with(new \App\PaymentBankDesc)->getTable().' as pbd', [['seller.bank_id', '=', 'pbd.payment_bank_id'], ['pbd.lang_id', '=', DB::raw($default_lang)]])
+                    ->select(DB::raw('sum(' . $prefix . 'sord.total_final_price) as tot_amount'),'sord.shop_id','sord.shop_json','pbd.bank_name')
+                    ->whereDate('ord.pickup_time',$filter_date);
             
             if(isset($request->pq_filter)){
                 $filter_req = json_decode($request->pq_filter,true);
