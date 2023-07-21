@@ -1184,7 +1184,7 @@ class CustomHelpers {
 
     public static function getBadgeSize($key=null){
 
-        $arr = ['jumbo'=>Lang::get('admin_product.jumbo'),'large'=>Lang::get('admin_product.large'),'medium'=>Lang::get('admin_product.medium'),'small'=>Lang::get('admin_product.small'),'mini'=>Lang::get('admin_product.mini'),'free_size'=>Lang::get('admin_product.free_size')];
+        $arr = ['jumbo'=>Lang::get('admin_product.jumbo'),'large'=>Lang::get('admin_product.large'),'medium'=>Lang::get('admin_product.medium'),'small'=>Lang::get('admin_product.small'),'mini'=>Lang::get('admin_product.mini'),'non'=>Lang::get('admin_product.non')];
         if($key){
             return $arr[$key] ?? '';
         }else{
@@ -1193,7 +1193,7 @@ class CustomHelpers {
     }
 
     public static function getBadgeGrade($key=null){
-        $arr = ['very_good'=>Lang::get('admin_product.very_good'),'good'=>Lang::get('admin_product.good'),'general'=>Lang::get('admin_product.general'),'mix'=>Lang::get('admin_product.mix')];
+        $arr = ['very_good'=>Lang::get('admin_product.very_good'),'good'=>Lang::get('admin_product.good'),'general'=>Lang::get('admin_product.general'),'mix'=>Lang::get('admin_product.mix'),'non'=>Lang::get('admin_product.non')];
         if($key){
             return $arr[$key] ?? '';
         }else{
