@@ -952,9 +952,9 @@ class CartController extends MarketPlace {
 				$ptime = str_replace('_n', '', $pickup_time);
 				$time_slot = $delivery_detail->time_slot;
 				if($time_slot){
-					$exp_slot = explode($time_slot, ',');
+					$exp_slot = explode(',',$time_slot);
 					if(!in_array($ptime, $exp_slot)){
-						return ['status'=>'fail','type'=>'pickup_time','msg'=>'"ไม่มีรอบการจัดส่งสินค้าที่คุณเลือก กรุณาสั่งสินค้าใหม่"'];
+						return ['status'=>'fail','type'=>'pickup_time','msg'=>'ไม่มีรอบการจัดส่งสินค้าที่คุณเลือก กรุณาสั่งสินค้าใหม่'];
 					}
 				}
 				if(strrpos($pickup_time,'_n')!==false){
