@@ -289,7 +289,7 @@ class ExportOrderController extends MarketPlace
                                 }else{
                                     $seller_order_data->where('payment_slug','!=','kbank');
                                 }*/
-            $seller_order_data = $seller_order_data->select(DB::raw('sum(' . $prefix . 'sord.total_final_price) as totPrice'),'sord.shop_user_id','sord.end_shopping_date','sord.shop_json','seller.bank_id','seller.bank_branch_id','seller.branch_code','seller.account_name','seller.account_no')
+            $seller_order_data = $seller_order_data->select(DB::raw('sum(' . $prefix . 'sord.total_final_price) as totPrice'),'sord.shop_user_id','sord.end_shopping_date','sord.shop_json','seller.bank_id','seller.bank_branch_id','seller.branch_code','seller.account_name','seller.account_no','ord.pickup_time')
                                 ->groupBy('sord.shop_id')
                                 ->whereIn('sord.shop_id',$shop_id_arr)
                                 ->get();
@@ -327,7 +327,7 @@ class ExportOrderController extends MarketPlace
 
                     $no_use_10 = str_repeat(' ', 20);
                     
-                    $inst_date = str_pad(date('d/m/Y',strtotime($value->end_shopping_date)), 10, " ", STR_PAD_RIGHT);
+                    $inst_date = str_pad(date('d/m/Y',strtotime($value->pickup_time)), 10, " ", STR_PAD_RIGHT);
                     $branch_code_format = $bank_code.sprintf('%04d', $bank_branch_code);
                     $benef_bank_code = str_pad($bank_code, 10, " ", STR_PAD_RIGHT);
                     $benef_branch_code = str_pad($branch_code_format, 10, " ", STR_PAD_RIGHT);
