@@ -89,7 +89,7 @@
 
                 <div class="row">
                     <div class="col-sm-4 form-group">
-                        <label>@lang('admin_order.date') <i class="red">*</i></label>
+                        <label>@lang('admin_order.pickup_date') <i class="red">*</i></label>
                         <input type="text" class="date-select-new date-picker" name="filter_date" id="order_date" value="{{$filter_date}}">
                         
                     </div>
