@@ -57,8 +57,8 @@
                         <td><img src="{{ getCategoryImageUrl($mainCategory->img) }}" width="100px" height="100px" ng-show="display_mode.image"></td>
                         <td>{{ $mainCategory->getCatDesc->name }}</td>
                         <td>--</td>
-                        <td>{{ $mainCategory->created_at }}</td>
-                        <td>{{ $mainCategory->updated_at }}</td>
+                        <td>{{ getDateFormat($mainCategory->created_at, '1')}}</td>
+                        <td>{{ getDateFormat($mainCategory->updated_at, '1') }}</td>
                         <td class="text-nowrap">
                             
                             <a class="btn btn-dark" href="{{ action('Admin\CategoryManagement\CategoryController@edit', $mainCategory->id) }}">@lang('common.edit')</a> 
