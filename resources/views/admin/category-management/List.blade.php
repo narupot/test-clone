@@ -64,7 +64,7 @@
                         @else
                         <td>@lang('common.inactive')</td>
                         @endif
-                        <td>{{ getUser($mainCategory->created_at)}}</td>
+                        <td>{{ getUser($mainCategory->created_by)}}</td>
                         <td>{{ getDateFormat($mainCategory->created_at, '1')}}</td>
                         <td>{{ getDateFormat($mainCategory->updated_at, '1') }}</td>
                         <td class="text-nowrap">
