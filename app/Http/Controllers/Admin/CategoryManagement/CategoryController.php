@@ -581,7 +581,7 @@ class CategoryController extends MarketPlace
 
             $active_tab = 'subcategory';
 
-            return view('admin.category.create', ['categories' => $categories, 'category' => $category, 'categoriesids' => $categoriesids, 'seo_status'=>$seo_status,'subcat_mesg'=> $subcategory_message,'active_tab'=>$active_tab, 'categorydropdown'=>$categorydropdown, 'units'=>$units, 'status'=>1]);
+            return view('admin.category-management.create', ['categories' => $categories, 'category' => $category, 'categoriesids' => $categoriesids, 'seo_status'=>$seo_status,'subcat_mesg'=> $subcategory_message,'active_tab'=>$active_tab, 'categorydropdown'=>$categorydropdown, 'units'=>$units, 'status'=>1]);
         }
     }
 
@@ -707,6 +707,14 @@ class CategoryController extends MarketPlace
         $id = $request['id'];
         $catunit =  \App\CategoryUnit::where('cat_id', $id)->pluck('id','unit_id');
         return $catunit;
+    }
+
+    public function subcategorylist()
+    {
+       //return redirect()->action('Admin\CategoryManagement\CategoryController@create');
+       $categories = Category::where('parent_id','!=','0')->get();
+       $permission = $this->checkUrlPermission('add_category');
+       return view('admin.category-management.sublist', ['categories' => $categories,'permission_arr'=>$permission]);
     }
 
 }
