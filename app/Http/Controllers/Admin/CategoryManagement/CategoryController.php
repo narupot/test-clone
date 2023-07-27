@@ -45,8 +45,9 @@ class CategoryController extends MarketPlace
     public function index()
     {
        //return redirect()->action('Admin\CategoryManagement\CategoryController@create');
-       $categories = Category::where(['parent_id' => '0', 'created_by' => $created_by])->get();
-       return view('admin.category-management.list', ['categories' => $categories]);
+       $categories = Category::where(['parent_id' => '0'])->get();
+       $permission = $this->checkUrlPermission('add_category');
+       return view('admin.category-management.list', ['categories' => $categories,'permission_arr'=>$permission]);
     }
 
     /**
@@ -298,7 +299,7 @@ class CategoryController extends MarketPlace
             $catunit =  \App\CategoryUnit::where('cat_id', $id)->pluck('id','unit_id');
  
             
-            return view('admin.category.edit', ['subcat_mesg'=>$subcat_mesg,'category' => $category, 'categories' => $categories, 'tableCategoryDesc' => $this->tableCategoryDesc,'top_parent_id'=>$parent_id, 'active_tab'=>$active_tab,'shop_data'=>$shop_data,'assign_seller'=>$assign_seller, 'units'=>$units, 'catunit'=>$catunit]);
+            return view('admin.category-management.edit', ['subcat_mesg'=>$subcat_mesg,'category' => $category, 'categories' => $categories, 'tableCategoryDesc' => $this->tableCategoryDesc,'top_parent_id'=>$parent_id, 'active_tab'=>$active_tab,'shop_data'=>$shop_data,'assign_seller'=>$assign_seller, 'units'=>$units, 'catunit'=>$catunit]);
         }
     }
 

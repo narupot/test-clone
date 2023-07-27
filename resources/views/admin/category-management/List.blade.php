@@ -16,11 +16,9 @@
     <div class="content">
         <div class="header-title">
             <h1 class="title">@lang('category.list')</h1>
-             @if($permission_arr['add'] === true)
             <div class="float-right">
                 <a class="btn btn-primary" href="{{ action('Admin\CategoryManagement\CategoryController@create') }}"> @lang('common.create_new')</a> 
-            </div>          
-            @endif
+            </div>
         </div>
         @if(Session::has('succMsg'))    
             <script type="text/javascript">               
@@ -56,17 +54,14 @@
                 
                     <tr>
                         <td>{{ ++$key }}</td>
-                        <td>--</td>
+                        <td><img src="{{ getCategoryImageUrl($mainCategory->img) }}" width="100px" height="100px" ng-show="display_mode.image"></td>
                         <td>{{ $mainCategory->getCatDesc->name }}</td>
                         <td>--</td>
                         <td>{{ $mainCategory->created_at }}</td>
-                        <td>{{ $mainCategory->updated_at] }}</td>
+                        <td>{{ $mainCategory->updated_at }}</td>
                         <td class="text-nowrap">
-                            @if($permission_arr['edit'] === true)
-                                <a class="btn btn-dark" href="{{ action('Admin\CategoryManagement\CategoryController@edit', $mainCategory->id) }}">@lang('common.edit')</a>
-                            @endif
-
-                            @if($permission_arr['delete'] === true) 
+                            
+                            <a class="btn btn-dark" href="{{ action('Admin\CategoryManagement\CategoryController@edit', $mainCategory->id) }}">@lang('common.edit')</a> 
                             <form method="post" action="{{ action('Admin\CategoryManagement\CategoryController@destroy', $mainCategory->id) }}" onsubmit="return confirm('Are you sure to delete this record ?');" class="inblock"> 
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}                             
@@ -74,7 +69,6 @@
                                    @lang('common.delete')
                                 </a>
                             </form>
-                            @endif
                         </td>
                     </tr>
                  @endforeach  

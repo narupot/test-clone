@@ -15,17 +15,17 @@
 @section('content')
 <script>
     var CROPPER_SETTING = {!! json_encode($cropper_setting) !!};   
-    var action = '{{action("Admin\Category\CategoryController@store")}}';
+    var action = '{{action("Admin\CategoryManagement\CategoryController@store")}}';
     var cat_id = '';
     var variantlisturl ='#';
-    var dataJsonUrl ='{{ action("Admin\Category\CategoryController@categorieslist")}}';
+    var dataJsonUrl ='{{ action("Admin\CategoryManagement\CategoryController@categorieslist")}}';
     var imageurl="#";
     var currency = "{{session('default_currency_code')}}";
     window.userFolderDefaultPath = "{{Config::get('constants.froala_img_path').md5(Auth::id()).'/'}}";
 
-    var categoryList = "{{action('Admin\Category\CategoryController@categorieslist')}}";
+    var categoryList = "{{action('Admin\CategoryManagement\CategoryController@categorieslist')}}";
     
-    var cateEditurl = "{{ action('Admin\Category\CategoryController@categoryedit') }}";
+    var cateEditurl = "{{ action('Admin\CategoryManagement\CategoryController@categoryedit') }}";
     
     var showHeadrePagination = true;
     var tableLoaderImgUrl = "{{ Config::get('constants.loader_url')}}ajax-loader.gif";
@@ -47,14 +47,15 @@
             <img ng-src="<%tableLoaderImgUrl%>" alt="Loader"> 
         </span>
      </div>
-    {!! Form::open(['action' => 'Admin\Category\CategoryController@store', 'id'=>'sellerCategoryForm', 'class'=>'form-horizontal','enctype' => 'multipart/form-data']) !!}
+    {!! Form::open(['action' => 'Admin\CategoryManagement\CategoryController@store', 'id'=>'sellerCategoryForm', 'class'=>'form-horizontal','enctype' => 'multipart/form-data']) !!}
     {!! Form::hidden('_method', old('_method', 'POST')) !!}
     {!! Form::hidden('category_id', old('category_id'), ['id'=>'category_id']) !!}
     <div class="header-title">
         <h1 class="title">@lang('admin_category.product_master')</h1>  
 
          @php( $confirm = "'".Lang::get('product.are_sure_delete_this_data')."'")
-        <div class="float-right">        
+        <div class="float-right">     
+            <a class="btn btn-back" href="{{ action('Admin\CategoryManagement\CategoryController@index') }}">@lang('common.back')</a>   
             <a ng-if="previewUrl"  class="btn btn-secondary deleteUrlcate" ng-href="<%previewUrl%>" target="_blank">@lang('admin_product.preview')</a>
             <a ng-if="deleteUrl" onclick="return confirm({{$confirm}});" class="btn btn-delete deleteUrlcate " ng-href="<%deleteUrl%>">@lang('admin_product.remove_category')</a>
              <input type="submit" class="btn btn-save btn-success" value="@lang('admin_category.save_fruit')" ng-disabled="catmoveerror" />
@@ -95,11 +96,7 @@
                 @endif
             </h2>
         </div>
-        <div class="content-left">
-
-            @include('admin.includes.category_menu')
-
-        </div>
+       
         <div class="content-right">
             <!-- BEGIN SIDEBAR MENU -->
             
@@ -278,7 +275,7 @@
               setTooltip(btn, 'Copied');
               hideTooltip(btn);
             });*/
-            var ajax_url = "{{ action('Admin\Category\CategoryController@assignUnit') }}";
+            var ajax_url = "{{ action('Admin\CategoryManagement\CategoryController@assignUnit') }}";
 
             jQuery('#parent_id').change(function(e){
                 var parent_id = $(this).val();
