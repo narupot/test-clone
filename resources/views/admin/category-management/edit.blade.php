@@ -16,24 +16,24 @@
 @section('content')
 <script>    
     var CROPPER_SETTING = {!! json_encode($cropper_setting) !!};  
-    var action = '{{ action("Admin\Category\CategoryController@store")}}';
+    var action = '{{ action("Admin\CategoryManagement\CategoryController@store")}}';
     var cat_id = '{{ $category->id}}';
     var top_cat_id = '{{ $top_parent_id}}';
 
-    var categoryList = "{{action('Admin\Category\CategoryController@categorieslist')}}";
-    var action = '{{action("Admin\Category\CategoryController@store")}}';
+    var categoryList = "{{action('Admin\CategoryManagement\CategoryController@categorieslist')}}";
+    var action = '{{action("Admin\CategoryManagement\CategoryController@store")}}';
     
     var variantlisturl ='#';
-    var dataJsonUrl ='{{ action("Admin\Category\CategoryController@categorieslist")}}';
+    var dataJsonUrl ='{{ action("Admin\CategoryManagement\CategoryController@categorieslist")}}';
     var imageurl="#";
     var currency = "{{session('default_currency_code')}}";
     window.userFolderDefaultPath = "{{Config::get('constants.froala_img_path').md5(Auth::id()).'/'}}";
 
-    var categoryList = "{{action('Admin\Category\CategoryController@categorieslist')}}";
+    var categoryList = "{{action('Admin\CategoryManagement\CategoryController@categorieslist')}}";
  
-    var cateEditurl = "{{ action('Admin\Category\CategoryController@categoryedit') }}";
+    var cateEditurl = "{{ action('Admin\CategoryManagement\CategoryController@categoryedit') }}";
     
-    var catediturl ="{{action('Admin\Category\CategoryController@categoryedit')}}";
+    var catediturl ="{{action('Admin\CategoryManagement\CategoryController@categoryedit')}}";
     var showHeadrePagination = true;
     var tableLoaderImgUrl = "{{getSiteLoader('SITE_LOADER_IMAGE')}}";
     //pagination config 
@@ -78,6 +78,8 @@
                     <i class="fas fa-link"></i> @lang('admin.copy_link')
                 </button>
             </span>
+            <a class="btn btn-back" href="{{ action('Admin\CategoryManagement\CategoryController@index') }}">@lang('common.back')</a>   
+            
              <a ng-if="previewUrl"  class="btn btn-secondary deleteUrlcate" ng-href="<%previewUrl%>" target="_blank">@lang('admin_product.preview')</a>
              <a ng-if="deleteUrl" onclick="return confirm({{$confirm}});" class="btn btn-delete btn-danger deleteUrlcate" ng-href="<%deleteUrl%>">@lang('admin_category.remove_fruit')</a>   
                              
@@ -113,11 +115,6 @@
                     @endif
                 </h2>
             </div>
-            <div class="content-left">
-                <!-- BEGIN SIDEBAR MENU -->
-                     @include('admin.includes.category_menu')
-                <!-- END SIDEBAR MENU -->
-            </div>
 
             <div class="category-right content-right">
                 <div ng-if="cat_mesg">
@@ -128,7 +125,7 @@
                         <li class="nav-item"><a class="nav-link active show" href="#cetegory-general-info" data-toggle="tab">@lang('admin_category.general_infomation_tab')</a></li>
                     </ul>
                 </div>
-                {!! Form::open(['action' => ['Admin\Category\CategoryController@update', $category->id], 'method' => 'put','id'=>'sellerCategoryForm', 'class'=>'form-horizontal','enctype' => 'multipart/form-data']) !!}
+                {!! Form::open(['action' => ['Admin\CategoryManagement\CategoryController@update', $category->id], 'method' => 'put','id'=>'sellerCategoryForm', 'class'=>'form-horizontal','enctype' => 'multipart/form-data']) !!}
                 <div class="box nobg pt-0" style="clear:both;">
                     <div class="tab-content row">
                         <div id="cetegory-general-info" class="tab-pane fade show active">
@@ -229,7 +226,7 @@
     <script src="{{ Config('constants.angular_app_url') }}controller/sellerCateCtrl.js"></script>
     <script src="{{ Config('constants.js_url') }}common_cropper_upload_setting.js"></script>
     <script>    
-        var assign_seller_url = "{{ action('Admin\Category\CategoryController@assignSeller') }}";
+        var assign_seller_url = "{{ action('Admin\CategoryManagement\CategoryController@assignSeller') }}";
         $(document).ready(function(){       
             $('.hint-btn a').on('click',function(){
                 if($(this).hasClass('active')){
