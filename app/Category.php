@@ -82,4 +82,8 @@ class Category extends Model
     public static function categoryData($cat_id){
         return self::where('id',$cat_id)->with('descAll')->with('Units')->first(); 
     }
+
+	public static function getParentName($cat_id){
+        return self::where('id',$cat_id)->with('getCatDesc')->first(); 
+    }
 }

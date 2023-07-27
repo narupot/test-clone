@@ -43,7 +43,8 @@
                         <th>@lang('common.sno')</th>
                         <th>@lang('cms.image')</th>
                         <th>@lang('cms.category_name')</th>
-                        <th>@lang('cms.allow_base_unit')</th>
+                        <th>@lang('cms.parent_category')</th>
+                        <!-- <th>@lang('cms.allow_base_unit')</th> -->
                         <th>@lang('cms.status')</th>
                         <th>@lang('cms.created_by')</th>
                         <th>@lang('common.created_at')</th>
@@ -58,7 +59,8 @@
                         <td>{{ ++$key }}</td>
                         <td><img src="{{ getCategoryImageUrl($mainCategory->img) }}" width="100px" height="100px" ng-show="display_mode.image"></td>
                         <td>{{ $mainCategory->getCatDesc->name }}</td>
-                        <td>--</td>
+                        <td>{{ getParentCategory($mainCategory->parent_id) }}</td>
+                        <!-- <td>--</td> -->
                         @if($mainCategory->status=="1")
                             <td>@lang('common.active')</td>
                         @else
