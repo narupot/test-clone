@@ -44,6 +44,8 @@
                         <th>@lang('cms.image')</th>
                         <th>@lang('cms.category_name')</th>
                         <th>@lang('cms.allow_base_unit')</th>
+                        <th>@lang('cms.status')</th>
+                        <th>@lang('cms.created_by')</th>
                         <th>@lang('common.created_at')</th>
                         <th>@lang('common.last_updated')</th>
                         <th>@lang('common.actions')</th>
@@ -57,6 +59,12 @@
                         <td><img src="{{ getCategoryImageUrl($mainCategory->img) }}" width="100px" height="100px" ng-show="display_mode.image"></td>
                         <td>{{ $mainCategory->getCatDesc->name }}</td>
                         <td>--</td>
+                        @if($mainCategory->status=="1")
+                            <td>@lang('common.active')</td>
+                        @else
+                        <td>@lang('common.inactive')</td>
+                        @endif
+                        <td>{{ getUser($mainCategory->created_at)}}</td>
                         <td>{{ getDateFormat($mainCategory->created_at, '1')}}</td>
                         <td>{{ getDateFormat($mainCategory->updated_at, '1') }}</td>
                         <td class="text-nowrap">
