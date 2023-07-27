@@ -446,7 +446,7 @@
         Route::get('category-management/deletecat/{id?}', 'Admin\CategoryManagement\CategoryController@deletecat');
         Route::post('category-management/assign-seller', 'Admin\CategoryManagement\CategoryController@assignSeller');
         Route::post('category-management/assign-unit', 'Admin\CategoryManagement\CategoryController@assignUnit');
-        
+        Route::get('category-management/sublist', 'Admin\CategoryManagement\CategoryController@subcategorylist');
         Route::resource('category-management', 'Admin\CategoryManagement\CategoryController');
 
         // Billing Address for buy plugin | End

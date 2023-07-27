@@ -709,4 +709,12 @@ class CategoryController extends MarketPlace
         return $catunit;
     }
 
+    public function subcategorylist()
+    {
+       //return redirect()->action('Admin\CategoryManagement\CategoryController@create');
+       $categories = Category::where('parent_id','!=','0')->get();
+       $permission = $this->checkUrlPermission('add_category');
+       return view('admin.category-management.sublist', ['categories' => $categories,'permission_arr'=>$permission]);
+    }
+
 }
