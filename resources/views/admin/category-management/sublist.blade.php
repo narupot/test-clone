@@ -95,7 +95,7 @@
     <script src="{{ Config('constants.admin_js_url') }}dataTables.bootstrap.js"></script>
     <script>
         $(document).ready(function() {
-            var table =  jQuery('table.table').DataTable({'lengthMenu': [ [10, 25, 50, -1], [10, 25, 50, 'All']]});
+            var table =  jQuery('table.table').DataTable({'lengthMenu': [ [10, 25, 50], [10, 25, 50]]});
         });
     </script>
     <!-- end of page level js -->
