@@ -581,7 +581,7 @@ class CategoryController extends MarketPlace
 
             $active_tab = 'subcategory';
 
-            return view('admin.category-management.create', ['categories' => $categories, 'category' => $category, 'categoriesids' => $categoriesids, 'seo_status'=>$seo_status,'subcat_mesg'=> $subcategory_message,'active_tab'=>$active_tab, 'categorydropdown'=>$categorydropdown, 'units'=>$units, 'status'=>1]);
+            return view('admin.category-management.subCreate', ['categories' => $categories, 'category' => $category, 'categoriesids' => $categoriesids, 'seo_status'=>$seo_status,'subcat_mesg'=> $subcategory_message,'active_tab'=>$active_tab, 'categorydropdown'=>$categorydropdown, 'units'=>$units, 'status'=>1]);
         }
     }
 
