@@ -17,7 +17,7 @@
         <div class="header-title">
             <h1 class="title">@lang('category.list')</h1>
             <div class="float-right">
-                <a class="btn btn-primary" href="{{ action('Admin\CategoryManagement\CategoryController@create') }}"> @lang('common.create_new')</a> 
+                <a class="btn btn-primary" href="{{ action('Admin\CategoryManagement\CategoryController@subcreate') }}"> @lang('common.create_new')</a> 
             </div>
         </div>
         @if(Session::has('succMsg'))    
@@ -95,7 +95,7 @@
     <script src="{{ Config('constants.admin_js_url') }}dataTables.bootstrap.js"></script>
     <script>
         $(document).ready(function() {
-            var table =  jQuery('table.table').DataTable();
+            var table =  jQuery('table.table').DataTable({'lengthMenu': [ [10, 25, 50, -1], [10, 25, 50, 'All']]});
         });
     </script>
     <!-- end of page level js -->
