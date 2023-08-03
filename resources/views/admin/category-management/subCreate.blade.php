@@ -51,7 +51,7 @@
     {!! Form::hidden('_method', old('_method', 'POST')) !!}
     {!! Form::hidden('category_id', old('category_id'), ['id'=>'category_id']) !!}
     <div class="header-title">
-        <h1 class="title">@lang('admin_category.product_master')</h1>  
+        <h1 class="title">@lang('admin_category.sub_product_master')</h1>  
 
          @php( $confirm = "'".Lang::get('product.are_sure_delete_this_data')."'")
         <div class="float-right">     
