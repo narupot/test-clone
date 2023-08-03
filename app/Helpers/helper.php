@@ -261,6 +261,22 @@ if(!function_exists('getUser')){
 		
 	}
 }
+if(!function_exists('getParentCategory')){
+	function getParentCategory($id){
+		$data = \App\Category::getParentName($id); 
+		if(is_null($data)){
+			return '';
+		}else{
+			if($data->getCatDesc){
+				return $data->getCatDesc->name;
+			}else{
+				return " ";
+			}
+				
+		}
+		
+	}
+}
 function getCurrencyVal($currency_id){
 	return \App\Currency::where('id',$currency_id)->value('currency_value');
 }
