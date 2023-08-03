@@ -45,7 +45,13 @@ class CategoryController extends MarketPlace
     public function index()
     {
        //return redirect()->action('Admin\CategoryManagement\CategoryController@create');
-       $categories = Category::where(['parent_id' => '0'])->get();
+       //$categories = Category::where(['parent_id' => '0'])->with('getCatDesc')->get();
+       $categories = DB::table(with(new \App\Category)->getTable().' as b')
+                    ->Leftjoin(with(new \App\CategoryDesc)->getTable().' as bd', [['b.id', '=', 'bd.cat_id'], ['bd.lang_id', '=' , DB::raw(session('default_lang'))]])
+                    ->leftjoin(with(new \App\AdminUser)->getTable().' as au','au.id', '=', 'b.created_by')
+                    ->select('b.*', 'bd.category_name','au.nick_name')
+                    ->orderby('b.id', 'desc')
+                    ->where(['b.parent_id'=>'0'])->get();
        $permission = $this->checkUrlPermission('add_category');
        return view('admin.category-management.list', ['categories' => $categories,'permission_arr'=>$permission]);
     }
@@ -712,7 +718,13 @@ class CategoryController extends MarketPlace
     public function subcategorylist()
     {
        //return redirect()->action('Admin\CategoryManagement\CategoryController@create');
-       $categories = Category::where('parent_id','!=','0')->get();
+       $categories = DB::table(with(new \App\Category)->getTable().' as b')
+            ->Leftjoin(with(new \App\CategoryDesc)->getTable().' as bd', [['b.id', '=', 'bd.cat_id'], ['bd.lang_id', '=' , DB::raw(session('default_lang'))]])
+            ->leftjoin(with(new \App\AdminUser)->getTable().' as au','au.id', '=', 'b.created_by')
+            ->select('b.*', 'bd.category_name','au.nick_name')
+            ->orderby('b.id', 'desc')
+            ->where('b.parent_id','!=','0')->get();
+       //$categories = Category::where('parent_id','!=','0')->get();
        $permission = $this->checkUrlPermission('add_category');
        return view('admin.category-management.sublist', ['categories' => $categories,'permission_arr'=>$permission]);
     }
