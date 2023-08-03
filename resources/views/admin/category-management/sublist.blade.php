@@ -15,7 +15,7 @@
 @section('content')
     <div class="content">
         <div class="header-title">
-            <h1 class="title">@lang('category.list')</h1>
+            <h1 class="title">@lang('category.sub_list')</h1>
             <div class="float-right">
                 <a class="btn btn-primary" href="{{ action('Admin\CategoryManagement\CategoryController@subcreate') }}"> @lang('common.create_new')</a> 
             </div>
