@@ -438,6 +438,17 @@
         
         Route::resource('catalog', 'Admin\Category\CategoryController');
 
+        /***category-management****/
+        Route::get('category-management/subcreate/{id?}', 'Admin\CategoryManagement\CategoryController@subcreate');
+        Route::get('category-management/checkUnique', 'Admin\CategoryManagement\CategoryController@checkUnique');
+        Route::get('category-management-list', 'Admin\CategoryManagement\CategoryController@categorieslist');
+        Route::get('category-management-edit','Admin\CategoryManagement\CategoryController@categoryedit');
+        Route::get('category-management/deletecat/{id?}', 'Admin\CategoryManagement\CategoryController@deletecat');
+        Route::post('category-management/assign-seller', 'Admin\CategoryManagement\CategoryController@assignSeller');
+        Route::post('category-management/assign-unit', 'Admin\CategoryManagement\CategoryController@assignUnit');
+        Route::get('category-management/sublist', 'Admin\CategoryManagement\CategoryController@subcategorylist');
+        Route::resource('category-management', 'Admin\CategoryManagement\CategoryController');
+
         // Billing Address for buy plugin | End
 
         /**All buyer and seller (Customers) in admin *******/
