@@ -57,14 +57,14 @@
                     <tr>
                         <td>{{ ++$key }}</td>
                         <td><img src="{{ getCategoryImageUrl($mainCategory->img) }}" width="100px" height="100px" ng-show="display_mode.image"></td>
-                        <td>{{ $mainCategory->getCatDesc->name }}</td>
+                        <td>{{ $mainCategory->category_name }}</td>
                         <!-- <td>--</td> -->
                         @if($mainCategory->status=="1")
                             <td>@lang('common.active')</td>
                         @else
                         <td>@lang('common.inactive')</td>
                         @endif
-                        <td>{{ getUser($mainCategory->created_by)}}</td>
+                        <td>{{ $mainCategory->nick_name }}</td>
                         <td>{{ getDateFormat($mainCategory->created_at, '1')}}</td>
                         <td>{{ getDateFormat($mainCategory->updated_at, '1') }}</td>
                         <td class="text-nowrap">
