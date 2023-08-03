@@ -53,7 +53,7 @@ class CategoryController extends MarketPlace
                     ->orderby('b.id', 'desc')
                     ->where(['b.parent_id'=>'0'])->get();
        $permission = $this->checkUrlPermission('add_category');
-       return view('admin.category-management.list', ['categories' => $categories,'permission_arr'=>$permission]);
+       return view('admin.category-management.mainlist', ['categories' => $categories,'permission_arr'=>$permission]);
     }
 
     /**
