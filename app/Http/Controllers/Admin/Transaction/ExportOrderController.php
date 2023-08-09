@@ -154,7 +154,7 @@ class ExportOrderController extends MarketPlace
     }
 
     public function testImportTxt(Request $request){
-        $file_path = Config::get('constants.public_path').'/seller-payment-response/HDONMUANGPH2HMIS517062023000036.pgp';
+        $file_path = Config::get('constants.public_path').'/seller-payment-response/HDONMUANGPH2HMIS202082023186810_2.pgp';
         if(file_exists($file_path)){
 
             $main_data = @file_get_contents($file_path);
@@ -166,7 +166,7 @@ class ExportOrderController extends MarketPlace
             $gpg->seterrormode(\gnupg::ERROR_EXCEPTION);
             $info_key = $gpg->import($key_path);
             $fingerprint = $info_key['fingerprint'];      
-
+            dd($fingerprint);
             $gpg->adddecryptkey($fingerprint,'4MumMu@ng');
             
             $dec =  $gpg->decrypt($main_data);
