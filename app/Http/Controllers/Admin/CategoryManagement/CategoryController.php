@@ -730,7 +730,7 @@ class CategoryController extends MarketPlace
 			if($cat_count>0)
 			{
 				$msg_text = Lang::get('category.already_added_to_product_cannot_be_delete');
-				return json_encode(array('status'=>'validate_error','message'=>$msg_text));
+				$return_response = array('status'=>'validate_error','message'=>$msg_text);
 			}
 			else 
 			{
@@ -751,16 +751,40 @@ class CategoryController extends MarketPlace
 					/** Logging category delete information end **/
 				   
 					$msg_text = Lang::get('category.category_delete_successfully');
-					return redirect()->action('Admin\CategoryManagement\CategoryController@index')->with('succMsg', $msg_text);  
+					$return_response = array('status'=>'success','message'=>$msg_text);  
 				}catch(Exception $e) {
 					$msg_text = Lang::get('category.something_went_wrong');
-					return json_encode(array('status'=>'validate_error','message'=>$msg_text));
+					$return_response = array('status'=>'validate_error','message'=>$msg_text);
 				}
 			}
 		} else {
 			$msg_text = Lang::get('category.delete_child_category_first');
-            return json_encode(array('status'=>'validate_error','message'=>$msg_text));
+            $return_response = array('status'=>'validate_error','message'=>$msg_text);
         }
+		
+		if($return_response['status']=='success')
+		{
+			if($result->parent_id!='0')
+			{
+				return redirect()->action('Admin\CategoryManagement\CategoryController@subcategorylist')->with('succMsg', $return_response['message']); 
+			}
+			else
+			{
+				return redirect()->action('Admin\CategoryManagement\CategoryController@index')->with('succMsg', $return_response['message']); 
+			}			
+		}
+		else 
+		{
+			/* return json_encode($return_response); */
+			if($result->parent_id!='0')
+			{
+				return redirect()->action('Admin\CategoryManagement\CategoryController@subcategorylist')->with('errorMsg', $return_response['message']); 
+			}
+			else
+			{
+				return redirect()->action('Admin\CategoryManagement\CategoryController@index')->with('errorMsg', $return_response['message']); 
+			}			
+		}
     }
 	
 	function categoryListData(Request $request){
