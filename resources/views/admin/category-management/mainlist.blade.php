@@ -6,9 +6,11 @@
 
 @section('header_styles')
 
-    <!--page level css -->
-    <link rel="stylesheet" href="{{ Config('constants.admin_css_url') }}dataTables.bootstrap.css"/>
-    <!-- end of page level css -->
+    {!! CustomHelpers::dataTableCss() !!}
+    <script type="text/javascript">
+        var filter_data = {!! $filter !!};  
+    </script>
+    
     
 @stop
 
@@ -37,65 +39,137 @@
                 {!!getBreadcrumbAdmin('category','category','list')!!}
                 </ul>
             </div>
-            <table class="table table-bordered">
-                <thead>
-                    <tr class="filters">
-                        <th>@lang('common.sno')</th>
-                        <th>@lang('cms.image')</th>
-                        <th>@lang('cms.category_name')</th>
-                        <!-- <th>@lang('cms.allow_base_unit')</th> -->
-                        <th>@lang('cms.status')</th>
-                        <th>@lang('cms.created_by')</th>
-                        <th>@lang('common.created_at')</th>
-                        <th>@lang('common.last_updated')</th>
-                        <th>@lang('common.actions')</th>
-                    </tr>
-                </thead>
-                <tbody>
-                @foreach ($categories as $key => $mainCategory)
-                
-                    <tr>
-                        <td>{{ ++$key }}</td>
-                        <td><img src="{{ getCategoryImageUrl($mainCategory->img) }}" width="100px" height="100px" ng-show="display_mode.image"></td>
-                        <td>{{ $mainCategory->category_name }}</td>
-                        <!-- <td>--</td> -->
-                        @if($mainCategory->status=="1")
-                            <td>@lang('common.active')</td>
-                        @else
-                        <td>@lang('common.inactive')</td>
-                        @endif
-                        <td>{{ $mainCategory->nick_name }}</td>
-                        <td>{{ getDateFormat($mainCategory->created_at, '1')}}</td>
-                        <td>{{ getDateFormat($mainCategory->updated_at, '1') }}</td>
-                        <td class="text-nowrap">
-                            
-                            <a class="btn btn-dark" href="{{ action('Admin\CategoryManagement\CategoryController@edit', $mainCategory->id) }}">@lang('common.edit')</a> 
-                            <form method="post" action="{{ action('Admin\CategoryManagement\CategoryController@destroy', $mainCategory->id) }}" onsubmit="return confirm('Are you sure to delete this record ?');" class="inblock"> 
-                                {{ csrf_field() }}
-                                {{ method_field('DELETE') }}                             
-                                <a class="btn btn-delete btn-danger" onclick="$(this).closest('form').submit();" data-toggle="modal">
-                                   @lang('common.delete')
-                                </a>
-                            </form>
-                        </td>
-                    </tr>
-                 @endforeach  
-                 </tbody>
-            </table>
+            <div id="jq_grid_table" class="table table-bordered"> 
+            </div>
         </div>
     </div>
 @stop
 
 @section('footer_scripts')
 
-    <!-- begining of page level js -->
-    <script src="{{ Config('constants.admin_js_url') }}jquery.dataTables.js"></script>
-    <script src="{{ Config('constants.admin_js_url') }}dataTables.bootstrap.js"></script>
+    {!! CustomHelpers::dataTableJs() !!}
+    <!-- end grid table js files -->  
     <script>
-        $(document).ready(function() {
-            var table =  jQuery('table.table').DataTable({'lengthMenu': [ [10, 25, 50], [10, 25, 50]]});
-        });
+        let edit_url = "";
+        let delete_url = "{{action('Admin\CategoryManagement\CategoryController@deletecategory')}}";
+        let JQ_GRID_DATA_URL = "{{ action('Admin\CategoryManagement\CategoryController@categoryListData') }}"; 
+		JQ_GRID_DATA_URL += '?page_type=category'; 
+        const JQ_GRID_TITLE = "@lang('category.list')";        
+        /*        
+        *@desc : Table column configrations
+            Array of column 
+        */
+        let columnModel = [  
+            /* check for row selection ***/
+            {   title: "", 
+                width: 50, 
+                dataType: "integer",
+                type:'checkbox', 
+                cbId: 'state',
+                sortable : false,
+                align : 'center',
+            },
+            { 
+                dataIndx: 'state', 
+                editable: true,
+                cb: {header: true, select: true, all: true}, 
+                dataType: 'bool',
+                hidden: true
+            },
+            /**** end selection *******/
+            {   title: "@lang('admin_common.actions')", 
+                dataIndx:'id', 
+                render : function(ui) {
+                    return {
+                        text:'<a href="'+edit_url+'/'+ui.cellData+'" class="btn btn-dark mb-1">@lang("admin_common.edit")</a> <a href="'+delete_url+'/'+ui.cellData+'" class="btn btn-danger mb-1" onclick="return confirm(\'@lang("admin_common.do_you_wanto_delete_this_data")\')">@lang("admin_common.delete")</a> ',    
+                    };                
+                },
+                sortable : !1,
+                minWidth : 200,
+            },
+            { 
+                title: "@lang('cms.image')",
+                dataIndx: 'category_mage', 
+                minWidth: 100,
+                render: function(ui){
+                    return "<img src='"+ui.rowData.category_mage+"' class='param-thumb'>&nbsp;";
+                },
+                cls : 'param-thumb-wrap',
+                sortable : false,
+            },
+			{   title: "@lang('cms.category_name')", 
+                dataIndx:'category_name', 
+                minWidth: 140,
+                filter : {
+                    attr : "@lang('cms.category_name')",                        
+                    crules: [
+                        {
+                            condition: getFilter('category_name', 'condition') ||  'contain',
+                            value : getFilter('category_name', 'value')  || "",
+                        }
+                    ],
+                    type: 'textbox', 
+                    listeners: ['change'],
+                },
+            },
+			{   title: "@lang('cms.status')", 
+                dataIndx:'status', 
+                minWidth: 140, 
+                render : function(ui){
+                    return {
+                        text : (ui.cellData.toString() == "1") ? "{{Lang::get('common.active')}}" : "{{Lang::get('common.inactive')}}",
+                    }
+                },
+                filter : {
+                    attr: "placeholder='@lang('admin_common.please_select')'",
+                    crules: [
+                        {
+                            condition: getFilter('status', 'condition') || 'range',
+                            value : getFilter('status', 'value') || "",
+                        }
+                    ],                    
+                    options: [ 
+                        {"1": "{{Lang::get('common.active')}}"}, 
+                        {"0": "{{Lang::get('common.inactive')}}"},
+                    ],                                           
+                },
+            },
+			{   title: "@lang('cms.created_by')", 
+                    dataIndx:'nick_name', 
+                    minWidth: 140,
+            },
+            {   title: "@lang('common.created_at')", 
+                dataIndx:'created_at', 
+                minWidth: 140, 
+                dataType: "date",
+                filter: { 
+                    crules :[
+                        {
+                            condition: getFilter('created_at', 'condition') ||  "between",
+                            value : getFilter('created_at', 'value') || "",
+                            value2 : getFilter('created_at', 'value2') || ""
+                        }
+                    ]           
+                },
+            },
+            {   title: "@lang('common.last_updated')", 
+                dataIndx:'updated_at', 
+                minWidth: 140,
+                dataType: "date",
+                filter: { 
+                    crules :[
+                        {
+                            condition: getFilter('updated_at', 'condition') ||  "between",
+                            value : getFilter('updated_at', 'value') || "",
+                            value2 : getFilter('updated_at', 'value2') || ""
+                        }
+                    ]           
+                },
+            },
+            
+        ];    
     </script>
+
     <!-- end of page level js -->
     
 @stop
