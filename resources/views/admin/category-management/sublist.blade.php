@@ -49,10 +49,11 @@
     {!! CustomHelpers::dataTableJs() !!}
     <!-- end grid table js files -->  
     <script>
+		let page_type = "sub_category";
         let edit_url = "{{action('Admin\CategoryManagement\CategoryController@index')}}";
         let delete_url = "{{action('Admin\CategoryManagement\CategoryController@deletecategory')}}";
         let JQ_GRID_DATA_URL = "{{ action('Admin\CategoryManagement\CategoryController@categoryListData') }}"; 
-		JQ_GRID_DATA_URL += '?page_type=sub_category'; 
+		JQ_GRID_DATA_URL += '?page_type='+page_type;
         const JQ_GRID_TITLE = "@lang('category.list')";        
         /*        
         *@desc : Table column configrations
