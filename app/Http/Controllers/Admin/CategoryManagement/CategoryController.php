@@ -726,27 +726,36 @@ class CategoryController extends MarketPlace
 			break;
 		}
 		if($deleteCatFlag == 1){
-			try{
-			   $result->delete();
-			   
-			    /***delete from mongo***/
-				MongoCategory::deleteData($id);
-				/** Logging category delete information **/
-				  $action_type = "delete";   
-				  $logdetails = "Admin has deleted category with url  $result->url "; //Change update message as requirement  
-
-				  //Prepaire array for send data
-				  $logdata = array('action_type' =>$action_type,'module_name' =>$this->module_name,'logdetails' =>$logdetails);
-
-				  //Call method in module
-				  $this->updateLogActivity($logdata);
-				/** Logging category delete information end **/
-			   
-			    $msg_text = Lang::get('category.category_delete_successfully');
-				return redirect()->action('Admin\CategoryManagement\CategoryController@index')->with('succMsg', $msg_text);  
-			}catch(Exception $e) {
-				$msg_text = Lang::get('category.something_went_wrong');
+			$cat_count=\App\Product::where('cat_id', $id)->get()->count();
+			if($cat_count>0)
+			{
+				$msg_text = Lang::get('category.already_added_to_product_cannot_be_delete');
 				return json_encode(array('status'=>'validate_error','message'=>$msg_text));
+			}
+			else 
+			{
+				try{
+				   $result->delete();
+				   
+					/***delete from mongo***/
+					MongoCategory::deleteData($id);
+					/** Logging category delete information **/
+					  $action_type = "delete";   
+					  $logdetails = "Admin has deleted category with url  $result->url "; //Change update message as requirement  
+
+					  //Prepaire array for send data
+					  $logdata = array('action_type' =>$action_type,'module_name' =>$this->module_name,'logdetails' =>$logdetails);
+
+					  //Call method in module
+					  $this->updateLogActivity($logdata);
+					/** Logging category delete information end **/
+				   
+					$msg_text = Lang::get('category.category_delete_successfully');
+					return redirect()->action('Admin\CategoryManagement\CategoryController@index')->with('succMsg', $msg_text);  
+				}catch(Exception $e) {
+					$msg_text = Lang::get('category.something_went_wrong');
+					return json_encode(array('status'=>'validate_error','message'=>$msg_text));
+				}
 			}
 		} else {
 			$msg_text = Lang::get('category.delete_child_category_first');
