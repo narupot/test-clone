@@ -49,7 +49,7 @@
     {!! CustomHelpers::dataTableJs() !!}
     <!-- end grid table js files -->  
     <script>
-        let edit_url = "";
+        let edit_url = "{{action('Admin\CategoryManagement\CategoryController@index')}}";
         let delete_url = "{{action('Admin\CategoryManagement\CategoryController@deletecategory')}}";
         let JQ_GRID_DATA_URL = "{{ action('Admin\CategoryManagement\CategoryController@categoryListData') }}"; 
 		JQ_GRID_DATA_URL += '?page_type=sub_category'; 
@@ -80,7 +80,7 @@
                 dataIndx:'id', 
                 render : function(ui) {
                     return {
-                        text:'<a href="'+edit_url+'/'+ui.cellData+'" class="btn btn-dark mb-1">@lang("admin_common.edit")</a> <a href="'+delete_url+'/'+ui.cellData+'" class="btn btn-danger mb-1" onclick="return confirm(\'@lang("admin_common.do_you_wanto_delete_this_data")\')">@lang("admin_common.delete")</a> ',    
+                        text:'<a href="'+edit_url+'/'+ui.cellData+'/edit" class="btn btn-dark mb-1">@lang("admin_common.edit")</a> <a href="'+delete_url+'/'+ui.cellData+'" class="btn btn-danger mb-1" onclick="return confirm(\'@lang("admin_common.do_you_wanto_delete_this_data")\')">@lang("admin_common.delete")</a> ',    
                     };                
                 },
                 sortable : !1,
