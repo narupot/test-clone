@@ -448,7 +448,8 @@
         Route::post('category-management/assign-unit', 'Admin\CategoryManagement\CategoryController@assignUnit');
         Route::get('category-management/sublist', 'Admin\CategoryManagement\CategoryController@subcategorylist');
         Route::resource('category-management', 'Admin\CategoryManagement\CategoryController');
-
+        Route::get('categoryListData', 'Admin\CategoryManagement\CategoryController@categoryListData');
+		Route::get('delete/{id?}', 'Admin\CategoryManagement\CategoryController@deletecategory'); 
         // Billing Address for buy plugin | End
 
         /**All buyer and seller (Customers) in admin *******/
