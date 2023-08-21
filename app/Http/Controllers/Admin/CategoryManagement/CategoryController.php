@@ -790,7 +790,7 @@ class CategoryController extends MarketPlace
 	function categoryListData(Request $request){
         //dd($request->all());
 		$page_type = !empty($request->page_type) ? $request->page_type : 'category';
-        $perpage = !empty($request->pq_rpp) ? $request->pq_rpp : 10;
+        $perpage = !empty($request->pq_rpp) ? $request->pq_rpp : getPagination('limit');
         $request->page = $current_page = !empty($request->pq_curpage)?$request->pq_curpage:0;
 
         $start_index = ($current_page - 1) * $perpage;
