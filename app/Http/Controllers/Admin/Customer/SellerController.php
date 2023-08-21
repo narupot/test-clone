@@ -125,7 +125,7 @@ class SellerController extends MarketPlace
             }
 
             /***save filter****/
-            $this->setFilter('seller',$request);
+            /* $this->setFilter('seller',$request); */
 
             
         }catch(QueryException $e){

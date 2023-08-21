@@ -115,7 +115,7 @@ class ShopOrderController extends MarketPlace
             }
 
             /***save filter****/
-            $this->setFilter('shop_order',$request);
+            /* $this->setFilter('shop_order',$request); */
 
             
         }catch(QueryException $e){
