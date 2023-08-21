@@ -109,7 +109,7 @@ class UserController extends MarketPlace
 			}
 
             /***save filter****/
-            $this->setFilter('user',$request);
+            /* $this->setFilter('user',$request); */
 
             
         }catch(QueryException $e){

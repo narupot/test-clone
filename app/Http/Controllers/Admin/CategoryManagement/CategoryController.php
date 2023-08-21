@@ -867,6 +867,7 @@ class CategoryController extends MarketPlace
             }
 
             /***save filter****/
+			/*
 			if(isset($page_type) && $page_type=='sub_category')
 			{
 				$this->setFilter('sub_category',$request);
@@ -875,6 +876,7 @@ class CategoryController extends MarketPlace
 			{
 				$this->setFilter('category',$request);
 			}
+			*/
             
 
             
