@@ -871,7 +871,7 @@ if(!function_exists('getCategoryUrl')){
 
 function getPagination($type='') {
 	if($type == 'limit') {
-		$limit = 10;
+		$limit = 20;
 		return $limit;
 	}
 	else {
