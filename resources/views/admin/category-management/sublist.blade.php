@@ -113,8 +113,19 @@
                 },
             },
 			{   title: "@lang('cms.parent_category')", 
-                    dataIndx:'parent_category_name', 
-                    minWidth: 140,
+                dataIndx:'parent_category_name', 
+                minWidth: 140,
+                filter : {
+                    attr : "@lang('cms.parent_category')",                        
+                    crules: [
+                        {
+                            condition: getFilter('parent_category_name', 'condition') ||  'contain',
+                            value : getFilter('parent_category_name', 'value')  || "",
+                        }
+                    ],
+                    type: 'textbox', 
+                    listeners: ['change'],
+                },
             },
 			{   title: "@lang('cms.status')", 
                 dataIndx:'status', 
