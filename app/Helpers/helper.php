@@ -263,7 +263,7 @@ if(!function_exists('getUser')){
 }
 if(!function_exists('getParentCategory')){
 	function getParentCategory($id){
-		$data = \App\Category::where('id',$cat_id)->with('getCatDesc')->first(); ; 
+		$data = \App\Category::where('id',$id)->with('getCatDesc')->first(); ; 
 		if(is_null($data)){
 			return '';
 		}else{
