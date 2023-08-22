@@ -136,8 +136,19 @@
                 },
             },
 			{   title: "@lang('cms.created_by')", 
-                    dataIndx:'nick_name', 
-                    minWidth: 140,
+                dataIndx:'nick_name', 
+                minWidth: 140,
+                filter : {
+                    attr : "@lang('cms.created_by')",                        
+                    crules: [
+                        {
+                            condition: getFilter('nick_name', 'condition') ||  'contain',
+                            value : getFilter('nick_name', 'value')  || "",
+                        }
+                    ],
+                    type: 'textbox', 
+                    listeners: ['change'],
+                },
             },
             {   title: "@lang('common.created_at')", 
                 dataIndx:'created_at', 

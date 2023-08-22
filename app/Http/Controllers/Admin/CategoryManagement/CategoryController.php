@@ -830,12 +830,10 @@ class CategoryController extends MarketPlace
                             case 'category_name':$query->where('bd.category_name','like', '%'.$searchval.'%'); break;
 							case 'parent_category_name':
 								$parent_cat_ids=getParentCategoryIdsBySearchName($searchval);
-								if(isset($parent_cat_ids) && !empty($parent_cat_ids))
-								{
-									$query->whereIn('b.parent_id',$parent_cat_ids); 
-								}
+								$query->whereIn('b.parent_id',$parent_cat_ids);
 								break;
                             case 'status':$query->whereIn('b.status',$searchval); break;
+							case 'nick_name':$query->where('au.nick_name','like', '%'.$searchval.'%'); break;
                             case 'created_at':
                                 $from_date = $fvalue['value']??'';
                                 $to_date = $fvalue['value2']??'';
