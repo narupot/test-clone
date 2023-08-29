@@ -180,6 +180,17 @@ class OrderController extends MarketPlace
         
         //dd($order_shop);
         $transaction = \App\OrderTransaction::where('order_id',$main_order->id)->orderBy('id')->get();
+		
+		$main_order->pickup_time = null;
+		if($main_order->id>0)
+		{
+			$order_info = Order::where('id',$main_order->id)->first();
+			if($order_info)
+			{
+				$main_order->pickup_time=$order_info->pickup_time;
+			}
+		}
+		
         return view('admin.transaction.mainOrddetail',['main_order' => $main_order,'order_shop'=>$order_shop,'transaction'=>$transaction]);
     }
     /*********** for check create order json ************/
