@@ -66,7 +66,7 @@ class ShopOrderController extends MarketPlace
                   ->join(with(new \App\ShopDesc)->getTable().' as shopdesc', 'shop.id', '=', 'shopdesc.shop_id')
                   ->join(with(new \App\User)->getTable().' as seller', 'shop.user_id', '=', 'seller.id')
                   ->join(with(new \App\OrderStatusDesc)->getTable().' as osd', 'sord.order_status','=', 'osd.order_status_id')
-                  ->select('seller.display_name as seller_name','seller.id as seller_id','sord.shop_formatted_id','ord.formatted_id','sord.total_final_price','sord.end_shopping_date','osd.status','sord.order_status','sord.admin_remark','sord.payment_status','shopdesc.shop_name');
+                  ->select('seller.display_name as seller_name','seller.id as seller_id','sord.shop_formatted_id','ord.formatted_id','sord.total_final_price','sord.end_shopping_date','ord.pickup_time','osd.status','sord.order_status','sord.admin_remark','sord.payment_status','shopdesc.shop_name');
             
             if(isset($request->pq_filter)){
                 $filter_req = json_decode($request->pq_filter,true);
@@ -88,6 +88,11 @@ class ShopOrderController extends MarketPlace
                                 $from_date = $fvalue['value']??'';
                                 $to_date = $fvalue['value2']??'';
                                 createDateFilter($query,'sord.end_shopping_date',$from_date,$to_date);
+                            break;
+							case 'pickup_time':
+                                $from_date = $fvalue['value']??'';
+                                $to_date = $fvalue['value2']??'';
+                                createDateFilter($query,'ord.pickup_time',$from_date,$to_date);	
                             break;
 
                         }

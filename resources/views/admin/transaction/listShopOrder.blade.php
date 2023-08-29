@@ -224,6 +224,21 @@
                     ]           
                 },
             },
+			{   title: "@lang('admin_order.pickup_date')", 
+                dataIndx:'pickup_time', 
+                minWidth: 140,
+                dataType: "date",
+                filter: { 
+                    init: pqDatePicker,
+                    crules :[
+                        {
+                            condition: getFilter('pickup_time', 'condition') ||  "between",
+                            value : getFilter('pickup_time', 'value') || "",
+                            value2 : getFilter('pickup_time', 'value2') || ""
+                        }
+                    ]           
+                },
+            },
             {   title: "@lang('admin_order.remark')", 
                 dataIndx:'admin_remark', 
                 minWidth: 140,
