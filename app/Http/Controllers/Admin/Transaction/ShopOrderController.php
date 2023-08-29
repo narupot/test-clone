@@ -145,6 +145,15 @@ class ShopOrderController extends MarketPlace
         if(count($transaction) < 2){
             $transaction = \App\OrderTransaction::where('order_id',$order_shop->order_id)->where('order_shop_id',0)->orderBy('id')->get();
         }
+		$order_shop->pickup_time = null;
+		if($order_shop->order_id>0)
+		{
+			$order_info = Order::where('id',$order_shop->order_id)->first();
+			if($order_info)
+			{
+				$order_shop->pickup_time=$order_info->pickup_time;
+			}
+		}
         return view('admin.transaction.shopOrdDetail',['order_shop'=>$order_shop,'transaction'=>$transaction]);
     }       
 
