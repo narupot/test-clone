@@ -154,6 +154,22 @@ class ShopOrderController extends MarketPlace
 				$order_shop->pickup_time=$order_info->pickup_time;
 			}
 		}
+		/* Start:: If Product Detail Not Available in Order Details */
+		if($order_shop->details)
+		{
+			if(!empty($order_shop->details))
+			{
+				foreach($order_shop->details as $key => $val)
+				{
+					if($val->description=='' || $val->description==null)
+					{
+						$productDetail = \App\Product::getProductDetail($val->sku);
+						$order_shop->details[$key]->description=($productDetail->productDesc->description!='')?$productDetail->productDesc->description:"";
+					}
+				}
+			}
+		}
+		/* Start:: If Product Detail Not Available in Order Details */
         return view('admin.transaction.shopOrdDetail',['order_shop'=>$order_shop,'transaction'=>$transaction]);
     }       
 
