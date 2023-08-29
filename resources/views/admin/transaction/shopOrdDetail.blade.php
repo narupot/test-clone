@@ -94,6 +94,11 @@
                                             <div class="form-group">
                                                <span>{{ GeneralFunctions::getShippingMethod($order_shop->shipping_method) }}</span>
                                             </div>
+											
+											<h4><strong>@lang('admin_order.pickup_date') : </strong></h4>
+                                            <div class="form-group">
+                                               <span>{{$order_shop->pickup_time}}</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
