@@ -828,6 +828,8 @@ class CategoryController extends MarketPlace
                         $searchval = $fvalue['value'];
                         switch ($fvalue['dataIndx']) {
                             case 'category_name':$query->where('bd.category_name','like', '%'.$searchval.'%'); break;
+							case 'url':$query->where('b.url','like', '%'.$searchval.'%'); 
+								break;
 							case 'parent_category_name':
 								$parent_cat_ids=getParentCategoryIdsBySearchName($searchval);
 								$query->whereIn('b.parent_id',$parent_cat_ids);

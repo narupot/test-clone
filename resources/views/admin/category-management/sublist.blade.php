@@ -112,6 +112,21 @@
                     listeners: ['change'],
                 },
             },
+			{   title: "@lang('cms.url')", 
+                dataIndx:'url', 
+                minWidth: 140,
+                filter : {
+                    attr : "@lang('cms.url')",                        
+                    crules: [
+                        {
+                            condition: getFilter('url', 'condition') ||  'contain',
+                            value : getFilter('url', 'value')  || "",
+                        }
+                    ],
+                    type: 'textbox', 
+                    listeners: ['change'],
+                },
+            },
 			{   title: "@lang('cms.parent_category')", 
                 dataIndx:'parent_category_name', 
                 minWidth: 140,
