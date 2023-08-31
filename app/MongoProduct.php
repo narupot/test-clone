@@ -51,7 +51,7 @@ class MongoProduct extends Molequent
 
             $obj->is_tier_price   = $sql_data->is_tier_price;
             $obj->package_id = (int)$sql_data->package_id;
-            $obj->base_unit_id = $sql_data->base_unit_id;
+            $obj->base_unit_id = (int)$sql_data->base_unit_id;
             $obj->weight_per_unit = $sql_data->weight_per_unit;
             
 
