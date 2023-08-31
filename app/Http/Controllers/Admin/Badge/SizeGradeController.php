@@ -41,7 +41,7 @@ class SizeGradeController extends MarketPlace
             $data_cus_arr = array();
             $SizeGrade_dtl = SizeGrade::getAllSizeGrade();
             //dd($SizeGrade_dtl);
-            return view('admin.sizegrade.listSizeGrade', ['SizeGrade_dtl'=>$SizeGrade_dtl, 'permission_arr'=>$permission_arr]);
+            return view('admin.badge.listSizeGrade', ['SizeGrade_dtl'=>$SizeGrade_dtl, 'permission_arr'=>$permission_arr]);
         }
     }   
     
@@ -83,7 +83,7 @@ class SizeGradeController extends MarketPlace
             cache_deleteKey('size_grade');
             /*update activity log start*/
             $action_type = "created";             
-            $logdetails = "Admin has ".$action_type." ".$input['un_name']." $this->module_name";
+            $logdetails = "Admin has ".$action_type." ".$input['sg_name']." $this->module_name";
             $logdata = array('action_type' =>$action_type,'module_name' =>$this->module_name,'logdetails' =>$logdetails);
 
             $this->updateLogActivity($logdata);
@@ -227,7 +227,6 @@ class SizeGradeController extends MarketPlace
 
         $static_cms->status = $status;
         $static_cms->updated_at = currentDateTime();
-        $static_cms->updated_by = Auth::guard('admin_user')->user()->id;
 
         $static_cms->save();
 
@@ -260,7 +259,7 @@ class SizeGradeController extends MarketPlace
         $rules['slug'] = reqRule();   
         
         $error_msg['sg_name.required'] = Lang::get('admin_product.name_is_required');
-        $error_msg['un_name.unique'] = Lang::get('admin_product.name_already_exist');
+        $error_msg['sg_name.unique'] = Lang::get('admin_product.name_already_exist');
         $error_msg['slug.required'] = Lang::get('admin_common.please_enter_slug');
         $validate = Validator::make($input, $rules, $error_msg);
         

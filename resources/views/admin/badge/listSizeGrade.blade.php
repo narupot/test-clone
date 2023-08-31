@@ -52,6 +52,7 @@
                                 <tr>
                                     <td>{{ ++$key }}</td>
                                     <td>{{ $res->sizegradedesc->name }}</td>
+                                    <td>{{ $res->type }}</td>
                                     <td>{{ $res->created_at ? $res->created_at : '' }}</td>
                                     <td>{{ $res->updated_at ? $res->updated_at : '' }}</td>
                                     <td>

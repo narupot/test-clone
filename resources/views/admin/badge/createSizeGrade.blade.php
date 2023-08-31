@@ -45,7 +45,7 @@
                 <div class="form-group row">
                     <div class="col-md-5">                                          
                         {!! CustomHelpers::fieldstabWithLanuage([['field'=>'text', 'name'=>'name', 'label'=>Lang::get('admin_product.name').'<i class="strick">*</i>', 'errorkey'=>'sg_name']], '1', $errors) !!}
-                        <p class="error" id="un_name"></p>
+                        <p class="error" id="sg_name"></p>
                         
                     </div>
                 </div>
