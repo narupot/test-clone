@@ -161,6 +161,9 @@
         Route::get('badge/{id}/changestatus', 'Admin\Badge\BadgeController@changeStatus');
         Route::resource('badge', 'Admin\Badge\BadgeController');
 
+        Route::get('sizegrade/{id}/changestatus', 'Admin\Badge\SizeGradeController@changeStatus');
+        Route::resource('sizegrade', 'Admin\Badge\SizeGradeController');
+
         /*****unit*****/
         Route::get('unit/{id}/changestatus', 'Admin\Unit\UnitController@changeStatus');
         Route::resource('unit', 'Admin\Unit\UnitController');
