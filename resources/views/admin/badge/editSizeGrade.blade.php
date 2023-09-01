@@ -45,7 +45,7 @@
                 <div class="form-group row">
                     <div class="col-md-5">
                     
-                        {!! CustomHelpers::fieldstabWithLanuageEdit([['field'=>'text', 'name'=>'name', 'label'=>Lang::get('admin_product.name').' <i class="strick">*</i>', 'errorkey'=>'sg_name']], '1', 'unit_id', $sizegrade_dtls->id, $tblSizeGradeDesc, $errors) !!}
+                        {!! CustomHelpers::fieldstabWithLanuageEdit([['field'=>'text', 'name'=>'name', 'label'=>Lang::get('admin_product.name').' <i class="strick">*</i>', 'errorkey'=>'sg_name']], '1', 'size_grade_id', $sizegrade_dtls->id, $tblSizeGradeDesc, $errors) !!}
                         <p class="error" id="sg_name"></p>
                         
                     </div>
