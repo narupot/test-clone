@@ -1,100 +1,103 @@
 @extends('layouts/admin/default')
 
 @section('title')
-    @lang('admin_product.list_unit')
+    @lang('admin_product.edit_badge_size')
 @stop
 
 @section('header_styles')
 
-    <!--page level css -->
-
-    <link rel="stylesheet" href="{{ Config('constants.admin_css_url') }}dataTables.bootstrap.css"/>
-    <!-- end of page level css -->
-    
 @stop
 
 @section('content')
     <div class="content">
-
-        <div class="header-title">
-            <h1 class="title">@lang('admin_product.list_unit')</h1>
-            @if($permission_arr['add'] === true)
-                <div class="float-right">
-                    <a class="btn btn-create" href="{{ action('Admin\Unit\UnitController@create') }}">@lang('common.create_new')</a> 
+        <form id="sizegradeForm" action="{{ action('Admin\Badge\SizeGradeController@update',$sizegrade_dtls->id) }}" method="post" class="form-horizontal form-bordered" novalidate="novalidate">
+            {{ csrf_field() }}
+            {{ method_field('PUT') }}        
+            <div class="header-title">
+            @if(Session::has('succMsg'))
+                <div class="alert alert-success alert-dismissable margin5">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <strong>@lang('common.success'):</strong> {{ Session::get('succMsg') }}
                 </div>
-            @endif
-        </div> 
-               
-        <!-- Main content -->         
-           
-        <div class="content-wrap ">
-            <div class="breadcrumb">
-                <ul class="bredcrumb-menu">
-                    {!!getBreadcrumbAdmin('unit')!!}
-                </ul>
+            @endif 
+                <h1 class="title">@lang('admin_product.edit_badge') : {{!empty($sizegrade_dtls->sizegradedesc)?$sizegrade_dtls->sizegradedesc->name:''}}</h1> 
+                <div class="float-right">                
+                    <a class="btn btn-back" href="{{ action('Admin\Badge\SizeGradeController@index') }}">@lang('common.back')</a>
+                    <button type="submit" name="submit_type" value="submit_continue" class="btn static-block-save btn-secondary" data-action="submit_continue">@lang('common.save_and_continue')</button>
+                    <button type="submit" class="btn btn-save btn-success">@lang('common.save')</button>
+                    
+                </div>               
             </div>
-            <div class="tab-content listing-tab">
-                <table class="table table-bordered " id="table">
-                    <thead>
-                        <tr class="filters">
-                            <th>@lang('common.sno')</th>
-                            <th>@lang('admin_product.unit_name')</th>
-                            <th>@lang('common.created_at')</th>
-                            <th>@lang('common.last_updated')</th>
-                            <th>@lang('common.status')</th>
-                            <th>@lang('common.actions')</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if($unit_dtl)
-                            @foreach ($unit_dtl as $key => $res)
-                                <tr>
-                                    <td>{{ ++$key }}</td>
-                                    <td>{{ $res->unitdesc->unit_name }}</td>
-                                    <td>{{ $res->created_at }}</td>
-                                    <td>{{ $res->updated_at }}</td>
-                                    <td>
-                                        <a id="status_{{ $res->id }}" href="javascript:void(0);" onclick="callForAjax('{{ action('Admin\Unit\UnitController@changeStatus', $res->id) }}', 'status_{{ $res->id }}')" class="{{($res->status == 1)?'status active':'status inactive'}}"> {{ ($res->status)?'Active':'Inactive' }}
-                                        </a>
-                                    </td>
-                                    <td>
-                                        @if($permission_arr['edit'] === true)
-                                            <a class="btn btn-dark" href="{{ action('Admin\Unit\UnitController@edit', $res->id) }}">@lang('common.edit')</a>
-                                        @endif
+            <div class="content-wrap">
+                <div class="breadcrumb">
+                    <ul class="bredcrumb-menu">
+                        {!!getBreadcrumbAdmin('size_grade')!!}
+                    </ul>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-5">
+                        <label>@lang('admin_common.slug') <i class="strick">*</i></label>
+                        <input type="text" name="slug" value="{{$sizegrade_dtls->slug}}">
+                        <p class="error" id="slug"></p>
+                    </div>
+                </div>
 
-                                        @if($permission_arr['delete'] === true) 
-                                        <form method="post" action="{{ action('Admin\Unit\UnitController@destroy', $res->id) }}" onsubmit="return confirm('@lang("admin_common.are_you_sure_to_delete_this_record")');" class="inblock"> 
-                                            {{ csrf_field() }}
-                                            {{ method_field('DELETE') }}   
-                                            
-                                            <a class="btn btn-danger" onclick="$(this).closest('form').submit();" data-toggle="modal">@lang('common.delete')
-                                            </a>
-                                           
-                                        </form>
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @endif  
-                    </tbody>
-                </table>
+                <div class="form-group row">
+                    <div class="col-md-5">
+                    
+                        {!! CustomHelpers::fieldstabWithLanuageEdit([['field'=>'text', 'name'=>'name', 'label'=>Lang::get('admin_product.name').' <i class="strick">*</i>', 'errorkey'=>'sg_name']], '1', 'unit_id', $sizegrade_dtls->id, $tblSizeGradeDesc, $errors) !!}
+                        <p class="error" id="sg_name"></p>
+                        
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-5">  
+                        <label>@lang('admin_product.type') <i class="strick">*</i></label>  
+                        <select name="type">
+                            <option value="size" @if($sizegrade_dtls->type=='size') selected="selected" @endif>@lang('admin_product.size')</option>
+                            <option value="grade" @if($sizegrade_dtls->type=='grade') selected="selected" @endif>@lang('admin_product.grade')</option>
+                        </select>                                      
+                        
+                        <p class="error" id="type"></p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>@lang('admin_common.status')</label>
+                    <label class="button-switch mt-2">
+                        <input type="checkbox" name="status" value="1" class="switch switch-orange ng-valid ng-dirty ng-valid-parse ng-touched ng-not-empty" id="autoRelated" @if($sizegrade_dtls->status) checked="checked" @endif>                        
+                          <span for="autoRelated" class="lbl-off">@lang('admin_common.off')</span>
+                          <span for="autoRelated" class="lbl-on">@lang('admin_common.on')</span>
+                    </label>
+                </div>
 
             </div>
-        </div>
+        </form>      
     </div>
+
 @stop
 
 @section('footer_scripts')
+ 
+<!-- begining of page level js -->
 
-    <!-- begining of page level js -->
+<!-- end of page level js --> 
 
-    <script src="{{ Config('constants.admin_js_url') }}dataTables.bootstrap.js"></script>
+<script src="{{ Config('constants.js_url') }}jquery.validate.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    
+    (function($){
 
-    <script>
-    $(document).ready(function() {
-        $('#table').dataTable();
-    });
-    </script>
-    <!-- end of page level js -->
+        var rules= {};            
+            rules['name['+admin_default_lang+']'] = 'required';
+            rules['slug'] = 'required';
+                      
+        var messages = {};
+            messages['name['+admin_default_lang+']'] = "@lang('admin_product.name_is_required')";
+            messages['title'] = "@lang('common.please_enter_slug')";       
 
+        validateForm('sizegradeForm',rules,messages);
+
+    })(jQuery);
+</script>       
 @stop
