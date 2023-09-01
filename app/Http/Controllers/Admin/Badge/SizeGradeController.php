@@ -112,9 +112,14 @@ class SizeGradeController extends MarketPlace
         $permission = $this->checkUrlPermission('edit_sizegrade_management');
         if($permission === true) {
 
-            $SizeGrade_dtls = SizeGrade::find($id);
+            $SizeGrade_dtls = SizeGrade::where('id',$id)->with('sizegradedesc')->first();
+            if($SizeGrade_dtls){
+                return view('admin.badge.editSizeGrade', ['sizegrade_dtls'=>$SizeGrade_dtls, 'tblSizeGradeDesc'=>$this->tblSizeGradeDesc]);
+            }else{
+                abort(404);
+            }
             
-            return view('admin.badge.editSizeGrade', ['sizegrade_dtls'=>$SizeGrade_dtls, 'tblSizeGradeDesc'=>$this->tblSizeGradeDesc]);
+            
         }
     }
     
@@ -135,7 +140,7 @@ class SizeGradeController extends MarketPlace
 
             $badge_dtls->status = !empty($request->status)?'1':'0';
 
-            $badge_dtls->slug = createUrl($request->title);
+            $badge_dtls->slug = createUrl($request->slug);
             $badge_dtls->type = cleanValue($request->type);
             $badge_dtls->save();
 
