@@ -56,8 +56,8 @@
                     <div class="col-md-5">
                         <label>@lang('admin_product.size') <i class="strick">*</i></label>
                         <select name="size">
-                            @foreach(CustomHelpers::getBadgeSize() as $key => $value)
-                                <option value="{{ $key }}" @if($key == $badge_dtls->size) selected="selected" @endif>{{ $value }}</option>
+                            @foreach($size_grade['size'] as $key => $value)
+                                <option value="{{ $value['slug'] }}" @if($value['slug'] == $badge_dtls->size) selected="selected" @endif>{{ $value['name'] }}</option>
                             @endforeach
                         </select>
                         
@@ -68,8 +68,8 @@
                     <div class="col-md-5">
                         <label>@lang('admin_product.grade') <i class="strick">*</i></label>
                         <select name="grade">
-                            @foreach(CustomHelpers::getBadgeGrade() as $key => $value)
-                                <option value="{{ $key }}" @if($key == $badge_dtls->grade) selected="selected" @endif>{{ $value }}</option>
+                            @foreach($size_grade['grade'] as $key => $value)
+                                <option value="{{ $value['slug'] }}" @if($value['slug'] == $badge_dtls->grade) selected="selected" @endif>{{ $value['name'] }}</option>
                             @endforeach
                         </select>
                         
