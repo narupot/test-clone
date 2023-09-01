@@ -34,7 +34,7 @@ class MongoSizeGrade extends Molequent
                 }
             }
         }
-        $obj->name       = $name;
+        $obj->size_grade_name = $name;
         $obj->status = $sql_data->status;
         $obj->created_at = $sql_data->created_at;
         $obj->updated_at = $sql_data->updated_at;
