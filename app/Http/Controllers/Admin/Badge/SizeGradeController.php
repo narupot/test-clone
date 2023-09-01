@@ -150,8 +150,8 @@ class SizeGradeController extends MarketPlace
                     $value = $input['sg_name'];
                 }                
                         
-                $data_arr = ["sige_grade_id" => $SizeGrade_id, "lang_id" => $key, "name" => $value];
-                 SizeGradeDesc::updateOrCreate(['sige_grade_id' => $SizeGrade_id, 'lang_id' => $key], $data_arr);
+                $data_arr = ["size_grade_id" => $SizeGrade_id, "lang_id" => $key, "name" => $value];
+                 SizeGradeDesc::updateOrCreate(['size_grade_id' => $SizeGrade_id, 'lang_id' => $key], $data_arr);
             }
 
             /***update SizeGrade data into mongo db*****/
