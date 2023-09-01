@@ -23,7 +23,7 @@ class SyncMongoController extends MarketPlace
         
         $mon = \App\MongoProduct::count();
         
-        dd($request->all(),$prd,$mon);
+        //dd($request->all(),$prd,$mon);
         
         if(isset($request->sync)){
             $sync = explode(',',$request->sync);
