@@ -54,24 +54,46 @@ class MongoSizeGrade extends Molequent
         Self::where('_id', (int)$unit_id)->delete();
     }
 
-    public static function getAllUnit($id=null){
+    public static function getAllSizeGrade($slug=null){
         $cache_key = 'size_grade';
-        $unit_arr = [];
+        $size_grade_arr = [];
         if (cache_hasKey($cache_key) && \Config::get('constants.enable_cache')) {
-            $unit_arr = cache_getDate($cache_key);
+            $size_grade_arr = cache_getDate($cache_key);
         }
-        if(empty($unit_arr)){
+        if(empty($size_grade_arr)){
             $unit = Self::get();
             if(count($unit)){
                 foreach ($unit as $key => $value) {
-                    $unit_arr[$value->id] = $value;
+                    $size_grade_arr[$value->slug] = $value;
                 }
-                cache_putData($cache_key,$unit_arr);
+                cache_putData($cache_key,$size_grade_arr);
             }
         }
-        if($id){
-            return isset($unit_arr[$id]) ? $unit_arr[$id] : [];
+        if($slug){
+            return isset($size_grade_arr[$slug]) ? $size_grade_arr[$slug] : [];
         }
-        return $unit_arr;
+        return $size_grade_arr;
+    }
+
+    public static function getSize(){
+        $data = Self::getAllSizeGrade();
+        $size_arr = [];
+        foreach ($data as $key => $value) {
+            if($value->type=='size'){
+                $size_arr[$value->slug] = $value->name;
+            }
+        }
+        return $size_arr;
+    }
+
+    public static function getGrade(){
+        $data = Self::getAllSizeGrade();
+        $grade_arr = [];
+        foreach ($data as $key => $value) {
+            if($value->type=='grade'){
+                $grade_arr[$value->slug] = $value->name;
+            }
+        }
+        return $grade_arr;
     }
 }

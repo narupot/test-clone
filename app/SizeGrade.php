@@ -26,4 +26,17 @@ class SizeGrade extends Model {
     public static function getSizeGradebyId($id){
         return self::where('id',$id)->first();
     }
+
+    public static function sizeGrade(){
+        $data = Self::where('status','1')->with('sizegradedesc')->get();
+        $size_arr = $grade_arr = [];
+        foreach ($data as $key => $value) {
+            if($value->type=='size'){
+                $size_arr[] = ['slug'=>$value->slug,'name'=>$value->sizegradedesc->name];
+            }else{
+                $grade_arr[] = ['slug'=>$value->slug,'name'=>$value->sizegradedesc->name];
+            }
+        }
+        return ['size'=>$size_arr,'grade'=>$grade_arr];
+    }
 }

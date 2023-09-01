@@ -12,6 +12,7 @@ use App\Language;
 use App\Badge;
 use App\BadgeDesc;
 use App\MongoBadge;
+use App\SizeGrade;
 use Auth;
 use Lang;
 use DB;
@@ -50,8 +51,8 @@ class BadgeController extends MarketPlace
 
         $permission = $this->checkUrlPermission('add_static_page');
         if($permission === true) {
-
-            return view('admin.badge.createBadge');
+            $size_grade = SizeGrade::sizeGrade();
+            return view('admin.badge.createBadge',['size_grade'=>$size_grade]);
         }
     }
     
@@ -128,8 +129,8 @@ class BadgeController extends MarketPlace
         if($permission === true) {
 
             $badge_dtls = Badge::getBadgebyId($id);
-            
-            return view('admin.badge.editBadge', ['badge_dtls'=>$badge_dtls, 'tblBadgeDesc'=>$this->tblBadgeDesc]);
+            $size_grade = SizeGrade::sizeGrade();
+            return view('admin.badge.editBadge', ['badge_dtls'=>$badge_dtls, 'tblBadgeDesc'=>$this->tblBadgeDesc,'size_grade'=>$size_grade]);
         }
     }
     
