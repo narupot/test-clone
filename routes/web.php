@@ -161,6 +161,9 @@
         Route::get('badge/{id}/changestatus', 'Admin\Badge\BadgeController@changeStatus');
         Route::resource('badge', 'Admin\Badge\BadgeController');
 
+        Route::get('sizegrade/{id}/changestatus', 'Admin\Badge\SizeGradeController@changeStatus');
+        Route::resource('sizegrade', 'Admin\Badge\SizeGradeController');
+
         /*****unit*****/
         Route::get('unit/{id}/changestatus', 'Admin\Unit\UnitController@changeStatus');
         Route::resource('unit', 'Admin\Unit\UnitController');
@@ -448,7 +451,8 @@
         Route::post('category-management/assign-unit', 'Admin\CategoryManagement\CategoryController@assignUnit');
         Route::get('category-management/sublist', 'Admin\CategoryManagement\CategoryController@subcategorylist');
         Route::resource('category-management', 'Admin\CategoryManagement\CategoryController');
-
+        Route::get('categoryListData', 'Admin\CategoryManagement\CategoryController@categoryListData');
+		Route::get('delete/{id?}', 'Admin\CategoryManagement\CategoryController@deletecategory'); 
         // Billing Address for buy plugin | End
 
         /**All buyer and seller (Customers) in admin *******/

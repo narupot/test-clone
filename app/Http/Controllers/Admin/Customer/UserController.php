@@ -41,7 +41,7 @@ class UserController extends MarketPlace
 
     function customerData(Request $request){
 
-        $perpage = !empty($request->pq_rpp) ? $request->pq_rpp : 10;
+        $perpage = !empty($request->pq_rpp) ? $request->pq_rpp : getPagination('limit');
         $request->page = $current_page = !empty($request->pq_curpage)?$request->pq_curpage:0;
 
         $start_index = ($current_page - 1) * $perpage;
@@ -109,7 +109,7 @@ class UserController extends MarketPlace
 			}
 
             /***save filter****/
-            $this->setFilter('user',$request);
+            /* $this->setFilter('user',$request); */
 
             
         }catch(QueryException $e){

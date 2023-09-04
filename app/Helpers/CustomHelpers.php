@@ -1184,19 +1184,25 @@ class CustomHelpers {
 
     public static function getBadgeSize($key=null){
 
-        $arr = ['jumbo'=>Lang::get('admin_product.jumbo'),'large'=>Lang::get('admin_product.large'),'medium'=>Lang::get('admin_product.medium'),'small'=>Lang::get('admin_product.small'),'mini'=>Lang::get('admin_product.mini'),'non'=>Lang::get('admin_product.non')];
+        /*$arr = ['jumbo'=>Lang::get('admin_product.jumbo'),'large'=>Lang::get('admin_product.large'),'medium'=>Lang::get('admin_product.medium'),'small'=>Lang::get('admin_product.small'),'mini'=>Lang::get('admin_product.mini'),'non'=>Lang::get('admin_product.non')];*/
+        
         if($key){
-            return $arr[$key] ?? '';
+            $data_val = \App\MongoSizeGrade::getAllSizeGrade($key);
+            return $data_val ? $data_val->name : '';
         }else{
+            $arr = \App\MongoSizeGrade::getSize();
             return $arr;
         }
     }
 
     public static function getBadgeGrade($key=null){
-        $arr = ['very_good'=>Lang::get('admin_product.very_good'),'good'=>Lang::get('admin_product.good'),'general'=>Lang::get('admin_product.general'),'mix'=>Lang::get('admin_product.mix'),'non'=>Lang::get('admin_product.non')];
+        /*$arr = ['very_good'=>Lang::get('admin_product.very_good'),'good'=>Lang::get('admin_product.good'),'general'=>Lang::get('admin_product.general'),'mix'=>Lang::get('admin_product.mix'),'non'=>Lang::get('admin_product.non')];*/
+        
         if($key){
-            return $arr[$key] ?? '';
+            $data_val = \App\MongoSizeGrade::getAllSizeGrade($key);
+            return $data_val ? $data_val->name : '';
         }else{
+            $arr = \App\MongoSizeGrade::getGrade();
             return $arr;
         }
     }

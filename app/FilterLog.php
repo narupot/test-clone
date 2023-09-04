@@ -14,7 +14,7 @@ class FilterLog extends Model {
 
         $filter_data = \App\FilterLog::where(['filter_name'=>$filter_name,'user_id'=>$admin_id])->first();
 
-        $result_data = ['pq_datatype'=>'JSON','pq_curpage'=>'1','pq_rpp'=>'10'];
+        $result_data = ['pq_datatype'=>'JSON','pq_curpage'=>'1','pq_rpp'=>getPagination('limit')];
 
         if($filter_data){
             return $filter_data->filter_value;

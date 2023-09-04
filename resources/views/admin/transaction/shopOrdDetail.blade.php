@@ -94,6 +94,11 @@
                                             <div class="form-group">
                                                <span>{{ GeneralFunctions::getShippingMethod($order_shop->shipping_method) }}</span>
                                             </div>
+											
+											<h4><strong>@lang('admin_order.pickup_date') : </strong></h4>
+                                            <div class="form-group">
+                                               <span>{{$order_shop->pickup_time}}</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -113,11 +118,11 @@
                                         <li>@lang('checkout.unit_price')</li>
                                         <li>@lang('checkout.qty')</li>
                                         <li>@lang('checkout.price')</li>
-                                        <!--li>@lang('checkout.details')</li-->
-                                        <li>@lang('checkout.credit_from_shop')</li>
+                                        <!-- <li>@lang('checkout.credit_from_shop')</li> -->
                                         <li>@lang('checkout.payment_method')</li>
                                         <li>@lang('common.status')</li>
-                                        <li>@lang('common.action')</li>
+                                        <!-- <li>@lang('common.action')</li> -->
+										<li>@lang('checkout.details')</li>
                                     </ul>
                                 </div>
                                 <div class="table-content">
@@ -162,22 +167,21 @@
 
                                             <li>
                                                 {{numberFormat($val->total_price) }} @lang('common.baht')
-                                            </li>
+                                            </li>   
 
-                                            <!--li>{{$val->description}}</li-->   
-
-                                            <li>{{ $val->payment_type=='credit'? numberFormat($val->total_price):'' }} @lang('common.baht')</li>     
+                                            <!-- <li>{{ $val->payment_type=='credit'? numberFormat($val->total_price):'' }} @lang('common.baht')</li> -->    
 
                                             <li>{!! $detail_json['payment_method'][session('default_lang')] ?? str_replace('_',' ',strtoupper($val->payment_slug)) !!}</li>   
                                             <li class="red" id="item_status_{{ $val->id }}">{{ $val->getOrderStatus->status??'' }}</li> 
-
+											<!--
                                             @if(!$order_shop->end_shopping_date || $order_shop->order_status ==3 || $order_shop->order_status ==4)
                                             <li></li>
                                             @else
                                                 
                                                 <li>@if($val->status!=4) <a href="javascript:;" data-type='cancel' data-val="{{ $val->id }}" class="ord_item_change">@lang('common.cancel')</a> @endif | <a href="javascript:;" data-type='receive' data-val="{{ $val->id }}" class="ord_item_change">@lang('admin_order.center_received')</a></li> 
                                             @endif 
-
+											-->
+											<li>{{$val->description}}</li>
                                         </ul>
                                     @endforeach                     
                                     

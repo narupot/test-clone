@@ -23,7 +23,7 @@ class SyncMongoController extends MarketPlace
         
         $mon = \App\MongoProduct::count();
         
-        dd($request->all(),$prd,$mon);
+        //dd($request->all(),$prd,$mon);
         
         if(isset($request->sync)){
             $sync = explode(',',$request->sync);
@@ -56,6 +56,9 @@ class SyncMongoController extends MarketPlace
                     case 'wishlist':
                         $unit = $this->wishlistSync();
                         break;
+                    case 'sizegrade':
+                        $unit = $this->sizegradeSync();
+                        break;
                     
                     default:
                         # code...
@@ -74,7 +77,17 @@ class SyncMongoController extends MarketPlace
             $up = \App\MongoUnit::updateData($value);
         }
 
-    }   
+    }  
+
+    public function sizegradeSync(){
+
+        $data = \App\SizeGrade::with('sizegradedescAll')->get();
+        $delete = \App\MongoUnit::where('_id','>',0)->delete();
+        foreach ($data as $key => $value) {
+            $up = \App\MongoSizeGrade::updateData($value);
+        }
+
+    } 
 
     public function badgeSync(){
 
