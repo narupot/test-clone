@@ -263,7 +263,7 @@ if(!function_exists('getUser')){
 }
 if(!function_exists('getParentCategory')){
 	function getParentCategory($id){
-		$data = \App\Category::getParentName($id); 
+		$data = \App\Category::where('id',$id)->with('getCatDesc')->first(); ; 
 		if(is_null($data)){
 			return '';
 		}else{
@@ -275,6 +275,22 @@ if(!function_exists('getParentCategory')){
 				
 		}
 		
+	}
+}
+if(!function_exists('getParentCategoryIdsBySearchName')){
+	function getParentCategoryIdsBySearchName($search_text){
+		if(isset($search_text) && $search_text!='')
+		{
+			$data_arr = DB::table(with(new \App\CategoryDesc)->getTable() . ' as cd')
+					->leftjoin(with(new \App\Category)->getTable() . ' as c', [['cd.cat_id', '=', 'c.id']])
+					->where(['c.parent_id'=>'0'])
+					->where('cd.category_name','like', '%'.$search_text.'%')
+					->get()->pluck('id')->toArray();
+			return $data_arr;		
+		}
+		else {
+			return array();
+		}		
 	}
 }
 function getCurrencyVal($currency_id){
@@ -871,7 +887,7 @@ if(!function_exists('getCategoryUrl')){
 
 function getPagination($type='') {
 	if($type == 'limit') {
-		$limit = 10;
+		$limit = 20;
 		return $limit;
 	}
 	else {

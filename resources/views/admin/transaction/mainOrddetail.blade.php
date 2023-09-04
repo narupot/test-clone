@@ -116,6 +116,11 @@
                                                <span>@lang('admin_order.phone_no') : {{$main_order->user_phone_no}}</span>
                                                @endif
                                             </div>
+											
+											<h4><strong>@lang('admin_order.pickup_date') : </strong></h4>
+                                            <div class="form-group">
+                                               <span>{{$main_order->pickup_time}}</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -166,11 +171,11 @@
                                                 <li>@lang('checkout.unit_price')</li>
                                                 <li>@lang('checkout.qty')</li>
                                                 <li>@lang('checkout.price')</li>
-                                                <!--li>@lang('checkout.details')</li-->
-                                                <li>@lang('checkout.credit_from_shop')</li>
+                                                <!-- <li>@lang('checkout.credit_from_shop')</li> -->
                                                 <li>@lang('checkout.payment_method')</li>
                                                 <li>@lang('common.status')</li>
                                                 <li>@lang('checkout.remark')</li>
+												<li>@lang('checkout.details')</li>
                                             </ul>
                                         </div>
                                         <div class="table-content">
@@ -217,10 +222,8 @@
                                                     <li>
                                                         {{numberFormat($val->total_price) }} @lang('common.baht')
                                                     </li>
-
-                                                    <!--li>{{$val->description}}</li-->   
-
-                                                    <li>{{ $val->payment_type=='credit'? numberFormat($val->total_price):'' }} @lang('common.baht')</li> 
+													
+                                                    <!-- <li>{{ $val->payment_type=='credit'? numberFormat($val->total_price):'' }} @lang('common.baht')</li> -->
 
                                                     <li>{!!$detail_json['payment_method'][session('default_lang')] ?? str_replace('_',' ',strtoupper($val->payment_slug)) !!}</li>
                                                     <li class="red" id="item_status_{{ $val->id }}">{{ $val->getOrderStatus->status??'' }}</li>
@@ -228,6 +231,7 @@
                                                     <li>
                                                         {{$val->api_remark}}
                                                     </li>
+													<li>{{$val->description}}</li> 
                                                 </ul>
                                             @endforeach                     
                                             

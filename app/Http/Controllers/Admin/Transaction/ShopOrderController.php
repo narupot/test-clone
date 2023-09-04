@@ -41,7 +41,7 @@ class ShopOrderController extends MarketPlace
     }
 
     public function listOrderData(Request $request){
-        $perpage = !empty($request->pq_rpp) ? $request->pq_rpp : 10;
+        $perpage = !empty($request->pq_rpp) ? $request->pq_rpp : getPagination('limit');
         $request->page = $current_page = !empty($request->pq_curpage)?$request->pq_curpage:0;
 
         $start_index = ($current_page - 1) * $perpage;
@@ -66,7 +66,7 @@ class ShopOrderController extends MarketPlace
                   ->join(with(new \App\ShopDesc)->getTable().' as shopdesc', 'shop.id', '=', 'shopdesc.shop_id')
                   ->join(with(new \App\User)->getTable().' as seller', 'shop.user_id', '=', 'seller.id')
                   ->join(with(new \App\OrderStatusDesc)->getTable().' as osd', 'sord.order_status','=', 'osd.order_status_id')
-                  ->select('seller.display_name as seller_name','seller.id as seller_id','sord.shop_formatted_id','ord.formatted_id','sord.total_final_price','sord.end_shopping_date','osd.status','sord.order_status','sord.admin_remark','sord.payment_status','shopdesc.shop_name');
+                  ->select('seller.display_name as seller_name','seller.id as seller_id','sord.shop_formatted_id','ord.formatted_id','sord.total_final_price','sord.end_shopping_date','ord.pickup_time','osd.status','sord.order_status','sord.admin_remark','sord.payment_status','shopdesc.shop_name');
             
             if(isset($request->pq_filter)){
                 $filter_req = json_decode($request->pq_filter,true);
@@ -88,6 +88,11 @@ class ShopOrderController extends MarketPlace
                                 $from_date = $fvalue['value']??'';
                                 $to_date = $fvalue['value2']??'';
                                 createDateFilter($query,'sord.end_shopping_date',$from_date,$to_date);
+                            break;
+							case 'pickup_time':
+                                $from_date = $fvalue['value']??'';
+                                $to_date = $fvalue['value2']??'';
+                                createDateFilter($query,'ord.pickup_time',$from_date,$to_date);	
                             break;
 
                         }
@@ -115,7 +120,7 @@ class ShopOrderController extends MarketPlace
             }
 
             /***save filter****/
-            $this->setFilter('shop_order',$request);
+            /* $this->setFilter('shop_order',$request); */
 
             
         }catch(QueryException $e){
@@ -140,6 +145,31 @@ class ShopOrderController extends MarketPlace
         if(count($transaction) < 2){
             $transaction = \App\OrderTransaction::where('order_id',$order_shop->order_id)->where('order_shop_id',0)->orderBy('id')->get();
         }
+		$order_shop->pickup_time = null;
+		if($order_shop->order_id>0)
+		{
+			$order_info = Order::where('id',$order_shop->order_id)->first();
+			if($order_info)
+			{
+				$order_shop->pickup_time=$order_info->pickup_time;
+			}
+		}
+		/* Start:: If Product Detail Not Available in Order Details */
+		if($order_shop->details)
+		{
+			if(!empty($order_shop->details))
+			{
+				foreach($order_shop->details as $key => $val)
+				{
+					if($val->description=='' || $val->description==null)
+					{
+						$productDetail = \App\Product::getProductDetail($val->sku);
+						$order_shop->details[$key]->description=($productDetail->productDesc->description!='')?$productDetail->productDesc->description:"";
+					}
+				}
+			}
+		}
+		/* Start:: If Product Detail Not Available in Order Details */
         return view('admin.transaction.shopOrdDetail',['order_shop'=>$order_shop,'transaction'=>$transaction]);
     }       
 

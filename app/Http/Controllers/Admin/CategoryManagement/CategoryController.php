@@ -44,16 +44,8 @@ class CategoryController extends MarketPlace
      */
     public function index()
     {
-       //return redirect()->action('Admin\CategoryManagement\CategoryController@create');
-       //$categories = Category::where(['parent_id' => '0'])->with('getCatDesc')->get();
-       $categories = DB::table(with(new \App\Category)->getTable().' as b')
-                    ->Leftjoin(with(new \App\CategoryDesc)->getTable().' as bd', [['b.id', '=', 'bd.cat_id'], ['bd.lang_id', '=' , DB::raw(session('default_lang'))]])
-                    ->leftjoin(with(new \App\AdminUser)->getTable().' as au','au.id', '=', 'b.created_by')
-                    ->select('b.*', 'bd.category_name','au.nick_name')
-                    ->orderby('b.id', 'desc')
-                    ->where(['b.parent_id'=>'0'])->get();
-       $permission = $this->checkUrlPermission('add_category');
-       return view('admin.category-management.mainlist', ['categories' => $categories,'permission_arr'=>$permission]);
+       $filter = $this->getFilter('category');
+       return view('admin.category-management.list', ['filter'=>$filter]);
     }
 
     /**
@@ -717,16 +709,189 @@ class CategoryController extends MarketPlace
 
     public function subcategorylist()
     {
-       //return redirect()->action('Admin\CategoryManagement\CategoryController@create');
-       $categories = DB::table(with(new \App\Category)->getTable().' as b')
+       $filter = $this->getFilter('sub_category');
+       return view('admin.category-management.sublist', ['filter'=>$filter]);
+    }
+	
+	public function deletecategory($id) {
+        //$permission = $this->checkUrlPermission('delete_category');
+		$permission = $this->checkUrlPermission('add_category');
+        $result = Category::where('id', $id)->first();		
+        if (!$result) {
+            abort(404);
+        }
+		$deleteCatFlag = 1;
+		foreach ($result->category as $cat) {
+			$deleteCatFlag = 2;
+			break;
+		}
+		if($deleteCatFlag == 1){
+			$cat_count=\App\Product::where('cat_id', $id)->get()->count();
+			if($cat_count>0)
+			{
+				$msg_text = Lang::get('category.already_added_to_product_cannot_be_delete');
+				$return_response = array('status'=>'validate_error','message'=>$msg_text);
+			}
+			else 
+			{
+				try{
+				   $result->delete();
+				   
+					/***delete from mongo***/
+					MongoCategory::deleteData($id);
+					/** Logging category delete information **/
+					  $action_type = "delete";   
+					  $logdetails = "Admin has deleted category with url  $result->url "; //Change update message as requirement  
+
+					  //Prepaire array for send data
+					  $logdata = array('action_type' =>$action_type,'module_name' =>$this->module_name,'logdetails' =>$logdetails);
+
+					  //Call method in module
+					  $this->updateLogActivity($logdata);
+					/** Logging category delete information end **/
+				   
+					$msg_text = Lang::get('category.category_delete_successfully');
+					$return_response = array('status'=>'success','message'=>$msg_text);  
+				}catch(Exception $e) {
+					$msg_text = Lang::get('category.something_went_wrong');
+					$return_response = array('status'=>'validate_error','message'=>$msg_text);
+				}
+			}
+		} else {
+			$msg_text = Lang::get('category.delete_child_category_first');
+            $return_response = array('status'=>'validate_error','message'=>$msg_text);
+        }
+		
+		if($return_response['status']=='success')
+		{
+			if($result->parent_id!='0')
+			{
+				return redirect()->action('Admin\CategoryManagement\CategoryController@subcategorylist')->with('succMsg', $return_response['message']); 
+			}
+			else
+			{
+				return redirect()->action('Admin\CategoryManagement\CategoryController@index')->with('succMsg', $return_response['message']); 
+			}			
+		}
+		else 
+		{
+			/* return json_encode($return_response); */
+			if($result->parent_id!='0')
+			{
+				return redirect()->action('Admin\CategoryManagement\CategoryController@subcategorylist')->with('errorMsg', $return_response['message']); 
+			}
+			else
+			{
+				return redirect()->action('Admin\CategoryManagement\CategoryController@index')->with('errorMsg', $return_response['message']); 
+			}			
+		}
+    }
+	
+	function categoryListData(Request $request){
+        //dd($request->all());
+		$page_type = !empty($request->page_type) ? $request->page_type : 'category';
+        $perpage = !empty($request->pq_rpp) ? $request->pq_rpp : getPagination('limit');
+        $request->page = $current_page = !empty($request->pq_curpage)?$request->pq_curpage:0;
+
+        $start_index = ($current_page - 1) * $perpage;
+        //dd($perpage,$request->page);
+        
+        $order_by = 'id';
+        $order_by_val = 'desc';
+        if(isset($request->pq_sort)){
+            $sort_data = jsonDecodeArr($request->pq_sort);
+            $order_by = $sort_data[0]['dataIndx'];
+            $order_by_val = ($sort_data[0]['dir']=='up')?'asc':'desc';
+        }
+
+        try{
+            
+            $query = DB::table(with(new \App\Category)->getTable().' as b')
             ->Leftjoin(with(new \App\CategoryDesc)->getTable().' as bd', [['b.id', '=', 'bd.cat_id'], ['bd.lang_id', '=' , DB::raw(session('default_lang'))]])
-            ->leftjoin(with(new \App\AdminUser)->getTable().' as au','au.id', '=', 'b.created_by')
-            ->select('b.*', 'bd.category_name','au.nick_name')
-            ->orderby('b.id', 'desc')
-            ->where('b.parent_id','!=','0')->get();
-       //$categories = Category::where('parent_id','!=','0')->get();
-       $permission = $this->checkUrlPermission('add_category');
-       return view('admin.category-management.sublist', ['categories' => $categories,'permission_arr'=>$permission]);
+            ->leftjoin(with(new \App\AdminUser)->getTable().' as au','au.id', '=', 'b.created_by');	 
+			if(isset($page_type) && $page_type=='sub_category')
+			{
+				$query = $query->where('b.parent_id','!=','0');
+			}
+			else
+			{
+				$query = $query->where(['b.parent_id'=>'0']);
+			}
+			$query = $query->select('b.*', 'bd.category_name','au.nick_name');
+            
+            if(isset($request->pq_filter)){
+                $filter_req = json_decode($request->pq_filter,true);
+                if(!empty($filter_req['data'])){
+                    $filter_arr = $filter_req['data'];
+                    foreach ($filter_arr as $fkey => $fvalue) {
+
+                        $searchval = $fvalue['value'];
+                        switch ($fvalue['dataIndx']) {
+                            case 'category_name':$query->where('bd.category_name','like', '%'.$searchval.'%'); break;
+							case 'url':$query->where('b.url','like', '%'.$searchval.'%'); 
+								break;
+							case 'parent_category_name':
+								$parent_cat_ids=getParentCategoryIdsBySearchName($searchval);
+								$query->whereIn('b.parent_id',$parent_cat_ids);
+								break;
+                            case 'status':$query->whereIn('b.status',$searchval); break;
+							case 'nick_name':$query->where('au.nick_name','like', '%'.$searchval.'%'); break;
+                            case 'created_at':
+                                $from_date = $fvalue['value']??'';
+                                $to_date = $fvalue['value2']??'';
+                                createDateFilter($query,'b.created_at',$from_date,$to_date);
+                            break;
+                            case 'updated_at':
+                                $from_date = $fvalue['value']??'';
+                                $to_date = $fvalue['value2']??'';
+                                createDateFilter($query,'b.updated_at',$from_date,$to_date);
+                            break;
+                            
+                        }
+                        
+                    }
+                }
+            }
+            $response = $query->orderBy($order_by,$order_by_val)->paginate($perpage,['*'],'page',$current_page);
+            $totrec = $response->total();
+            //dd($response);
+            if($start_index >= $totrec) {
+                $current_page = ceil($totrec/$perpage);
+                
+                $response = $query->orderBy($order_by,$order_by_val)->paginate($perpage,['*'],'page',$current_page);
+            }
+
+            if(count($response)){
+                foreach($response as $key=>$mainCategory){
+                    $response[$key]->category_mage = getCategoryImageUrl($mainCategory->img);
+					if(isset($page_type) && $page_type=='sub_category')
+					{
+						$response[$key]->parent_category_name = getParentCategory($mainCategory->parent_id);
+					}
+					$response[$key]->created_at = getDateFormat($mainCategory->created_at, '1');
+					$response[$key]->updated_at = getDateFormat($mainCategory->updated_at, '1');
+                }       
+            }
+
+            /***save filter****/
+			/*
+			if(isset($page_type) && $page_type=='sub_category')
+			{
+				$this->setFilter('sub_category',$request);
+			}
+			else
+			{
+				$this->setFilter('category',$request);
+			}
+			*/
+            
+
+            
+        }catch(QueryException $e){
+            $response = ['status'=>'fail','msg'=>$e->getMessage()];
+        }
+        
+        return $response;
     }
 
 }

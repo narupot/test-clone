@@ -45,7 +45,7 @@ class OrderController extends MarketPlace
     }
 
     public function listOrderData(Request $request){
-        $perpage = !empty($request->pq_rpp) ? $request->pq_rpp : 10;
+        $perpage = !empty($request->pq_rpp) ? $request->pq_rpp : getPagination('limit');
         $request->page = $current_page = !empty($request->pq_curpage)?$request->pq_curpage:0;
 
         $start_index = ($current_page - 1) * $perpage;
@@ -149,7 +149,7 @@ class OrderController extends MarketPlace
             }
 
             /***save filter****/
-            $this->setFilter('main_order',$request);
+            /* $this->setFilter('main_order',$request); */
 
             
         }catch(QueryException $e){
@@ -180,6 +180,34 @@ class OrderController extends MarketPlace
         
         //dd($order_shop);
         $transaction = \App\OrderTransaction::where('order_id',$main_order->id)->orderBy('id')->get();
+		
+		$main_order->pickup_time = null;
+		if($main_order->id>0)
+		{
+			$order_info = Order::where('id',$main_order->id)->first();
+			if($order_info)
+			{
+				$main_order->pickup_time=$order_info->pickup_time;
+			}
+		}
+		
+		/* Start:: If Product Detail Not Available in Order Details */
+		if(count($order_shop))
+		{
+			foreach($order_shop as $skey => $shop_ord_val)
+				{
+					foreach($shop_ord_val->details as $key => $val)
+					{
+						if($val->description=='' || $val->description==null)
+						{
+							$productDetail = \App\Product::getProductDetail($val->sku);
+							$order_shop[$skey]->details[$key]->description=($productDetail->productDesc->description!='')?$productDetail->productDesc->description:"";
+						}
+					}
+				}
+		}
+		/* Start:: If Product Detail Not Available in Order Details */
+		
         return view('admin.transaction.mainOrddetail',['main_order' => $main_order,'order_shop'=>$order_shop,'transaction'=>$transaction]);
     }
     /*********** for check create order json ************/

@@ -53,8 +53,8 @@
                     <div class="col-md-5">
                         <label>@lang('admin_product.size') <i class="strick">*</i></label>
                         <select name="size">
-                            @foreach(CustomHelpers::getBadgeSize() as $key => $value)
-                                <option value="{{ $key }}">{{ $value }}</option>
+                            @foreach($size_grade['size'] as $key => $value)
+                                <option value="{{ $value['slug'] }}">{{ $value['name'] }}</option>
                             @endforeach
                         </select>
                         <p class="error" id="size"></p>
@@ -65,8 +65,8 @@
                     <div class="col-md-5">
                         <label>@lang('admin_product.grade') <i class="strick">*</i></label>
                         <select name="grade">
-                            @foreach(CustomHelpers::getBadgeGrade() as $key => $value)
-                                <option value="{{ $key }}">{{ $value }}</option>
+                            @foreach($size_grade['grade'] as $key => $value)
+                                <option value="{{ $value['slug'] }}">{{ $value['name'] }}</option>
                             @endforeach
                         </select>
                         
