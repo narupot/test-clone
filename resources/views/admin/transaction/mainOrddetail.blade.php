@@ -232,7 +232,13 @@
                                                         {{$val->api_remark}}
                                                     </li>
 													@php 
-														$str_description = chunk_split($val->description, 30, "\n\r");
+														$str_description = $val->description;
+														$str_description = strip_tags($str_description);
+														if (strlen($str_description) > 30) {
+															$stringCut = substr($str_description, 0, 30);
+															$strEndPoint = strrpos($stringCut, ' ');
+															$str_description = $strEndPoint? substr($stringCut, 0, $strEndPoint) : substr($stringCut, 0);
+														}
 													@endphp
 													<li>{{$str_description}}</li> 
                                                 </ul>
