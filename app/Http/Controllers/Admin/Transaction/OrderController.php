@@ -201,7 +201,7 @@ class OrderController extends MarketPlace
 						if($val->description=='' || $val->description==null)
 						{
 							$productDetail = \App\Product::getProductDetail($val->sku);
-							$order_shop[$skey]->details[$key]->description=($productDetail->productDesc->description!='')?$productDetail->productDesc->description:"";
+							$order_shop[$skey]->details[$key]->description=isset($productDetail->productDesc)?$productDetail->productDesc->description:"";
 						}
 					}
 				}
