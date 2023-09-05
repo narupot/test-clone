@@ -231,7 +231,10 @@
                                                     <li>
                                                         {{$val->api_remark}}
                                                     </li>
-													<li>{{$val->description}}</li> 
+													@php 
+														$str_description = chunk_split($val->description, 30, "\n\r");
+													@endphp
+													<li>{{$str_description}}</li> 
                                                 </ul>
                                             @endforeach                     
                                             

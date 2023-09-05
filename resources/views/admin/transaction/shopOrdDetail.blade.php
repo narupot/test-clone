@@ -181,7 +181,10 @@
                                                 <li>@if($val->status!=4) <a href="javascript:;" data-type='cancel' data-val="{{ $val->id }}" class="ord_item_change">@lang('common.cancel')</a> @endif | <a href="javascript:;" data-type='receive' data-val="{{ $val->id }}" class="ord_item_change">@lang('admin_order.center_received')</a></li> 
                                             @endif 
 											-->
-											<li>{{$val->description}}</li>
+											@php 
+												$str_description = chunk_split($val->description, 30, "\n\r");
+											@endphp
+											<li>{{$str_description}}</li>
                                         </ul>
                                     @endforeach                     
                                     
