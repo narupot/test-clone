@@ -121,7 +121,7 @@
                                         <!-- <li>@lang('checkout.credit_from_shop')</li> -->
                                         <li>@lang('checkout.payment_method')</li>
                                         <li>@lang('common.status')</li>
-                                        <!-- <li>@lang('common.action')</li> -->
+                                        <li>@lang('common.action')</li>
 										<li>@lang('checkout.details')</li>
                                     </ul>
                                 </div>
@@ -172,15 +172,15 @@
                                             <!-- <li>{{ $val->payment_type=='credit'? numberFormat($val->total_price):'' }} @lang('common.baht')</li> -->    
 
                                             <li>{!! $detail_json['payment_method'][session('default_lang')] ?? str_replace('_',' ',strtoupper($val->payment_slug)) !!}</li>   
-                                            <li class="red" id="item_status_{{ $val->id }}">{{ $val->getOrderStatus->status??'' }}</li> 
-											<!--
+                                            <li class="red" id="item_status_{{ $val->id }}">{{ $val->getOrderStatus->status??'' }}</li>
+											
                                             @if(!$order_shop->end_shopping_date || $order_shop->order_status ==3 || $order_shop->order_status ==4)
                                             <li></li>
                                             @else
                                                 
                                                 <li>@if($val->status!=4) <a href="javascript:;" data-type='cancel' data-val="{{ $val->id }}" class="ord_item_change">@lang('common.cancel')</a> @endif | <a href="javascript:;" data-type='receive' data-val="{{ $val->id }}" class="ord_item_change">@lang('admin_order.center_received')</a></li> 
-                                            @endif 
-											-->
+                                            @endif
+											
 											@php 
 												$str_description = $val->description;
 												$str_description = strip_tags($str_description);
@@ -188,7 +188,7 @@
 												if (preg_match($pattern_str, $str_description)) {
 													$strdesclen=30;
 												} else {
-													$strdesclen=90;
+													$strdesclen=80;
 												} 
 												if (strlen($str_description) > $strdesclen) {
 													$stringCut = substr($str_description, 0, $strdesclen);
