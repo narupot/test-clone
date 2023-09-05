@@ -184,17 +184,7 @@
 											@php 
 												$str_description = $val->description;
 												$str_description = strip_tags($str_description);
-												$pattern_str = '/^[A-Za-z0-9]+$/';
-												if (preg_match($pattern_str, $str_description)) {
-													$strdesclen=30;
-												} else {
-													$strdesclen=80;
-												} 
-												if (strlen($str_description) > $strdesclen) {
-													$stringCut = substr($str_description, 0, $strdesclen);
-													$strEndPoint = strrpos($stringCut, ' ');
-													$str_description = $strEndPoint? substr($stringCut, 0, $strEndPoint) : substr($stringCut, 0);
-												}
+												$str_description = mb_substr($str_description, 0, 30);
 											@endphp
 											<li>{!!$str_description!!}</li>
                                         </ul>
