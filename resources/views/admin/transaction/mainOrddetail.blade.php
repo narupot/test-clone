@@ -238,7 +238,7 @@
 														if (preg_match($pattern_str, $str_description)) {
 															$strdesclen=30;
 														} else {
-															$strdesclen=90;
+															$strdesclen=80;
 														} 
 														if (strlen($str_description) > $strdesclen) {
 															$stringCut = substr($str_description, 0, $strdesclen);
