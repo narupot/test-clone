@@ -231,7 +231,12 @@
                                                     <li>
                                                         {{$val->api_remark}}
                                                     </li>
-													<li>{{$val->description}}</li> 
+													@php 
+														$str_description = $val->description;
+														$str_description = strip_tags($str_description);
+														$str_description = mb_substr($str_description, 0, 30);
+													@endphp
+													<li>{!!$str_description!!}</li> 
                                                 </ul>
                                             @endforeach                     
                                             
