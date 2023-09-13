@@ -5,7 +5,7 @@
             <select name="size" id="size">
                 <option value="">@lang('product.select_size')</option>
                 @foreach(CustomHelpers::getBadgeSize() as $key => $value)
-                    <option @if($$badge && $key == $badge->size) selected="selected" @endif value="{{ $key }}">{{ $value }}</option>
+                    <option @if($badge && $key == $badge->size) selected="selected" @endif value="{{ $key }}">{{ $value }}</option>
                 @endforeach
             </select>
         </div>
@@ -13,7 +13,7 @@
             <select name="grade" id="grade">
                 <option value="">@lang('product.select_grade')</option>
                 @foreach(CustomHelpers::getBadgeGrade() as $key => $value)
-                    <option value="{{ $key }}"  @if($$badge && $key == $badge->grade) selected="selected" @endif>{{ $value }}</option>
+                    <option value="{{ $key }}"  @if($badge && $key == $badge->grade) selected="selected" @endif>{{ $value }}</option>
                 @endforeach
             </select>
             <div class="size-popup mt-2"><a class="link-primary" href="javascript:;"  data-toggle="modal" data-target="#standard_size_popup">Standard Size Popup</a></div>
