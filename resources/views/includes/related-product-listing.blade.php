@@ -34,6 +34,7 @@
                    <div class="shop-name">
                         <a ng-href="<%item.shop.shop_url%>" ng-bind="item.shop.shop_name"></a>
                    </div>
+                   <span>ราคาปัจจุบัน</span>
                    <div class="price-wrap" ng-if="item.show_price == 1">
                         <div class="price"><%item.unit_price%> @lang('common.baht')/<%item.package_name%></div>
                    </div>
