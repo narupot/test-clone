@@ -19,6 +19,7 @@ class Kernel extends ConsoleKernel
         '\App\Console\Commands\ExportOrder',
         '\App\Console\Commands\CancelPendingOrder',
         '\App\Console\Commands\CompleteOrder',
+        '\App\Console\Commands\ClearApiLog',
         '\App\Console\Commands\CartNotificationForExpire'
     ];
 
@@ -36,16 +37,19 @@ class Kernel extends ConsoleKernel
         $cancel_pending_order = base_path("storage/logs/cancel_pending_order.log");
         $cart_notification_expire = base_path("storage/logs/cart_notification_expire.log");
         $cancel_pending_order = base_path("storage/logs/complete_order.log");
+        $clear_api_log = base_path("storage/logs/clear_api_log.log");
 
-        $schedule->command('sendOrderLogistic:sendOrderLogistic')->everyMinute()->sendOutputTo($send_order_logistic); 
-        $schedule->command('ClearCartItem:clearCartItem')->everyMinute()->sendOutputTo($send_clear_cart); 
+        $schedule->command('sendOrderLogistic:sendOrderLogistic')->withoutOverlapping()->everyMinute()->sendOutputTo($send_order_logistic); 
+        $schedule->command('ClearCartItem:clearCartItem')->withoutOverlapping()->everyMinute()->sendOutputTo($send_clear_cart); 
         $schedule->command('ExportOrder:exportOrder')->dailyAt('01:00')->sendOutputTo($send_export_order); 
         //cancel online pending order whose payment pending
-        $schedule->command('CancelPendingOrder:cancelPendingOrder')->everyMinute()->sendOutputTo($cancel_pending_order);
+        $schedule->command('CancelPendingOrder:cancelPendingOrder')->withoutOverlapping()->everyMinute()->sendOutputTo($cancel_pending_order);
 
-        $schedule->command('CartNotificationForExpire:cartNotificationForExpire')->everyMinute()->sendOutputTo($cart_notification_expire);
+        $schedule->command('CartNotificationForExpire:cartNotificationForExpire')->withoutOverlapping()->everyMinute()->sendOutputTo($cart_notification_expire);
 
         $schedule->command('CompleteOrder:completeOrder')->dailyAt('18:00')->sendOutputTo($send_export_order); 
+
+        $schedule->command('ClearApiLog:clearApiLog')->dailyAt('23:00')->sendOutputTo($clear_api_log); 
 
     }
 
