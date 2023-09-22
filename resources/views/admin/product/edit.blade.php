@@ -66,7 +66,7 @@
                                             <input type="radio" name="product_cat" value="{{$prod_cat->id}}" @if($prod_cat->id == $result->cat_id)checked="checked" @endif>
                                             <span class="radio-mark"></span>
                                         </label>
-                                        <div class="prod-name">{{$prod_cat->category_name}}</div>
+                                        <div class="prod-name text-center">{{$prod_cat->category_name}}</div>
                                     </li>
                                 @endforeach
                             @endif
