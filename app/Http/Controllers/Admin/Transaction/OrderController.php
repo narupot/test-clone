@@ -149,8 +149,7 @@ class OrderController extends MarketPlace
             }
 
             /***save filter****/
-            /* $this->setFilter('main_order',$request); */
-
+            $this->setFilter('main_order',$request); 
             
         }catch(QueryException $e){
             $response = ['status'=>'fail','msg'=>$e->getMessage()];

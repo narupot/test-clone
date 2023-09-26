@@ -1,7 +1,7 @@
 @extends('layouts/admin/default')
 
 @section('title')
-    @lang('admin_product.product_list')
+    @lang('admin_order.shop_order_list')
 @stop
 
 @section('header_styles')

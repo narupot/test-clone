@@ -99,6 +99,7 @@
                             </div>
                         </div>
                     </div>
+                    <span>ราคาปัจจุบัน</span>
                     <div class="price-box">
                         @if(!$productDetail->show_price)
                             <span class="price">@lang('product.ask_the_price_from_the_store')</span>
