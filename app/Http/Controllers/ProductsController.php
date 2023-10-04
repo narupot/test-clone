@@ -440,9 +440,9 @@ class ProductsController extends MarketPlace {
         //$search = $request->search;
         $search = stripTags($request->search);
         $range_flag = false;
-        $page_item = $request->itemsPerPage;
-        $order_by = $request->orderBy;
-        $order = $request->order;
+        $page_item = stripTags($request->itemsPerPage);
+        $order_by = stripTags($request->orderBy);
+        $order = stripTags($request->order);
 
         $referer_url = $request->headers->get('referer');
         $breadcrumb = $this->getBreadcrumb(null);
@@ -497,9 +497,9 @@ class ProductsController extends MarketPlace {
         $filter_attributes = $request->fillterAttributes;
         $name = stripTags($request->search);
         $range_flag = false;
-        $page_item = $request->itemsPerPage;
-        $order_by = $request->orderBy;
-        $order = $request->order;
+        $page_item = stripTags($request->itemsPerPage);
+        $order_by = stripTags($request->orderBy);
+        $order = stripTags($request->order);
         $cat_ids= null; 
         
         if(!is_null($filter_attributes) && count($filter_attributes['cat_ids'] ?? [])>0){
