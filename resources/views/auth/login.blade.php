@@ -52,7 +52,7 @@
 
                 <div class="form-group">
                     <label>@lang('auth.password')</label>
-                    <input type="password" name="login_password" id="login_password">
+                    <input type="password" name="login_password" id="login_password" autocomplete="off">
                 </div>
 
                 <div class="form-group">
