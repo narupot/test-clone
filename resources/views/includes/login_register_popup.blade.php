@@ -18,7 +18,7 @@
 
                 <div class="form-group">
                     <label>@lang('auth.password')</label>
-                    <input type="password" name="login_password" id="login_password">
+                    <input type="password" name="login_password" id="login_password" autocomplete="off">
                 </div>
 
                 <div class="form-group">
@@ -132,12 +132,12 @@
                             {{ csrf_field() }}
                             <div class="form-group">
                                 <label>@lang('auth.new_password')<i class="red">*</i></label>
-                                <input type="password" name="password">
+                                <input type="password" name="password" autocomplete="off">
                                 <p class="error"></p>
                             </div>
                             <div class="form-group">
                                 <label>@lang('auth.confirm_new_password')<i class="red">*</i></label>
-                                <input type="password" name="password_confirm">
+                                <input type="password" name="password_confirm" autocomplete="off">
                                 <p class="error"></p>
                             </div>
                             <div class="text-right">

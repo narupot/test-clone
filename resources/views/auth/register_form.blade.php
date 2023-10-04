@@ -68,12 +68,12 @@
     </div>
     <div class="form-group">
         <label>@lang('auth.password')<i class="red">*</i></label>
-        <input type="password" name="password">
+        <input type="password" name="password" autocomplete="off">
         <p id="password" class="error">{{ $errors->first('password') }}</p>
     </div>
     <div class="form-group">
         <label>@lang('auth.confirm_password')<i class="red">*</i></label>
-        <input type="password" name="password_confirm">
+        <input type="password" name="password_confirm" autocomplete="off">
         <p id="password_confirm" class="error">{{ $errors->first('password_confirm') }}</p>
     </div>
     <div class="form-group">
