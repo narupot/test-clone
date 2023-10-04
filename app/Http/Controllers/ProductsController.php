@@ -63,7 +63,7 @@ class ProductsController extends MarketPlace {
         $referer_url = url()->current();
         
         //dd($referer_url);
-
+        $url = stripTags($url);
         $parent_cat_detail = \App\MongoCategory::where('url',$url)->first();
 
         //dd($parent_cat_detail);
@@ -125,6 +125,7 @@ class ProductsController extends MarketPlace {
         
         $referer_url = $request->server('REQUEST_SCHEME')."://".$request->server('HTTP_HOST').'/'.$request->server('REQUEST_URI');
         //dd($referer_url);
+        $url = stripTags($url);
         $parent_cat_detail = \App\MongoCategory::where('url',$url)->first();
         //dd($parent_cat_detail);
         if(empty($parent_cat_detail)){
@@ -436,7 +437,8 @@ class ProductsController extends MarketPlace {
 
     public function search(Request $request){
         //dd($request->all());
-        $search = $request->search;
+        //$search = $request->search;
+        $search = stripTags($request->search);
         $range_flag = false;
         $page_item = $request->itemsPerPage;
         $order_by = $request->orderBy;
@@ -445,7 +447,8 @@ class ProductsController extends MarketPlace {
         $referer_url = $request->headers->get('referer');
         $breadcrumb = $this->getBreadcrumb(null);
 
-        $search = trim($request->search);
+        //$search = trim($request->search);
+
         $this->validate($request, ['search' => 'required']);
 
         $cat_data = \App\MongoCategory::where('category_name','like','%'.$search.'%')->select('category_name','img','url')->get()->toArray();
@@ -492,7 +495,7 @@ class ProductsController extends MarketPlace {
     public function getProductsBysearch(Request $request){
 
         $filter_attributes = $request->fillterAttributes;
-        $name = trim($request->search);
+        $name = stripTags($request->search);
         $range_flag = false;
         $page_item = $request->itemsPerPage;
         $order_by = $request->orderBy;
@@ -672,7 +675,7 @@ class ProductsController extends MarketPlace {
     public function getProductsShopBysearch(Request $request){
 
         //$filter_attributes = $request->fillterAttributes;
-        $name = trim($request->search);
+        $name = stripTags($request->search);
         $range_flag = false;
         /*$page_item = $request->itemsPerPage;
         $order_by = $request->orderBy;
@@ -723,7 +726,7 @@ class ProductsController extends MarketPlace {
     public function getShopBysearch(Request $request){
 
         //$filter_attributes = $request->fillterAttributes;
-        $name = trim($request->search);
+        $name = stripTags($request->search);
 
         $shop_closed_id = \App\MongoShop::where('shop_status','close')->pluck('_id')->toArray();
         $cat_Ids = [];
@@ -757,7 +760,7 @@ class ProductsController extends MarketPlace {
     }
 
     public function autosearch(Request $request){
-        $term = $request->term;
+        $term = stripTags($request->term);
         $autoData = [];
         $data = [];
         if($request->searchtype=='all'){
@@ -1067,7 +1070,7 @@ class ProductsController extends MarketPlace {
 
         $blade = $request->blade;
         $filter_attributes = $request->fillterAttributes;
-        $name = $request->search;
+        $name = stripTags($request->search);
         $page_item = $request->itemsPerPage; 
         $order_by = $request->orderBy;
         $order = $request->order;
