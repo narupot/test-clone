@@ -38,8 +38,11 @@ class ClearApiLog extends Command
      */
     public function handle()
     {
-        
+        $clear_log_days = \App\SystemConfig::getSystemValFromDb('CLEAR_MOBILE_API_LOG');
         $date = date('Y-m-d H:i:s');
+        $new_time = date($date, strtotime('-'.$clear_log_days, strtotime($date)));
+
+       
         $del_time = date("Y-m-d H:i:s", strtotime('-2 month', strtotime($date)));
         $clear_log = \App\ApiLog::where('created_at','<',$del_time)->delete();
     }
