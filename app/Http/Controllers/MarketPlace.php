@@ -177,7 +177,21 @@ class MarketPlace extends Controller {
                 }
             }
             else {
-                $files['file']->move($files['path'], $file_name);  // upload original image not resize
+                $sizeImage = $files['file']->getSize();
+                if($sizeImage > 2048){
+                    if(!is_dir($files['path'])) {               
+                            mkdir($files['path'], 0777, true);               
+                    } 
+                    $files['width'] = '600';
+                    $files['height'] = '800';
+                    Image::make($files['file']->getRealPath())->fit($files['width'], $files['height'], function ($constraint) {
+                            $constraint->aspectRatio();
+                            $constraint->upsize();
+                        })->save($files['path'].'/'.$file_name); 
+                }else{
+                    $files['file']->move($files['path'], $file_name);  // upload original image not resize
+
+                }
             }
             
             return $file_name;
