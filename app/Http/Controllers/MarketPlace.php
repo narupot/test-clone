@@ -182,8 +182,11 @@ class MarketPlace extends Controller {
                     if(!is_dir($files['path'])) {               
                             mkdir($files['path'], 0777, true);               
                     } 
-                    $files['width'] = '600';
-                    $files['height'] = '800';
+                    $width = Image::make($files['file']->getRealPath())->width(); 
+                    $height = Image::make($files['file']->getRealPath())->height();
+                    $percent = .5;
+                    $files['width'] = $width*$percent;
+                    $files['height'] = $height*$percent;
                     Image::make($files['file']->getRealPath())->fit($files['width'], $files['height'], function ($constraint) {
                             $constraint->aspectRatio();
                             $constraint->upsize();
