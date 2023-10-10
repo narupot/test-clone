@@ -39,15 +39,17 @@ class ResizeImage extends Command
      */
     public function handle()
     {
-            $totalProductCount = \App\Product::where('status', '1')->where('id', 1028)->count();
+            $totalProductCount = \App\Product::where('status', '1')->count();
             $countPerpage = 500;
             $totpages = ceil($totalProductCount/$countPerpage); 
             $original_image_path = Config::get('constants.product_original_image_path');
             $product_img_url = Config::get('constants.product_img_url').'original/';
             for($i=1; $i<=$totpages; $i++){
                 $offset =  $countPerpage * ($i-1);
-                $results = \App\Product::where('status', '1')->where('id', 1028)->with('images')->offset($offset)->limit($countPerpage);
+                $results = \App\Product::where('status', '1')->with('images')->offset($offset)->limit($countPerpage);
+                $results = $results->get();
                 foreach($results as $result){
+                    $logdata = [];
                     foreach($result->images as $value){
                         $original_image = $original_image_path.'/'.$value->image;
                         $sizeImage = @filesize($original_image);
@@ -63,10 +65,16 @@ class ResizeImage extends Command
                                     $constraint->upsize();
                                 })->save($original_image);
 
+                            $logdata[] = ['product_id' => $result->id, 'product_sku'=>$result->sku, 'image'=>$value->image];
+
                         }    
                     }
+                    \App\ResizeImageLog::insert($logdata);
+
                 }
-            }    
+            }
+
+        echo 'done';        
     }
   
 } 
