@@ -65,7 +65,7 @@ class ResizeImage extends Command
                                     $constraint->upsize();
                                 })->save($original_image);
 
-                            $logdata[] = ['product_id' => $result->id, 'product_sku'=>$result->sku, 'image'=>$value->image];
+                            $logdata[] = ['product_id' => $result->id, 'product_sku'=>$result->sku, 'image'=>$value->image, 'created_at'=>date('Y-m-d H:i:s')];
 
                         }    
                     }
