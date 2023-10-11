@@ -60,12 +60,18 @@ class ResizeImage extends Command
                             $percent = .5;
                             $newWidth = $width*$percent;
                             $newHeight = $height*$percent;
-                            Image::make($original_image)->fit($newWidth, $newHeight, function ($constraint) {
+                            $msg = 'done';
+                            try {
+                                Image::make($original_image)->fit($newWidth, $newHeight, function ($constraint) {
                                     $constraint->aspectRatio();
                                     $constraint->upsize();
                                 })->save($original_image);
+                            } catch (\Exception $e) {
+                                $msg = $e->getMessage(); 
+                            }
+                            
 
-                            $logdata[] = ['product_id' => $result->id, 'product_sku'=>$result->sku, 'image'=>$value->image, 'created_at'=>date('Y-m-d H:i:s')];
+                            $logdata[] = ['product_id' => $result->id, 'product_sku'=>$result->sku, 'image'=>$value->image, 'msg'=>$msg, 'created_at'=>date('Y-m-d H:i:s')];
 
                         }    
                     }
