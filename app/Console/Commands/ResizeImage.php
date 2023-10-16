@@ -62,10 +62,13 @@ class ResizeImage extends Command
                             $newHeight = $height*$percent;
                             $msg = 'done';
                             try {
-                                Image::make($original_image)->fit($newWidth, $newHeight, function ($constraint) {
-                                    $constraint->aspectRatio();
-                                    $constraint->upsize();
-                                })->save($original_image);
+                                if(!empty($newWidth) && !empty($newHeight)){
+                                    Image::make($original_image)->fit($newWidth, $newHeight, function ($constraint) {
+                                        $constraint->aspectRatio();
+                                        $constraint->upsize();
+                                    })->save($original_image);
+                                }
+
                             } catch (\Exception $e) {
                                 $msg = $e->getMessage(); 
                             }
