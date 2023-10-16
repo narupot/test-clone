@@ -70,7 +70,7 @@ class ResizeImageByFolder extends Command
                     }
                     
 
-                    $logdata[] = ['product_id' => '000', 'product_sku'=>'BYSCAN', 'image'=>$value->image, 'msg'=>$msg, 'created_at'=>date('Y-m-d H:i:s')];
+                    $logdata[] = ['product_id' => '000', 'product_sku'=>'BYSCAN', 'image'=>$image, 'msg'=>$msg, 'created_at'=>date('Y-m-d H:i:s')];
 
                 }    
             }
