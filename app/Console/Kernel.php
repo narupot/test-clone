@@ -55,7 +55,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('ClearApiLog:clearApiLog')->dailyAt('23:00')->sendOutputTo($clear_api_log);
 
-        $schedule->command('ResizeImage:resizeimage')->dailyAt('01:00')->sendOutputTo($resize_image_log);  
+        //$schedule->command('ResizeImage:resizeimage')->dailyAt('01:00')->sendOutputTo($resize_image_log);  
 
         
 
