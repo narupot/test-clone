@@ -58,8 +58,11 @@ class ResizeImage extends Command
                             $width = Image::make($original_image)->width(); 
                             $height = Image::make($original_image)->height();
                             $percent = .5;
-                            $newWidth = $width*$percent;
-                            $newHeight = $height*$percent;
+                            $newWidth = floor($width*$percent);
+                            $newHeight = floor($height*$percent);
+                            
+                            $newWidth = (int) $newWidth;
+                            $newHeight = (int) $newHeight;
                             $msg = 'done';
                             try {
                                 if(!empty($newWidth) && !empty($newHeight)){
