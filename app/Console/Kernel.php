@@ -22,6 +22,7 @@ class Kernel extends ConsoleKernel
         '\App\Console\Commands\ClearApiLog',
         '\App\Console\Commands\CartNotificationForExpire',
         '\App\Console\Commands\ResizeImage',
+        '\App\Console\Commands\ResizeImageByFolder',
 
     ];
 
