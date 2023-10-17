@@ -20,7 +20,10 @@ class Kernel extends ConsoleKernel
         '\App\Console\Commands\CancelPendingOrder',
         '\App\Console\Commands\CompleteOrder',
         '\App\Console\Commands\ClearApiLog',
-        '\App\Console\Commands\CartNotificationForExpire'
+        '\App\Console\Commands\CartNotificationForExpire',
+        '\App\Console\Commands\ResizeImage',
+        '\App\Console\Commands\ResizeImageByFolder',
+
     ];
 
     /**
@@ -39,6 +42,8 @@ class Kernel extends ConsoleKernel
         $cancel_pending_order = base_path("storage/logs/complete_order.log");
         $clear_api_log = base_path("storage/logs/clear_api_log.log");
 
+        $resize_image_log = base_path("storage/logs/resize_image_log.log");
+
         $schedule->command('sendOrderLogistic:sendOrderLogistic')->withoutOverlapping()->everyMinute()->sendOutputTo($send_order_logistic); 
         $schedule->command('ClearCartItem:clearCartItem')->withoutOverlapping()->everyMinute()->sendOutputTo($send_clear_cart); 
         $schedule->command('ExportOrder:exportOrder')->dailyAt('01:00')->sendOutputTo($send_export_order); 
@@ -49,7 +54,11 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('CompleteOrder:completeOrder')->dailyAt('18:00')->sendOutputTo($send_export_order); 
 
-        $schedule->command('ClearApiLog:clearApiLog')->dailyAt('23:00')->sendOutputTo($clear_api_log); 
+        $schedule->command('ClearApiLog:clearApiLog')->dailyAt('23:00')->sendOutputTo($clear_api_log);
+
+        //$schedule->command('ResizeImage:resizeimage')->dailyAt('01:00')->sendOutputTo($resize_image_log);  
+
+        
 
     }
 

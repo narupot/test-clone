@@ -39,7 +39,7 @@
                             </div>
                             <div class="form-group">
                                 <i class="fas fa-unlock-alt licon"></i>
-                                <input type="password" id="password" name="password" placeholder="Enter a password" />
+                                <input type="password" id="password" name="password" placeholder="Enter a password" autocomplete="off"/>
                                 <i class="fas fa-eye ricon" onclick="pwdShow()"></i>
                             </div>
                             <div class="form-group">

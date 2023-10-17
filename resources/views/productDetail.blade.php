@@ -49,7 +49,7 @@
                 <div class="zoom-gallery">
                     <div class="product-main-img">
                         <div data-slide-id="zoom" class="zoom-gallery-slide active">
-                            <a href="@if(isset($productImage[0])){{ $productImage[0]->large }}@endif" class="MagicZoom" id="zoom-v">
+                            <a href="@if(isset($productImage[0])){{ $productImage[0]->original }}@endif" class="MagicZoom" id="zoom-v">
                                 <img src="@if(isset($productImage[0])){{ $productImage[0]->large }}@endif"/>
                             </a>
 
@@ -66,7 +66,7 @@
                       
                     <div class="selectors vertical-thumb MagicScroll magic-slider MagicScroll-horizontal" data-options="items: 4; step: 1;arrows: inside">
                         @foreach($productImage as $imgkey => $imgVal)  
-                            <a data-slide-id="zoom" @if($imgkey == 0) class="active" @endif href="{{ $imgVal->original }}" data-image="{{ $imgVal->large }}" data-zoom-id="zoom-v">
+                            <a data-slide-id="zoom" @if($imgkey == 0) class="active" @endif href="{{ $imgVal->original }}" data-image="{{ $imgVal->original }}" data-zoom-id="zoom-v">
                                 <img src="{{ $imgVal->thumb }}" width="60" height="50" />
                             </a>
                         @endforeach                           
