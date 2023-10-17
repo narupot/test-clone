@@ -38,9 +38,6 @@ class ClearApiLog extends Command
      */
     public function handle()
     {
-        
-        $date = date('Y-m-d H:i:s');
-        $del_time = date("Y-m-d H:i:s", strtotime('-2 month', strtotime($date)));
         $clear_log = \App\ApiLog::where('created_at','<',$del_time)->delete();
     }
   

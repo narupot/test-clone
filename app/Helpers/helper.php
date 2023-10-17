@@ -1681,3 +1681,7 @@ function convert_string($price){
 	$price  = str_replace('.00', '', $price);
 	return $price;
 }
+
+function stripTags($text=''){
+   return trim(strip_tags($text));
+}
