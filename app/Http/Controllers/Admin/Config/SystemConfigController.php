@@ -467,7 +467,7 @@ class SystemConfigController extends MarketPlace
 
         $arr = ['name'=>$name,'location'=>$location,'contact'=>$contact];
 
-        $json = json_encode($arr);
+        $json = jsonEncode($arr);
 
         $update = SystemConfig::where('system_name','PICKUP_CENTER')->update(['system_val'=>$json]);
         $request->delivery_type = 'pickup_center';
