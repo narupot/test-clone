@@ -58,66 +58,104 @@ class ProductsController extends MarketPlace {
     }
 
 
+    // public function category(Request $request, $url){
+        
+    //     $referer_url = url()->current();
+    //     $url = stripTags($url);
+    //     $parent_cat_detail = \App\MongoCategory::where('url',$url)->first();
+    //     if(empty($parent_cat_detail)){
+    //         abort(404);
+    //     }
+        
+
+
+    //     if($parent_cat_detail->parent_id<1){
+    //         // if category is parent category show the subcategory
+
+    //         $child_cat_data = \App\MongoCategory::where('parent_id',$parent_cat_detail->id)->select('url','category_name','img')->where('status','1')->get();
+
+    //         if(count($child_cat_data)){
+    //             foreach ($child_cat_data as $key => $value) {
+    //                 $tot_prd = \App\MongoProduct::where(['cat_id'=>$value->id,'status'=>'1','stock'=>'1'])->count();
+    //                 $child_cat_data[$key]->tot_prd = $tot_prd>0?$tot_prd:0;
+                    
+    //             }
+    //         }
+    //     }else{
+    //         // if category is child category 
+    //         $child_cat_data = [];
+    //     }
+
+    //     $breadcrumb = $this->getBreadcrumb($referer_url);
+    //     $selectedAttributes ='';
+    //     if(isset($request->filter_by)){
+    //         $selectedAttributes = json_encode(['badge'=>[$request->filter_by]]);
+    //     }
+    //     //$selectedAttributes = $selectedAttributesvalue ='';
+    //     if($parent_cat_detail->parent_id<1){
+    //       $page = 'category';
+    //       return view('categoryList',['parent_cat_detail'=>$parent_cat_detail,'child_cat_data'=>$child_cat_data->toJson(),'selectedAttributes'=>$selectedAttributes,'page'=>$page,'result'=>$parent_cat_detail]); 
+    //     }else{
+    //         /*****getting badge data********/
+    //         $range_flag = false;
+    //         $data = \App\MongoProduct::where('cat_id',$parent_cat_detail->_id)->select('badge_id','unit_price')->OrderBy('updated_at','DESC')->where('status',"1")->where('stock',"1")->get();
+            
+    //         if(count($data)){
+    //           $data = $data->toArray();
+    //           $all_badges = array_unique(array_column($data, 'badge_id'));
+    //           $all_prices = array_unique(array_column($data, 'unit_price'));
+    //           if(count($all_prices)>=2){
+    //             $range_flag = true;
+    //           }
+    //           $all_badges = \App\MongoBadge::whereIn('_id',$all_badges)->get();
+    //         }else{
+    //           $all_badges = null;
+    //         }
+    //       $page = 'category';  
+    //       return view('categoryProductList',['parent_cat_detail'=>$parent_cat_detail,'show_per_page'=>json_encode(getShowRangePerPage()),'order_by_item'=>json_encode(getSortingItems()),'rating_star_item'=>json_encode(getRatingStarItems()),'breadcrumb'=>$breadcrumb,'selectedAttributes'=>$selectedAttributes,'badges'=>$all_badges,'price_flag'=>$range_flag,'page'=>$page,'result'=>$parent_cat_detail]);  
+    //     }
+      
+    // }
+
     public function category(Request $request, $url){
         
-        $referer_url = url()->current();
-        
+        $referer_url = $request->server('REQUEST_SCHEME')."://".$request->server('HTTP_HOST').'/'.$request->server('REQUEST_URI');
         //dd($referer_url);
         $url = stripTags($url);
         $parent_cat_detail = \App\MongoCategory::where('url',$url)->first();
-
         //dd($parent_cat_detail);
         if(empty($parent_cat_detail)){
             abort(404);
         }
         
 
-
-        if($parent_cat_detail->parent_id<1){
-            // if category is parent category show the subcategory
-
-            $child_cat_data = \App\MongoCategory::where('parent_id',$parent_cat_detail->id)->select('url','category_name','img')->where('status','1')->get();
-
-            if(count($child_cat_data)){
-                foreach ($child_cat_data as $key => $value) {
-                    $tot_prd = \App\MongoProduct::where(['cat_id'=>$value->id,'status'=>'1','stock'=>'1'])->count();
-                    $child_cat_data[$key]->tot_prd = $tot_prd>0?$tot_prd:0;
-                    
-                }
-            }
-        }else{
-            // if category is child category 
-            $child_cat_data = [];
-        }
-
+        $child_cat_data = [];
         $breadcrumb = $this->getBreadcrumb($referer_url);
         $selectedAttributes ='';
-        if(isset($request->filter_by)){
-            $selectedAttributes = json_encode(['badge'=>[$request->filter_by]]);
-        }
-        //$selectedAttributes = $selectedAttributesvalue ='';
-        if($parent_cat_detail->parent_id<1){
-          $page = 'category';
-          return view('categoryList',['parent_cat_detail'=>$parent_cat_detail,'child_cat_data'=>$child_cat_data->toJson(),'selectedAttributes'=>$selectedAttributes,'page'=>$page,'result'=>$parent_cat_detail]); 
-        }else{
+        
             /*****getting badge data********/
-            $range_flag = false;
-            $data = \App\MongoProduct::where('cat_id',$parent_cat_detail->_id)->select('badge_id','unit_price')->OrderBy('updated_at','DESC')->where('status',"1")->where('stock',"1")->get();
+        $range_flag = false;
+        //$data = \App\MongoProduct::where('cat_id',$parent_cat_detail->_id)->select('badge_id','unit_price', 'shop_id')->OrderBy('updated_at','DESC')->where('status',"1")->get();
+        
+
+        $data = \App\MongoProduct::where('cat_id',$parent_cat_detail->_id)->where('status',"1")->OrderBy('updated_at','DESC')->groupBy('shop_id')->get(['shop_id','badge_id','unit_price']);
+
+        //dd($data);
             
-            if(count($data)){
-              $data = $data->toArray();
-              $all_badges = array_unique(array_column($data, 'badge_id'));
-              $all_prices = array_unique(array_column($data, 'unit_price'));
-              if(count($all_prices)>=2){
+        if(count($data)){
+            $data = $data->toArray();
+            $all_badges = array_unique(array_column($data, 'badge_id'));
+            $all_prices = array_unique(array_column($data, 'unit_price'));
+            if(count($all_prices)>=2){
                 $range_flag = true;
-              }
-              $all_badges = \App\MongoBadge::whereIn('_id',$all_badges)->get();
-            }else{
-              $all_badges = null;
             }
-          $page = 'category';  
-          return view('categoryProductList',['parent_cat_detail'=>$parent_cat_detail,'show_per_page'=>json_encode(getShowRangePerPage()),'order_by_item'=>json_encode(getSortingItems()),'rating_star_item'=>json_encode(getRatingStarItems()),'breadcrumb'=>$breadcrumb,'selectedAttributes'=>$selectedAttributes,'badges'=>$all_badges,'price_flag'=>$range_flag,'page'=>$page,'result'=>$parent_cat_detail]);  
+            $all_badges = \App\MongoBadge::whereIn('_id',$all_badges)->get();
+        }else{
+            $all_badges = null;
         }
+        $page = 'category';  
+        return view('searchCategoryProductList',['parent_cat_detail'=>$parent_cat_detail,'show_per_page'=>json_encode(getShowRangePerPage()),'order_by_item'=>json_encode(getSortingItems()),'rating_star_item'=>json_encode(getRatingStarItems()),'breadcrumb'=>$breadcrumb,'selectedAttributes'=>$selectedAttributes,'badges'=>$all_badges,'price_flag'=>$range_flag,'page'=>$page,'result'=>$parent_cat_detail]);  
+    
       
     }
 
