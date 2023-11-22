@@ -38,7 +38,7 @@ class OrderController extends MarketPlace {
     }
 
     public function orderHistoryData(Request $request){
-        $column_arr = ['end_shopping_date','shop_formatted_id','user_name','shipping_method','order_status','action'];
+        $column_arr = ['os.end_shopping_date','os.shop_formatted_id','os.user_name','os.shipping_method','os.order_status','action'];
         $draw        = $request->draw;
         $start       = $request->start; //Start is the offset
         $length      = $request->length; //How many records to show
@@ -55,16 +55,26 @@ class OrderController extends MarketPlace {
         $user_id = Auth::id();
         $shop_id = session('user_shop_id');
         $check_date = date('Y-m-d');
-        $order_data = OrderShop::where('shop_id',$shop_id)->where('end_shopping_date','!=',null)->Where(function($query) use($check_date){
+        /*$order_data = OrderShop::where('shop_id',$shop_id)->where('end_shopping_date','!=',null)->Where(function($query) use($check_date){
                 $query->whereNotIn('order_status',[1,2,5,8]);
                 $query->orWhereRaw(DB::raw("(order_status in(2,5,8) and date(seller_status_at) < '$check_date')"));
-            });
+            });*/
+        //new qry status complete or cancel or pickup date has passed
+        $order_data= DB::table(with(new OrderShop)->getTable().' as os')
+                ->join(with(new Order)->getTable().' as o', 'os.order_id', '=', 'o.id')
+                ->join(with(new \App\OrderStatusDesc)->getTable().' as osd', 'os.order_status', '=', 'osd.order_status_id')
+                ->select('os.end_shopping_date','os.shop_formatted_id','os.user_name','os.shipping_method','osd.status')
+                ->where('os.shop_id',$shop_id)
+                ->Where(function($query) use($check_date){
+                    $query->whereIn('os.order_status',[3,4]);
+                    $query->orWhere('o.pickup_time','<',$check_date);
+                });
 
         if(!empty($searchValue)){
-            $order_data->where('shop_formatted_id', 'LIKE',"%{$searchValue}%");
+            $order_data->where('os.shop_formatted_id', 'LIKE',"%{$searchValue}%");
         }
 
-        $order_list = $order_data->with('getOrderStatus')->orderBy($order_by_column, $dir)->paginate($length);
+        $order_list = $order_data->orderBy($order_by_column, $dir)->paginate($length);
         $data = array();
         if(!empty($order_list)){
 
@@ -75,7 +85,7 @@ class OrderController extends MarketPlace {
                 $nestedData['buyer_name'] = $ord_val->user_name;
                 $nestedData['shop_formatted_id'] = '<a href="'.action('Seller\OrderController@details',$ord_val->shop_formatted_id).'" class="link-skyblue">'.$ord_val->shop_formatted_id.'</a>';
 
-                $nestedData['status'] = $ord_val->getOrderStatus->status??'';
+                $nestedData['status'] = $ord_val->status;
 
                 $nestedData['shipping_method'] = GeneralFunctions::getShippingMethod($ord_val->shipping_method);
                 $nestedData['action'] = "<a href='".action('Seller\OrderController@details',$ord_val->shop_formatted_id)."' class='skyblue'>".Lang::get('common.view_detail')."</a>";
