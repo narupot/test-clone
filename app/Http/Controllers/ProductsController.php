@@ -820,6 +820,56 @@ class ProductsController extends MarketPlace {
 
         /*return ['detail'=>$product_data,'status'=>'success','cat_data'=>$product_cats,'badges'=>$all_badges,'price_flag'=>$range_flag];*/
     }
+    public function getProductsShopByCategory(Request $request){
+
+        $name = stripTags($request->search);
+        $range_flag = false;
+        $cat_ids= null; 
+
+        /*$cat_data = \App\MongoCategory::where('category_name','like','%'.$name.'%')->where('status',"1")->where('parent_id','>',0)->select('category_name','img','url')->get()->toArray();
+        if(count($cat_data)){
+            $cat_ids = array_unique(array_column($cat_data, '_id'));
+        }else{
+            $cat_ids = [];  
+        }
+        $product_data_list =  \App\MongoProduct::whereIn('cat_id',$cat_ids)->where('status',"1")->select('badge_id','unit_price','cat_id')->get();
+        $product_cat_ids = [];
+        if(count($product_data_list)){
+            $product_data_list = $product_data_list->toArray(); 
+            $product_cat_ids = array_unique(array_column($product_data_list, 'cat_id'));
+        }*/
+        $cat_check= \App\MongoCategory::where('category_name',$name)->where('status',"1")->first();
+        if($cat_check){
+            $categor_id =$cat_check->_id;
+            $cat_array= \App\MongoCategory::where('parent_id',$categor_id)->pluck('_id')->toArray();
+        }
+        $shop_closed_id = \App\MongoShop::where('shop_status','close')->orWhere('status','0')->pluck('_id')->toArray();
+        $cat_Ids = \App\MongoProduct::where('status','1')->where('stock','1');
+        $cat_Ids = $cat_Ids->whereIn('shop_id',$shop_closed_id)->pluck('cat_id','cat_id')->toArray();
+        $product_data = \App\MongoCategory::whereNotIn('_id', $cat_Ids)->whereIn('_id',$cat_array)->where('status',"1")->select('category_name','img','url')->get()->toArray(); 
+        
+        //$product_data = \App\MongoCategory::whereIn('_id',$product_cat_ids)->select('category_name','img','url')->get()->toArray();
+        
+        $i=0;
+        foreach ($product_data as $key => $result) {            
+            $product_data[$i]['url'] = action('ProductsController@categorySearch', $result['url']);
+            $product_data[$i]['name'] = $result['category_name'];
+            $product_data[$i]['value'] = $result['category_name'];
+            $product_data[$i]['sku'] = '';
+            $product_data[$i]['price'] = '';
+            $product_data[$i]['image'] = getCategoryImageUrl($result['img']);
+
+            $product_data[$i]['shop_name'] = '';//$result['shop']['shop_name'];
+            $product_data[$i]['type'] = 'product';
+            $product_data[$i]['i'] = $i;            
+            $i++;            
+        }
+
+
+        return ['detail'=>$product_data,'status'=>'success'];
+
+        /*return ['detail'=>$product_data,'status'=>'success','cat_data'=>$product_cats,'badges'=>$all_badges,'price_flag'=>$range_flag];*/
+    }
     
     public function getShopBysearch(Request $request){
 

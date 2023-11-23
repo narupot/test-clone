@@ -13,7 +13,7 @@
     var browser_url =  window.location.pathname;
     var cate_id = null;
     var name = "{{isset($search) ? $search: '' }}";    
-    var getproductURL = "{{action('ProductsController@getProductsShopBysearch')}}";
+    var getproductURL = "{{action('ProductsController@getProductsShopByCategory')}}";
     var getshopURL = "{{action('ProductsController@getShopBysearch')}}";
     
     //for routing url (query string)
