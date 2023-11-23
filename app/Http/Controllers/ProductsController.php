@@ -471,6 +471,60 @@ class ProductsController extends MarketPlace {
 
     }
 
+    public function newCategory(Request $request, $url){
+        //dd($request->all());
+        //$search = $request->search;
+        $search = stripTags($request->search);
+        $range_flag = false;
+        $page_item = stripTags($request->itemsPerPage);
+        $order_by = stripTags($request->orderBy);
+        $order = stripTags($request->order);
+
+        $referer_url = $request->headers->get('referer');
+        $breadcrumb = $this->getBreadcrumb(null);
+
+        //$search = trim($request->search);
+
+        $this->validate($request, ['search' => 'required']);
+
+        $cat_data = \App\MongoCategory::where('url',$search)->select('category_name','img','url')->get()->toArray();
+
+        if(count($cat_data)){
+            $cat_ids = array_unique(array_column($cat_data, '_id'));
+        }else{
+            $cat_ids = [];  
+        }
+
+        $filtered_products =  \App\MongoProduct::whereIn('cat_id',$cat_ids)->select('badge_id','unit_price','cat_id')->get();
+
+        $badges = [];
+        $product_cat_ids = [];
+        if(count($filtered_products)){
+            $filtered_products = $filtered_products->toArray();
+            $badges = array_unique(array_column($filtered_products, 'badge_id'));
+            $prices = array_unique(array_column($filtered_products, 'unit_price'));
+            $product_cat_ids = array_unique(array_column($filtered_products, 'cat_id'));
+        }
+        
+        if(count($badges)){
+            $all_badges = \App\MongoBadge::whereIn('_id',$badges)->get();
+        }else{
+            $all_badges = json_encode([]);
+        }
+
+        if(isset($prices) && count($prices)){
+            $range_flag = true;
+        }
+
+        $product_cats = [];
+        foreach ($cat_data as $key => $value){
+            if(in_array($value['_id'], $product_cat_ids)){
+                $product_cats[]= $value;
+            }
+        }
+        
+        return view('searchProductShopList',['status'=>'success','show_per_page'=>json_encode(getShowRangePerPage()),'breadcrumb'=>$breadcrumb,'order_by_item'=>json_encode(getSortingItems()),'rating_star_item'=>json_encode(getRatingStarItems()),'search'=>$search,'cat_data'=>$product_cats,'badges'=>$all_badges,'price_flag'=>$range_flag]);        
+    }
 
 
     public function search(Request $request){
