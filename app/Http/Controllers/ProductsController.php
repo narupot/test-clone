@@ -487,7 +487,11 @@ class ProductsController extends MarketPlace {
         //$search = trim($request->search);
 
         //$this->validate($request, ['search' => 'required']);
-        $cat_da = \App\MongoCategory::where('url',$url)->select('category_name','img','url')->first();
+        $cat_da = \App\MongoCategory::where('url',$url)->select('category_name','img','url','parent_id')->first();
+        if($cat_da->parent_id!=0){
+            return redirect()->action('ProductsController@category',$url);
+        
+        }
         $cat_data = \App\MongoCategory::where('url',$url)->select('category_name','img','url')->get()->toArray();
         if(count($cat_data)){
             $search=$cat_da->category_name;
