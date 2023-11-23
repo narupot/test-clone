@@ -474,6 +474,7 @@ class ProductsController extends MarketPlace {
     public function newCategory(Request $request, $url){
         //dd($request->all());
         //$search = $request->search;
+        
         $search = stripTags($request->search);
         $range_flag = false;
         $page_item = stripTags($request->itemsPerPage);
@@ -485,11 +486,12 @@ class ProductsController extends MarketPlace {
 
         //$search = trim($request->search);
 
-        $this->validate($request, ['search' => 'required']);
-
-        $cat_data = \App\MongoCategory::where('url',$search)->select('category_name','img','url')->get()->toArray();
-
+        //$this->validate($request, ['search' => 'required']);
+        $cat_da = \App\MongoCategory::where('url',$url)->select('category_name','img','url')->first();
+        $cat_data = \App\MongoCategory::where('url',$url)->select('category_name','img','url')->get()->toArray();
         if(count($cat_data)){
+            $search=$cat_da->category_name;
+            $request->search=$search;
             $cat_ids = array_unique(array_column($cat_data, '_id'));
         }else{
             $cat_ids = [];  
@@ -522,8 +524,8 @@ class ProductsController extends MarketPlace {
                 $product_cats[]= $value;
             }
         }
-        
-        return view('searchProductShopList',['status'=>'success','show_per_page'=>json_encode(getShowRangePerPage()),'breadcrumb'=>$breadcrumb,'order_by_item'=>json_encode(getSortingItems()),'rating_star_item'=>json_encode(getRatingStarItems()),'search'=>$search,'cat_data'=>$product_cats,'badges'=>$all_badges,'price_flag'=>$range_flag]);        
+        //dd($search);
+        return view('catProductShopList',['status'=>'success','show_per_page'=>json_encode(getShowRangePerPage()),'breadcrumb'=>$breadcrumb,'order_by_item'=>json_encode(getSortingItems()),'rating_star_item'=>json_encode(getRatingStarItems()),'search'=>$search,'cat_data'=>$product_cats,'badges'=>$all_badges,'price_flag'=>$range_flag]);        
     }
 
 
