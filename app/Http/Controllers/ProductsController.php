@@ -870,6 +870,45 @@ class ProductsController extends MarketPlace {
 
         /*return ['detail'=>$product_data,'status'=>'success','cat_data'=>$product_cats,'badges'=>$all_badges,'price_flag'=>$range_flag];*/
     }
+
+    public function getShopByCategory(Request $request){
+
+        //$filter_attributes = $request->fillterAttributes;
+        $name = stripTags($request->search);
+
+        $shop_closed_id = \App\MongoShop::where('shop_status','close')->pluck('_id')->toArray();
+        $cat_Ids = [];
+        $shop_ids = [];
+        $cat_check= \App\MongoCategory::where('category_name',$name)->where('status',"1")->first();
+        if($cat_check){
+            $categor_id =$cat_check->_id;
+            $cat_array= \App\MongoCategory::where('parent_id',$categor_id)->pluck('_id')->toArray();
+            $shop_ids = \App\MongoProduct::where('status','1')->where('stock','1');
+            $shop_ids = $shop_ids->whereNotIn('shop_id',$shop_closed_id)->whereIn('cat_id',$cat_array)->pluck('shop_id')->toArray();
+        
+        }
+        
+        //where('shop_name','like','%'.$name.'%')
+        $product_data = \App\MongoShop::whereIn('_id', $shop_ids)->where('shop_status','open')->where('status','1')->get()->toArray();
+
+            //$data = []; 
+            //dd($product_data);
+        $i = 0;
+        foreach($product_data as $key=>$result){
+            //dd($result->sku);
+            $product_data[$i]['url'] = action('ShopController@index',['shop'=>$result['shop_url']]);
+            $product_data[$i]['name'] = $result['shop_name'];
+            $product_data[$i]['value'] = $result['shop_name'];
+
+            $product_data[$i]['sku'] = '';
+            $product_data[$i]['price'] = '';
+            $product_data[$i]['image'] =  getImgUrl($result['logo'],'logo');
+            $product_data[$i]['type'] = 'shop';
+            $product_data[$i]['i'] = $i;
+            $i++; 
+        }
+        return ['detail'=>$product_data,'status'=>'success'];
+    }
     
     public function getShopBysearch(Request $request){
 

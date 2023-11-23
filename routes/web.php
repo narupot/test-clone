@@ -714,6 +714,7 @@
     Route::any('getproducts', 'ProductsController@getProductsbycategory');
     Route::get('category/{url?}/shop', 'ShopController@shopList');
     Route::post('getproductsShopByCategory', 'ProductsController@getProductsShopByCategory');
+    Route::post('getshopByCategory', 'ProductsController@getShopByCategory');
 
 
     /*search product by search*/
