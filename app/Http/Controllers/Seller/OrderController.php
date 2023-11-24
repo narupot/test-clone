@@ -54,7 +54,7 @@ class OrderController extends MarketPlace {
 
         $user_id = Auth::id();
         $shop_id = session('user_shop_id');
-        $check_date = date('Y-m-d');
+        $check_date = date('Y-m-d H:i:s');
         /*$order_data = OrderShop::where('shop_id',$shop_id)->where('end_shopping_date','!=',null)->Where(function($query) use($check_date){
                 $query->whereNotIn('order_status',[1,2,5,8]);
                 $query->orWhereRaw(DB::raw("(order_status in(2,5,8) and date(seller_status_at) < '$check_date')"));
