@@ -845,8 +845,8 @@ class ProductsController extends MarketPlace {
         }
         $shop_closed_id = \App\MongoShop::where('shop_status','close')->orWhere('status','0')->pluck('_id')->toArray();
         $cat_Ids = \App\MongoProduct::where('status','1')->where('stock','1');
-        $cat_Ids = $cat_Ids->whereIn('shop_id',$shop_closed_id)->pluck('cat_id','cat_id')->toArray();
-        $product_data = \App\MongoCategory::whereNotIn('_id', $cat_Ids)->whereIn('_id',$cat_array)->where('status',"1")->select('category_name','img','url')->get()->toArray(); 
+        $cat_Ids = $cat_Ids->whereNotIn('shop_id',$shop_closed_id)->whereIn('cat_id',$cat_array)->pluck('cat_id','cat_id')->toArray();
+        $product_data = \App\MongoCategory::whereIn('_id', $cat_Ids)->where('status',"1")->select('category_name','img','url')->get()->toArray(); 
         
         //$product_data = \App\MongoCategory::whereIn('_id',$product_cat_ids)->select('category_name','img','url')->get()->toArray();
         
