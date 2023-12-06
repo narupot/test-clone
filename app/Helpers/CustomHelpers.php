@@ -177,7 +177,8 @@ class CustomHelpers {
         if(!empty($item)){
             if($item->menu_type == 'Category'){
                 $catslug = \App\Category::where('id', $item->assoc_item_id)->value('url');
-                $url = action('ProductsController@category', $catslug);
+                //$url = action('ProductsController@category', $catslug);
+                $url = action('ProductsController@newCategory', $catslug);
             }elseif($item->menu_type == 'Pages'){
                 $pageslug = \App\StaticPage::where('id', $item->assoc_item_id)->value('url');
                 $url = action('StaticPageController@pagedata', $pageslug);

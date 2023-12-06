@@ -708,10 +708,13 @@
     Route::get('get-shop-filter','ShopController@shopFilter');
     /*****product********/
     Route::get('category/{url?}', 'ProductsController@category');
+    Route::get('categorys/{url?}', 'ProductsController@newCategory');
     Route::get('categorysearch/{url?}', 'ProductsController@categorySearch');
     Route::any('getsearchproducts', 'ProductsController@getSearchProducts');
     Route::any('getproducts', 'ProductsController@getProductsbycategory');
     Route::get('category/{url?}/shop', 'ShopController@shopList');
+    Route::post('getproductsShopByCategory', 'ProductsController@getProductsShopByCategory');
+    Route::post('getshopByCategory', 'ProductsController@getShopByCategory');
 
 
     /*search product by search*/
