@@ -56,8 +56,8 @@ class ProductController extends MarketPlace
     public function index()
     {
         
-    	$filter = $this->getFilter('product');
-    	//dd($filter);
+        $filter = $this->getFilter('product');
+        //dd($filter);
        return view('admin.product.list', ['filter'=>$filter]);
     }
 
@@ -189,10 +189,10 @@ class ProductController extends MarketPlace
                 )
                 ->join(with(new Shop)->getTable().' as s','p.shop_id', '=', 's.id')
                   ->join(with(new ShopDesc)->getTable().' as sd',
-                  			[
-                  				['s.id', '=', 'sd.shop_id']
+                            [
+                                ['s.id', '=', 'sd.shop_id']
 
-                  			])
+                            ])
                   ->join(with(new User)->getTable().' as u','s.user_id', '=', 'u.id');
                  $query = $query->select('p.id','p.sku','p.thumbnail_image', 'cd.category_name', 'bd.badge_name', 'p.show_price', 'p.unit_price', 'p.stock', 'p.quantity', 'p.status', 'p.created_at', 'p.updated_at', 'p.created_from','s.shop_url','sd.shop_name','u.display_name','c.url as caturl');
             
@@ -615,7 +615,7 @@ class ProductController extends MarketPlace
     public function deleteProductBySky(Request $request){  
         $permission = $this->checkUrlPermission('delete_product_manual');
         if($permission === true) {
-            $productImportMessage = $productImportErrorMessage = 
+            $productImportMessage = $productImportErrorMessage = [];
             $delete_type = $request->delete_type;
             $user_id = Auth::guard('admin_user')->user()->id;
             $errors = [];
@@ -736,7 +736,7 @@ class ProductController extends MarketPlace
                     $globalstate['SuccessMess'] = $productImportMessage;
                 }
 
-                return view('admin.import.deleteProduct',[
+                return view('admin.product.deleteProduct',[
                     'duplicateArr'=>$errors,
                     'percentage'=>(int) $percentage,
                     'actionInsert'=>'1',
