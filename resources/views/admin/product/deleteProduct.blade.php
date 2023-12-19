@@ -20,7 +20,7 @@
     @if($actionInsert==1)    
           <div class="row">
             <div class="col-sm-9">&nbsp;</div>
-            <div class="col-sm-3"><a href="{{action('Admin\Import\ProductImportController@deleteProductManual')}}" class="btn btn-secondary">Go To Delete Product</a></div>
+            <div class="col-sm-3"><a href="{{action('Admin\Product\ProductController@deleteProductManual')}}" class="btn btn-secondary">Go To Delete Product</a></div>
           </div>
        
           @if(count($duplicateArr)>0)
