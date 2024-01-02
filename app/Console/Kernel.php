@@ -23,6 +23,7 @@ class Kernel extends ConsoleKernel
         '\App\Console\Commands\CartNotificationForExpire',
         '\App\Console\Commands\ResizeImage',
         '\App\Console\Commands\ResizeImageByFolder',
+        '\App\Console\Commands\ClearLog',
 
     ];
 
@@ -55,7 +56,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('CompleteOrder:completeOrder')->dailyAt('18:00')->sendOutputTo($send_export_order); 
 
         $schedule->command('ClearApiLog:clearApiLog')->dailyAt('23:00')->sendOutputTo($clear_api_log);
-
+        $schedule->command('ClearLog:clearLog')->dailyAt('23:00');
         //$schedule->command('ResizeImage:resizeimage')->dailyAt('01:00')->sendOutputTo($resize_image_log);  
 
         
