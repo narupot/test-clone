@@ -205,10 +205,13 @@ class OrderController extends MarketPlace {
 
         if($request->section=='ready'){
             $order_data->where(function($query) use($check_date,$prefix){
+                /**removed date condition
+                ->where(DB::raw('date(' . $prefix . 'os.seller_status_at)'), $check_date)
+                and date(".$prefix."os.seller_status_at) = '$check_date'
+                **/
+                $query->whereIn('os.order_status',[3,5,8]);
 
-                $query->whereIn('os.order_status',[3,5,8])->where(DB::raw('date(' . $prefix . 'os.seller_status_at)'), $check_date);
-
-                $query->orWhereRaw("(".$prefix."os.seller_status in('sent') and date(".$prefix."os.seller_status_at) = '$check_date')");
+                $query->orWhereRaw("(".$prefix."os.seller_status in('sent'))");
             });
             
         }else{

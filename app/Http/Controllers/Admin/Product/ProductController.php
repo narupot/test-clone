@@ -921,4 +921,9 @@ class ProductController extends MarketPlace
 
     }
 
+    public function deleteUnusedProductImage(Request $request){
+
+        
+    }
+
 }
