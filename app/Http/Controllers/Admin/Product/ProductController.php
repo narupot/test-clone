@@ -10,6 +10,7 @@ use Session;
 use Config;
 use Auth;
 use DB;
+use File;
 use Lang;
 use App\ShopAssignCategory;
 use App\Currency;
@@ -18,6 +19,8 @@ use App\Shop;
 use App\ShopDesc;
 use App\Seller;
 use App\User;
+use App\Product;
+use App\ProductImage;
 
 
 
@@ -53,8 +56,8 @@ class ProductController extends MarketPlace
     public function index()
     {
         
-    	$filter = $this->getFilter('product');
-    	//dd($filter);
+        $filter = $this->getFilter('product');
+        //dd($filter);
        return view('admin.product.list', ['filter'=>$filter]);
     }
 
@@ -186,10 +189,10 @@ class ProductController extends MarketPlace
                 )
                 ->join(with(new Shop)->getTable().' as s','p.shop_id', '=', 's.id')
                   ->join(with(new ShopDesc)->getTable().' as sd',
-                  			[
-                  				['s.id', '=', 'sd.shop_id']
+                            [
+                                ['s.id', '=', 'sd.shop_id']
 
-                  			])
+                            ])
                   ->join(with(new User)->getTable().' as u','s.user_id', '=', 'u.id');
                  $query = $query->select('p.id','p.sku','p.thumbnail_image', 'cd.category_name', 'bd.badge_name', 'p.show_price', 'p.unit_price', 'p.stock', 'p.quantity', 'p.status', 'p.created_at', 'p.updated_at', 'p.created_from','s.shop_url','sd.shop_name','u.display_name','c.url as caturl');
             
@@ -500,6 +503,11 @@ class ProductController extends MarketPlace
             abort(404);
         }
         try{
+            $product_images = \App\ProductImage::where('product_id',$id)->pluck('image')->toArray();
+            if(count($product_images)){
+                $product_images = array_unique($product_images);
+                $del = $this->deletePrdImageByImages($product_images);
+            }
            $result->delete();
            \App\MongoProduct::deleteData($id);
             $msg_text = Lang::get('product.product_delete_successfully');
@@ -523,7 +531,12 @@ class ProductController extends MarketPlace
                 if (!$result){
                     abort(404);
                 }
-                $result->save();
+                $product_images = \App\ProductImage::where('product_id',$id)->pluck('image')->toArray();
+                if(count($product_images)){
+                    $product_images = array_unique($product_images);
+                    $del = $this->deletePrdImageByImages($product_images);
+                }
+                $result->delete();
                 \App\MongoProduct::deleteData($id);
                 /*try{
                    $result->delete();
@@ -583,6 +596,334 @@ class ProductController extends MarketPlace
 
             return $sql;   
         }
+    }
+
+    public function deleteProductManual(Request $request){
+        $permission = $this->checkUrlPermission('delete_product_manual');
+        if($permission === true) {
+            return view('admin.product.deleteProduct',[
+                    'duplicateArr'=>[],
+                    'percentage'=>0,
+                    'actionInsert'=>'0',
+                    'class'=>'',
+                    'globalstate'=>[]
+             ]);
+        }
+
+    }
+
+    public function deleteProductBySky(Request $request){  
+        $permission = $this->checkUrlPermission('delete_product_manual');
+        if($permission === true) {
+            $productImportMessage = $productImportErrorMessage = [];
+            $delete_type = $request->delete_type;
+            $user_id = Auth::guard('admin_user')->user()->id;
+            $errors = [];
+            $success = [];
+            $p_id_arr = [];
+            $all_skus = '';
+            $mtime = microtime();
+            $mtime = explode(" ",$mtime);
+            $mtime = $mtime[1] + $mtime[0];
+            $starttime = $mtime;
+            if($delete_type == 'sku'){
+                $sku = $request->sku;
+                $productData = Product::where('sku', $sku)->first();
+                if($productData){
+                    $p_id_arr[] = $productData->id;
+                    $product_images = \App\ProductImage::whereIn('product_id',$p_id_arr)->pluck('image')->toArray();
+                    if(count($product_images)){
+                        $product_images = array_unique($product_images);
+                        $del = $this->deletePrdImageByImages($product_images);
+                    }
+
+                    $response = Product::where('id',$productData->id)->delete();
+                    $monog_del = \App\MongoProduct::deleteData($productData->id);
+              
+                    $logdetails = "Admin has deleted product with sku $sku "; 
+
+                    //Prepaire array for send data
+                    $logdata = array('action_type' =>"deleted",'module_name' =>"Product",'logdetails' =>$logdetails);
+                    //Call method in module
+                    $this->updateLogActivity($logdata);
+
+                    $productImportMessage[] = $sku.' product has deleted with this SKU <br/>';
+                    $percentage = 100;
+                    $class='progress-bar-success';
+                }else{
+                    $percentage = 0;
+                    $class='progress-bar-warning';
+                    $productImportErrorMessage[] = $sku.' this product sku not exist in the database<br>'; 
+                }
+                $mtime = microtime();
+                $mtime = explode(" ",$mtime);
+                $mtime = $mtime[1] + $mtime[0];
+                $endtime = $mtime;
+                $totaltime = ($endtime - $starttime);
+                $globalstate = [];
+                $globalstate['Total Time']=floatval($totaltime).' seconds';
+                $globalstate['Percentage']=$percentage.' %';
+                $globalstate['Success']="<font color='green'><b>".count($productImportMessage).' Items (100%)'."</b></font>";
+                $globalstate['Failed']=count($productImportErrorMessage);
+                $globalstate['Warning']=count($productImportErrorMessage);
+                if(!empty($productImportErrorMessage)){
+                    $globalstate['WarningMess']=$productImportErrorMessage;
+                }
+                if(!empty($productImportMessage)){
+                    $globalstate['SuccessMess'] = $productImportMessage;
+                }
+
+                return view('admin.product.deleteProduct',[
+                    'duplicateArr'=>$errors,
+                    'percentage'=>(int) $percentage,
+                    'actionInsert'=>'1',
+                    'class'=>$class,
+                    'globalstate'=>$globalstate
+                  ]);
+            }elseif ($delete_type=='daterange') {
+                $from_date = date('Y-m-d',strtotime($request->from_date));
+                $to_date = date('Y-m-d',strtotime($request->to_date));
+                $product_data = Product::whereDate('created_at', '>=', $from_date)
+                        ->whereDate('created_at', '<=', $to_date)->select('id','sku')->get();
+                if(count($product_data)){
+                    $all_sku=[];
+                    foreach ($product_data as $key => $value) {
+                        $all_sku[] = $value->sku;
+                        $product_images = \App\ProductImage::where('product_id',$value->id)->pluck('image')->toArray();
+                        if(count($product_images)){
+                            $product_images = array_unique($product_images);
+                            $del = $this->deletePrdImageByImages($product_images);
+                        }
+
+                        $response = Product::where('id',$value->id)->delete();
+                        $monog_del = \App\MongoProduct::deleteData($value->id);
+                    }
+
+                    if(count($all_sku)){
+                        $all_skus = implode(', ',$all_sku);
+                        $productImportMessage[] = $all_skus.' product has deleted with this SKU <br/>';
+                        $percentage = 100;
+                        $class='progress-bar-success';
+                    }
+              
+                    $logdetails = "Admin has deleted product with sku $all_skus "; 
+
+                    //Prepaire array for send data
+                    $logdata = array('action_type' =>"deleted",'module_name' =>"Product",'logdetails' =>$logdetails);
+                    //Call method in module
+                    $this->updateLogActivity($logdata);
+                }else{
+                    $percentage = 0;
+                    $class='progress-bar-warning';
+                    $productImportErrorMessage[] = 'No record exist in this date range'; 
+                }
+
+                $mtime = microtime();
+                $mtime = explode(" ",$mtime);
+                $mtime = $mtime[1] + $mtime[0];
+                $endtime = $mtime;
+                $totaltime = ($endtime - $starttime);
+                $globalstate = [];
+                $globalstate['Total Time']=floatval($totaltime).' seconds';
+                $globalstate['Percentage']=$percentage.' %';
+                $globalstate['Success']="<font color='green'><b>".count($productImportMessage).' Items (100%)'."</b></font>";
+                $globalstate['Failed']=count($productImportErrorMessage);
+                $globalstate['Warning']=count($productImportErrorMessage);
+                if(!empty($productImportErrorMessage)){
+                    $globalstate['WarningMess']=$productImportErrorMessage;
+                }
+                if(!empty($productImportMessage)){
+                    $globalstate['SuccessMess'] = $productImportMessage;
+                }
+
+                return view('admin.product.deleteProduct',[
+                    'duplicateArr'=>$errors,
+                    'percentage'=>(int) $percentage,
+                    'actionInsert'=>'1',
+                    'class'=>$class,
+                    'globalstate'=>$globalstate
+                  ]);
+
+            }elseif ($delete_type=='csv') {
+
+                $mtime = microtime();
+                $mtime = explode(" ",$mtime);
+                $mtime = $mtime[1] + $mtime[0];
+                $starttime = $mtime;
+
+                $this->validate($request, ['import_file' => 'required|mimes:csv,txt']);
+                $csv_folder_path = '/public/csv/';            
+
+                $imageName = md5(microtime()).time().'.'.$request->file('import_file')->getClientOriginalExtension();
+                $original_ext = $request->file('import_file')->getClientOriginalExtension();
+                if($original_ext=='csv'){
+                    //check if directory exists
+                    if(!File::exists(base_path().$csv_folder_path)){
+                     File::makeDirectory(base_path().$csv_folder_path, 0777, true, true);
+                    }else{
+                      //directory already exists;
+                    }
+
+                    //upload image in directory
+                    $response = $request->file('import_file')->move(base_path().$csv_folder_path, $imageName);
+                    $filename_with_path = base_path().$csv_folder_path.$imageName;
+                    if($response){
+                        header('Content-Type: text/html; charset=UTF-8');
+                        $fileD = fopen($filename_with_path,"r");
+                        $column = fgetcsv($fileD); // csv first row column
+
+                        $column = array_filter($column);
+                        $column = array_map('trim', $column);
+                        $column = array_map('strtolower', $column);
+
+                        if(empty($column)){
+                          $errors[] = 'some thing is wrong in this sheet.';  
+                          //return false;
+                        }
+                        //put mapped column name over here
+                        $info_fields = self::mappedColumn($column);
+                        $to_delete = array(false, 'false');
+                        $info_fields= array_diff($info_fields, $to_delete);
+
+                        while(!feof($fileD)){
+                           $rowData[]= fgetcsv($fileD);
+                        }
+
+                        $rowData = array_filter($rowData);
+                        if(empty($rowData)){
+                           $errors[] = 'please enter some data in the sheet.'; 
+                        }
+                        $duplicate = [];
+                        $sku_index = $info_fields['sku_index'];
+                        foreach($rowData as $key=>$value){
+                              if(isset($value[$sku_index]) && !empty($value[$sku_index])){
+                                $duplicate[] = $value[$sku_index];
+                              }
+                        }
+                        $to_delete = array('1', 1);
+                        $duplicateSkuCounts = array_diff(array_count_values($duplicate), $to_delete);
+                        if(count($duplicateSkuCounts) > 0){
+                             foreach($duplicateSkuCounts as $key=>$duplicateSkuCount){
+                               //echo $key.'====>'.$duplicateSkuCount.'<br/>';
+                             }
+                             $errors[] = 'Duplicate skus in the sheet.'; 
+                        }
+                        $product_img_arr = [];
+                        $pid_arr = [];
+                        if(empty($errors)){
+                            foreach($rowData as $key=>$value){
+                                $p_id_arr = [];
+                                $all_skus = '';
+                                $sku = $value[$sku_index];
+                                $productData = Product::where('sku', $sku)->first();
+                                if($productData){
+                                    array_push($p_id_arr,(Integer)$productData->id);
+                                    $product_images = \App\ProductImage::whereIn('product_id',$p_id_arr)->pluck('image')->toArray();
+                                    if(count($product_images)){
+                                        $product_images = array_unique($product_images);
+                                        $del = $this->deletePrdImageByImages($product_images);
+                                    }
+
+                                    // for keeping log only get all skus
+                                    $all_sku = $productData->sku;
+
+                                    $response = Product::whereIn('id',$p_id_arr)->delete();
+                                    $monog_del = \App\MongoProduct::deleteData($productData->id);
+
+                                    $logdetails = "Admin has deleted product with sku $all_sku "; 
+
+                                    //Prepaire array for send data
+                                    $logdata = array('action_type' =>"deleted",'module_name' =>"Product",'logdetails' =>$logdetails);
+                                    //Call method in module
+                                    $this->updateLogActivity($logdata);
+                                    $productImportMessage[] = $all_sku.' product has deleted with this SKU <br/>';
+                                }else{
+                                    $productImportErrorMessage[] = $sku.' this product sku not exist in the database<br>';
+                                }
+                            }
+
+                            $success['status'] = 'success';
+                            $success['message'] = ' Imported';
+                        }else{
+                           
+                          $success['status'] = 'fail';
+                          $success['message'] = 'upload failure';
+
+                        }    
+                
+                        /*Uploaded Csv Remove From server*/
+                        @unlink($filename_with_path);
+
+                        $mtime = microtime();
+                        $mtime = explode(" ",$mtime);
+                        $mtime = $mtime[1] + $mtime[0];
+                        $endtime = $mtime;
+                        $totaltime = ($endtime - $starttime);
+                        $totalRows=count($rowData);
+                        $totalInsert = count($productImportMessage);
+                        $percentage = 0 ;
+                        if($totalInsert > 0){
+                            $percentage=($totalInsert/$totalRows)*100;
+                        }
+
+                        $class='';
+                        if($percentage>=0 && $percentage<30){ $class='progress-bar-danger';}
+                        if($percentage>30 && $percentage<50){ $class='progress-bar-warning';}
+                        if($percentage>50 && $percentage<80){ $class='progress-bar-info';}
+                        if($percentage>80 && $percentage<=100){ $class='progress-bar-success';}
+
+                        //Set all Global state Of this Import
+                        $percentage=(int) $percentage;
+                        $globalstate['Total Time']=floatval($totaltime).' seconds';
+                        $globalstate['Percentage']=$percentage.' %';
+                        $globalstate['Success']="<font color='green'><b>".count($productImportMessage).' Items (100%)'."</b></font>";
+                        $globalstate['Failed']=count($productImportErrorMessage);
+                        $globalstate['Warning']=count($productImportErrorMessage);
+                        if(!empty($productImportErrorMessage)){
+                            $globalstate['WarningMess']=$productImportErrorMessage;
+                        }
+                        if(!empty($productImportMessage)){
+                            $globalstate['SuccessMess'] = $productImportMessage;
+                        }
+
+                        if(!empty($notImportcategoryWithProductsku)){
+                            $globalstate['categoryNotUploaded'] = $notImportcategoryWithProductsku;
+                        }
+
+
+                        return view('admin.product.deleteProduct',[
+                            'duplicateArr'=>$errors,
+                            'percentage'=>(int) $percentage,
+                            'actionInsert'=>'1',
+                            'class'=>$class,
+                            'globalstate'=>$globalstate
+                          ]);
+                    }
+
+                }
+
+            } 
+
+        }       
+
+    }
+
+    public static function mappedColumn($column=null, $languages=null){
+                /*main product fields*/
+                $sku = 'sku';
+                $id  = 'id';
+                //getting index of all in column
+                $product_info = [
+                  'sku_index'=>array_search($sku, $column),
+                  'id_index'=>array_search($id, $column)
+                ];
+                return $product_info;
+
+    }
+
+    public function deleteUnusedProductImage(Request $request){
+
+        
     }
 
 }
