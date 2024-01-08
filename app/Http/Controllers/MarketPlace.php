@@ -555,6 +555,24 @@ class MarketPlace extends Controller {
         }
     }
 
+    public function deletePrdImageByImages($product_images){
+
+        $product_path = Config::get('constants.product_path');
+        $subdirectories = scandir($product_path);
+        $required_file_array=[];
+        if(count($subdirectories)){
+            foreach ($subdirectories as $skey => $svalue) {
+                if($svalue{0} !== '.'){
+                    foreach($product_images  as $pimage){
+                        $path = $product_path.'/'.$svalue;
+                        $file_path = $path.'/'.$pimage;
+                        $this->fileDelete($file_path);
+                    } 
+                }
+            }
+        }
+    }
+
     public function formatListingData($product_data, $data = null){
         
 
