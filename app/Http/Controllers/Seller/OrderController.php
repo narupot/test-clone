@@ -209,7 +209,7 @@ class OrderController extends MarketPlace {
                 ->where(DB::raw('date(' . $prefix . 'os.seller_status_at)'), $check_date)
                 and date(".$prefix."os.seller_status_at) = '$check_date'
                 **/
-                $query->whereIn('os.order_status',[3,5,8]);
+                $query->whereIn('os.order_status',[2])->where('os.payment_status',1);
 
                 $query->orWhereRaw("(".$prefix."os.seller_status in('sent'))");
             });
