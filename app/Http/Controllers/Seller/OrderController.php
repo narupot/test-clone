@@ -211,7 +211,7 @@ class OrderController extends MarketPlace {
                 **/
                 $query->whereIn('os.order_status',[2])->where('os.payment_status',1);
 
-                $query->orWhereRaw("(".$prefix."os.seller_status in('sent'))");
+                //$query->orWhereRaw("(".$prefix."os.seller_status in('sent'))");
             });
             
         }else{
