@@ -471,10 +471,12 @@ class ProductsController extends MarketPlace {
 
     }
 
-    public function newCategory(Request $request, $url){
+    public function newCategory(Request $request, $url=null){
         //dd($request->all());
         //$search = $request->search;
-        
+        if(empty($url)){
+            return view('categoryNotFound');  
+        }
         $search = stripTags($request->search);
         $range_flag = false;
         $page_item = stripTags($request->itemsPerPage);
