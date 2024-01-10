@@ -157,9 +157,9 @@ class BadgeController extends MarketPlace
 
                 $file_name = $this->uploadFileCustom($uploadDetails,'1');
 
-                if($badge_dtls->icon){
-                    $this->fileDelete(Config::get('constants.standard_badge_path').'/'.$badge_dtls->icon);
-                }
+                // if($badge_dtls->icon){
+                //     $this->fileDelete(Config::get('constants.standard_badge_path').'/'.$badge_dtls->icon);
+                // }
 
                 $badge_dtls->icon = $file_name;
             }
