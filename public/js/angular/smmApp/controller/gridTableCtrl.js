@@ -218,6 +218,7 @@
                         $scope.displayTotalNumItems = d.total;
                         $scope.showLoaderTable = false;   
                         tableSessionManage("user_action", current_active_tab); 
+                        $('#totpendingitems').html(d.total);
                     }else{                        
                         $scope.no_result_found=true;  
                         // In case response data is empty string
