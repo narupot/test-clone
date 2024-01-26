@@ -462,7 +462,7 @@
         Route::resource('list_customer', 'Admin\Customer\UserController');
         Route::post('deleteSelectedCustomers', 'Admin\Customer\UserController@deleteSelectedCustomers');
         Route::post('changeStatusofSelectedCustomer', 'Admin\Customer\UserController@changeStatusofSelectedCustomer');
-        Route::post('deleteSelectedSeller', 'Admin\Customer\SellerController@deleteSelectedSeller');
+        Route::delete('deleteSelectedSeller', 'Admin\Customer\SellerController@deleteSelectedSeller');
         Route::post('changeStatusofSelectedSeller', 'Admin\Customer\SellerController@changeStatusofSelectedSeller'); 
         Route::get('add_buyer','Admin\Customer\BuyerController@addNewBuyer');
         Route::get('edit-buyer/{id}','Admin\Customer\BuyerController@editBuyer'); 
