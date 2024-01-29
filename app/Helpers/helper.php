@@ -401,17 +401,11 @@ if (! function_exists('getDeliveryItemsForSellerCount')) {
 			$check_date = date('Y-m-d');
 		    $total_records_pending = \App\OrderShop::whereIn('order_status',[1,2])->where('shop_id',$shop_id)->where('end_shopping_date','!=',null)->whereNotIn('seller_status',['sent'])->count();
 
-		    $total_records = \App\OrderShop::where('shop_id', $shop_id)->where('end_shopping_date','!=',null);
-                $total_records->where(function($query) use($check_date){
+		    /*$total_records = \App\OrderShop::where('shop_id', $shop_id)->where('end_shopping_date','!=',null)
+		    	->whereIn('order_status',[2])->where('payment_status',1)->where('seller_status','sent');*/
+            //$total_records_ready = $total_records->count();
 
-                    $query->whereIn('order_status',[3,5,8])->where(DB::raw('date(seller_status_at)'), $check_date);
-
-                    $query->orWhereRaw("(seller_status in('sent') and date(seller_status_at) = '$check_date')");
-                });
-
-            $total_records_ready = $total_records->count();
-
-            return $total_record = $total_records_ready + $total_records_pending;
+            return $total_record =  $total_records_pending;
 		}    
 	}
 }
