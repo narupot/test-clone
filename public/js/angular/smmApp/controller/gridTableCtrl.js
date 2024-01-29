@@ -217,7 +217,7 @@
                         $scope.gridOptions.data = d.data;
                         $scope.displayTotalNumItems = d.total;
                         $scope.showLoaderTable = false;   
-                        tableSessionManage("user_action", current_active_tab); 
+                        tableSessionManage("user_action", current_active_tab);
                     }else{                        
                         $scope.no_result_found=true;  
                         // In case response data is empty string

@@ -35,7 +35,7 @@ $total_delivery_items = getDeliveryItemsForSellerCount();
             <a href="{{action('Seller\OrderController@deliveryList')}}" class="@if(strpos( $_SERVER['REQUEST_URI'], 'order/delivery-list' ) !== false) active @endif"> 
                 <span class="icon-list"><i class="fas fa-truck"></i></span>
                 <span class="tab-name">@lang('order.delivery_list')</span>                                     
-                <span class="info-list">{{$total_delivery_items}}</span>
+                <span class="info-list" id="totpendingitems">{{$total_delivery_items}}</span>
             </a>
         </li>
         
