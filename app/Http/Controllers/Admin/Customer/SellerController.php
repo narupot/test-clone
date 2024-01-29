@@ -512,6 +512,10 @@ class SellerController extends MarketPlace
                 $update_shop = \App\Shop::where('user_id',$id)->update(['status'=>'0','shop_status'=>'close']);
                 $result->status = '2';
                 $result->save();
+
+                $shop_id = \App\Shop::where('user_id',$id)->value('id');
+                $update_data = \App\MongoShop::updateShopColumn($shop_id,'shop_status','close');
+                $update_data = \App\MongoShop::updateShopColumn($shop_id,'status','0');
             }
 
             return ['status'=>'success'];
