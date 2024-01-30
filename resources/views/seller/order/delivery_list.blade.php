@@ -113,13 +113,13 @@
             cellClass : _getInfo('total_final_price','align'),
           }
           ,{ 
-            field : 'created_at',
+            field : 'pickup_time',
             displayName : '@lang('order.order_date')',
             cellTooltip: true,
             enableSorting : false, //_getInfo('paid','sortable'),
-            //width : _getInfo('created_at','width'),
+            //width : _getInfo('pickup_time','width'),
             minWidth: 100,
-            cellClass : _getInfo('created_at','align'),
+            cellClass : _getInfo('pickup_time','align'),
           }
 
           ];
