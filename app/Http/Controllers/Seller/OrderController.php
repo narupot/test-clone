@@ -220,7 +220,11 @@ class OrderController extends MarketPlace {
         }
 
         $order_list = $order_data->paginate($perpage);  
-        
+        $pickup = DeliveryTime::getDeliveryTime();
+        $pickup_time =null;
+        if($pickup){
+            $pickup_time =$pickup->prepare_time_before;
+        }
         if(!empty($order_list)){
             foreach ($order_list as $ord_val){
                 switch ($ord_val->shipping_method) {
@@ -240,7 +244,7 @@ class OrderController extends MarketPlace {
                 $ord_val->status = $ord_val->status;
                 $ord_val->total_final_price = $ord_val->total_final_price.' '.Lang::get('common.currency');
                 $ord_val->url = action('Seller\OrderController@details',$ord_val->shop_formatted_id);
-                $ord_val->pickup_time=$ord_val->pickup_time ? date('Y-m-d H:i',strtotime($ord_val->pickup_time)) : '';
+                $ord_val->pickup_time=$ord_val->pickup_time ? date('Y-m-d H:i',strtotime($ord_val->pickup_time-$pickup_time)) : '';
 
             }
         }
