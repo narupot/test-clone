@@ -114,7 +114,7 @@
           }
           ,{ 
             field : 'pickup_time',
-            displayName : '@lang('order.order_date')',
+            displayName : '@lang('order.pickup_time')',
             cellTooltip: true,
             enableSorting : false, //_getInfo('paid','sortable'),
             //width : _getInfo('pickup_time','width'),
