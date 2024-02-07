@@ -100,7 +100,7 @@
             displayName : '@lang('order.order_status')',
             cellTooltip: true,
             enableSorting : false, //_getInfo('paid','sortable'),
-            minWidth: 250,
+            minWidth: 230,
             //cellClass : _getInfo('status','align'),
           }
           ,{ 
