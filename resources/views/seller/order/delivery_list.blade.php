@@ -100,7 +100,7 @@
             displayName : '@lang('order.order_status')',
             cellTooltip: true,
             enableSorting : false, //_getInfo('paid','sortable'),
-            minWidth: 150,
+            minWidth: 200,
             //cellClass : _getInfo('status','align'),
           }
           ,{ 
@@ -118,7 +118,7 @@
             cellTooltip: true,
             enableSorting : false, //_getInfo('paid','sortable'),
             //width : _getInfo('pickup_time','width'),
-            minWidth: 150,
+            minWidth: 200,
             cellClass : _getInfo('pickup_time','align'),
           }
 
