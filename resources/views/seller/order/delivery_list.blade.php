@@ -93,7 +93,7 @@
             displayName : '@lang('order.shipping_method')',
             cellTooltip: true,
             enableSorting : false, //_getInfo('paid','sortable'),
-            minWidth: 150,
+            minWidth: 160,
             cellClass : _getInfo('shipping_method_name','align'),
           },{ 
             field : 'status',
