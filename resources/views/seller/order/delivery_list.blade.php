@@ -109,7 +109,7 @@
             cellTooltip: true,
             enableSorting : false, //_getInfo('paid','sortable'),
             //width : _getInfo('total_final_price','width'),
-            minWidth: 150,
+            minWidth: 155,
             cellClass : _getInfo('total_final_price','align'),
           }
           ,{ 
