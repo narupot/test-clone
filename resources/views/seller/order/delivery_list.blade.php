@@ -118,7 +118,7 @@
             cellTooltip: true,
             enableSorting : false, //_getInfo('paid','sortable'),
             //width : _getInfo('pickup_time','width'),
-            minWidth: 250,
+            minWidth: 280,
             cellClass : _getInfo('pickup_time','align'),
           }
 
