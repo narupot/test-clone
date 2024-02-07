@@ -84,7 +84,7 @@
             displayName : '@lang('order.order_number')',
             cellTemplate: '<a class="skyblue" href="<%row.entity.url%>"><%row.entity.shop_formatted_id%></a>',
             enableSorting : _getInfo('shop_formatted_id','sortable'),
-            width : 300,
+            width : 200,
            // cellClass : _getInfo('shop_formatted_id','align'),
 
           },
@@ -93,14 +93,14 @@
             displayName : '@lang('order.shipping_method')',
             cellTooltip: true,
             enableSorting : false, //_getInfo('paid','sortable'),
-            minWidth: 100,
+            minWidth: 150,
             cellClass : _getInfo('shipping_method_name','align'),
           },{ 
             field : 'status',
             displayName : '@lang('order.order_status')',
             cellTooltip: true,
             enableSorting : false, //_getInfo('paid','sortable'),
-            minWidth: 100,
+            minWidth: 150,
             //cellClass : _getInfo('status','align'),
           }
           ,{ 
@@ -109,7 +109,7 @@
             cellTooltip: true,
             enableSorting : false, //_getInfo('paid','sortable'),
             //width : _getInfo('total_final_price','width'),
-            minWidth: 100,
+            minWidth: 150,
             cellClass : _getInfo('total_final_price','align'),
           }
           ,{ 
@@ -118,7 +118,7 @@
             cellTooltip: true,
             enableSorting : false, //_getInfo('paid','sortable'),
             //width : _getInfo('pickup_time','width'),
-            minWidth: 100,
+            minWidth: 150,
             cellClass : _getInfo('pickup_time','align'),
           }
 
