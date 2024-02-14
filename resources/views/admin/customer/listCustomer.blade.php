@@ -21,6 +21,7 @@
     <div class="content">
         <div class="header-title">
             <h1 class="title">@lang('admin_customer.customer_attribute_list')</h1>
+            <a href="{{action('Admin\Customer\UserController@downloadPDF')}}">@lang('admin_customer.export_pdf')</a>
         </div>
              
         <!-- Main content -->         

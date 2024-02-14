@@ -120,6 +120,16 @@ class UserController extends MarketPlace
         return $response;
     }
 
+    public function downloadPDF()
+    {
+        $query = User::select('*');
+
+        $pdf = PDF::loadView('admin.customer.downloadPdf', array('users' =>  $query))
+        ->setPaper('a4', 'portrait');
+
+        return $pdf->download('user-list.pdf');   
+    }
+
     public function show($id){
         //dd($id);
         $permission = $this->checkUrlPermission('list_customer');
