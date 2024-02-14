@@ -77,14 +77,14 @@
             cellTemplate: '<span class="product-img"><img src="<%row.entity.image_url%>" width="50" height="50" alt="" ng-hide="!row.entity.image_url"></span><%row.entity.user_name%>',
             enableSorting : _getInfo('buyer_name','sortable'),
             //width : _getInfo('buyer_name','width'),
-            width : 250,
+            width : 200,
             cellClass : _getInfo('buyer_name','align'),
           },{ 
             field : 'shop_formatted_id',
             displayName : '@lang('order.order_number')',
             cellTemplate: '<a class="skyblue" href="<%row.entity.url%>"><%row.entity.shop_formatted_id%></a>',
             enableSorting : _getInfo('shop_formatted_id','sortable'),
-            width : 300,
+            width : 180,
            // cellClass : _getInfo('shop_formatted_id','align'),
 
           },
@@ -93,14 +93,14 @@
             displayName : '@lang('order.shipping_method')',
             cellTooltip: true,
             enableSorting : false, //_getInfo('paid','sortable'),
-            minWidth: 100,
+            minWidth: 160,
             cellClass : _getInfo('shipping_method_name','align'),
           },{ 
             field : 'status',
             displayName : '@lang('order.order_status')',
             cellTooltip: true,
             enableSorting : false, //_getInfo('paid','sortable'),
-            minWidth: 100,
+            minWidth: 230,
             //cellClass : _getInfo('status','align'),
           }
           ,{ 
@@ -109,17 +109,17 @@
             cellTooltip: true,
             enableSorting : false, //_getInfo('paid','sortable'),
             //width : _getInfo('total_final_price','width'),
-            minWidth: 100,
+            minWidth: 155,
             cellClass : _getInfo('total_final_price','align'),
           }
           ,{ 
-            field : 'created_at',
-            displayName : '@lang('order.order_date')',
+            field : 'pickup_time',
+            displayName : '@lang('order.pickup_time')',
             cellTooltip: true,
             enableSorting : false, //_getInfo('paid','sortable'),
-            //width : _getInfo('created_at','width'),
-            minWidth: 100,
-            cellClass : _getInfo('created_at','align'),
+            //width : _getInfo('pickup_time','width'),
+            minWidth: 280,
+            cellClass : _getInfo('pickup_time','align'),
           }
 
           ];

@@ -195,13 +195,14 @@ class OrderController extends MarketPlace {
         $check_date = date('Y-m-d');
         $prefix = DB::getTablePrefix();
         $order_data = DB::table(with(new \App\OrderShop)->getTable().' as os')
+                ->join(with(new \App\Order)->getTable().' as ord', 'os.order_id', '=', 'ord.id')
                 ->leftJoin(with(new \App\User)->getTable().' as u',[['os.user_id', '=', 'u.id']])
                 ->leftJoin(with(new \App\OrderStatusDesc)->getTable().' as osd',[['os.order_status', '=', 'osd.order_status_id']])
                 ->where('os.shop_id',$shop_id)
                 ->where('osd.lang_id',$lang_id)
                 ->where('os.end_shopping_date','!=',null)
                 ->orderBy('os.id', 'desc')
-                ->select('os.user_name','os.shop_formatted_id','os.order_status','os.shipping_method','os.end_shopping_date','os.total_final_price', 'u.image','osd.status');
+                ->select('os.user_name','os.shop_formatted_id','os.order_status','os.shipping_method','os.end_shopping_date','os.total_final_price', 'u.image','osd.status','ord.pickup_time');
 
         if($request->section=='ready'){
             $order_data->where(function($query) use($check_date,$prefix){
@@ -219,7 +220,11 @@ class OrderController extends MarketPlace {
         }
 
         $order_list = $order_data->paginate($perpage);  
-        
+        $pickup = \App\DeliveryTime::getDeliveryTime();
+        $pickup_time =0;
+        if($pickup){
+            $pickup_time =$pickup->prepare_time_before;
+        }
         if(!empty($order_list)){
             foreach ($order_list as $ord_val){
                 switch ($ord_val->shipping_method) {
@@ -239,6 +244,7 @@ class OrderController extends MarketPlace {
                 $ord_val->status = $ord_val->status;
                 $ord_val->total_final_price = $ord_val->total_final_price.' '.Lang::get('common.currency');
                 $ord_val->url = action('Seller\OrderController@details',$ord_val->shop_formatted_id);
+                $ord_val->pickup_time=$ord_val->pickup_time ? date('Y-m-d H:i',strtotime($ord_val->pickup_time)-$pickup_time*60*60) : '';
 
             }
         }
