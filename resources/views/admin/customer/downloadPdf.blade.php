@@ -41,9 +41,9 @@
 <body>
 
     <div style="width: 95%; margin: 0 auto;">
-        <div style="width: 10%; float:left; margin-right: 20px;">
+        <!-- <div style="width: 10%; float:left; margin-right: 20px;">
             <img src="{{ public_path('assets/images/logo.png') }}" width="100%"  alt="">
-        </div>
+        </div> -->
         <div style="width: 50%; float: left;">
             <h1>All User Details</h1>
         </div>
@@ -52,23 +52,33 @@
     <table style="position: relative; top: 50px;">
         <thead>
             <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Date Of Joining</th>
+                <th>@lang('admin_customer.name')</th>
+                <th>@lang('admin_customer.email')</th>
+                <th>@lang('admin_customer.dob')</th>
+                <th>@lang('admin_customer.phone_no')</th>
+                <th>@lang('admin_customer.user_type')</th>
+                <th>@lang('admin_customer.register_from')</th>
+                <th>@lang('admin_customer.status')</th>
+                <th>@lang('admin_customer.verified')</th>
+                <th>@lang('admin_common.created_at')</th>
+                <th>@lang('admin_common.last_updated')</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($users as $user)
                 <tr>
-                    <td data-column="First Name">{{ $user->first_name }}</td>
-                    <td data-column="Last Name">{{ $user->last_name }}</td>
-                    <td data-column="Email" style="color: dodgerblue;">
-                        {{ $user->email }}
-                    </td>
-                    <td data-column="Date">
-                        {{ date('F j, Y', strtotime($user->created_at)) }}
-                    </td>
+                    <td data-column="name">{{ $user->display_name }}</td>
+                    <td data-column="email">{{ $user->email }}</td>
+                    <td data-column="dob">{{ $user->dob }}</td>
+                    <td data-column="phn">{{ $user->ph_number }}</td>
+                    <td data-column="user_type">{{ $user->user_type }}</td>
+                    <td data-column="register_from">{{ $user->register_from }}</td>
+                    <td data-column="status">{{ $user->status }}</td>
+                    <td data-column="status">{{ $user->verified }}</td>
+
+                    <td data-column="status">{{ getDateFormat($row->created_at,9) }}</td>
+                    <td data-column="status">{{ getDateFormat($row->updated_at,9) }}</td>
+
                 </tr>
             @endforeach
         </tbody>
