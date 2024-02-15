@@ -136,6 +136,21 @@ class SellerController extends MarketPlace
         return $response;
     }
 
+    public function downloadPDF()
+    {
+        $query = \DB::table(with(new User)->getTable().' as u')
+                  ->join(with(new Shop)->getTable().' as s', 'u.id', '=', 's.user_id')
+                  ->join(with(new Seller)->getTable().' as se', 'u.id', '=', 'se.user_id')
+                 
+                  ->join(with(new ShopDesc)->getTable().' as sd', 's.id', '=', 'sd.shop_id')
+                  ->select('u.id','u.display_name','s.shop_url','sd.shop_name','u.ph_number','u.register_from','u.dob','s.created_at','s.updated_at','s.panel_no','u.email','u.status','u.verified','se.citizen_id','se.account_name','se.account_no','se.branch','s.seller_unique_id','s.shop_status')
+                  ->where('u.user_type','seller')->get();
+
+        $pdf = PDF::loadView('admin.customer.downloadSellerPdf', array('users' =>  $query));
+
+        return $pdf->download('user-list.pdf');   
+    }
+
 
     public function addSeller(Request $request){
 
