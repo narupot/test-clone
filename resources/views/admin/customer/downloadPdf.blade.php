@@ -8,6 +8,13 @@
     <title>User Details</title>
 
     <style>
+        @font-face {
+        font-family: "THSarabunNew";
+        font-style: normal;
+        font-weight: normal;
+        src: url("{{ asset('pdf_fonts/THSarabunNew.ttf')}}") format("truetype");
+
+        }  
         table {
             width: 95%;
             border-collapse: collapse;
