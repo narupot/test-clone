@@ -66,8 +66,10 @@
                 <th>@lang('admin_customer.email')</th>
                 <th>@lang('admin_customer.dob')</th>
                 <th>@lang('admin_customer.phone_no')</th>
-                <th>@lang('admin_customer.user_type')</th>
-                <th>@lang('admin_customer.register_from')</th>
+                <th>@lang('admin_customer.shop_name')</th>
+                <th>@lang('admin_customer.shop_url')</th>
+                <th>@lang('admin_customer.panel')</th>
+                <th>@lang('admin_customer.shop_status')</th>
                 <th>@lang('admin_customer.status')</th>
                 <th>@lang('admin_customer.verified')</th>
                 <th>@lang('admin_common.created_at')</th>
@@ -81,15 +83,21 @@
                     <td data-column="email">{{ $user->email }}</td>
                     <td data-column="dob">{{ $user->dob }}</td>
                     <td data-column="phn">{{ $user->ph_number }}</td>
-                    <td data-column="user_type">{{ $user->user_type }}</td>
-                    <td data-column="register_from">{{ $user->register_from }}</td>
+                    <td data-column="shop_name">{{ $user->shop_name }}</td>
+                    <td data-column="shop_url">{{ $user->shop_url }}</td>
+                    <td data-column="panel">{{ $user->panel_no }}</td>
+                    <td data-column="shop_status">
+                        @if($user->shop_status=="open")
+                            @lang('admin_customer.open')
+                        @else
+                            @lang('admin_customer.close')
+                        @endif
+                    </td>
                     <td data-column="status">
                         @if($user->status==0)
                             @lang('common.inactive')
-                        @elseif($user->status==1)
-                            @lang('common.active')
                         @else
-                            @lang('common.delete')
+                            @lang('common.active')
                         @endif
                     </td>
                     <td data-column="verified">
