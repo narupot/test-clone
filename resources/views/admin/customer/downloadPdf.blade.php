@@ -75,8 +75,8 @@
                     <td data-column="register_from">{{ $user->register_from }}</td>
                     <td data-column="status">{{ $user->status }}</td>
                     <td data-column="verified">{{ $user->verified }}</td>
-                    <td data-column="created_at">{{ getDateFormat($row->created_at,9) }}</td>
-                    <td data-column="updated_at">{{ getDateFormat($row->updated_at,9) }}</td>
+                    <td data-column="created_at">{{ getDateFormat($user->created_at,9) }}</td>
+                    <td data-column="updated_at">{{ getDateFormat($user->updated_at,9) }}</td>
 
                 </tr>
             @endforeach
