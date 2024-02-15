@@ -1,7 +1,7 @@
 @extends('layouts/admin/default')
 
 @section('title')
-    @lang('admin_customer.customer_attribute_list')
+    @lang('admin_customer.customer_list')
 @stop
 
 @section('header_styles')
@@ -20,7 +20,7 @@
 @section('content')
     <div class="content">
         <div class="header-title">
-            <h1 class="title">@lang('admin_customer.customer_attribute_list')</h1>
+            <h1 class="title">@lang('admin_customer.customer_list')</h1>
             <a href="{{action('Admin\Customer\UserController@downloadPDF')}}">@lang('admin_customer.export_pdf')</a>
         </div>
              
