@@ -23,7 +23,7 @@ use Lang;
 use DB;
 use Session;
 use Config;
-
+use PDF;
 
 class SellerController extends MarketPlace
 { 
