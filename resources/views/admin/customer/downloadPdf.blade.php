@@ -73,8 +73,22 @@
                     <td data-column="phn">{{ $user->ph_number }}</td>
                     <td data-column="user_type">{{ $user->user_type }}</td>
                     <td data-column="register_from">{{ $user->register_from }}</td>
-                    <td data-column="status">{{ $user->status }}</td>
-                    <td data-column="verified">{{ $user->verified }}</td>
+                    <td data-column="status">
+                        @if($user->status==0)
+                            @lang('common.inactive')
+                        @elseif($user->status==1)
+                            @lang('common.active')
+                        @else
+                            @lang('common.delete')
+                        @endif
+                    </td>
+                    <td data-column="verified">
+                        @if($user->verified==0)
+                            @lang('admin_customer.not_verified')
+                        @else
+                            @lang('admin_customer.verified')
+                        @endif
+                    </td>
                     <td data-column="created_at">{{ getDateFormat($user->created_at,9) }}</td>
                     <td data-column="updated_at">{{ getDateFormat($user->updated_at,9) }}</td>
 
