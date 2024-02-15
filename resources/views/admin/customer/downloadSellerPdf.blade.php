@@ -55,7 +55,7 @@
             <img src="{{ public_path('assets/images/logo.png') }}" width="100%"  alt="">
         </div> -->
         <div style="width: 50%; float: left;">
-            <h1>All User Details</h1>
+            <h1>@lang('admin_customer.customer_seller_list')</h1>
         </div>
     </div>
 
