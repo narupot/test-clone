@@ -16,11 +16,14 @@
 
         }  
         table {
+            font-family: "IBM Plex Sans Thai", sans-serif;
             width: 95%;
             border-collapse: collapse;
             margin: 50px auto;
         }
-
+        body {
+            font-family: "IBM Plex Sans Thai", sans-serif;
+        }
         /* Zebra striping */
         tr:nth-of-type(odd) {
             background: #eee;
