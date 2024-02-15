@@ -122,7 +122,7 @@ class UserController extends MarketPlace
 
     public function downloadPDF()
     {
-        $query = User::select('*');
+        $query = User::select('*')->get();
 
         $pdf = PDF::loadView('admin.customer.downloadPdf', array('users' =>  $query));
 
