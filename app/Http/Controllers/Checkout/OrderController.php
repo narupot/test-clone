@@ -155,7 +155,7 @@ class OrderController extends MarketPlace {
                 $billAddArr = self::getAddressArr($billAddInfo);
             }else{
                 $billAddInfo = $shipAddInfo;
-                $billAddArr = self::getAddressArr($shipAddArr);
+                $billAddArr = self::getAddressArr($shipAddInfo);
             }
 
             $order_json = jsonEncode(['shipping_address'=>$shipAddArr,'billing_address'=>$billAddArr,'total_logistic_cost'=>$temp_ord_info->total_logistic_cost]);
