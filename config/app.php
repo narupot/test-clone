@@ -205,6 +205,7 @@ return [
         /* Email server Configuration to manage from database | End */
 
         Barryvdh\DomPDF\ServiceProvider::class,
+        niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
 
 
     ],
@@ -267,7 +268,7 @@ return [
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'VideoApi'  => Sseffa\VideoApi\Facades\VideoApi::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        'PDF' => Barryvdh\DomPDF\Facade::class,
+        'PDF' => niklasravnsborg\LaravelPdf\Facades\Pdf::class
         // Module zipper allias | Added By Dinesh Kumar Kovid | Start
         //'Zipper' => Chumper\Zipper\Zipper::class
 
