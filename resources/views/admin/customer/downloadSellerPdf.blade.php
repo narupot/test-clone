@@ -9,20 +9,18 @@
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;700">
     <style>
         @font-face {
-        font-family: "THSarabunNew";
-        font-style: normal;
-        font-weight: normal;
-        src: url("{{ asset('pdf_fonts/THSarabunNew.ttf')}}") format("truetype");
-
+            font-family: 'examplefont', sans-serif;
+            font-style: normal;
+            font-weight: normal;
         }  
         table {
-            font-family: "IBM Plex Sans Thai", sans-serif;
+            font-family: 'examplefont', sans-serif;
             width: 95%;
             border-collapse: collapse;
             margin: 50px auto;
         }
         body {
-            font-family: "IBM Plex Sans Thai", sans-serif;
+            font-family: 'examplefont', sans-serif;
         }
         /* Zebra striping */
         tr:nth-of-type(odd) {
@@ -48,14 +46,14 @@
 
 </head>
 
-<body>
+<body style="font-family: 'examplefont', sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.3; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;  margin: 0; padding: 0;">
 
     <div style="width: 95%; margin: 0 auto;">
         <!-- <div style="width: 10%; float:left; margin-right: 20px;">
             <img src="{{ public_path('assets/images/logo.png') }}" width="100%"  alt="">
         </div> -->
-        <div style="width: 50%; float: left;">
-            <h1>@lang('admin_customer.customer_seller_list')</h1>
+        <div>
+            <h3>@lang('admin_customer.customer_seller_list')</h3>
         </div>
     </div>
 
