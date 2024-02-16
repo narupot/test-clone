@@ -68,7 +68,8 @@ class OrderController extends MarketPlace {
                 $billAddArr = self::getAddressArr($billAddInfo);
             }else{
                 $billAddInfo = $shipAddInfo;
-                $billAddArr = $shipAddArr;
+                //$billAddArr = $shipAddArr;
+                $billAddArr = self::getAddressArr($shipAddArr);
             }
 
             $order_json = jsonEncode(['shipping_address'=>$shipAddArr,'billing_address'=>$billAddArr,'total_logistic_cost'=>$orderInfo->total_logistic_cost]);
@@ -154,7 +155,7 @@ class OrderController extends MarketPlace {
                 $billAddArr = self::getAddressArr($billAddInfo);
             }else{
                 $billAddInfo = $shipAddInfo;
-                $billAddArr = $shipAddArr;
+                $billAddArr = self::getAddressArr($shipAddArr);
             }
 
             $order_json = jsonEncode(['shipping_address'=>$shipAddArr,'billing_address'=>$billAddArr,'total_logistic_cost'=>$temp_ord_info->total_logistic_cost]);
@@ -391,10 +392,10 @@ class OrderController extends MarketPlace {
     }
 
     public static function getAddressArr($addInfo,$type=null) {
-        if($type){
+        if(!empty($type)){
             $AddressArr = ['shipping_address_id'=>$addInfo->id,'title'=>$addInfo->title,'first_name'=>$addInfo->first_name,'last_name'=>$addInfo->last_name,'provice'=>$addInfo->province_state,'district'=>$addInfo->city_district,'sub_district'=>$addInfo->sub_district,'address'=>$addInfo->address,'road'=>$addInfo->road,'zip_code'=>$addInfo->zip_code,'ph_number'=>$addInfo->ph_number,'company_name'=>$addInfo->company_name,'branch'=>$addInfo->branch,'tax_id'=>$addInfo->tax_id,'company_address'=>$addInfo->company_address];
         }else{
-            $AddressArr = ['title'=>$addInfo->title,'first_name'=>$addInfo->first_name,'last_name'=>$addInfo->last_name,'provice'=>$addInfo->province_state,'district'=>$addInfo->city_district,'sub_district'=>$addInfo->sub_district,'address'=>$addInfo->address,'road'=>$addInfo->road,'zip_code'=>$addInfo->zip_code,'ph_number'=>$addInfo->ph_number,'company_name'=>$addInfo->company_name,'branch'=>$addInfo->branch,'tax_id'=>$addInfo->tax_id,'company_address'=>$addInfo->company_address];
+            $AddressArr = ['billing_address_id'=>$addInfo->id,'title'=>$addInfo->title,'first_name'=>$addInfo->first_name,'last_name'=>$addInfo->last_name,'provice'=>$addInfo->province_state,'district'=>$addInfo->city_district,'sub_district'=>$addInfo->sub_district,'address'=>$addInfo->address,'road'=>$addInfo->road,'zip_code'=>$addInfo->zip_code,'ph_number'=>$addInfo->ph_number,'company_name'=>$addInfo->company_name,'branch'=>$addInfo->branch,'tax_id'=>$addInfo->tax_id,'company_address'=>$addInfo->company_address];
         }
         
         return $AddressArr;
