@@ -459,6 +459,8 @@
 
         /**All buyer and seller (Customers) in admin *******/
         Route::get('list_customer/customerdata', 'Admin\Customer\UserController@customerData');
+        Route::get('list_customer/downloadpdf', 'Admin\Customer\UserController@downloadPDF');
+        Route::get('list_seller/downloadpdf', 'Admin\Customer\SellerController@downloadPDF');
         Route::resource('list_customer', 'Admin\Customer\UserController');
         Route::post('deleteSelectedCustomers', 'Admin\Customer\UserController@deleteSelectedCustomers');
         Route::post('changeStatusofSelectedCustomer', 'Admin\Customer\UserController@changeStatusofSelectedCustomer');
