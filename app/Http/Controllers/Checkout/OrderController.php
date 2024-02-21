@@ -62,13 +62,14 @@ class OrderController extends MarketPlace {
         if($orderInfo->shipping_method == '3') {
 
             $shipAddInfo = ShippingAddress::find($orderInfo->shipping_address_id);
-            $shipAddArr = self::getAddressArr($shipAddInfo);
+            $shipAddArr = self::getAddressArr($shipAddInfo,'ship');
             if($orderInfo->shipping_address_id != $orderInfo->billing_address_id) {
                 $billAddInfo = ShippingAddress::find($orderInfo->billing_address_id);
                 $billAddArr = self::getAddressArr($billAddInfo);
             }else{
                 $billAddInfo = $shipAddInfo;
-                $billAddArr = $shipAddArr;
+                //$billAddArr = $shipAddArr;
+                $billAddArr = self::getAddressArr($shipAddInfo);
             }
 
             $order_json = jsonEncode(['shipping_address'=>$shipAddArr,'billing_address'=>$billAddArr,'total_logistic_cost'=>$orderInfo->total_logistic_cost]);
@@ -148,13 +149,13 @@ class OrderController extends MarketPlace {
         if($temp_ord_info->shipping_method == '3') {
 
             $shipAddInfo = ShippingAddress::find($temp_ord_info->shipping_address_id);
-            $shipAddArr = self::getAddressArr($shipAddInfo);
+            $shipAddArr = self::getAddressArr($shipAddInfo,'ship');
             if($temp_ord_info->shipping_address_id != $temp_ord_info->billing_address_id) {
                 $billAddInfo = ShippingAddress::find($temp_ord_info->billing_address_id);
                 $billAddArr = self::getAddressArr($billAddInfo);
             }else{
                 $billAddInfo = $shipAddInfo;
-                $billAddArr = $shipAddArr;
+                $billAddArr = self::getAddressArr($shipAddInfo);
             }
 
             $order_json = jsonEncode(['shipping_address'=>$shipAddArr,'billing_address'=>$billAddArr,'total_logistic_cost'=>$temp_ord_info->total_logistic_cost]);
@@ -390,10 +391,13 @@ class OrderController extends MarketPlace {
         return view(loadFrontTheme('checkout/payplusresp'));
     }
 
-    public static function getAddressArr($addInfo) {
-
-        $AddressArr = ['title'=>$addInfo->title,'first_name'=>$addInfo->first_name,'last_name'=>$addInfo->last_name,'provice'=>$addInfo->province_state,'district'=>$addInfo->city_district,'sub_district'=>$addInfo->sub_district,'address'=>$addInfo->address,'road'=>$addInfo->road,'zip_code'=>$addInfo->zip_code,'ph_number'=>$addInfo->ph_number,'company_name'=>$addInfo->company_name,'branch'=>$addInfo->branch,'tax_id'=>$addInfo->tax_id,'company_address'=>$addInfo->company_address];
-
+    public static function getAddressArr($addInfo,$type=null) {
+        if(!empty($type)){
+            $AddressArr = ['shipping_address_id'=>$addInfo->id,'title'=>$addInfo->title,'first_name'=>$addInfo->first_name,'last_name'=>$addInfo->last_name,'provice'=>$addInfo->province_state,'district'=>$addInfo->city_district,'sub_district'=>$addInfo->sub_district,'address'=>$addInfo->address,'road'=>$addInfo->road,'zip_code'=>$addInfo->zip_code,'ph_number'=>$addInfo->ph_number,'company_name'=>$addInfo->company_name,'branch'=>$addInfo->branch,'tax_id'=>$addInfo->tax_id,'company_address'=>$addInfo->company_address];
+        }else{
+            $AddressArr = ['billing_address_id'=>$addInfo->id,'title'=>$addInfo->title,'first_name'=>$addInfo->first_name,'last_name'=>$addInfo->last_name,'provice'=>$addInfo->province_state,'district'=>$addInfo->city_district,'sub_district'=>$addInfo->sub_district,'address'=>$addInfo->address,'road'=>$addInfo->road,'zip_code'=>$addInfo->zip_code,'ph_number'=>$addInfo->ph_number,'company_name'=>$addInfo->company_name,'branch'=>$addInfo->branch,'tax_id'=>$addInfo->tax_id,'company_address'=>$addInfo->company_address];
+        }
+        
         return $AddressArr;
     }
 

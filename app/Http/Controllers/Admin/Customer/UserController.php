@@ -17,7 +17,7 @@ use Lang;
 use DB;
 use Session;
 use Config;
-
+use PDF;
 
 class UserController extends MarketPlace
 { 
@@ -118,6 +118,15 @@ class UserController extends MarketPlace
         
 
         return $response;
+    }
+
+    public function downloadPDF()
+    {
+        $query = User::select('*')->get();
+
+        $pdf = PDF::loadView('admin.customer.downloadPdf', array('users' =>  $query));
+
+        return $pdf->download('user-list.pdf');   
     }
 
     public function show($id){

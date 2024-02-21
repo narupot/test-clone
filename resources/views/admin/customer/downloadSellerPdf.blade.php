@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details</title>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;700">
+    <style>
+        @font-face {
+            font-family: 'examplefont', sans-serif;
+            font-style: normal;
+            font-weight: normal;
+        }  
+        table {
+            font-family: 'examplefont', sans-serif;
+            width: 95%;
+            border-collapse: collapse;
+            margin: 50px auto;
+        }
+        body {
+            font-family: 'examplefont', sans-serif;
+        }
+        /* Zebra striping */
+        tr:nth-of-type(odd) {
+            background: #eee;
+        }
+
+        th {
+            background: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+
+        td,
+        th {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+            font-size: 18px;
+        }
+
+
+    </style>
+
+</head>
+
+<body style="font-family: 'examplefont', sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.3; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;  margin: 0; padding: 0;">
+
+    <div style="width: 95%; margin: 0 auto;">
+        <!-- <div style="width: 10%; float:left; margin-right: 20px;">
+            <img src="{{ public_path('assets/images/logo.png') }}" width="100%"  alt="">
+        </div> -->
+        <div>
+            <h3>@lang('admin_customer.customer_seller_list')</h3>
+        </div>
+    </div>
+
+    <table style="position: relative; top: 50px;">
+        <thead>
+            <tr>
+                <th>@lang('admin_customer.name')</th>
+                <th>@lang('admin_customer.email')</th>
+                <th>@lang('admin_customer.dob')</th>
+                <th>@lang('admin_customer.phone_no')</th>
+                <th>@lang('admin_customer.shop_name')</th>
+                <th>@lang('admin_customer.shop_url')</th>
+                <th>@lang('admin_customer.panel')</th>
+                <th>@lang('admin_customer.shop_status')</th>
+                <th>@lang('admin_customer.status')</th>
+                <th>@lang('admin_customer.verified')</th>
+                <th>@lang('admin_common.created_at')</th>
+                <th>@lang('admin_common.last_updated')</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($users as $user)
+                <tr>
+                    <td data-column="name">{{ $user->display_name }}</td>
+                    <td data-column="email">{{ $user->email }}</td>
+                    <td data-column="dob">{{ $user->dob }}</td>
+                    <td data-column="phn">{{ $user->ph_number }}</td>
+                    <td data-column="shop_name">{{ $user->shop_name }}</td>
+                    <td data-column="shop_url">{{ $user->shop_url }}</td>
+                    <td data-column="panel">{{ $user->panel_no }}</td>
+                    <td data-column="shop_status">
+                        @if($user->shop_status=="open")
+                            @lang('admin_customer.open')
+                        @else
+                            @lang('admin_customer.close')
+                        @endif
+                    </td>
+                    <td data-column="status">
+                        @if($user->status==0)
+                            @lang('common.inactive')
+                        @else
+                            @lang('common.active')
+                        @endif
+                    </td>
+                    <td data-column="verified">
+                        @if($user->verified==0)
+                            @lang('admin_customer.not_verified')
+                        @else
+                            @lang('admin_customer.verified')
+                        @endif
+                    </td>
+                    <td data-column="created_at">{{ getDateFormat($user->created_at,9) }}</td>
+                    <td data-column="updated_at">{{ getDateFormat($user->updated_at,9) }}</td>
+
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+</body>
+
+</html>
