@@ -1680,7 +1680,19 @@ function stripTags($text=''){
    return trim(strip_tags($text));
 }
 function checkPermission($slug){
-	$market_place = new \App\Http\Controllers\MarketPlace();
-	$permission = $market_place->checkUrlPermission($slug);
-	return $permission;
+	$menus = \App\Menu::where([['status', '=', '1'],['slug', '=', $slug]])->first();
+	if(!empty($menus)){
+
+		//dd($menus, session('menu_permision_arr'));
+
+		if(!empty(session('menu_permision_arr')) && in_array($menus->id, session('menu_permision_arr'))) {
+				return true;
+		}
+		else {
+			return false;
+		}            
+	}
+	else {
+		return false;
+	}
 }
