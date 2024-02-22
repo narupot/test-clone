@@ -300,8 +300,14 @@ class CartController extends MarketPlace {
 		if(count($orderDetails)){
 			foreach ($orderDetails as $key => $orderItem) {
 				$itemsShipFees =    $this->getCalculateProductsShipFee($orderDetails, $shipping_address,$shipProfileData);
-			    $total_deliver_fee = $itemsShipFees['shipping_fee'];	
-			    $total_logistic_fee = $itemsShipFees['logistic_fee'];
+				if($itemsShipFees && isset($itemsShipFees['shipping_fee'])){
+					$total_deliver_fee = $itemsShipFees['shipping_fee'];	
+			    	$total_logistic_fee = $itemsShipFees['logistic_fee'];
+				}else{
+					$total_deliver_fee = $shipProfileData->minimal_rate;	
+			    	$total_logistic_fee = $shipProfileData->minimal_rate;
+				}
+			    
 
 				/*$itemsShipFee = $this->getProductShipFee($orderItem,$shipping_address,$shipProfileData);
 				$total_deliver_fee += $itemsShipFee['shipping_fee'];	
