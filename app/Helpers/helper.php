@@ -1680,6 +1680,7 @@ function stripTags($text=''){
    return trim(strip_tags($text));
 }
 function checkPermission($slug){
-	$permission = $this->checkUrlPermission($slug);
+	$market_place = new \App\Http\Controllers\MarketPlace();
+	$permission = $market_place->checkUrlPermission($slug);
 	return $permission;
 }
