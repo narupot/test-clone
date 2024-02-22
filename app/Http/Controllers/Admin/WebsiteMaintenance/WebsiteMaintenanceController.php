@@ -174,38 +174,38 @@ class WebsiteMaintenanceController extends MarketPlace
     
     public function updateMaintenance(Request $request){
 
-        if($request->SITE_MAINTENANCE == '0'){
-            /***checking language**/
-            $langcount = \App\Language::where(['isDefault'=>'1','status'=>'1'])->count();
+        // if($request->SITE_MAINTENANCE == '0'){
+        //     /***checking language**/
+        //     $langcount = \App\Language::where(['isDefault'=>'1','status'=>'1'])->count();
 
-            /****checking currency*****/
-            $curcount = \App\Currency::where(['is_default'=>'1','status'=>'1'])->count();
+        //     /****checking currency*****/
+        //     $curcount = \App\Currency::where(['is_default'=>'1','status'=>'1'])->count();
 
-            /***payment method****/
-            $bank = true;
-            $payoptcount = \App\PaymentOption::where(['status'=>'1'])->get();
-            if(count($payoptcount)){
-                $payment_option = true;
-                foreach ($payoptcount as $key => $value) {
-                    if($value->payment_type == '2'){
-                        $bankcount = \App\PaymentBank::where(['status'=>'1'])->count();
-                        $bank = ($bankcount > 0) ? true : false;
-                    }
-                }
-            }else{
-                $payment_option = false;
-            }
+        //     /***payment method****/
+        //     $bank = true;
+        //     $payoptcount = \App\PaymentOption::where(['status'=>'1'])->get();
+        //     if(count($payoptcount)){
+        //         $payment_option = true;
+        //         foreach ($payoptcount as $key => $value) {
+        //             if($value->payment_type == '2'){
+        //                 $bankcount = \App\PaymentBank::where(['status'=>'1'])->count();
+        //                 $bank = ($bankcount > 0) ? true : false;
+        //             }
+        //         }
+        //     }else{
+        //         $payment_option = false;
+        //     }
 
-            /****shipping profile***/
-            $shippingcount = \App\ShippingProfile::where(['status'=>'1'])->count();
+        //     /****shipping profile***/
+        //     $shippingcount = \App\ShippingProfile::where(['status'=>'1'])->count();
 
-            if($langcount && $curcount && $shippingcount && $payment_option && $bank){
+        //     if($langcount && $curcount && $shippingcount && $payment_option && $bank){
                 
-            }else{
-                return ['status'=>'fail','msg'=>Lang::get('admin.please_make_100_before_open_your_shop')];
-            }
+        //     }else{
+        //         return ['status'=>'fail','msg'=>Lang::get('admin.please_make_100_before_open_your_shop')];
+        //     }
             
-        }
+        // }
         $value = $request->SITE_MAINTENANCE;
 
         $update = WebsiteConfiguration::where('website_config_name','SITE_MAINTENANCE')->update(['website_config_value'=>$value]);
