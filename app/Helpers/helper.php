@@ -1679,3 +1679,7 @@ function convert_string($price){
 function stripTags($text=''){
    return trim(strip_tags($text));
 }
+function checkPermission($slug){
+	$permission = $this->checkUrlPermission($slug);
+	return $permission;
+}
