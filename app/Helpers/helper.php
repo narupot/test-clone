@@ -1679,3 +1679,20 @@ function convert_string($price){
 function stripTags($text=''){
    return trim(strip_tags($text));
 }
+function checkPermission($slug){
+	$menus = \App\Menu::where([['status', '=', '1'],['slug', '=', $slug]])->first();
+	if(!empty($menus)){
+
+		//dd($menus, session('menu_permision_arr'));
+
+		if(!empty(session('menu_permision_arr')) && in_array($menus->id, session('menu_permision_arr'))) {
+				return true;
+		}
+		else {
+			return false;
+		}            
+	}
+	else {
+		return false;
+	}
+}
