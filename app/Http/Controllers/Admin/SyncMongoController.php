@@ -82,7 +82,7 @@ class SyncMongoController extends MarketPlace
     public function sizegradeSync(){
 
         $data = \App\SizeGrade::with('sizegradedescAll')->get();
-        $delete = \App\MongoUnit::where('_id','>',0)->delete();
+        $delete = \App\MongoSizeGrade::where('_id','>',0)->delete();
         foreach ($data as $key => $value) {
             $up = \App\MongoSizeGrade::updateData($value);
         }
