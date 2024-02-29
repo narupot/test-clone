@@ -99,6 +99,22 @@
                     listeners: ['change'],
                 },
             },
+            {   title: "@lang('admin_order.pickup_time')", 
+                dataIndx:'time', 
+                minWidth: 160,
+                align : 'center',
+                filter: { 
+                    init: pqDatePicker,
+                    crules :[
+                        {
+                            condition: getFilter('time', 'condition') ||  "between",
+                            value : getFilter('time', 'value') || "",
+                            value2 : getFilter('time', 'value2') || ""
+                        }
+                    ]           
+                },
+        
+            },
             {   title: "@lang('admin_order.bill_to_name')", 
                 dataIndx:'user_name', 
                 minWidth: 160,
@@ -197,7 +213,7 @@
                     options: {!! $shipping_method !!},
                 },
             },
-            {   title: "@lang('admin_order.pickup_time')", 
+            {   title: "@lang('admin_order.pickup_date_time')", 
                 dataIndx:'pickup_time', 
                 minWidth: 160,
                 align : 'center',
