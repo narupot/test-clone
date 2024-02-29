@@ -86,6 +86,9 @@ class OrderController extends MarketPlace
                             case 'order_status':
                                 $query->whereIn('order_status', $searchval);
                                 break;
+                            case 'time':
+                                $query->where('pickup_time','like', '%'.$searchval.'%');
+                                break;
                             case 'dob':
                                 $from_date = $fvalue['value']??'';
                                 $to_date = $fvalue['value2']??'';
