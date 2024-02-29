@@ -89,8 +89,15 @@ class OrderController extends MarketPlace
                             case 'time':
                                 $kys = implode(',',$searchval);
                                 $query->where(function ($query) use ($kys) {
+                                    $count= 0;
                                     foreach ($kys as $searchdata) {
-                                        $query = $query->where('pickup_time','like', '%'.$searchdata.'%');
+                                        $count++;
+                                        if($count==1){
+                                            $query = $query->where('pickup_time','like', '%'.$searchdata.'%');
+                                        }else{
+                                            $query = $query->orwhere('pickup_time','like', '%'.$searchdata.'%');
+
+                                        }    
                                     }
 									
 								});
