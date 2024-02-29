@@ -89,6 +89,22 @@ class ShopOrderController extends MarketPlace
                                 $to_date = $fvalue['value2']??'';
                                 createDateFilter($query,'sord.end_shopping_date',$from_date,$to_date);
                             break;
+                            case 'time':
+                               
+                                $query->where(function ($query) use ($searchval) {
+                                    $count= 0;
+                                    foreach ($searchval as $searchdata) {
+                                        $count++;
+                                        if($count==1){
+                                            $query = $query->where('pickup_time','like', '%'.$searchdata.'%');
+                                        }else{
+                                            $query = $query->orwhere('pickup_time','like', '%'.$searchdata.'%');
+
+                                        }    
+                                    }
+									
+								});
+                                break;
 							case 'pickup_time':
                                 $from_date = $fvalue['value']??'';
                                 $to_date = $fvalue['value2']??'';
