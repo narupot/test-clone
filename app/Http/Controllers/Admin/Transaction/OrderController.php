@@ -134,6 +134,7 @@ class OrderController extends MarketPlace
                 $response[$key]->end_shopping_date_time = $value->end_shopping_date;
                 $response[$key]->end_shopping_date = $value->end_shopping_date?date('Y-m-d',strtotime($value->end_shopping_date)):null;
                 $response[$key]->pickup_time = $value->pickup_time?date('Y-m-d H:i:s',strtotime($value->pickup_time)):null;
+                $response[$key]->time = $value->pickup_time?date('H:i:s',strtotime($value->pickup_time)):null;
                 
                 $response[$key]->total_final_price = numberFormat($value->total_final_price);
                 
