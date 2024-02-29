@@ -103,15 +103,18 @@
                 dataIndx:'time', 
                 minWidth: 160,
                 align : 'center',
-                filter: { 
-                    init: pqDatePicker,
-                    crules :[
+                filter : {
+                    crules: [
                         {
-                            condition: getFilter('time', 'condition') ||  "between",
+                            condition: getFilter('time', 'condition') || 'range',
                             value : getFilter('time', 'value') || "",
-                            value2 : getFilter('time', 'value2') || ""
                         }
-                    ]           
+                    ],                    
+                    options: [ 
+                        {"09:00:00": "09:00:00"}, 
+                        {"14:00:00": "14:00:00"},
+                        {"16:00:00": "16:00:00"},
+                    ],                                           
                 },
         
             },
