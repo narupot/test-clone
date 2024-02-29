@@ -57,7 +57,7 @@
         */
         let columnModel = [  
             /* check for row selection ***/
-            /*{   title: "", 
+            {   title: "", 
                 width: 50, 
                 dataType: "integer",
                 type:'checkbox', 
@@ -71,7 +71,7 @@
                 cb: {header: true, select: true, all: true}, 
                 dataType: 'bool',
                 hidden: true
-            },*/
+            },
             /**** end selection *******/ 
             {   title: "@lang('admin_common.actions')", 
                 dataIndx:'detail_url', 
