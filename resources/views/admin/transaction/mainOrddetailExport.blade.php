@@ -78,9 +78,9 @@
     }
 </style>
 
-<body style="font-family: Helvetica, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.3; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;  margin: 0; padding: 0;">
+<body style="font-family: examplefont, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.3; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;  margin: 0; padding: 0;">
     <div class="container">
-        <table border="0" cellpadding="0" cellspacing="0" align="center" style="font-family: Helvetica, sans-serif; width: 1000px; color:#17499c; line-height:1.3;">
+        <table border="0" cellpadding="0" cellspacing="0" align="center" style="font-family: examplefont, sans-serif; width: 1000px; color:#17499c; line-height:1.3;">
             <!-- First row starts -->
             <tr>              
                 <td style="line-height: 18px; padding:10px 15px; box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);">
