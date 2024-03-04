@@ -17,7 +17,7 @@
                 <button id="btn-resend" class="btn-primary">Resend to logistic</button>
             @endif
             <a href="{{ action('Admin\Transaction\OrderController@index') }}" class="btn-back">@lang('admin_common.back')</a>
-            <a href="{{ action('Admin\Transaction\OrderController@orderDetailExport') }}" class="btn-back">@lang('admin_common.export_order_pdf')</a>
+            <a href="{{ action('Admin\Transaction\OrderController@orderDetailExport',$main_order->formatted_id) }}" class="btn-back">@lang('admin_common.export_order_pdf')</a>
         
         </div>
     </div>
