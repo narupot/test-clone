@@ -96,7 +96,7 @@
                             </td>
                             <td style="text-align: center; padding: 30px 5px; font-size:22px; width: 50%;">
                                 <div style="margin-bottom: 12px;">ยอดรวม</div>
-                                <span style="font-size: 28px;">THB 60</span>
+                                <span style="font-size: 28px;">@lang('common.thb') {{ numberFormat($main_order->total_final_price) }}</span>
                             </td>
                         </tr>
                     </table>
@@ -109,34 +109,49 @@
                 <td style="border:1px solid #000; padding:12px 10px;">
                     <table border="0" cellpadding="0" cellspacing="0" width="100%">
                         <tr>
-                            <td colspan="4" style="font-size:24px;">Buyer Infomation</td>
+                            <td colspan="4" style="font-size:24px;">@lang('admin_order.buyer_information')</td>
                         </tr>
                         <tr><td style="height:22px;"></td></tr> 
                         <tr>
                             <td style="width:25%;">
-                                ชื่อ : Name <br>
-                                อีเมล : Email <br>
-                                เบอร์โทรศัพท์ :0990990999
+                                ชื่อ : {{$main_order->user_name}} <br>
+                                อีเมล : {{$main_order->user_email}} <br>
+                                เบอร์โทรศัพท์ : {{$main_order->ph_number}}
                             </td>
-                            <td style="width:25%;">
-                                <div style="margin-bottom:15px;">ที่อยู่ในการจัดส่ง : Location name</div>
-                                <div style="margin-bottom:15px;">name</div>
-                                <div style="margin-bottom:15px;">123 <br> 
-                                    location <br> 12002</div>
-                                <div style="margin-bottom:15px;">0990990999</div>
+                            @if($main_order->shipping_method == 1)
+                                <td style="width:25%;">
+                                    <div style="margin-bottom:15px;">ที่อยู่ในการจัดส่ง : Location name</div>
+                                    {!! CustomHelpers::centerAddress($main_order->order_json) !!}
+                                    <!-- <div style="margin-bottom:15px;">name</div>
+                                    <div style="margin-bottom:15px;">123 <br> 
+                                        location <br> 12002</div>
+                                    <div style="margin-bottom:15px;">0990990999</div> -->
 
-                            </td>
-                            <td style="width:25%;">
-                                <div style="margin-bottom:15px;">ที่อยู่ในการออกใบเสร็จ : Location name</div>
-                                <div style="margin-bottom:15px;">name</div>
-                                <div style="margin-bottom:15px;">123 <br> 
-                                    location <br> 12002</div>
-                                <div style="margin-bottom:15px;">0990990999</div>
+                                </td>
+                            @elseif($main_order->shipping_method == 2)
+                                <td style="width:25%;">
+                                    <div style="margin-bottom:15px;">ที่อยู่ในการออกใบเสร็จ : Location name</div>
+                                    {!! CustomHelpers::storeAddress($main_order->order_json) !!}
+                                    <!-- <div style="margin-bottom:15px;">name</div>
+                                    <div style="margin-bottom:15px;">123 <br> 
+                                        location <br> 12002</div>
+                                    <div style="margin-bottom:15px;">0990990999</div> -->
 
-                            </td>
+                                </td>
+                            @else
+                                <td style="width:25%;">
+                                    <div style="margin-bottom:15px;">ที่อยู่ในการจัดส่ง : Location name</div>
+                                    {{ CustomHelpers::buyerShipBillTo($main_order->order_json,'shipping_address') }}
+                                </td>
+                                <td style="width:25%;">
+                                    <div style="margin-bottom:15px;">ที่อยู่ในการออกใบเสร็จ : Location name</div>
+                                    {{ CustomHelpers::buyerShipBillTo($main_order->order_json,'billing_address') }}
+                                </td>
+
+                            @endif
                             <td style="width:25%;">
-                                <div style="margin-bottom:15px;">Shipping : จัดส่งตามที่อยู่จัดส่ง</div>
-                                <div style="margin-bottom:15px;">Pickup Date : <br>2024-01-11 09:00:00</div>
+                                <div style="margin-bottom:15px;">Shipping : {{ GeneralFunctions::getShippingMethod($main_order->shipping_method) }}</div>
+                                <div style="margin-bottom:15px;">Pickup Date : <br>{{$main_order->pickup_time}}</div>
                             </td>
                         </tr>
                     </table>
