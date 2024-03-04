@@ -7,19 +7,22 @@
 
 <style>
     @font-face {
-	    font-family: "THSarabun";
+	    /* font-family: "THSarabun"; */
+        font-family: 'examplefont', sans-serif;
 	    font-style: normal;
 	    font-weight: normal;
-	    src: url("{{ asset('pdf_fonts/THSarabun.ttf')}}") format("truetype");
+	    /* src: url("{{ asset('pdf_fonts/THSarabun.ttf')}}") format("truetype"); */
     }  
     @font-face {
-	    font-family: "THSarabunbold";
+	    /* font-family: "THSarabunbold"; */
+        font-family: 'examplefont', sans-serif;
 	    font-style: normal;
 	    font-weight: bolder;
-	    src: url("{{ asset('pdf_fonts/THSarabun Bold.ttf')}}") format("truetype");
+	    /* src: url("{{ asset('pdf_fonts/THSarabun Bold.ttf')}}") format("truetype"); */
     }      
     body {
-        font-family: "THSarabun";
+        /* font-family: "THSarabun"; */
+        font-family: 'examplefont', sans-serif;
         font-size: 16px; color: #343A40; 
         background: #fff !important; line-height: 16px;
         letter-spacing: 0.38px;
