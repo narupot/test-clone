@@ -3,20 +3,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
     <meta http-equiv="Content-Type" content="800; charset=utf-8" />
-    <title>Main order PDF Table</title>
+    <title>{{$main_order->formatted_id}}</title>
 
 <style>
     @font-face {
-        font-family: "THSarabunNew";
-        font-style: normal;
-        font-weight: normal;
-        src: url("/pdf_fonts/THSarabunNew.ttf") format("truetype");
+	    font-family: "THSarabun";
+	    font-style: normal;
+	    font-weight: normal;
+	    src: url("{{ asset('pdf_fonts/THSarabun.ttf')}}") format("truetype");
+    }  
+    @font-face {
+	    font-family: "THSarabunbold";
+	    font-style: normal;
+	    font-weight: bolder;
+	    src: url("{{ asset('pdf_fonts/THSarabun Bold.ttf')}}") format("truetype");
+    }      
+    body {
+        font-family: "THSarabun";
+        font-size: 16px; color: #343A40; 
+        background: #fff !important; line-height: 16px;
+        letter-spacing: 0.38px;
+        padding-bottom:1.62cm; margin-top: 5px;
     }
     html { -webkit-print-color-adjust: exact; }
-    body {    
-        font-family: Helvetica, sans-serif;
-        color: #000; font-size: 16px; line-height: 1.3;
-    }
     table {
         border-collapse: collapse;
         border: 0; 
@@ -72,7 +81,7 @@
             <!-- First row starts -->
             <tr>              
                 <td style="line-height: 18px; padding:10px 15px; box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);">
-                   <span style="color: #F00;">Main Order ID:</span> SMM24010100000
+                   <span style="color: #F00;">Main Order ID:</span> {{$main_order->formatted_id}}
                 </td>
             </tr>
             <tr><td style="height:40px;"></td></tr> 
@@ -82,8 +91,8 @@
                     <table border="0" cellpadding="0" cellspacing="0" width="100%">
                         <tr>
                             <td style="text-align: center; border-right: 1px solid #000; width: 50%; padding: 30px 5px; font-size:22px;">
-                                <div style="margin-bottom: 12px;">Main order status :</div>
-                                รอยืนยันการชำระเงิน
+                                <div style="margin-bottom: 12px;">@lang('admin_order.main_order_status') :</div>
+                                {{ $main_order->getOrderStatus->status??'' }}
                             </td>
                             <td style="text-align: center; padding: 30px 5px; font-size:22px; width: 50%;">
                                 <div style="margin-bottom: 12px;">ยอดรวม</div>
