@@ -18,6 +18,7 @@ use App\Product;
 use Lang;
 use Config;
 use Excel;
+use PDF;
 
 class OrderController extends MarketPlace
 {
