@@ -123,7 +123,7 @@
                             </td>
                             @if($main_order->shipping_method == 1)
                                 <td style="width:25%;">
-                                    <div style="margin-bottom:15px;">ที่อยู่ในการจัดส่ง : Location name</div>
+                                    <div style="margin-bottom:15px;">ที่อยู่ในการจัดส่ง :</div>
                                     {!! CustomHelpers::centerAddress($main_order->order_json) !!}
                                     <!-- <div style="margin-bottom:15px;">name</div>
                                     <div style="margin-bottom:15px;">123 <br> 
@@ -133,7 +133,7 @@
                                 </td>
                             @elseif($main_order->shipping_method == 2)
                                 <td style="width:25%;">
-                                    <div style="margin-bottom:15px;">ที่อยู่ในการออกใบเสร็จ : Location name</div>
+                                    <div style="margin-bottom:15px;">ที่อยู่ในการออกใบเสร็จ :</div>
                                     {!! CustomHelpers::storeAddress($main_order->order_json) !!}
                                     <!-- <div style="margin-bottom:15px;">name</div>
                                     <div style="margin-bottom:15px;">123 <br> 
@@ -143,11 +143,11 @@
                                 </td>
                             @else
                                 <td style="width:25%;">
-                                    <div style="margin-bottom:15px;">ที่อยู่ในการจัดส่ง : Location name</div>
+                                    <div style="margin-bottom:15px;">ที่อยู่ในการจัดส่ง : </div>
                                     {{ CustomHelpers::buyerShipBillTo($main_order->order_json,'shipping_address') }}
                                 </td>
                                 <td style="width:25%;">
-                                    <div style="margin-bottom:15px;">ที่อยู่ในการออกใบเสร็จ : Location name</div>
+                                    <div style="margin-bottom:15px;">ที่อยู่ในการออกใบเสร็จ : </div>
                                     {{ CustomHelpers::buyerShipBillTo($main_order->order_json,'billing_address') }}
                                 </td>
 
@@ -170,8 +170,8 @@
                         <td style="padding-left: 0; padding-right: 0px;">
                             <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                 <tr>
-                                    <td style="width:50%; font-size: 24px; padding-left:0px;">Shop order id : AA000000000001</td>
-                                    <td class="red" style="text-align:right; width:50%; font-size: 22px; padding-right:0px;">Shop order status : รอยืนยันการชำระเงิน</td>
+                                    <td style="width:50%; font-size: 24px; padding-left:0px;">@lang('admin_order.shop_order_id') : {{ $shop_ord_val->shop_formatted_id }}</td>
+                                    <td style="text-align:right; width:50%; font-size: 22px; padding-right:0px;">@lang('admin_order.shop_order_status') : {{$shop_ord_val->getOrderStatus->status}}</td>
                                 </tr>
                                 <tr><td style="height:5px;"></td></tr>
                             </table>
@@ -202,11 +202,11 @@
                                         <td style="text-align:left;">
                                             <div style="margin-bottom:4px;"><img src="{{ getProductImageUrlRunTime($detail_json['thumbnail_image']??'','thumb') }}" alt="img"> </div>
                                             <div style="margin-bottom: 2px;">{{ $detail_json['name'][session('default_lang')]??$val->category_name }}</div>
-                                            <div>
+                                            <!-- <div>
                                                 <span style="border:1px solid green; font-size: 8px;
                                                 padding:2px; display: inline-block; border-radius: 50%; width:20px; height:20px; line-height: 20px; text-align: center;">XLA</span>
                                                 จัมโบ้ | สวย
-                                            </div>
+                                            </div> -->
                                         </td>
                                         <td style="text-align:left;">
                                             <div style="margin-bottom:4px;"><img src="{{getImgUrl($detail_json['logo'] ??'','logo')}}" alt="img"> </div>
@@ -214,10 +214,10 @@
                                         </td>
                                         <td>{{numberFormat($val->last_price) }} @lang('common.baht') /{{ $detail_json['package'][session('default_lang')] ?? $val->package_name }}</td>
                                         <td>{{ $val->quantity }} {{ $detail_json['package'][session('default_lang')] ?? $val->package_name }}
-                                            <br> <span class="red">{{convertString($val->total_weight) }} {{$val->base_unit}}<br> / {{$val->package_name}}</span></td>
+                                            <br> <span>{{convertString($val->total_weight) }} {{$val->base_unit}}<br> / {{$val->package_name}}</span></td>
                                         <td>{{numberFormat($val->total_price) }} @lang('common.baht')</td>
                                         <td>{!!$detail_json['payment_method'][session('default_lang')] ?? str_replace('_',' ',strtoupper($val->payment_slug)) !!}</td>
-                                        <td class="red">{{ $val->getOrderStatus->status??'' }}</td>
+                                        <td>{{ $val->getOrderStatus->status??'' }}</td>
                                         <td>{{$val->api_remark}}</td>
                                         <td></td>
                                     </tr>
