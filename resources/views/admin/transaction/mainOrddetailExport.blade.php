@@ -219,7 +219,12 @@
                                         <td>{!!$detail_json['payment_method'][session('default_lang')] ?? str_replace('_',' ',strtoupper($val->payment_slug)) !!}</td>
                                         <td>{{ $val->getOrderStatus->status??'' }}</td>
                                         <td>{{$val->api_remark}}</td>
-                                        <td></td>
+                                        @php 
+                                            $str_description = $val->description;
+                                            $str_description = strip_tags($str_description);
+                                            $str_description = mb_substr($str_description, 0, 30);
+                                        @endphp
+                                        <td>{!!$str_description!!}</td>
                                     </tr>
                                 @endforeach 
                             </table>
