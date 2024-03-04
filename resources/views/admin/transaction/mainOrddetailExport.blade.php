@@ -233,16 +233,16 @@
                     <table border="0" cellpadding="0" cellspacing="0" width="100%">
                         <tr>
                             <td style="width:50%">checkout.shop_remark <br>
-                            -</td>
+                            {{$shop_ord_val->api_remark}}</td>
                             <td style="width:50%; border:1px solid #000; padding:0; border-bottom:none;">
                                 <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                     <tr>
-                                        <td style="padding: 10px; border-bottom:1px solid #000;">ยอดรวม</td>
-                                        <td style="padding: 10px; border-bottom:1px solid #000; text-align: right;">60 บาท</td>
+                                        <td style="padding: 10px; border-bottom:1px solid #000;">@lang('checkout.total')</td>
+                                        <td style="padding: 10px; border-bottom:1px solid #000; text-align: right;">{{numberFormat($shop_ord_val->total_core_cost)}} @lang('common.baht')</td>
                                     </tr>
                                     <tr>
-                                        <td style="padding: 10px; border-bottom:1px solid #000;">ยอดรวมทั้งหมด</td>
-                                        <td style="padding: 10px; border-bottom:1px solid #000; text-align: right;">60 บาท</td>
+                                        <td style="padding: 10px; border-bottom:1px solid #000;">@lang('checkout.grand_total')</td>
+                                        <td style="padding: 10px; border-bottom:1px solid #000; text-align: right;">{{numberFormat($shop_ord_val->total_final_price)}} @lang('common.baht')</td>
                                     </tr>
                                 </table>
                             </td>
