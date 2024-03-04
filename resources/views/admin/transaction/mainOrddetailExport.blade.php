@@ -189,50 +189,36 @@
                                     <th style="text-align:center; font-weight: normal;">รายละเอียด <br>สินค้า</th>
                                     <th style="text-align:center; font-weight: normal;">Action</th>
                                 </tr>
-                                <tr>
-                                    <td style="text-align:left;">
-                                        <div style="margin-bottom:4px;"><img src="images/prod.png" alt="img"> </div>
-                                        <div style="margin-bottom: 2px;">ส้ม</div>
-                                        <div>
-                                            <span style="border:1px solid green; font-size: 8px;
-                                            padding:2px; display: inline-block; border-radius: 50%; width:20px; height:20px; line-height: 20px; text-align: center;">XLA</span>
-                                            จัมโบ้ | สวย
-                                        </div>
-                                    </td>
-                                    <td style="text-align:left;">
-                                        <div style="margin-bottom:4px;"><img src="images/prod2.png" alt="img"> </div>
-                                        Name
-                                    </td>
-                                    <td>60 บาท / <br>กล่อง</td>
-                                    <td>1 กล่อง <br> <span class="red">10 กล่อง <br> / กล่อง</span></td>
-                                    <td>60 บาท</td>
-                                    <td>QR Code</td>
-                                    <td class="red">ชำระเงิน</td>
-                                    <td>Test</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align:left;">
-                                        <div style="margin-bottom:4px;"><img src="images/prod.png" alt="img"> </div>
-                                        <div style="margin-bottom: 2px;">ส้ม</div>
-                                        <div>
-                                            <span style="border:1px solid green; font-size: 8px;
-                                            padding:2px; display: inline-block; border-radius: 50%; width:20px; height:20px; line-height: 20px; text-align: center;">XLA</span>
-                                            จัมโบ้ | สวย
-                                        </div>
-                                    </td>
-                                    <td style="text-align:left;">
-                                        <div style="margin-bottom:4px;"><img src="images/prod2.png" alt="img"> </div>
-                                        Name
-                                    </td>
-                                    <td>60 บาท / <br>กล่อง</td>
-                                    <td>1 กล่อง <br> <span class="red">10 กล่อง <br> / กล่อง</span></td>
-                                    <td>60 บาท</td>
-                                    <td>QR Code</td>
-                                    <td class="red">ชำระเงิน</td>
-                                    <td>Test</td>
-                                    <td></td>
-                                </tr>
+                                @foreach($shop_ord_val->details as $key => $val)
+                                    @php 
+                                        $detail_json = jsonDecodeArr($val->order_detail_json);
+                                        $shop_url = action('ShopController@index',$detail_json['shop_url'] ??'');
+                                        $prd_url = action('ProductDetailController@display',[$detail_json['cat_url']??'',$val->sku]);
+                                    @endphp
+                                    <tr>
+                                        <td style="text-align:left;">
+                                            <div style="margin-bottom:4px;"><img src="{{ getProductImageUrlRunTime($detail_json['thumbnail_image']??'','thumb') }}" alt="img"> </div>
+                                            <div style="margin-bottom: 2px;">{{ $detail_json['name'][session('default_lang')]??$val->category_name }}</div>
+                                            <div>
+                                                <span style="border:1px solid green; font-size: 8px;
+                                                padding:2px; display: inline-block; border-radius: 50%; width:20px; height:20px; line-height: 20px; text-align: center;">XLA</span>
+                                                จัมโบ้ | สวย
+                                            </div>
+                                        </td>
+                                        <td style="text-align:left;">
+                                            <div style="margin-bottom:4px;"><img src="{{getImgUrl($detail_json['logo'] ??'','logo')}}" alt="img"> </div>
+                                            {{ $detail_json['shop_name'][session('default_lang')]??'' }}
+                                        </td>
+                                        <td>{{numberFormat($val->last_price) }} @lang('common.baht') /{{ $detail_json['package'][session('default_lang')] ?? $val->package_name }}</td>
+                                        <td>{{ $val->quantity }} {{ $detail_json['package'][session('default_lang')] ?? $val->package_name }}
+                                            <br> <span class="red">{{convertString($val->total_weight) }} {{$val->base_unit}}<br> / {{$val->package_name}}</span></td>
+                                        <td>{{numberFormat($val->total_price) }} @lang('common.baht')</td>
+                                        <td>{!!$detail_json['payment_method'][session('default_lang')] ?? str_replace('_',' ',strtoupper($val->payment_slug)) !!}</td>
+                                        <td class="red">{{ $val->getOrderStatus->status??'' }}</td>
+                                        <td>{{$val->api_remark}}</td>
+                                        <td></td>
+                                    </tr>
+                                @endforeach 
                             </table>
                         </td>
                     </tr>
