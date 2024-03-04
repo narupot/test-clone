@@ -160,82 +160,85 @@
  
 
             <!-- Forth row starts -->
-            <tr><td style="height:30px;"></td></tr> 
-            <tr>
-                <td style="padding-left: 0; padding-right: 0px;">
-                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                        <tr>
-                            <td style="width:50%; font-size: 24px; padding-left:0px;">Shop order id : AA000000000001</td>
-                            <td class="red" style="text-align:right; width:50%; font-size: 22px; padding-right:0px;">Shop order status : รอยืนยันการชำระเงิน</td>
-                        </tr>
-                        <tr><td style="height:5px;"></td></tr>
-                    </table>
-                </td>
-            </tr>
+            @if(count($order_shop))
+                @foreach($order_shop as $skey => $shop_ord_val)
+                    <tr><td style="height:30px;"></td></tr> 
+                    <tr>
+                        <td style="padding-left: 0; padding-right: 0px;">
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tr>
+                                    <td style="width:50%; font-size: 24px; padding-left:0px;">Shop order id : AA000000000001</td>
+                                    <td class="red" style="text-align:right; width:50%; font-size: 22px; padding-right:0px;">Shop order status : รอยืนยันการชำระเงิน</td>
+                                </tr>
+                                <tr><td style="height:5px;"></td></tr>
+                            </table>
+                        </td>
+                    </tr>
 
-            <tr>
-                <td style="border:1px solid #000; border-bottom:none; padding:0;">
-                    <table border="0" cellpadding="0" cellspacing="0" width="100%" class="data-tables">
-                        <tr>
-                            <th style="text-align:center; font-weight: normal;">สินค้า</th>
-                            <th style="text-align:center; font-weight: normal;">ร้านค้า</th>
-                            <th style="text-align:center; font-weight: normal;">ราคา <br> ต่อหน่วย</th>
-                            <th style="text-align:center; font-weight: normal;">จำนวน</th>
-                            <th style="text-align:center; font-weight: normal;">ราคารวม <br></th>
-                            <th style="text-align:center; font-weight: normal;">ช่องทางการ <br>ชำระเงิน</th>
-                            <th style="text-align:center; font-weight: normal;">สถานะ </th>
-                            <th style="text-align:center; font-weight: normal;">รายละเอียด <br>สินค้า</th>
-                            <th style="text-align:center; font-weight: normal;">Action</th>
-                        </tr>
-                        <tr>
-                            <td style="text-align:left;">
-                                <div style="margin-bottom:4px;"><img src="images/prod.png" alt="img"> </div>
-                                <div style="margin-bottom: 2px;">ส้ม</div>
-                                <div>
-                                    <span style="border:1px solid green; font-size: 8px;
-                                    padding:2px; display: inline-block; border-radius: 50%; width:20px; height:20px; line-height: 20px; text-align: center;">XLA</span>
-                                     จัมโบ้ | สวย
-                                </div>
-                            </td>
-                            <td style="text-align:left;">
-                                <div style="margin-bottom:4px;"><img src="images/prod2.png" alt="img"> </div>
-                                Name
-                            </td>
-                            <td>60 บาท / <br>กล่อง</td>
-                            <td>1 กล่อง <br> <span class="red">10 กล่อง <br> / กล่อง</span></td>
-                            <td>60 บาท</td>
-                            <td>QR Code</td>
-                            <td class="red">ชำระเงิน</td>
-                            <td>Test</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td style="text-align:left;">
-                                <div style="margin-bottom:4px;"><img src="images/prod.png" alt="img"> </div>
-                                <div style="margin-bottom: 2px;">ส้ม</div>
-                                <div>
-                                    <span style="border:1px solid green; font-size: 8px;
-                                    padding:2px; display: inline-block; border-radius: 50%; width:20px; height:20px; line-height: 20px; text-align: center;">XLA</span>
-                                     จัมโบ้ | สวย
-                                </div>
-                            </td>
-                            <td style="text-align:left;">
-                                <div style="margin-bottom:4px;"><img src="images/prod2.png" alt="img"> </div>
-                                Name
-                            </td>
-                            <td>60 บาท / <br>กล่อง</td>
-                            <td>1 กล่อง <br> <span class="red">10 กล่อง <br> / กล่อง</span></td>
-                            <td>60 บาท</td>
-                            <td>QR Code</td>
-                            <td class="red">ชำระเงิน</td>
-                            <td>Test</td>
-                            <td></td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr><td style="height:40px;"></td></tr> 
-
+                    <tr>
+                        <td style="border:1px solid #000; border-bottom:none; padding:0;">
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" class="data-tables">
+                                <tr>
+                                    <th style="text-align:center; font-weight: normal;">สินค้า</th>
+                                    <th style="text-align:center; font-weight: normal;">ร้านค้า</th>
+                                    <th style="text-align:center; font-weight: normal;">ราคา <br> ต่อหน่วย</th>
+                                    <th style="text-align:center; font-weight: normal;">จำนวน</th>
+                                    <th style="text-align:center; font-weight: normal;">ราคารวม <br></th>
+                                    <th style="text-align:center; font-weight: normal;">ช่องทางการ <br>ชำระเงิน</th>
+                                    <th style="text-align:center; font-weight: normal;">สถานะ </th>
+                                    <th style="text-align:center; font-weight: normal;">รายละเอียด <br>สินค้า</th>
+                                    <th style="text-align:center; font-weight: normal;">Action</th>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;">
+                                        <div style="margin-bottom:4px;"><img src="images/prod.png" alt="img"> </div>
+                                        <div style="margin-bottom: 2px;">ส้ม</div>
+                                        <div>
+                                            <span style="border:1px solid green; font-size: 8px;
+                                            padding:2px; display: inline-block; border-radius: 50%; width:20px; height:20px; line-height: 20px; text-align: center;">XLA</span>
+                                            จัมโบ้ | สวย
+                                        </div>
+                                    </td>
+                                    <td style="text-align:left;">
+                                        <div style="margin-bottom:4px;"><img src="images/prod2.png" alt="img"> </div>
+                                        Name
+                                    </td>
+                                    <td>60 บาท / <br>กล่อง</td>
+                                    <td>1 กล่อง <br> <span class="red">10 กล่อง <br> / กล่อง</span></td>
+                                    <td>60 บาท</td>
+                                    <td>QR Code</td>
+                                    <td class="red">ชำระเงิน</td>
+                                    <td>Test</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;">
+                                        <div style="margin-bottom:4px;"><img src="images/prod.png" alt="img"> </div>
+                                        <div style="margin-bottom: 2px;">ส้ม</div>
+                                        <div>
+                                            <span style="border:1px solid green; font-size: 8px;
+                                            padding:2px; display: inline-block; border-radius: 50%; width:20px; height:20px; line-height: 20px; text-align: center;">XLA</span>
+                                            จัมโบ้ | สวย
+                                        </div>
+                                    </td>
+                                    <td style="text-align:left;">
+                                        <div style="margin-bottom:4px;"><img src="images/prod2.png" alt="img"> </div>
+                                        Name
+                                    </td>
+                                    <td>60 บาท / <br>กล่อง</td>
+                                    <td>1 กล่อง <br> <span class="red">10 กล่อง <br> / กล่อง</span></td>
+                                    <td>60 บาท</td>
+                                    <td>QR Code</td>
+                                    <td class="red">ชำระเงิน</td>
+                                    <td>Test</td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr><td style="height:40px;"></td></tr> 
+                @endforeach
+            @endif
 
             
             <!-- Table footer starts -->
