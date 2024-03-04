@@ -413,5 +413,56 @@ class OrderController extends MarketPlace
     
     function update(Request $request){
     }
+
+    public function orderDetailExport(Request $request) {
+
+        $formatted_id = $request->oid; 
+        $main_order = Order::where('formatted_id',$formatted_id)->with(['getUser','getOrderStatus'])->first();
+        // dd($main_order,$formatted_id);
+        if(empty($main_order)){
+          abort(404);
+        }
+
+        $order_shop = OrderShop::where('order_id',$main_order->id)->with(['getOrderStatus'])->get();
+        if(count($order_shop)){
+            foreach ($order_shop as $key => $value) {
+                $order_detail = OrderDetail::getShopOrderDetail('',$value->id);
+                $order_shop[$key]->details = $order_detail;
+            }
+        }
+        $main_order->tot_shop = count($order_shop);
+        
+        //dd($order_shop);
+        $transaction = \App\OrderTransaction::where('order_id',$main_order->id)->orderBy('id')->get();
+		
+		$main_order->pickup_time = null;
+		if($main_order->id>0)
+		{
+			$order_info = Order::where('id',$main_order->id)->first();
+			if($order_info)
+			{
+				$main_order->pickup_time=$order_info->pickup_time;
+			}
+		}
+		
+		/* Start:: If Product Detail Not Available in Order Details */
+		if(count($order_shop))
+		{
+			foreach($order_shop as $skey => $shop_ord_val)
+				{
+					foreach($shop_ord_val->details as $key => $val)
+					{
+						if($val->description=='' || $val->description==null)
+						{
+							$productDetail = \App\Product::getProductDetail($val->sku);
+							$order_shop[$skey]->details[$key]->description=isset($productDetail->productDesc)?$productDetail->productDesc->description:"";
+						}
+					}
+				}
+		}
+		/* Start:: If Product Detail Not Available in Order Details */
+		
+        return view('admin.transaction.mainOrddetailExport',['main_order' => $main_order,'order_shop'=>$order_shop,'transaction'=>$transaction]);
+    }
     
 }
