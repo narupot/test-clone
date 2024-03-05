@@ -38,7 +38,7 @@
         border-collapse: collapse;
         padding: 3px 8px;
         /* border: 1px solid #CED4DA; */
-        border:none; font-size: 16px;
+        border:none; font-size: 20px;
     }
     th {
         font-weight: bold;
@@ -51,11 +51,11 @@
         vertical-align: top;
     }
     a {
-        text-decoration: none;
+        text-decoration: none; color: #000;
     }
     .data-tables td, .data-tables th {
         padding-top: 15px; padding-bottom: 15px;
-        text-align: center;
+        text-align: center; color: #000;
     }
     .data-tables td {
         border-bottom: 1px solid #000;        
@@ -80,10 +80,10 @@
 
 <body style="font-family: examplefont, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.3; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;  margin: 0; padding: 0;">
     <div class="container">
-        <table border="0" cellpadding="0" cellspacing="0" align="center" style="font-family: examplefont, sans-serif; width: 1000px; color:#17499c; line-height:1.3;">
+        <table border="0" cellpadding="0" cellspacing="0" align="center" style="font-family: examplefont, sans-serif; width: 1000px; color:#000; line-height:1.3;">
             <!-- First row starts -->
             <tr>              
-                <td style="line-height: 18px; padding:10px 15px; box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);">
+                <td style="line-height: 18px; padding:10px 15px; box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10); font-size: 22px;">
                    <span style="color: #F00;">Main Order ID:</span> {{$main_order->formatted_id}}
                 </td>
             </tr>
@@ -93,13 +93,13 @@
                 <td>
                     <table border="0" cellpadding="0" cellspacing="0" width="100%">
                         <tr>
-                            <td style="text-align: center; border-right: 1px solid #000; width: 50%; padding: 30px 5px; font-size:22px;">
+                            <td style="text-align: center; border-right: 1px solid #000; width: 50%; padding: 30px 5px; font-size:34px;">
                                 <div style="margin-bottom: 12px;">@lang('admin_order.main_order_status') :</div>
                                 {{ $main_order->getOrderStatus->status??'' }}
                             </td>
-                            <td style="text-align: center; padding: 30px 5px; font-size:22px; width: 50%;">
+                            <td style="text-align: center; padding: 30px 5px; font-size:34px; width: 50%;">
                                 <div style="margin-bottom: 12px;">ยอดรวม</div>
-                                <span style="font-size: 28px;">@lang('common.thb') {{ numberFormat($main_order->total_final_price) }}</span>
+                                <span style="font-size: 36px;">@lang('common.thb') {{ numberFormat($main_order->total_final_price) }}</span>
                             </td>
                         </tr>
                     </table>
@@ -112,7 +112,7 @@
                 <td style="border:1px solid #000; padding:12px 10px;">
                     <table border="0" cellpadding="0" cellspacing="0" width="100%">
                         <tr>
-                            <td colspan="4" style="font-size:24px;">@lang('admin_order.buyer_information')</td>
+                            <td colspan="4" style="font-size:28px;">@lang('admin_order.buyer_information')</td>
                         </tr>
                         <tr><td style="height:22px;"></td></tr> 
                         <tr>
@@ -170,8 +170,8 @@
                         <td style="padding-left: 0; padding-right: 0px;">
                             <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                 <tr>
-                                    <td style="width:50%; font-size: 24px; padding-left:0px;">@lang('admin_order.shop_order_id') : {{ $shop_ord_val->shop_formatted_id }}</td>
-                                    <td style="text-align:right; width:50%; font-size: 22px; padding-right:0px;">@lang('admin_order.shop_order_status') : {{$shop_ord_val->getOrderStatus->status}}</td>
+                                    <td style="width:50%; font-size: 28px; padding-left:0px;">@lang('admin_order.shop_order_id') : {{ $shop_ord_val->shop_formatted_id }}</td>
+                                    <td style="text-align:right; width:50%; font-size: 28px; padding-right:0px;color:#F00;">@lang('admin_order.shop_order_status') : {{$shop_ord_val->getOrderStatus->status}}</td>
                                 </tr>
                                 <tr><td style="height:5px;"></td></tr>
                             </table>
@@ -200,7 +200,7 @@
                                     @endphp
                                     <tr>
                                         <td style="text-align:left;">
-                                            <div style="margin-bottom:4px;"><img src="{{ getProductImageUrlRunTime($detail_json['thumbnail_image']??'','thumb') }}" alt="img"> </div>
+                                            <div style="margin-bottom:4px;"><img src="{{ getProductImageUrlRunTime($detail_json['thumbnail_image']??'','thumb') }}" alt="img" width="50"> </div>
                                             <div style="margin-bottom: 2px;">{{ $detail_json['name'][session('default_lang')]??$val->category_name }}</div>
                                             <!-- <div>
                                                 <span style="border:1px solid green; font-size: 8px;
@@ -209,12 +209,12 @@
                                             </div> -->
                                         </td>
                                         <td style="text-align:left;">
-                                            <div style="margin-bottom:4px;"><img src="{{getImgUrl($detail_json['logo'] ??'','logo')}}" alt="img"> </div>
+                                            <div style="margin-bottom:4px;"><img src="{{getImgUrl($detail_json['logo'] ??'','logo')}}" alt="img" width="50"> </div>
                                             {{ $detail_json['shop_name'][session('default_lang')]??'' }}
                                         </td>
                                         <td>{{numberFormat($val->last_price) }} @lang('common.baht') /{{ $detail_json['package'][session('default_lang')] ?? $val->package_name }}</td>
                                         <td>{{ $val->quantity }} {{ $detail_json['package'][session('default_lang')] ?? $val->package_name }}
-                                            <br> <span>{{convertString($val->total_weight) }} {{$val->base_unit}}<br> / {{$val->package_name}}</span></td>
+                                            <br> <span style="color:#F00;">{{convertString($val->total_weight) }} {{$val->base_unit}}<br> / {{$val->package_name}}</span></td>
                                         <td>{{numberFormat($val->total_price) }} @lang('common.baht')</td>
                                         <td>{!!$detail_json['payment_method'][session('default_lang')] ?? str_replace('_',' ',strtoupper($val->payment_slug)) !!}</td>
                                         <td>{{ $val->getOrderStatus->status??'' }}</td>
