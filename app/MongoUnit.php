@@ -35,6 +35,7 @@ class MongoUnit extends Molequent
         }
         $obj->name       = $name;
         $obj->status = $sql_data->status;
+        $obj->unit_weight = (float)$sql_data->unit_weight;
         $obj->created_at = $sql_data->created_at;
         $obj->updated_at = $sql_data->updated_at;
         $obj->save();
