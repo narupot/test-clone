@@ -52,7 +52,7 @@
                 <div class="form-group row">
                     <div class="col-md-5">  
                         <label>@lang('admin_product.unit_weight') <i class="strick">*</i></label>  
-                        <input type="number" name="unit_weight" min="1" value="1">                                      
+                        <input type="number" name="unit_weight" value="1">                                      
                         <span>@lang('admin_product.weight_unit')</span>
                         <p class="error" id="un_weight"></p>
                     </div>
