@@ -87,7 +87,7 @@
         <table border="0" cellpadding="0" cellspacing="0" align="center" style="font-family: examplefont, sans-serif; width: 1000px; color:#000; line-height:1.3;">
             <!-- First row starts -->
             <htmlpageheader name="page-header">
-                <div style="padding-top:20px;">
+                <div style="padding-top:20px;padding-bottom:10px;box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.10);">
                     <span style="color: #F00;">Main Order ID:</span> {{$main_order->formatted_id}}
                 </div>
                 
