@@ -167,7 +167,29 @@
                 </td>
             </tr>
  
-
+            <tr><td style="height:30px;"></td></tr> 
+            <tr>
+                <td style="border-bottom:none; padding:0;" align="center">
+                    <table border="0" cellpadding="0" cellspacing="0" width="53%" align="center;" class="total-table" style="border:1px solid #000;">
+                        <tr>
+                            <td style="padding:12px; border-bottom: 1px solid #000;">@lang('checkout.total_seller')</td>
+                            <td style="text-align:right; padding:12px;border-bottom: 1px solid #000;">{{ $main_order->tot_shop }}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:12px;border-bottom: 1px solid #000;">@lang('checkout.total')</td>
+                            <td style="text-align:right; padding:12px;border-bottom: 1px solid #000;">{{numberFormat($main_order->total_core_cost)}} @lang('common.baht')</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:12px;border-bottom: 1px solid #000;">@lang('checkout.shipping_charge')</td>
+                            <td style="text-align:right; padding:12px;border-bottom: 1px solid #000;">{{numberFormat($main_order->total_shipping_cost)}} @lang('common.baht')</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:12px;border-bottom: 1px solid #000;">@lang('checkout.grand_total')</td>
+                            <td style="text-align:right; padding:12px;border-bottom: 1px solid #000;">{{numberFormat($main_order->total_final_price)}} @lang('common.baht')</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
             <!-- Forth row starts -->
             @if(count($order_shop))
                 @foreach($order_shop as $skey => $shop_ord_val)
