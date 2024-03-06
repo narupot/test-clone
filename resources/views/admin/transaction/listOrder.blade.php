@@ -16,6 +16,7 @@
     <div class="content">
         <div class="header-title">
             <h1 class="title">@lang('admin_order.order_list')</h1>
+            <button class="btn btn-outline-primary" type="button" name="export_order_pdf" onclick="generateOrderPdf('export_order_pdf')">@lang('admin_common.export_order_pdf')</button>
         </div>
              
         <!-- Main content -->         
@@ -266,7 +267,71 @@
             },  
         ];    
     </script>
-
+    <script>
+        function getData(){
+            return jqGrid.SelectRow().getSelection().map(function(rowList) {
+                return rowList.rowData.formatted_order_id;
+            });
+        };
+        function beforeExport(){
+          var d = getData();
+          if(d && !d.length){
+            swal("@lang('admin_common.opps')", "@lang('admin_order.please_select_rows_first')", 'warning');
+          }
+          return d;
+        };
+    </script>
+     <script>
+        function generateOrderPdf(event, orderData){ 
+            orderData = beforeExport();
+            if(!orderData.length) return;
+            $.ajax({
+                  type : 'post',
+                  url : "{{action('Admin\Transaction\OrderController@generateOrderPdf')}}",
+                  headers : {
+                      'X-CSRF-TOKEN' : window.Laravel.csrfToken,
+                      '_token' : window.Laravel.csrfToken,
+                  },
+                  beforeSend : ()=>{                        
+                     try{showHideLoaderAdmin('showLoader')}catch(er){console.log};
+                  },
+                  data : {'lang_code' : resp,'section':'order', 'order_list':JSON.stringify(orderData)},
+              }).done((data)=>{
+                  if(data.status && data.status == 'error')
+                      swal('Opps..!', data.message, data.status)
+                  else{
+                    swal({
+                      title: data.message,
+                      text: "Your pdf zip created, please click on download",
+                      type: data.status,
+                      showCancelButton: true,
+                      showConfirmButton: true,
+                      confirmButtonColor: '#3085d6',
+                      cancelButtonColor: '#d33',
+                      confirmButtonClass : 'p-0',                       
+                      confirmButtonText: '<a style="color: #FFF;background-color:#3085d6;padding: 10px 15px;display:inline-block;" href="'+data.url+'" download>Download Zip</a>'
+                    })
+                  }
+              })
+              .always(()=>{
+                  try{showHideLoaderAdmin('hideLoader')}catch(er){console.log};
+              });         
+                
+        };  
+ 
+        function getData(){
+            return jqGrid.SelectRow().getSelection().map(function(rowList) {
+                return rowList.rowData.formatted_order_id;
+            });
+        };
+        function beforeExport(){
+          var d = getData();
+          if(d && !d.length){
+            swal("@lang('admin_common.opps')", "@lang('admin_order.please_select_rows_first')", 'warning');
+          }
+          return d;
+        };
+    </script>   
     <!-- end of page level js -->
     
 @stop
