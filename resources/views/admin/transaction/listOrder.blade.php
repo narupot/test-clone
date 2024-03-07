@@ -295,7 +295,7 @@
                   beforeSend : ()=>{                        
                      try{showHideLoaderAdmin('showLoader')}catch(er){console.log};
                   },
-                  data : {'lang_code' : resp,'section':'order', 'order_list':JSON.stringify(orderData)},
+                  data : {'section':'order', 'order_list':JSON.stringify(orderData)},
               }).done((data)=>{
                   if(data.status && data.status == 'error')
                       swal('Opps..!', data.message, data.status)
