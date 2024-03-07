@@ -469,8 +469,8 @@ class OrderController extends MarketPlace
     }
     public function generateOrderPdf(Request $request) {
 
-        $formatted_id = $request->oid; 
-        $main_order = Order::where('formatted_id',$formatted_id)->with(['getUser','getOrderStatus'])->first();
+        $formatted_id = $request->order_list; 
+        $main_order = Order::whereIn('formatted_id',$formatted_id)->with(['getUser','getOrderStatus'])->first();
         // dd($main_order,$formatted_id);
         if(empty($main_order)){
           abort(404);
