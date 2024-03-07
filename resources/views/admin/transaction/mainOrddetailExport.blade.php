@@ -58,7 +58,7 @@
         text-align: center; color: #000;
     }
     .data-tables td {
-        border-bottom: 1px solid #000;        
+        border-bottom: 1px solid #9E9E9E;        
     }
     .border-0 {
         border: 0;
@@ -84,14 +84,15 @@
 
 <body style="font-family: examplefont, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.3; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;  margin: 0; padding: 0;">
     <div class="container">
-        <table border="0" cellpadding="0" cellspacing="0" align="center" style="font-family: examplefont, sans-serif; width: 1000px; color:#000; line-height:1.3;">
-            <!-- First row starts -->
-            <htmlpageheader name="page-header">
-                <div style="padding-top:20px;padding-bottom:10px;box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, .1);">
+        <htmlpageheader name="page-header">
+                <div style="padding:15px 10px 10px 10px;box-shadow: 0px 3px 9px 0px #ccc;">
                     <span style="color: #F00;">Main Order ID:</span> {{$main_order->formatted_id}}
                 </div>
                 
             </htmlpageheader>
+        <table border="0" cellpadding="0" cellspacing="0" align="center" style="font-family: examplefont, sans-serif; width: 1000px; color:#000; line-height:1.3;">
+            <!-- First row starts -->
+            
                 
             <tr><td style="height:40px;"></td></tr> 
             <!-- Second row starts -->
@@ -99,13 +100,13 @@
                 <td>
                     <table border="0" cellpadding="0" cellspacing="0" width="100%">
                         <tr>
-                            <td style="text-align: center; border-right: 1px solid #000; width: 50%; padding: 30px 5px; font-size:34px;">
+                            <td style="text-align: center; border-right: 1px solid #9E9E9E; width: 50%; max-width: 50%; padding: 30px 5px; font-size:34px;">
                                 <div style="margin-bottom: 12px;">@lang('admin_order.main_order_status') :</div>
                                 {{ $main_order->getOrderStatus->status??'' }}
                             </td>
-                            <td style="text-align: center; padding: 30px 5px; font-size:34px; width: 50%;">
-                                <div style="margin-bottom: 12px;">ยอดรวม</div>
-                                <span style="font-size: 36px;">@lang('common.thb') {{ numberFormat($main_order->total_final_price) }}</span>
+                            <td style="text-align: center; padding: 30px 5px; font-size:34px; width: 50%; max-width: 50%;">
+                                <div style="margin-bottom: 12px;">&nbsp;&nbsp;&nbsp; ยอดรวม &nbsp;&nbsp;&nbsp;</div>
+                                <span style="font-size: 44px;">@lang('common.thb') {{ numberFormat($main_order->total_final_price) }}</span>
                             </td>
                         </tr>
                     </table>
@@ -115,7 +116,7 @@
             <tr><td style="height:40px;"></td></tr> 
             <!-- Third row starts -->
             <tr>
-                <td style="border:1px solid #000; padding:12px 10px;">
+                <td style="border:1px solid #9E9E9E; padding:12px 10px;">
                     <table border="0" cellpadding="0" cellspacing="0" width="100%">
                         <tr>
                             <td colspan="4" style="font-size:28px;">@lang('admin_order.buyer_information')</td>
@@ -159,7 +160,7 @@
 
                             @endif
                             <td style="width:25%;">
-                                <div style="margin-bottom:15px;">Shipping : {{ GeneralFunctions::getShippingMethod($main_order->shipping_method) }}</div>
+                                <div style="margin-bottom:15px;">Shipping : <br> {{ GeneralFunctions::getShippingMethod($main_order->shipping_method) }}</div>
                                 <div style="margin-bottom:15px;">Pickup Date : <br>{{$main_order->pickup_time}}</div>
                             </td>
                         </tr>
@@ -170,22 +171,22 @@
             <tr><td style="height:30px;"></td></tr> 
             <tr>
                 <td style="border-bottom:none; padding:0;" align="center">
-                    <table border="0" cellpadding="0" cellspacing="0" width="53%" align="center;" class="total-table" style="border:1px solid #000;">
+                    <table border="0" cellpadding="0" cellspacing="0" width="53%" align="center;" class="total-table" style="border:1px solid #9E9E9E;">
                         <tr>
-                            <td style="padding:12px; border-bottom: 1px solid #000;text-align:left;">@lang('checkout.total_seller')</td>
-                            <td style="text-align:right; padding:12px;border-bottom: 1px solid #000;">{{ $main_order->tot_shop }}</td>
+                            <td style="padding:12px; border-bottom: 1px solid #9E9E9E;text-align:left;">@lang('checkout.total_seller')</td>
+                            <td style="text-align:right; padding:12px;border-bottom: 1px solid #9E9E9E;">{{ $main_order->tot_shop }}</td>
                         </tr>
                         <tr>
-                            <td style="padding:12px;border-bottom: 1px solid #000;text-align:left;">@lang('checkout.total')</td>
-                            <td style="text-align:right; padding:12px;border-bottom: 1px solid #000;">{{numberFormat($main_order->total_core_cost)}} @lang('common.baht')</td>
+                            <td style="padding:12px;border-bottom: 1px solid #9E9E9E;text-align:left;">@lang('checkout.total')</td>
+                            <td style="text-align:right; padding:12px;border-bottom: 1px solid #9E9E9E;">{{numberFormat($main_order->total_core_cost)}} @lang('common.baht')</td>
                         </tr>
                         <tr>
-                            <td style="padding:12px;border-bottom: 1px solid #000;text-align:left;">@lang('checkout.shipping_charge')</td>
-                            <td style="text-align:right; padding:12px;border-bottom: 1px solid #000;">{{numberFormat($main_order->total_shipping_cost)}} @lang('common.baht')</td>
+                            <td style="padding:12px;border-bottom: 1px solid #9E9E9E;text-align:left;">@lang('checkout.shipping_charge')</td>
+                            <td style="text-align:right; padding:12px;border-bottom: 1px solid #9E9E9E;">{{numberFormat($main_order->total_shipping_cost)}} @lang('common.baht')</td>
                         </tr>
                         <tr>
-                            <td style="padding:12px;border-bottom: 1px solid #000;text-align:left;">@lang('checkout.grand_total')</td>
-                            <td style="text-align:right; padding:12px;border-bottom: 1px solid #000;">{{numberFormat($main_order->total_final_price)}} @lang('common.baht')</td>
+                            <td style="padding:12px;border-bottom: 1px solid #9E9E9E;text-align:left;">@lang('checkout.grand_total')</td>
+                            <td style="text-align:right; padding:12px;border-bottom: 1px solid #9E9E9E;">{{numberFormat($main_order->total_final_price)}} @lang('common.baht')</td>
                         </tr>
                     </table>
                 </td>
@@ -207,7 +208,7 @@
                     </tr>
 
                     <tr>
-                        <td style="border:1px solid #000; border-bottom:none; padding:0;">
+                        <td style="border:1px solid #9E9E9E; border-bottom:none; padding:0;">
                             <table border="0" cellpadding="0" cellspacing="0" width="100%" class="data-tables">
                                 <tr>
                                     <th style="text-align:center; font-weight: normal;">สินค้า</th>
@@ -266,15 +267,15 @@
                                 <tr>
                                     <td style="width:50%">checkout.shop_remark <br>
                                     {{$shop_ord_val->api_remark}}</td>
-                                    <td style="width:50%; border:1px solid #000; padding:0; border-bottom:none;">
+                                    <td style="width:50%; border:1px solid #9E9E9E; padding:0; border-bottom:none;">
                                         <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                             <tr>
-                                                <td style="padding: 10px; border-bottom:1px solid #000;">@lang('checkout.total')</td>
-                                                <td style="padding: 10px; border-bottom:1px solid #000; text-align: right;">{{numberFormat($shop_ord_val->total_core_cost)}} @lang('common.baht')</td>
+                                                <td style="padding: 10px; border-bottom:1px solid #9E9E9E;">@lang('checkout.total')</td>
+                                                <td style="padding: 10px; border-bottom:1px solid #9E9E9E; text-align: right;">{{numberFormat($shop_ord_val->total_core_cost)}} @lang('common.baht')</td>
                                             </tr>
                                             <tr>
-                                                <td style="padding: 10px; border-bottom:1px solid #000;">@lang('checkout.grand_total')</td>
-                                                <td style="padding: 10px; border-bottom:1px solid #000; text-align: right;">{{numberFormat($shop_ord_val->total_final_price)}} @lang('common.baht')</td>
+                                                <td style="padding: 10px; border-bottom:1px solid #9E9E9E;">@lang('checkout.grand_total')</td>
+                                                <td style="padding: 10px; border-bottom:1px solid #9E9E9E; text-align: right;">{{numberFormat($shop_ord_val->total_final_price)}} @lang('common.baht')</td>
                                             </tr>
                                         </table>
                                     </td>
