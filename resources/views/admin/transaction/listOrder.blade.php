@@ -285,6 +285,8 @@
         function generateOrderPdf(event, orderData){ 
             orderData = beforeExport();
             if(!orderData.length) return;
+            var url = "{{action('Admin\Transaction\OrderController@generateOrderPdf')}}?order_list="+JSON.stringify(orderData);
+            window.location.href=url;
             $.ajax({
                   type : 'post',
                   url : "{{action('Admin\Transaction\OrderController@generateOrderPdf')}}",
@@ -300,17 +302,7 @@
                   if(data.status && data.status == 'error')
                       swal('Opps..!', data.message, data.status)
                   else{
-                    swal({
-                      title: data.message,
-                      text: "Your pdf zip created, please click on download",
-                      type: data.status,
-                      showCancelButton: true,
-                      showConfirmButton: true,
-                      confirmButtonColor: '#3085d6',
-                      cancelButtonColor: '#d33',
-                      confirmButtonClass : 'p-0',                       
-                      confirmButtonText: '<a style="color: #FFF;background-color:#3085d6;padding: 10px 15px;display:inline-block;" href="'+data.url+'" download>Download Zip</a>'
-                    })
+                    swal('Success', data.message, data.status)
                   }
               })
               .always(()=>{

@@ -185,7 +185,7 @@
             Route::get('download-export/{id?}', 'Admin\Transaction\ExportOrderController@downloadExport');
             Route::post('change-status', 'Admin\Transaction\ExportOrderController@changeStatus');
             Route::get('orderdetailexport/{oid}', 'Admin\Transaction\OrderController@orderDetailExport');
-            Route::post('orderlistexport', 'Admin\Transaction\OrderController@generateOrderPdf');
+            Route::get('orderlistexport', 'Admin\Transaction\OrderController@generateOrderPdf');
         });
 
         Route::get('generate-txt', 'Admin\Transaction\ExportOrderController@generateTxt');
