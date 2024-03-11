@@ -73,6 +73,9 @@
 
     /*  */
     @media  print {    
+        body, html {
+            margin:0;
+        }
         .red, .dont-forget { background: #DC3545; }  
         .voucher-page {page-break-after: always; margin-top: 30px;}
     }
@@ -83,13 +86,14 @@
 </style>
 
 <body style="font-family: examplefont, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.3; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;  margin: 0; padding: 0;">
+    <htmlpageheader name="page-header">
+        <div style="padding:15px 10px 10px 10px;box-shadow: 0px 3px 9px 0px #ccc;">
+            <span style="color: #F00;">Main Order ID:</span> {{$main_order->formatted_id}}
+        </div>
+        
+    </htmlpageheader>
     <div class="container">
-        <htmlpageheader name="page-header">
-                <div style="padding:15px 10px 10px 10px;box-shadow: 0px 3px 9px 0px #ccc;">
-                    <span style="color: #F00;">Main Order ID:</span> {{$main_order->formatted_id}}
-                </div>
-                
-            </htmlpageheader>
+        
         <table border="0" cellpadding="0" cellspacing="0" align="center" style="font-family: examplefont, sans-serif; width: 1000px; color:#000; line-height:1.3;">
             <!-- First row starts -->
             
@@ -212,14 +216,14 @@
                             <table border="0" cellpadding="0" cellspacing="0" width="100%" class="data-tables">
                                 <tr>
                                     <th style="text-align:center; font-weight: normal;">สินค้า</th>
-                                    <th style="text-align:center; font-weight: normal;">ร้านค้า</th>
+                                    <th style="text-align:left; font-weight: normal;">ร้านค้า</th>
                                     <th style="text-align:center; font-weight: normal;">ราคา <br> ต่อหน่วย</th>
                                     <th style="text-align:center; font-weight: normal;">จำนวน</th>
                                     <th style="text-align:center; font-weight: normal;">ราคารวม <br></th>
                                     <th style="text-align:center; font-weight: normal;">ช่องทางการ <br>ชำระเงิน</th>
                                     <th style="text-align:center; font-weight: normal;">สถานะ </th>
+                                    <th style="text-align:center; font-weight: normal;">Remark</th>
                                     <th style="text-align:center; font-weight: normal;">รายละเอียด <br>สินค้า</th>
-                                    <th style="text-align:center; font-weight: normal;">Action</th>
                                 </tr>
                                 @foreach($shop_ord_val->details as $key => $val)
                                     @php 
