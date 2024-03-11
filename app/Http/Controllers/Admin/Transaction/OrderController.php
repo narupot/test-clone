@@ -520,7 +520,7 @@ class OrderController extends MarketPlace
             return $pdf->download($main_order->formatted_id.'.pdf');
             //return view('admin.transaction.mainOrddetailExport',['main_order' => $main_order,'order_shop'=>$order_shop,'transaction'=>$transaction]);
         }
-
+        return ['status'=>'success','message'=>'Pdf Download Successfully'];
         
     }
     
