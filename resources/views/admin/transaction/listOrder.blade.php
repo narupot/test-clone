@@ -285,7 +285,7 @@
         function generateOrderPdf(event, orderData){ 
             orderData = beforeExport();
             if(!orderData.length) return;
-            var url = "{{action('Admin\Transaction\OrderController@generateOrderPdf')}}?order_list="+JSON.stringify(orderData);
+            var url = "{{action('Admin\Transaction\OrderController@generateOrderPdf')}}?order_list="+orderData;
             window.location.href=url;
             $.ajax({
                   type : 'post',
