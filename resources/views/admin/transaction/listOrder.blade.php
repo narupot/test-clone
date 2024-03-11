@@ -287,27 +287,27 @@
             if(!orderData.length) return;
             var url = "{{action('Admin\Transaction\OrderController@generateOrderPdf')}}?order_list="+orderData;
             window.location.href=url;
-            $.ajax({
-                  type : 'post',
-                  url : "{{action('Admin\Transaction\OrderController@generateOrderPdf')}}",
-                  headers : {
-                      'X-CSRF-TOKEN' : window.Laravel.csrfToken,
-                      '_token' : window.Laravel.csrfToken,
-                  },
-                  beforeSend : ()=>{                        
-                     try{showHideLoaderAdmin('showLoader')}catch(er){console.log};
-                  },
-                  data : {'section':'order', 'order_list':JSON.stringify(orderData)},
-              }).done((data)=>{
-                  if(data.status && data.status == 'error')
-                      swal('Opps..!', data.message, data.status)
-                  else{
-                    swal('Success', data.message, data.status)
-                  }
-              })
-              .always(()=>{
-                  try{showHideLoaderAdmin('hideLoader')}catch(er){console.log};
-              });         
+            // $.ajax({
+            //       type : 'post',
+            //       url : "{{action('Admin\Transaction\OrderController@generateOrderPdf')}}",
+            //       headers : {
+            //           'X-CSRF-TOKEN' : window.Laravel.csrfToken,
+            //           '_token' : window.Laravel.csrfToken,
+            //       },
+            //       beforeSend : ()=>{                        
+            //          try{showHideLoaderAdmin('showLoader')}catch(er){console.log};
+            //       },
+            //       data : {'section':'order', 'order_list':JSON.stringify(orderData)},
+            //   }).done((data)=>{
+            //       if(data.status && data.status == 'error')
+            //           swal('Opps..!', data.message, data.status)
+            //       else{
+            //         swal('Success', data.message, data.status)
+            //       }
+            //   })
+            //   .always(()=>{
+            //       try{showHideLoaderAdmin('hideLoader')}catch(er){console.log};
+            //   });         
                 
         };  
  
