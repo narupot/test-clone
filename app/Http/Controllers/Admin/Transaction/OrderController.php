@@ -470,12 +470,14 @@ class OrderController extends MarketPlace
     public function generateOrderPdf(Request $request) {
 
         //$formatted_id = $request->order_list; 
-        $formatted_id = json_decode($request->order_list,true); 
+        //dd($request->order_list);
+        $formatted_id = explode(',',$request->order_list); 
         $total_order = Order::whereIn('formatted_id',$formatted_id)->with(['getUser','getOrderStatus'])->get();
         // dd($main_order,$formatted_id);
         if(empty($total_order)){
           abort(404);
         }
+        //dd($total_order,$formatted_id);
         foreach ($total_order as $key => $main_order) {
             $order_shop = OrderShop::where('order_id',$main_order->id)->with(['getOrderStatus'])->get();
             if(count($order_shop)){
@@ -520,7 +522,7 @@ class OrderController extends MarketPlace
             return $pdf->download($main_order->formatted_id.'.pdf');
             //return view('admin.transaction.mainOrddetailExport',['main_order' => $main_order,'order_shop'=>$order_shop,'transaction'=>$transaction]);
         }
-        return ['status'=>'success','message'=>'Pdf Download Successfully'];
+        //return ['status'=>'success','message'=>'Pdf Download Successfully'];
         
     }
     
