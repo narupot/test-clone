@@ -285,7 +285,9 @@
         function generateOrderPdf(event, orderData){ 
             orderData = beforeExport();
             if(!orderData.length) return;
-            var url = "{{action('Admin\Transaction\OrderController@generateOrderPdf')}}?order_list="+orderData;
+            //console.log(orderData);return;
+            var total_order = orderData.toString();
+            var url = "{{action('Admin\Transaction\OrderController@generateOrderPdf')}}?order_list="+total_order;
             window.location.href=url;
             // $.ajax({
             //       type : 'post',
