@@ -3,7 +3,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
     <meta http-equiv="Content-Type" content="800; charset=utf-8" />
-    <title>{{$main_order->formatted_id}}</title>
+    <title>Tobo</title>
 
 <style>
     @font-face {
@@ -86,12 +86,47 @@
 </style>
 
 <body style="font-family: examplefont, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.3; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;  margin: 0; padding: 0;">
-    <htmlpageheader name="page-header">
-        <div style="padding:15px 10px 10px 10px;box-shadow: 0px 3px 9px 0px #ccc;">
-            <span style="color: #F00;">Main Order ID:</span> {{$main_order->formatted_id}}
-        </div>
+    @foreach($total_order as $key => $main_order)
+    
+    <?php 
+        $order_shop = \App\OrderShop::where('order_id',$main_order->id)->with(['getOrderStatus'])->get();
+        if(count($order_shop)){
+            foreach ($order_shop as $key => $value) {
+                $order_detail = \App\OrderDetail::getShopOrderDetail('',$value->id);
+                $order_shop[$key]->details = $order_detail;
+            }
+        }
+        $main_order->tot_shop = count($order_shop);
         
-    </htmlpageheader>
+        //dd($order_shop);
+        $transaction = \App\OrderTransaction::where('order_id',$main_order->id)->orderBy('id')->get();
+        
+        $main_order->pickup_time = null;
+        if($main_order->id>0)
+        {
+            $order_info = \App\Order::where('id',$main_order->id)->first();
+            if($order_info)
+            {
+                $main_order->pickup_time=$order_info->pickup_time;
+            }
+        }
+        
+        /* Start:: If Product Detail Not Available in Order Details */
+        if(count($order_shop))
+        {
+            foreach($order_shop as $skey => $shop_ord_val)
+                {
+                    foreach($shop_ord_val->details as $key => $val)
+                    {
+                        if($val->description=='' || $val->description==null)
+                        {
+                            $productDetail = \App\Product::getProductDetail($val->sku);
+                            $order_shop[$skey]->details[$key]->description=isset($productDetail->productDesc)?$productDetail->productDesc->description:"";
+                        }
+                    }
+                }
+        }
+    ?>
     <div class="container">
         
         <table border="0" cellpadding="0" cellspacing="0" align="center" style="font-family: examplefont, sans-serif; width: 1000px; color:#000; line-height:1.3;">
@@ -294,6 +329,7 @@
             @endif
         </table>
     </div>
+    @endforeach
 </body>
 
 </html>
