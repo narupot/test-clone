@@ -412,5 +412,50 @@ class ShopOrderController extends MarketPlace
     
     function update(Request $request){
     }
+
+    public function orderDetailExport(Request $request) {
+
+        $formatted_id = $request->oid; 
+        $order_shop = OrderShop::where('shop_formatted_id',$formatted_id)->with(['getOrderStatus'])->first();
+       
+        if(empty($order_shop)){
+          return redirect()->action('Admin\Transaction\ShopOrderController@index');
+        }
+        $order_detail = OrderDetail::getShopOrderDetail('',$order_shop->id);
+        $order_shop->details = $order_detail;
+        $transaction = \App\OrderTransaction::where('order_shop_id',$order_shop->id)->get();
+        if(count($transaction) < 2){
+            $transaction = \App\OrderTransaction::where('order_id',$order_shop->order_id)->where('order_shop_id',0)->orderBy('id')->get();
+        }
+		$order_shop->pickup_time = null;
+		if($order_shop->order_id>0)
+		{
+			$order_info = Order::where('id',$order_shop->order_id)->first();
+			if($order_info)
+			{
+				$order_shop->pickup_time=$order_info->pickup_time;
+			}
+		}
+		/* Start:: If Product Detail Not Available in Order Details */
+		if($order_shop->details)
+		{
+			if(!empty($order_shop->details))
+			{
+				foreach($order_shop->details as $key => $val)
+				{
+					if($val->description=='' || $val->description==null)
+					{
+						$productDetail = \App\Product::getProductDetail($val->sku);
+						$order_shop->details[$key]->description=isset($productDetail->productDesc)?$productDetail->productDesc->description:"";
+					}
+				}
+			}
+		}
+		/* Start:: If Product Detail Not Available in Order Details */
+        //return view('admin.transaction.shopOrdDetail',['order_shop'=>$order_shop,'transaction'=>$transaction]);
+        $pdf = PDF::loadView('admin.transaction.shopOrdDetailExport',['order_shop'=>$order_shop,'transaction'=>$transaction]);
+        
+        return $pdf->download($main_order->formatted_id.'.pdf');
+    } 
     
 }

@@ -21,6 +21,8 @@
 
                 <a href="javascript:;" data-val="{{ $order_shop->shop_formatted_id }}" data-type="cancel" class="btn-danger ord_status_change">@lang('admin_order.cancel_order')</a>
             @endif
+            <a href="{{ action('Admin\Transaction\ShopOrderController@orderDetailExport',$order_shop->shop_formatted_id) }}" class="btn-back">@lang('admin_common.export_order_pdf')</a>
+        
         </div>
     </div>
     <div class="content-wrap">
