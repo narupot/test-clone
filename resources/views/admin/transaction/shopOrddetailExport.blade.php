@@ -199,6 +199,7 @@
                             <th style="text-align:center; font-weight: normal;">สถานะ </th>
                             <th style="text-align:center; font-weight: normal;">Remark</th>
                             <th style="text-align:center; font-weight: normal;">รายละเอียด <br>สินค้า</th>
+                            <th style="text-align:center; font-weight: normal;">@lang('common.action')</th>
                         </tr>
                         @foreach($order_shop->details as $key => $val)
                             @php 
@@ -233,6 +234,12 @@
                                     $str_description = mb_substr($str_description, 0, 30);
                                 @endphp
                                 <td>{!!$str_description!!}</td>
+                                @if(!$order_shop->end_shopping_date || $order_shop->order_status ==3 || $order_shop->order_status ==4)
+                                <td></td>
+                                @else
+                                    
+                                    <td>@if($val->status!=4) <a href="javascript:;" data-type='cancel' data-val="{{ $val->id }}" class="ord_item_change">@lang('common.cancel')</a> @endif | <a href="javascript:;" data-type='receive' data-val="{{ $val->id }}" class="ord_item_change">@lang('admin_order.center_received')</a></td> 
+                                @endif
                             </tr>
                         @endforeach 
                     </table>
