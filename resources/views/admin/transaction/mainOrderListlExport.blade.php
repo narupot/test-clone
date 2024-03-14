@@ -7,26 +7,26 @@
 
 <style>
     @font-face {
-	    /* font-family: "THSarabun"; */
+	    / font-family: "THSarabun"; /
         font-family: 'examplefont', sans-serif;
 	    font-style: normal;
 	    font-weight: normal;
-	    /* src: url("{{ asset('pdf_fonts/THSarabun.ttf')}}") format("truetype"); */
+	    / src: url("{{ asset('pdf_fonts/THSarabun.ttf')}}") format("truetype"); /
     }  
     @font-face {
-	    /* font-family: "THSarabunbold"; */
+	    / font-family: "THSarabunbold"; /
         font-family: 'examplefont', sans-serif;
 	    font-style: normal;
 	    font-weight: bolder;
-	    /* src: url("{{ asset('pdf_fonts/THSarabun Bold.ttf')}}") format("truetype"); */
+	    / src: url("{{ asset('pdf_fonts/THSarabun Bold.ttf')}}") format("truetype"); /
     }      
     body {
-        /* font-family: "THSarabun"; */
+        / font-family: "THSarabun"; /
         font-family: 'examplefont', sans-serif;
         font-size: 16px; color: #343A40; 
         background: #fff !important; line-height: 16px;
         letter-spacing: 0.38px;
-        padding-bottom:1.62cm; margin-top: 5px;
+        padding-bottom:1.62cm; 
     }
     html { -webkit-print-color-adjust: exact; }
     table {
@@ -37,7 +37,7 @@
     td {
         border-collapse: collapse;
         padding: 3px 8px;
-        /* border: 1px solid #CED4DA; */
+        / border: 1px solid #CED4DA; /
         border:none; font-size: 20px;
     }
     th {
@@ -71,7 +71,7 @@
         color: #F00;
     }
 
-    /*  */
+    /  /
     @media  print {    
         body, html {
             margin:0;
@@ -110,8 +110,6 @@
                 $main_order->pickup_time=$order_info->pickup_time;
             }
         }
-        
-        /* Start:: If Product Detail Not Available in Order Details */
         if(count($order_shop))
         {
             foreach($order_shop as $skey => $shop_ord_val)
@@ -128,10 +126,13 @@
         }
     ?>
     <div class="container">
+
+        <div style="padding:15px 10px 10px 10px;box-shadow: 0px 3px 9px 0px #ccc;">
+            <span style="color: #F00;">Main Order ID:</span> {{$main_order->formatted_id}}
+        </div>
         
         <table border="0" cellpadding="0" cellspacing="0" align="center" style="font-family: examplefont, sans-serif; width: 1000px; color:#000; line-height:1.3;">
             <!-- First row starts -->
-            
                 
             <tr><td style="height:40px;"></td></tr> 
             <!-- Second row starts -->
