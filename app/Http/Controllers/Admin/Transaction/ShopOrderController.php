@@ -17,7 +17,7 @@ use App\User;
 use Lang;
 use Config;
 use Excel;
-
+use PDF;
 class ShopOrderController extends MarketPlace
 {
     public function __construct(){
