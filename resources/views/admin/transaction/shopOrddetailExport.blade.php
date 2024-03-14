@@ -89,9 +89,8 @@
     <htmlpageheader name="page-header">
         <div style="padding:15px 10px 10px 10px;box-shadow: 0px 3px 9px 0px #ccc;">
             <span style="color: #F00;">Main Order ID:</span> {{$order_shop->shop_formatted_id}}
-            <span style="text-align:right;">SHOP NAME</span>
+            <div style="text-align:right; float:right; margin-top:-16px;">SHOP NAME</div>
         </div>
-        
     </htmlpageheader>
     <div class="container">
         
