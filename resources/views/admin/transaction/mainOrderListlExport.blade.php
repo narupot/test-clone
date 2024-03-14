@@ -80,8 +80,9 @@
         .voucher-page {page-break-after: always; margin-top: 30px;}
     }
     @page {
-        header: page-header;
-        footer: page-footer;
+        /*header: page-header;
+        footer: page-footer;*/
+        margin-top: 4mm ; 
     }
 </style>
 
