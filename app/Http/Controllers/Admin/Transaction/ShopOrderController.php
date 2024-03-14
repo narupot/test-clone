@@ -455,7 +455,7 @@ class ShopOrderController extends MarketPlace
         //return view('admin.transaction.shopOrdDetail',['order_shop'=>$order_shop,'transaction'=>$transaction]);
         $pdf = PDF::loadView('admin.transaction.shopOrddetailExport',['order_shop'=>$order_shop,'transaction'=>$transaction]);
         
-        return $pdf->download($main_order->formatted_id.'.pdf');
+        return $pdf->download($order_shop->formatted_id.'.pdf');
     } 
     
 }
