@@ -77,13 +77,15 @@
             margin:0;
         }
         .red, .dont-forget { background: #DC3545; }  
-        .voucher-page {page-break-after: always; margin-top: 30px;}
+        /* .voucher-page {page-break-after: always; margin-top: 30px;} */
+        .order_pdf_repeat {page-break-after: always; margin-top: 30px;}
     }
     @page {
         /*header: page-header;
         footer: page-footer;*/
         margin-top: 4mm ; 
     }
+    
 </style>
 
 <body style="font-family: examplefont, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.3; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;  margin: 0; padding: 0;">
@@ -126,7 +128,7 @@
                 }
         }
     ?>
-    <div class="container">
+    <div class="container order_pdf_repeat">
 
         <div style="padding:10px 10px 10px 10px;box-shadow: 0px 3px 9px 0px #ccc;">
             <span style="color: #F00;">Main Order ID:</span> {{$main_order->formatted_id}}
