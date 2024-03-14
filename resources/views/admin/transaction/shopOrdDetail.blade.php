@@ -12,8 +12,9 @@
 @section('content')
 <div class="content">
     <div class="header-title">
-        <h1 class="title">@lang('checkout.order_no'). {{ $order_shop->shop_formatted_id }}</h1>       
+        <h1 class="title">@lang('checkout.order_no'). {{ $main_order_info->formatted_id }}</h1>       
         <div class="float-right">
+            <h2>{{ $shop_json['shop_name'][session('default_lang')]??'' }}</h2>
             <a href="{{ action('Admin\Transaction\ShopOrderController@index') }}" class="btn-back">@lang('admin_common.back')</a>
 
             @if($order_shop->end_shopping_date && $order_shop->order_status !=3 && $order_shop->order_status !=4)

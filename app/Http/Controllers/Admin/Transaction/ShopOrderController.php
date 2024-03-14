@@ -185,8 +185,9 @@ class ShopOrderController extends MarketPlace
 				}
 			}
 		}
+        $shop_json = json_decode($order_shop->shop_json,true);
 		/* Start:: If Product Detail Not Available in Order Details */
-        return view('admin.transaction.shopOrdDetail',['order_shop'=>$order_shop,'transaction'=>$transaction]);
+        return view('admin.transaction.shopOrdDetail',['order_shop'=>$order_shop,'transaction'=>$transaction,'main_order_info'=>$order_info,'shop_json'=>$shop_json]);
     }       
 
     public function changeShopOrderStatus(Request $request){
