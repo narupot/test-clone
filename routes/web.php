@@ -204,6 +204,7 @@
             Route::get('/{oid}/detail', 'Admin\Transaction\ShopOrderController@orderDetail');
             Route::post('ordChangeItemStatus', 'Admin\Transaction\ShopOrderController@changeShopOrderStatus');
             Route::post('updateRemark', 'Admin\Transaction\ShopOrderController@updateRemark');
+            Route::get('orderdetailexport/{oid}', 'Admin\Transaction\ShopOrderController@orderDetailExport');
         });
 
         Route::post('froalaupload','FroalaEditorController@uploadImage');
