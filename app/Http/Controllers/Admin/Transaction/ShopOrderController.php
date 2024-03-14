@@ -185,8 +185,9 @@ class ShopOrderController extends MarketPlace
 				}
 			}
 		}
+        $shop_json = json_decode($order_shop->shop_json,true);
 		/* Start:: If Product Detail Not Available in Order Details */
-        return view('admin.transaction.shopOrdDetail',['order_shop'=>$order_shop,'transaction'=>$transaction]);
+        return view('admin.transaction.shopOrdDetail',['order_shop'=>$order_shop,'transaction'=>$transaction,'main_order_info'=>$order_info,'shop_json'=>$shop_json]);
     }       
 
     public function changeShopOrderStatus(Request $request){
@@ -417,9 +418,14 @@ class ShopOrderController extends MarketPlace
 
         $formatted_id = $request->oid; 
         $order_shop = OrderShop::where('shop_formatted_id',$formatted_id)->with(['getOrderStatus'])->first();
-       
+        
         if(empty($order_shop)){
           return redirect()->action('Admin\Transaction\ShopOrderController@index');
+        }
+        $shop_name ='';
+        $json_name = json_decode($order_shop->shop_json,true);
+        if($json_name){
+            $shop_name = $json_name['shop_name'][0];
         }
         $order_detail = OrderDetail::getShopOrderDetail('',$order_shop->id);
         $order_shop->details = $order_detail;
@@ -453,7 +459,7 @@ class ShopOrderController extends MarketPlace
 		}
 		/* Start:: If Product Detail Not Available in Order Details */
         //return view('admin.transaction.shopOrdDetail',['order_shop'=>$order_shop,'transaction'=>$transaction]);
-        $pdf = PDF::loadView('admin.transaction.shopOrddetailExport',['order_shop'=>$order_shop,'transaction'=>$transaction]);
+        $pdf = PDF::loadView('admin.transaction.shopOrddetailExport',['order_shop'=>$order_shop,'transaction'=>$transaction,'shop_name'=>$shop_name]);
         
         return $pdf->download($order_shop->shop_formatted_id.'.pdf');
     } 
