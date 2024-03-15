@@ -65,7 +65,15 @@
                                     </select>
                                 </div>
                             </div>
-
+                            <div class="form-group row">
+                                <div class="col-md-5">
+                                    <label for="form-text-input">@lang('common.header_footer') <i class="strick">*</i></label>
+                                    <select class="select" name="header_footer">
+                                        <option value="1">@lang('common.show')</option>
+                                        <option value="0">@lang('common.hide')</option>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="form-group row">
                                 <div class="col-md-8">
                                     {!! CustomHelpers::fieldstabWithLanuage([['field'=>'text', 'name'=>'page_title', 'label'=>'Title <i class="strick">*</i>', 'errorkey'=>'page_ttl'], ['field'=>'textarea', 'name'=>'page_desc', 'label'=>'Description <i class="strick">*</i>', 'errorkey'=>'page_description', 'cssClass'=>'froala-editor-apply']], '3', $errors) !!}
