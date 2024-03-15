@@ -151,6 +151,7 @@ class StaticPageController extends MarketPlace
             //dd($cms->url);  
             //$cms->url = str_slug($request->cms_url, '-');
             $cms->status = $request->status;
+            $cms->header_footer = $request->header_footer;
             if(!empty($request->metaimage)) {
                 
                 $uploadDetails['path'] = Config::get('constants.page_socialshare_img_path');
@@ -342,7 +343,7 @@ class StaticPageController extends MarketPlace
 
         if ($validate->passes()) {
 
-            StaticPage::where(['id'=>$page_id])->update(['url' => createUrl($request->cms_url), 'status' => $request->status,'updated_by'=>Auth::guard('admin_user')->user()->id]);
+            StaticPage::where(['id'=>$page_id])->update(['url' => createUrl($request->cms_url), 'status' => $request->status,'header_footer' => $request->header_footer,'updated_by'=>Auth::guard('admin_user')->user()->id]);
             $update_data=[];
             if(!empty($request->metaimage)) {
                 
