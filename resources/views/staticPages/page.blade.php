@@ -9,6 +9,9 @@
 		#header{
 			display:none !important;
 		}
+		#footer{
+			display:none !important;
+		}
 	</style>
 @endif
 @section('content')
