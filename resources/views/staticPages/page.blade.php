@@ -4,7 +4,13 @@
 @section('header_style')
 
 @stop
-
+@if($data->header_footer=='0')
+	<style>
+		#header{
+			display:none !important;
+		}
+	</style>
+@endif
 @section('content')
 	@if($preview == 'yes')
 
