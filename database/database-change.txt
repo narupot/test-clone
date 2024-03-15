@@ -3,3 +3,7 @@ INSERT INTO `smm_menus` (`id`, `slug`, `url`, `status`, `parent_id`, `menu_type`
 INSERT INTO `smm_menus_desc` (`id`, `menu_id`, `lang_id`, `menu_name`) VALUES (NULL, '327', '0', 'Web Status Button'), (NULL, '327', '1', 'Web Status Button'), (NULL, '328', '0', 'Mobile Status Button'), (NULL, '328', '1', 'Mobile Status Button');
 
 ALTER TABLE `smm_unit` CHANGE `unit_weight` `unit_weight` FLOAT NOT NULL DEFAULT '0';
+
+15-03-2024 change
+-----------------------
+ALTER TABLE `smm_static_page` ADD `header_footer` ENUM('0','1') NOT NULL DEFAULT '1' AFTER `status`;
