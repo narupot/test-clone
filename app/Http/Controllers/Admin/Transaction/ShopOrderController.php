@@ -462,6 +462,22 @@ class ShopOrderController extends MarketPlace
         $pdf = PDF::loadView('admin.transaction.shopOrddetailExport',['order_shop'=>$order_shop,'transaction'=>$transaction,'shop_name'=>$shop_name]);
         
         return $pdf->download($order_shop->shop_formatted_id.'.pdf');
-    } 
+    }
+    
+    public function generateOrderPdf(Request $request) {
+
+        $formatted_id = explode(',',$request->order_list); 
+        $total_order = OrderShop::where('shop_formatted_id',$formatted_id)->with(['getOrderStatus'])->get();
+        
+        if(empty($total_order)){
+          abort(404);
+        }
+        $pdf = PDF::loadView('admin.transaction.shopOrdListlExport', ['total_order' => $total_order]);
+        return $pdf->download('shop-order.pdf');
+        //return view('admin.transaction.mainOrderListlExport',['total_order' => $total_order]);
+    
+        //return ['status'=>'success','message'=>'Pdf Download Successfully'];
+        
+    }
     
 }
