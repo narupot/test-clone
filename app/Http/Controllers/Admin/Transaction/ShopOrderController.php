@@ -467,7 +467,7 @@ class ShopOrderController extends MarketPlace
     public function generateOrderPdf(Request $request) {
 
         $formatted_id = explode(',',$request->order_list); 
-        $total_order = OrderShop::where('shop_formatted_id',$formatted_id)->with(['getOrderStatus'])->get();
+        $total_order = OrderShop::whereIn('shop_formatted_id',$formatted_id)->with(['getOrderStatus'])->get();
         
         if(empty($total_order)){
           abort(404);
