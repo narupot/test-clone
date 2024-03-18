@@ -325,7 +325,7 @@
  
         function getData(){
             return jqGrid.SelectRow().getSelection().map(function(rowList) {
-                return rowList.rowData.formatted_id;
+                return rowList.rowData.shop_formatted_id;
             });
         };
         function beforeExport(){

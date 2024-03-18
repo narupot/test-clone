@@ -93,7 +93,7 @@
             if($json_name){
                 $shop_name = $json_name['shop_name'][0];
             }
-            $order_detail = OrderDetail::getShopOrderDetail('',$order_shop->id);
+            $order_detail = \App\OrderDetail::getShopOrderDetail('',$order_shop->id);
             $order_shop->details = $order_detail;
             $transaction = \App\OrderTransaction::where('order_shop_id',$order_shop->id)->get();
             if(count($transaction) < 2){
@@ -102,7 +102,7 @@
             $order_shop->pickup_time = null;
             if($order_shop->order_id>0)
             {
-                $order_info = Order::where('id',$order_shop->order_id)->first();
+                $order_info = \App\Order::where('id',$order_shop->order_id)->first();
                 if($order_info)
                 {
                     $order_shop->pickup_time=$order_info->pickup_time;
