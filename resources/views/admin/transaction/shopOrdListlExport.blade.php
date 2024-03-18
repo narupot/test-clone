@@ -3,7 +3,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
     <meta http-equiv="Content-Type" content="800; charset=utf-8" />
-    <title>{{$order_shop->shop_formatted_id}}</title>
+    <title>Shop Order List</title>
 
 <style>
     @font-face {

@@ -197,7 +197,7 @@
                             <th style="text-align:center; font-weight: normal;">ราคารวม <br></th>
                             <th style="text-align:center; font-weight: normal;">ช่องทางการ <br>ชำระเงิน</th>
                             <th style="text-align:center; font-weight: normal;">สถานะ </th>
-                            <th style="text-align:center; font-weight: normal;">Remark</th>
+                            <!-- <th style="text-align:center; font-weight: normal;">Remark</th> -->
                             <th style="text-align:center; font-weight: normal;">รายละเอียด <br>สินค้า</th>
                             <th style="text-align:center; font-weight: normal;">@lang('common.action')</th>
                         </tr>
@@ -227,7 +227,7 @@
                                 <td>{{numberFormat($val->total_price) }} @lang('common.baht')</td>
                                 <td>{!!$detail_json['payment_method'][session('default_lang')] ?? str_replace('_',' ',strtoupper($val->payment_slug)) !!}</td>
                                 <td><span style="color:#F00;">{{ $val->getOrderStatus->status??'' }}</span></td>
-                                <td>{{$val->api_remark}}</td>
+                                <!-- <td>{{$val->api_remark}}</td> -->
                                 @php 
                                     $str_description = $val->description;
                                     $str_description = strip_tags($str_description);
