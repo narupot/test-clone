@@ -77,11 +77,12 @@
             margin:0;
         }
         .red, .dont-forget { background: #DC3545; }  
-        .voucher-page {page-break-after: always; margin-top: 30px;}
+        .order_pdf_repeat {page-break-after: always; margin-top: 30px;}
     }
     @page {
-        header: page-header;
-        footer: page-footer;
+        /* header: page-header;
+        footer: page-footer; */
+        margin-top: 4mm ; 
     }
 </style>
 
