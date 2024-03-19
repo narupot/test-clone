@@ -88,7 +88,7 @@
 <body style="font-family: examplefont, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.3; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;  margin: 0; padding: 0;">
     <htmlpageheader name="page-header">
         <div style="padding:15px 10px 10px 10px;box-shadow: 0px 3px 9px 0px #ccc;">
-            <span style="color: #F00;">Main Order ID:</span> {{$order_shop->shop_formatted_id}}
+            <span style="color: #F00;">Main Order ID:</span> {{getMainOrderId($order_shop->order_id)}}
             <div style="text-align:right; float:right; margin-top:-16px;"><span style="color: #F00;">Shop Name :</span>{{$shop_name}}</div>
         </div>
     </htmlpageheader>

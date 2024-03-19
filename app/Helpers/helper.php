@@ -1696,3 +1696,15 @@ function checkPermission($slug){
 		return false;
 	}
 }
+if (! function_exists('getMainOrderId')) {
+	function getMainOrderId($id=null) {
+		$formated_id ='';
+		if($id){
+			$order_detail = \App\Order::where('id',$id)->first();
+			if($order_detail){
+				$formated_id = $order_detail->formatted_id;
+			}
+		} 
+		return $formated_id;   
+	}
+}
