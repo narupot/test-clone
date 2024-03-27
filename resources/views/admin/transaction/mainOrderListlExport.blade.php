@@ -78,7 +78,10 @@
         }
         .red, .dont-forget { background: #DC3545; }  
         /* .voucher-page {page-break-after: always; margin-top: 30px;} */
-        .order_pdf_repeat {page-break-inside: avoid; margin-top: 30px;}
+        .order_pdf_repeat {page-break-before: always; margin-top: 30px;} 
+        .page0{
+            page-break-inside: avoid;
+        }
     }
     @page {
         /*header: page-header;
