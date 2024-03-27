@@ -130,7 +130,7 @@
     ?>
     <div class="container order_pdf_repeat">
 
-        <div style="padding:10px 10px 10px 10px;box-shadow: 0px 3px 9px 0px #ccc;">
+        <div style="padding:10px 10px 10px 10px;box-shadow: 0px 3px 9px 0px #ccc;" class="page{{$key}}">
             <span style="color: #F00;">Main Order ID:</span> {{$main_order->formatted_id}}
         </div>
         
