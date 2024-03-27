@@ -94,9 +94,9 @@
     <?php 
         $order_shop = \App\OrderShop::where('order_id',$main_order->id)->with(['getOrderStatus'])->get();
         if(count($order_shop)){
-            foreach ($order_shop as $key => $value) {
+            foreach ($order_shop as $key111 => $value) {
                 $order_detail = \App\OrderDetail::getShopOrderDetail('',$value->id);
-                $order_shop[$key]->details = $order_detail;
+                $order_shop[$key111]->details = $order_detail;
             }
         }
         $main_order->tot_shop = count($order_shop);
@@ -117,20 +117,20 @@
         {
             foreach($order_shop as $skey => $shop_ord_val)
                 {
-                    foreach($shop_ord_val->details as $key => $val)
+                    foreach($shop_ord_val->details as $key1111 => $val)
                     {
                         if($val->description=='' || $val->description==null)
                         {
                             $productDetail = \App\Product::getProductDetail($val->sku);
-                            $order_shop[$skey]->details[$key]->description=isset($productDetail->productDesc)?$productDetail->productDesc->description:"";
+                            $order_shop[$skey]->details[$key1111]->description=isset($productDetail->productDesc)?$productDetail->productDesc->description:"";
                         }
                     }
                 }
         }
     ?>
-    <div class="container order_pdf_repeat">
+    <div class="container order_pdf_repeat page{{$key}}">
 
-        <div style="padding:10px 10px 10px 10px;box-shadow: 0px 3px 9px 0px #ccc;" class="page{{$key}}">
+        <div style="padding:10px 10px 10px 10px;box-shadow: 0px 3px 9px 0px #ccc;" >
             <span style="color: #F00;">Main Order ID:</span> {{$main_order->formatted_id}}
         </div>
         
