@@ -79,8 +79,8 @@
         .red, .dont-forget { background: #DC3545; }  
         /* .voucher-page {page-break-after: always; margin-top: 30px;} */
         .order_pdf_repeat {page-break-before: always; margin-top: 30px;} 
-        .page0{
-            page-break-inside: avoid;
+        .order_pdf_repeat.page0{
+            page-break-before: avoid;
         }
     }
     @page {
