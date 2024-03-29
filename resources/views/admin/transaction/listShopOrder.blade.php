@@ -99,25 +99,7 @@
                     listeners: ['change'],
                 },
             },
-            {   title: "@lang('admin_order.pickup_time')", 
-                dataIndx:'time', 
-                minWidth: 160,
-                align : 'center',
-                filter : {
-                    crules: [
-                        {
-                            condition: getFilter('time', 'condition') || 'range',
-                            value : getFilter('time', 'value') || "",
-                        }
-                    ],                    
-                    options: [ 
-                        {"09:00": "09:00"}, 
-                        {"14:00": "14:00"},
-                        {"16:00": "16:00"},
-                    ],                                           
-                },
-        
-            },
+            
             {   title: "@lang('admin_order.shop_order')", 
                 dataIndx:'shop_formatted_id', 
                 minWidth: 140,
@@ -243,6 +225,25 @@
                         }
                     ]           
                 },
+            },
+            {   title: "@lang('admin_order.pickup_time')", 
+                dataIndx:'time', 
+                minWidth: 160,
+                align : 'center',
+                filter : {
+                    crules: [
+                        {
+                            condition: getFilter('time', 'condition') || 'range',
+                            value : getFilter('time', 'value') || "",
+                        }
+                    ],                    
+                    options: [ 
+                        {"09:00": "09:00"}, 
+                        {"14:00": "14:00"},
+                        {"16:00": "16:00"},
+                    ],                                           
+                },
+        
             },
 			{   title: "@lang('admin_order.pickup_date')", 
                 dataIndx:'pickup_time', 
