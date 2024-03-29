@@ -77,7 +77,10 @@
             margin:0;
         }
         .red, .dont-forget { background: #DC3545; }  
-        .order_pdf_repeat {page-break-after: always; margin-top: 30px;}
+        .order_pdf_repeat {page-break-before: always; margin-top: 30px;} 
+        .order_pdf_repeat.page0{
+            page-break-before: avoid;
+        }
     }
     @page {
         /* header: page-header;
@@ -125,7 +128,7 @@
                 }
             }
         ?>
-        <div class="container order_pdf_repeat">
+        <div class="container order_pdf_repeat page{{$key}}">
             <div style="padding:10px 10px 10px 10px;box-shadow: 0px 3px 9px 0px #ccc;">
                 <span style="color: #F00;">Main Order ID:</span> {{getMainOrderId($order_shop->order_id)}}
                 <div style="text-align:right; float:right; margin-top:-16px;"><span style="color: #F00;">Shop Name :</span>{{$shop_name}}</div>
