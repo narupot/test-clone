@@ -117,12 +117,12 @@
             {
                 if(!empty($order_shop->details))
                 {
-                    foreach($order_shop->details as $key => $val)
+                    foreach($order_shop->details as $key1 => $val)
                     {
                         if($val->description=='' || $val->description==null)
                         {
                             $productDetail = \App\Product::getProductDetail($val->sku);
-                            $order_shop->details[$key]->description=isset($productDetail->productDesc)?$productDetail->productDesc->description:"";
+                            $order_shop->details[$key1]->description=isset($productDetail->productDesc)?$productDetail->productDesc->description:"";
                         }
                     }
                 }
