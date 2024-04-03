@@ -36,7 +36,7 @@ class StaticPage extends Model {
     }
 
     public static function getStaticPagebyId($id){
-    	return self::select('id', 'url', 'status', 'created_at', 'updated_at','metaimage','fbimage','twimage','insimage')->with('staticPageDesc')->where(['id'=>$id])->first();
+    	return self::select('id', 'url', 'status', 'created_at', 'updated_at','metaimage','fbimage','twimage','insimage','header_footer')->with('staticPageDesc')->where(['id'=>$id])->first();
     }   
 
     public static function pageBuilderData(){
