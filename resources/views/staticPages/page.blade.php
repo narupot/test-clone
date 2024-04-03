@@ -4,7 +4,7 @@
 @section('header_style')
 
 @stop
-@if($data->header_footer=='0')
+@if($data->header_footer=='0' || $data->header_footer=='2')
 	<style>
 		#header{
 			display:none !important;
