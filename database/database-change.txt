@@ -7,3 +7,7 @@ ALTER TABLE `smm_unit` CHANGE `unit_weight` `unit_weight` FLOAT NOT NULL DEFAULT
 15-03-2024 change
 -----------------------
 ALTER TABLE `smm_static_page` ADD `header_footer` ENUM('0','1') NOT NULL DEFAULT '1' AFTER `status`;
+
+03-04-2024 change
+-----------------------
+ALTER TABLE `smm_static_page` CHANGE `header_footer` `header_footer` ENUM('0','1','2','3') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1' COMMENT '\'0\'=>both hide,\'1\'=>both show,\'2\'=>only destop,\'3\'=>only app';
