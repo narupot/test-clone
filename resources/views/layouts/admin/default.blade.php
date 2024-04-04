@@ -74,8 +74,9 @@
 
 <div class="loader-wrapper d-none" id="showHideLoader">
     <span class="loader">
-        <img src="{{getSiteLoader('SITE_LOADER_IMAGE')}}" alt="Loader" width="30" height="30"> 
-        <div>@lang('common.please_wait')...</div>
+        <!-- <img src="{{getSiteLoader('SITE_LOADER_IMAGE')}}" alt="Loader" width="30" height="30">  -->
+        <!-- <div>@lang('common.please_wait')...</div> -->
+        <img src="{{getSiteLoader('SITE_LOADER_IMAGE')}}" alt="Loader" > 
     </span>
 </div>
 
