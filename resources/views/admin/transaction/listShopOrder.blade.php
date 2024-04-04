@@ -298,6 +298,10 @@
             orderData = beforeExport();
             if(!orderData.length) return;
             //console.log(orderData);return;
+            $("#showHideLoader").removeClass("d-none");
+            setTimeout(function(){
+                $("#showHideLoader").addClass("d-none");
+            },10000);
             var total_order = orderData.toString();
             var url = "{{action('Admin\Transaction\ShopOrderController@generateOrderPdf')}}?order_list="+total_order;
             window.location.href=url;
