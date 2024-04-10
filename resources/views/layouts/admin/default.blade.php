@@ -72,11 +72,12 @@
    
 </head>
 
-<div class="loader-wrapper d-none" id="showHideLoader">
+<div class="loader-wrapper bg-white d-none" id="showHideLoader">
     <span class="loader">
         <!-- <img src="{{getSiteLoader('SITE_LOADER_IMAGE')}}" alt="Loader" width="30" height="30">  -->
         <!-- <div>@lang('common.please_wait')...</div> -->
         <img src="{{getSiteLoader('SITE_LOADER_IMAGE')}}" alt="Loader" > 
+        <div class="loading-txt text-center mt-2 h3">@lang('admin_common.loading')</div>
     </span>
 </div>
 
