@@ -6,6 +6,12 @@
 
 @section('header_styles')
    {!! CustomHelpers::dataTableCss() !!}
+
+    <style>
+       .loading-txt {
+        color: #000;
+       }
+    </style>
     <script type="text/javascript">
         var filter_data = {!! $filter !!};    
     </script>
