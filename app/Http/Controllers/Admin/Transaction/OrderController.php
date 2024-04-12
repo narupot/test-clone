@@ -18,6 +18,7 @@ use App\Product;
 use Lang;
 use Config;
 use Excel;
+use PDF;
 
 class OrderController extends MarketPlace
 {
@@ -86,6 +87,22 @@ class OrderController extends MarketPlace
                             case 'order_status':
                                 $query->whereIn('order_status', $searchval);
                                 break;
+                            case 'time':
+                               
+                                $query->where(function ($query) use ($searchval) {
+                                    $count= 0;
+                                    foreach ($searchval as $searchdata) {
+                                        $count++;
+                                        if($count==1){
+                                            $query = $query->where('pickup_time','like', '%'.$searchdata.'%');
+                                        }else{
+                                            $query = $query->orwhere('pickup_time','like', '%'.$searchdata.'%');
+
+                                        }    
+                                    }
+									
+								});
+                                break;
                             case 'dob':
                                 $from_date = $fvalue['value']??'';
                                 $to_date = $fvalue['value2']??'';
@@ -134,6 +151,7 @@ class OrderController extends MarketPlace
                 $response[$key]->end_shopping_date_time = $value->end_shopping_date;
                 $response[$key]->end_shopping_date = $value->end_shopping_date?date('Y-m-d',strtotime($value->end_shopping_date)):null;
                 $response[$key]->pickup_time = $value->pickup_time?date('Y-m-d H:i:s',strtotime($value->pickup_time)):null;
+                $response[$key]->time = $value->pickup_time?date('H:i:s',strtotime($value->pickup_time)):null;
                 
                 $response[$key]->total_final_price = numberFormat($value->total_final_price);
                 
@@ -395,6 +413,136 @@ class OrderController extends MarketPlace
     }
     
     function update(Request $request){
+    }
+
+    public function orderDetailExport(Request $request) {
+
+        $formatted_id = $request->oid; 
+        $main_order = Order::where('formatted_id',$formatted_id)->with(['getUser','getOrderStatus'])->first();
+        // dd($main_order,$formatted_id);
+        if(empty($main_order)){
+          abort(404);
+        }
+
+        $order_shop = OrderShop::where('order_id',$main_order->id)->with(['getOrderStatus'])->get();
+        if(count($order_shop)){
+            foreach ($order_shop as $key => $value) {
+                $order_detail = OrderDetail::getShopOrderDetail('',$value->id);
+                $order_shop[$key]->details = $order_detail;
+            }
+        }
+        $main_order->tot_shop = count($order_shop);
+        
+        //dd($order_shop);
+        $transaction = \App\OrderTransaction::where('order_id',$main_order->id)->orderBy('id')->get();
+		
+		$main_order->pickup_time = null;
+		if($main_order->id>0)
+		{
+			$order_info = Order::where('id',$main_order->id)->first();
+			if($order_info)
+			{
+				$main_order->pickup_time=$order_info->pickup_time;
+			}
+		}
+		
+		/* Start:: If Product Detail Not Available in Order Details */
+		if(count($order_shop))
+		{
+			foreach($order_shop as $skey => $shop_ord_val)
+				{
+					foreach($shop_ord_val->details as $key => $val)
+					{
+						if($val->description=='' || $val->description==null)
+						{
+							$productDetail = \App\Product::getProductDetail($val->sku);
+							$order_shop[$skey]->details[$key]->description=isset($productDetail->productDesc)?$productDetail->productDesc->description:"";
+						}
+					}
+				}
+		}
+		/* Start:: If Product Detail Not Available in Order Details */
+		$pdf = PDF::loadView('admin.transaction.mainOrddetailExport', ['main_order' => $main_order,'order_shop'=>$order_shop,'transaction'=>$transaction]);
+
+        return $pdf->download($main_order->formatted_id.'.pdf');
+        //return view('admin.transaction.mainOrddetailExport',['main_order' => $main_order,'order_shop'=>$order_shop,'transaction'=>$transaction]);
+    }
+    // public function generateOrderPdf(Request $request) {
+
+    //     //$formatted_id = $request->order_list; 
+    //     //dd($request->order_list);
+    //     $formatted_id = explode(',',$request->order_list); 
+    //     $total_order = Order::whereIn('formatted_id',$formatted_id)->with(['getUser','getOrderStatus'])->get();
+    //     // dd($main_order,$formatted_id);
+    //     if(empty($total_order)){
+    //       abort(404);
+    //     }
+    //     //dd($total_order,$formatted_id);
+    //     foreach ($total_order as $key => $main_order) {
+    //         $order_shop = OrderShop::where('order_id',$main_order->id)->with(['getOrderStatus'])->get();
+    //         if(count($order_shop)){
+    //             foreach ($order_shop as $key => $value) {
+    //                 $order_detail = OrderDetail::getShopOrderDetail('',$value->id);
+    //                 $order_shop[$key]->details = $order_detail;
+    //             }
+    //         }
+    //         $main_order->tot_shop = count($order_shop);
+            
+    //         //dd($order_shop);
+    //         $transaction = \App\OrderTransaction::where('order_id',$main_order->id)->orderBy('id')->get();
+            
+    //         $main_order->pickup_time = null;
+    //         if($main_order->id>0)
+    //         {
+    //             $order_info = Order::where('id',$main_order->id)->first();
+    //             if($order_info)
+    //             {
+    //                 $main_order->pickup_time=$order_info->pickup_time;
+    //             }
+    //         }
+            
+    //         /* Start:: If Product Detail Not Available in Order Details */
+    //         if(count($order_shop))
+    //         {
+    //             foreach($order_shop as $skey => $shop_ord_val)
+    //                 {
+    //                     foreach($shop_ord_val->details as $key => $val)
+    //                     {
+    //                         if($val->description=='' || $val->description==null)
+    //                         {
+    //                             $productDetail = \App\Product::getProductDetail($val->sku);
+    //                             $order_shop[$skey]->details[$key]->description=isset($productDetail->productDesc)?$productDetail->productDesc->description:"";
+    //                         }
+    //                     }
+    //                 }
+    //         }
+    //         /* Start:: If Product Detail Not Available in Order Details */
+    //         $pdf = PDF::loadView('admin.transaction.mainOrderListlExport', ['main_order' => $main_order,'order_shop'=>$order_shop,'transaction'=>$transaction]);
+
+    //         return $pdf->download($main_order->formatted_id.'.pdf');
+    //         //return view('admin.transaction.mainOrddetailExport',['main_order' => $main_order,'order_shop'=>$order_shop,'transaction'=>$transaction]);
+    //     }
+    //     //return ['status'=>'success','message'=>'Pdf Download Successfully'];
+        
+    // }
+
+    public function generateOrderPdf(Request $request) {
+
+        //$formatted_id = $request->order_list; 
+        //dd($request->order_list);
+        $formatted_id = explode(',',$request->order_list); 
+        $total_order = Order::whereIn('formatted_id',$formatted_id)->with(['getUser','getOrderStatus'])->get();
+        // dd($main_order,$formatted_id);
+        if(empty($total_order)){
+          abort(404);
+        }
+        //dd($total_order,$formatted_id);
+        $pdf = PDF::loadView('admin.transaction.mainOrderListlExport', ['total_order' => $total_order]);
+        return $pdf->download('order.pdf');
+        //return view('admin.transaction.mainOrderListlExport',['total_order' => $total_order]);
+    
+        //return ['status'=>'success','message'=>'Pdf Download Successfully'];
+        
     }
     
 }

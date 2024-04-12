@@ -19,9 +19,9 @@ class SyncMongoController extends MarketPlace
     public function index(Request $request)
     {   
         /******update unit*******/
-        $prd = \App\Product::count();
+        //$prd = \App\Product::count();
         
-        $mon = \App\MongoProduct::count();
+        //$mon = \App\MongoProduct::count();
         
         //dd($request->all(),$prd,$mon);
         
@@ -50,7 +50,10 @@ class SyncMongoController extends MarketPlace
                         break;
 
                     case 'product':
-                        $unit = $this->productSync();
+                        $prd_resp = $this->productSync($request);
+                        if($prd_resp){
+                            return redirect($prd_resp);
+                        }
                         break;
 
                     case 'wishlist':
@@ -82,7 +85,7 @@ class SyncMongoController extends MarketPlace
     public function sizegradeSync(){
 
         $data = \App\SizeGrade::with('sizegradedescAll')->get();
-        $delete = \App\MongoUnit::where('_id','>',0)->delete();
+        $delete = \App\MongoSizeGrade::where('_id','>',0)->delete();
         foreach ($data as $key => $value) {
             $up = \App\MongoSizeGrade::updateData($value);
         }
@@ -129,24 +132,44 @@ class SyncMongoController extends MarketPlace
         }
     }
 
-    public function productSync(){
-        $delete = \App\MongoProduct::where('_id','>',0)->delete();
-        $products = \App\Product::get();
-        foreach ($products as $key => $product) {
-            $product_id = $product->id;
-            $desc = \App\ProductDesc::where('product_id',$product->id)->value('description');
-            $product->description = $desc;
-            $image_arr = \App\ProductImage::where('product_id', $product_id)->pluck('image')->toArray();
-            $product->image = $image_arr;
-            //$product->thumbnail_image = isset($image_arr[0])?$image_arr[0]:'';
+    public function productSync($request){
 
-            $tier_price_arres = \App\ProductTierPrice::select('start_qty','end_qty','unit_price')->where('product_id', $product_id)->get()->toArray();
-            if(count($tier_price_arres)){
-               $product->tier_price_data = $tier_price_arres;
+        $page = !empty($request->page) ? $request->page : 0;
+        $limit = 1000;
+        $skip = $page * $limit;
+        
+        if($page==0){
+            $delete = \App\MongoProduct::where('_id','>',0)->delete();
+        }
+        $products = \App\Product::skip($skip)->take($limit)->get();
+        //dd($products);
+        if(count($products)){
+            foreach ($products as $key => $product) {
+                $product_id = $product->id;
+                $desc = \App\ProductDesc::where('product_id',$product->id)->value('description');
+                $product->description = $desc;
+                $image_arr = \App\ProductImage::where('product_id', $product_id)->pluck('image')->toArray();
+                $product->image = $image_arr;
+                //$product->thumbnail_image = isset($image_arr[0])?$image_arr[0]:'';
+
+                $tier_price_arres = \App\ProductTierPrice::select('start_qty','end_qty','unit_price')->where('product_id', $product_id)->get()->toArray();
+                if(count($tier_price_arres)){
+                   $product->tier_price_data = $tier_price_arres;
+                }
+
+                \App\MongoProduct::updateData($product);
             }
 
-            \App\MongoProduct::updateData($product);
+            $page = $page + 1;
+            $redirect_url = action('Admin\SyncMongoController@index', ['sync' => 'product', 'page' => $page]);
+            
+            return $redirect_url;
+
+        }else{
+            dd('done');
         }
+        
+        
     }
 
 }
