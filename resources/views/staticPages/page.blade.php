@@ -4,18 +4,20 @@
 @section('header_style')
 
 @stop
-@if($data->header_footer=='0' || $data->header_footer=='3')
-	<style>
-		#header{
-			display:none !important;
-		}
-		#footer{
-			display:none !important;
-		}
-	</style>
-@endif
+
 @if(isMobile())
 	@if($data->header_footer=='0' || $data->header_footer=='2')
+		<style>
+			#header{
+				display:none !important;
+			}
+			#footer{
+				display:none !important;
+			}
+		</style>
+	@endif
+@else
+	@if($data->header_footer=='0' || $data->header_footer=='3')
 		<style>
 			#header{
 				display:none !important;
