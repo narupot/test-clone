@@ -16,6 +16,7 @@
     <div class="content">
         <div class="header-title">
             <h1 class="title">@lang('admin_order.shop_order_list')</h1>
+            <button class="btn btn-outline-primary" type="button" name="export_order_pdf" onclick="generateOrderPdf('export_order_pdf')">@lang('admin_common.export_order_pdf')</button>
         </div>
              
         <!-- Main content -->         
@@ -57,7 +58,7 @@
         */
         let columnModel = [  
             /* check for row selection ***/
-            /*{   title: "", 
+            {   title: "", 
                 width: 50, 
                 dataType: "integer",
                 type:'checkbox', 
@@ -71,7 +72,7 @@
                 cb: {header: true, select: true, all: true}, 
                 dataType: 'bool',
                 hidden: true
-            },*/
+            },
             /**** end selection *******/ 
             {   title: "@lang('admin_common.actions')", 
                     dataIndx:'detail_url', 
@@ -98,6 +99,7 @@
                     listeners: ['change'],
                 },
             },
+            
             {   title: "@lang('admin_order.shop_order')", 
                 dataIndx:'shop_formatted_id', 
                 minWidth: 140,
@@ -224,6 +226,7 @@
                     ]           
                 },
             },
+            
 			{   title: "@lang('admin_order.pickup_date')", 
                 dataIndx:'pickup_time', 
                 minWidth: 140,
@@ -238,6 +241,25 @@
                         }
                     ]           
                 },
+            },
+            {   title: "@lang('admin_order.pickup_time')", 
+                dataIndx:'time', 
+                minWidth: 160,
+                align : 'center',
+                filter : {
+                    crules: [
+                        {
+                            condition: getFilter('time', 'condition') || 'range',
+                            value : getFilter('time', 'value') || "",
+                        }
+                    ],                    
+                    options: [ 
+                        {"09:00": "09:00"}, 
+                        {"14:00": "14:00"},
+                        {"16:00": "16:00"},
+                    ],                                           
+                },
+        
             },
             {   title: "@lang('admin_order.remark')", 
                 dataIndx:'admin_remark', 
@@ -257,5 +279,68 @@
             
         ];    
     </script>
+     <script>
+        function getData(){
+            return jqGrid.SelectRow().getSelection().map(function(rowList) {
+                return rowList.rowData.formatted_order_id;
+            });
+        };
+        function beforeExport(){
+          var d = getData();
+          if(d && !d.length){
+            swal("@lang('admin_common.opps')", "@lang('admin_order.please_select_rows_first')", 'warning');
+          }
+          return d;
+        };
+    </script>
+     <script>
+        function generateOrderPdf(event, orderData){ 
+            orderData = beforeExport();
+            if(!orderData.length) return;
+            //console.log(orderData);return;
+            $("#showHideLoader").removeClass("d-none");
+            setTimeout(function(){
+                $("#showHideLoader").addClass("d-none");
+            },10000);
+            var total_order = orderData.toString();
+            var url = "{{action('Admin\Transaction\ShopOrderController@generateOrderPdf')}}?order_list="+total_order;
+            window.location.href=url;
+            // $.ajax({
+            //       type : 'post',
+            //       url : "{{action('Admin\Transaction\OrderController@generateOrderPdf')}}",
+            //       headers : {
+            //           'X-CSRF-TOKEN' : window.Laravel.csrfToken,
+            //           '_token' : window.Laravel.csrfToken,
+            //       },
+            //       beforeSend : ()=>{                        
+            //          try{showHideLoaderAdmin('showLoader')}catch(er){console.log};
+            //       },
+            //       data : {'section':'order', 'order_list':JSON.stringify(orderData)},
+            //   }).done((data)=>{
+            //       if(data.status && data.status == 'error')
+            //           swal('Opps..!', data.message, data.status)
+            //       else{
+            //         swal('Success', data.message, data.status)
+            //       }
+            //   })
+            //   .always(()=>{
+            //       try{showHideLoaderAdmin('hideLoader')}catch(er){console.log};
+            //   });         
+                
+        };  
+ 
+        function getData(){
+            return jqGrid.SelectRow().getSelection().map(function(rowList) {
+                return rowList.rowData.shop_formatted_id;
+            });
+        };
+        function beforeExport(){
+          var d = getData();
+          if(d && !d.length){
+            swal("@lang('admin_common.opps')", "@lang('admin_order.please_select_rows_first')", 'warning');
+          }
+          return d;
+        };
+    </script>  
     
 @stop

@@ -17,7 +17,7 @@ use App\User;
 use Lang;
 use Config;
 use Excel;
-
+use PDF;
 class ShopOrderController extends MarketPlace
 {
     public function __construct(){
@@ -89,6 +89,22 @@ class ShopOrderController extends MarketPlace
                                 $to_date = $fvalue['value2']??'';
                                 createDateFilter($query,'sord.end_shopping_date',$from_date,$to_date);
                             break;
+                            case 'time':
+                               
+                                $query->where(function ($query) use ($searchval) {
+                                    $count= 0;
+                                    foreach ($searchval as $searchdata) {
+                                        $count++;
+                                        if($count==1){
+                                            $query = $query->where('pickup_time','like', '%'.$searchdata.'%');
+                                        }else{
+                                            $query = $query->orwhere('pickup_time','like', '%'.$searchdata.'%');
+
+                                        }    
+                                    }
+									
+								});
+                                break;
 							case 'pickup_time':
                                 $from_date = $fvalue['value']??'';
                                 $to_date = $fvalue['value2']??'';
@@ -112,7 +128,7 @@ class ShopOrderController extends MarketPlace
             foreach ($response as $key => $value) {
                 $response[$key]->end_shopping_date_time = $value->end_shopping_date;
                 $response[$key]->end_shopping_date = $value->end_shopping_date?date('Y-m-d',strtotime($value->end_shopping_date)):null;
-                
+                $response[$key]->time = $value->pickup_time?date('H:i:s',strtotime($value->pickup_time)):null;
                 $response[$key]->total_final_price = numberFormat($value->total_final_price);
                 $response[$key]->status = $value->status??'';
                 $response[$key]->detail_url = action('Admin\Transaction\ShopOrderController@orderDetail',$value->shop_formatted_id);
@@ -169,8 +185,9 @@ class ShopOrderController extends MarketPlace
 				}
 			}
 		}
+        $shop_json = json_decode($order_shop->shop_json,true);
 		/* Start:: If Product Detail Not Available in Order Details */
-        return view('admin.transaction.shopOrdDetail',['order_shop'=>$order_shop,'transaction'=>$transaction]);
+        return view('admin.transaction.shopOrdDetail',['order_shop'=>$order_shop,'transaction'=>$transaction,'main_order_info'=>$order_info,'shop_json'=>$shop_json]);
     }       
 
     public function changeShopOrderStatus(Request $request){
@@ -395,6 +412,72 @@ class ShopOrderController extends MarketPlace
     }
     
     function update(Request $request){
+    }
+
+    public function orderDetailExport(Request $request) {
+
+        $formatted_id = $request->oid; 
+        $order_shop = OrderShop::where('shop_formatted_id',$formatted_id)->with(['getOrderStatus'])->first();
+        
+        if(empty($order_shop)){
+          return redirect()->action('Admin\Transaction\ShopOrderController@index');
+        }
+        $shop_name ='';
+        $json_name = json_decode($order_shop->shop_json,true);
+        if($json_name){
+            $shop_name = $json_name['shop_name'][0];
+        }
+        $order_detail = OrderDetail::getShopOrderDetail('',$order_shop->id);
+        $order_shop->details = $order_detail;
+        $transaction = \App\OrderTransaction::where('order_shop_id',$order_shop->id)->get();
+        if(count($transaction) < 2){
+            $transaction = \App\OrderTransaction::where('order_id',$order_shop->order_id)->where('order_shop_id',0)->orderBy('id')->get();
+        }
+		$order_shop->pickup_time = null;
+		if($order_shop->order_id>0)
+		{
+			$order_info = Order::where('id',$order_shop->order_id)->first();
+			if($order_info)
+			{
+				$order_shop->pickup_time=$order_info->pickup_time;
+			}
+		}
+		/* Start:: If Product Detail Not Available in Order Details */
+		if($order_shop->details)
+		{
+			if(!empty($order_shop->details))
+			{
+				foreach($order_shop->details as $key => $val)
+				{
+					if($val->description=='' || $val->description==null)
+					{
+						$productDetail = \App\Product::getProductDetail($val->sku);
+						$order_shop->details[$key]->description=isset($productDetail->productDesc)?$productDetail->productDesc->description:"";
+					}
+				}
+			}
+		}
+		/* Start:: If Product Detail Not Available in Order Details */
+        //return view('admin.transaction.shopOrdDetail',['order_shop'=>$order_shop,'transaction'=>$transaction]);
+        $pdf = PDF::loadView('admin.transaction.shopOrddetailExport',['order_shop'=>$order_shop,'transaction'=>$transaction,'shop_name'=>$shop_name]);
+        
+        return $pdf->download($order_shop->shop_formatted_id.'.pdf');
+    }
+    
+    public function generateOrderPdf(Request $request) {
+
+        $formatted_id = explode(',',$request->order_list); 
+        $total_order = OrderShop::whereIn('shop_formatted_id',$formatted_id)->with(['getOrderStatus'])->get();
+        
+        if(empty($total_order)){
+          abort(404);
+        }
+        $pdf = PDF::loadView('admin.transaction.shopOrdListlExport', ['total_order' => $total_order]);
+        return $pdf->download('shop-order.pdf');
+        //return view('admin.transaction.mainOrderListlExport',['total_order' => $total_order]);
+    
+        //return ['status'=>'success','message'=>'Pdf Download Successfully'];
+        
     }
     
 }

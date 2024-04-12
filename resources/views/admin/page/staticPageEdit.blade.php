@@ -73,6 +73,17 @@
                                 </div>
                             </div>
                             <div class="form-group row">
+                                <div class="col-md-5">
+                                    <label for="form-text-input">@lang('common.header_footer') <i class="strick">*</i></label> 
+                                    <select class="select" name="header_footer">
+                                        <option value="0" @if($page_dtls->header_footer == '0') selected @endif>@lang('common.not_visible')</option>
+                                        <option value="2" @if($page_dtls->header_footer == '2') selected @endif>@lang('common.visible_only_desktop')</option>
+                                        <option value="3" @if($page_dtls->header_footer == '3') selected @endif>@lang('common.visible_only_mobile_app')</option>
+                                        <option value="1" @if($page_dtls->header_footer == '1') selected @endif>@lang('common.visible_both_desktop_and_mobile_app')</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <div class="col-md-12">
                                     {!! CustomHelpers::fieldstabWithLanuageEdit([['field'=>'text', 'name'=>'page_title', 'label'=>Lang::get('cms.title').'<p class="error" id="page_ttl"></p>'.' <i class="strick">*</i>', 'errorkey'=>'page_ttl'], ['field'=>'textarea', 'name'=>'page_desc', 'label'=>Lang::get('cms.description').' <i class="strick">*</i>', 'errorkey'=>'page_description']], '3', 'static_page_id', $page_dtls->id, $tblStaticPageDesc, $errors) !!}
                                     <p class="error" id="page_description"></p>
