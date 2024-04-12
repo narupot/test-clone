@@ -14,6 +14,18 @@
 		}
 	</style>
 @endif
+@if(isMobile())
+	@if($data->header_footer=='0' || $data->header_footer=='2')
+		<style>
+			#header{
+				display:none !important;
+			}
+			#footer{
+				display:none !important;
+			}
+		</style>
+	@endif
+@endif
 @section('content')
 	@if($preview == 'yes')
 
