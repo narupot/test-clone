@@ -38,7 +38,7 @@ class CancelPendingOrder extends Command {
 
         // cancel online order
         //$add_minut = getConfigValue('AUTO_CANCEL_ONLINE_PENDING_ORDER');
-        $add_minut = 180;
+        $add_minut = 60;
         $order_data = \App\Order::where(['payment_status'=>0,'order_status'=>1])->limit(10)->get();
         $curtime = date('Y-m-d H:i:s');
         
