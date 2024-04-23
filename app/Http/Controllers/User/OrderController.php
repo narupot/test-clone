@@ -374,10 +374,10 @@ class OrderController extends MarketPlace
         $payment_option = \App\PaymentOption::getPaymentOptions();
         $user_odd_info = \App\UserInfo::getUserInfo('odd-register');
         $pickup_time_arr = [];
-        if($main_order->shipping_method==1 && isset($delivery_time_arr['pick_up_center'])){
-            $pickup_time_arr = $delivery_time_arr['pick_up_center'];
+        if($main_order->shipping_method==1 && isset($delivery_time_arr['pickup_center'])){
+            $pickup_time_arr = $delivery_time_arr['pickup_center'];
         }elseif ($main_order->shipping_method==2 && isset($delivery_time_arr['shop_address'])) {
-            $pickup_time_arr = $delivery_time_arr['pick_up_center'];
+            $pickup_time_arr = $delivery_time_arr['shop_address'];
         }else{
             $pickup_time_arr = $delivery_time_arr['buyer_address'];
         }
