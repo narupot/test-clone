@@ -240,6 +240,7 @@
                                                 padding:2px; display: inline-block; border-radius: 50%; width:20px; height:20px; line-height: 20px; text-align: center;">XLA</span>
                                                 จัมโบ้ | สวย
                                             </div> -->
+                                            <div><img class="border-0" src="{{ getBadgeImageUrl($detail_json['badge']['icon'] ?? '' )}}" height="30"></div>
                                         </td>
                                         <td style="text-align:left;">
                                             <div style="margin-bottom:4px;"><img src="{{getImgUrl($detail_json['logo'] ??'','logo')}}" alt="img" width="50"> </div>
