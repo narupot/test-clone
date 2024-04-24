@@ -211,6 +211,8 @@
                                 <td style="text-align:left;">
                                     <div style="margin-bottom:4px;"><img src="{{ getProductImageUrlRunTime($detail_json['thumbnail_image']??'','thumb') }}" alt="img" width="50"> </div>
                                     <div style="margin-bottom: 2px;">{{ $detail_json['name'][session('default_lang')]??$val->category_name }}</div>
+                                    <div class="la d-block"><img class="border-0" src="{{ getBadgeImageUrl($detail_json['badge']['icon'] ?? '' )}}" height="30"></div> 
+                                                
                                     <!-- <div>
                                         <span style="border:1px solid green; font-size: 8px;
                                         padding:2px; display: inline-block; border-radius: 50%; width:20px; height:20px; line-height: 20px; text-align: center;">XLA</span>
@@ -251,7 +253,7 @@
                 <td style="padding-left:0px; padding-right:0px;">
                     <table border="0" cellpadding="0" cellspacing="0" width="100%">
                         <tr>
-                            <td style="width:50%">checkout.shop_remark <br>
+                            <td style="width:50%">@lang('checkout.shop_remark') <br>
                             {{$order_shop->api_remark}}</td>
                             <td style="width:50%; border:1px solid #9E9E9E; padding:0; border-bottom:none;">
                                 <table border="0" cellpadding="0" cellspacing="0" width="100%">
