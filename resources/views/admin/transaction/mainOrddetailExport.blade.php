@@ -270,7 +270,7 @@
                         <td style="padding-left:0px; padding-right:0px;">
                             <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                 <tr>
-                                    <td style="width:50%">checkout.shop_remark <br>
+                                    <td style="width:50%">@lang('checkout.shop_remark') <br>
                                     {{$shop_ord_val->api_remark}}</td>
                                     <td style="width:50%; border:1px solid #9E9E9E; padding:0; border-bottom:none;">
                                         <table border="0" cellpadding="0" cellspacing="0" width="100%">
