@@ -1233,10 +1233,10 @@ class CustomHelpers {
         $orderInfoJson = jsonDecodeArr($orderJson);
         $html='';
         if(!empty($orderInfoJson[$add_type]['title'])) {
-            $html .= '<p>'.$orderInfoJson[$add_type]['title'].'</p>';
+            $html .= '<p>'.str_replace("​","",$orderInfoJson[$add_type]['title']).'</p>';
         }
         $html .= '<p>'. $orderInfoJson[$add_type]['first_name'].' '.$orderInfoJson[$add_type]['last_name'].'</p>';
-        $html .= '<p>'.$orderInfoJson[$add_type]['address'].'</p><p>';
+        $html .= '<p>'.str_replace("​","",$orderInfoJson[$add_type]['address']).'</p><p>';
         if(!empty($orderInfoJson[$add_type]['road'])) {
             $html .= $orderInfoJson[$add_type]['road'].', ';
         }
