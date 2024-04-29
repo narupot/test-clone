@@ -1084,8 +1084,8 @@ class MarketPlace extends Controller {
         $address->title = $request->title;
         $address->first_name = $request->first_name;
         $address->last_name = $request->last_name;
-        $address->address = $request->address;
-        $address->road = $request->road;
+        $address->address = strip_tags($request->address);
+        $address->road = strip_tags($request->road);
         $address->zip_code = $request->zip_code;
         $address->ph_number = $request->ph_number;
 
@@ -1103,10 +1103,10 @@ class MarketPlace extends Controller {
 
         if(isset($request->tax_invoice)) {
             $address->is_company_add = '1';
-            $address->company_name = $request->company_name;
-            $address->branch = $request->branch;
+            $address->company_name = strip_tags($request->company_name);
+            $address->branch = strip_tags($request->branch);
             $address->tax_id = $request->tax_id;
-            $address->company_address = $request->company_address;          
+            $address->company_address = strip_tags($request->company_address);          
         }
         else {
             $address->is_company_add = '0';
