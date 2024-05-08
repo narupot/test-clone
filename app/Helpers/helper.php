@@ -522,6 +522,14 @@ function jsonDecodeArr($data) {
 	return json_decode($data,true);
 }
 
+function createdBy() {
+
+    $admin_id = Auth::guard('admin_user')->user()->id;
+    $nick_name = Auth::guard('admin_user')->user()->nick_name;
+    $admin_name = $nick_name . '(' . $admin_id . ')';
+    return $admin_name;
+}
+
 function userRequireRule($validation_type){
 	$validation_rule = '';
 	switch ($validation_type) {
