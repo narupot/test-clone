@@ -170,7 +170,7 @@ class ShippingRateTableController extends MarketPlace {
 
     public function saveShippingRateProfile(Request $request){
         $shippingProfileData = ShippingProfile::find($request->shipping_profile_id);
-        $sp_old = $shippingProfileData;
+        $sp_old = (object)$shippingProfileData->toArray();
         $update_arr = [];
         if(isset($request->shipping_logo)){
             $fileobject  = $request->shipping_logo;
@@ -354,12 +354,12 @@ class ShippingRateTableController extends MarketPlace {
                 }else{
                     $match_data['shipping_profile_id'] = $shipping_profile_id;
                     // to protect duplicacy we need to check if rate not exist
-		    
-		    // ** Request change 10 Oct 2021
-		    // **from client, no need to check duplicate
-		    // ** because sometime they need all same but different zipcode
+            
+            // ** Request change 10 Oct 2021
+            // **from client, no need to check duplicate
+            // ** because sometime they need all same but different zipcode
                     //$is_exist = ShippingProfileRates::select('id')->where($match_data)->get();
-		    //$is_exist = 0;
+            //$is_exist = 0;
                     //if(count($is_exist) == 0){
                         $inserted_rate_id = ShippingProfileRates::insertGetId($match_data);
                         $rateDescData['province_state'] = $data['province_state'];
@@ -696,7 +696,7 @@ class ShippingRateTableController extends MarketPlace {
             $admin_id = Auth::guard('admin_user')->user()->id;
             if(isset($request->rate_id) && $request->rate_id!=''){
                 $shippingProfileRate = ShippingProfileRates::find($request->rate_id);
-                $sprate_old = $shippingProfileRate;
+                $sprate_old = (object)$shippingProfileRate->toArray();
                 $action_type = 'edit';
                 if($shippingProfileRate->country_id != $country_id) {
                     $update_arr['country_id'] = $shippingProfileRate->country_id.' => '.$country_id;
@@ -849,7 +849,7 @@ class ShippingRateTableController extends MarketPlace {
                         if(!empty($rateDescData)){
                             $rateDescObj = \App\ShippingProfileRatesDesc::where('id',$rateDescData->id)->first();
                             $action_desc = 'edit';
-                            $rateDesc_old = $rateDescObj;
+                            $rateDesc_old = (object)$rateDescObj->toArray();
                         }else{
                             $rateDescObj = new \App\ShippingProfileRatesDesc;
                             $action_desc = 'add';
@@ -880,15 +880,15 @@ class ShippingRateTableController extends MarketPlace {
 
                         if($action_desc == 'edit'){
                             if($rateDesc_old->province_state != $rateDescObj->province_state) {
-                                $update_arr['province_state'] = $sprate_old->province_state.' => '.$rateDescObj->province_state;
+                                $update_arr['province_state'] = $rateDesc_old->province_state.' => '.$rateDescObj->province_state;
                             }
 
                             if($rateDesc_old->district_city != $rateDescObj->district_city) {
-                                $update_arr['district_city'] = $sprate_old->district_city.' => '.$rateDescObj->district_city;
+                                $update_arr['district_city'] = $rateDesc_old->district_city.' => '.$rateDescObj->district_city;
                             }
 
                             if($rateDesc_old->sub_district != $rateDescObj->sub_district) {
-                                $update_arr['sub_district'] = $sprate_old->sub_district.' => '.$rateDescObj->sub_district;
+                                $update_arr['sub_district'] = $rateDesc_old->sub_district.' => '.$rateDescObj->sub_district;
                             }
                         }
                         //dd($rateDescObj);
@@ -903,10 +903,6 @@ class ShippingRateTableController extends MarketPlace {
                         ShippingProfileLog::updateShippingChangeLog($change_log);
                     }
 
-                    if($action_type == 'add'){
-                        $change_log = ['shipping_profile_id'=>$shippingProfileRate->shipping_profile_id, 'shipping_profile_rate_id'=>$shippingProfileRate->id, 'remark'=>'New rate created'];
-                        ShippingProfileLog::updateShippingChangeLog($change_log);
-                    }
                     // end
                     /*update activity log start*/
                     $action_type = "Add";
@@ -969,6 +965,11 @@ class ShippingRateTableController extends MarketPlace {
                                 $rateDescObj->sub_district = $request->sub_district;
                             }
                             $rateDescObj->save();
+                        }
+
+                        if($action_type == 'add'){
+                            $change_log = ['shipping_profile_id'=>$shippingProfileRate->shipping_profile_id, 'shipping_profile_rate_id'=>$shippingProfileRate->id, 'remark'=>'New rate created'];
+                            ShippingProfileLog::updateShippingChangeLog($change_log);
                         }
                         // end
                         /*update activity log start*/
