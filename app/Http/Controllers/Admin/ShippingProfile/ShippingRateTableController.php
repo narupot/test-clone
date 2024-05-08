@@ -17,6 +17,7 @@ use App\ShippingProfileRatesDesc;
 use App\ShippingProfileCountry;
 use App\ShipppingProfileProvince;
 use App\ShipppingProfileProduct;
+use App\ShippingProfileLog;
 use App\Country;
 use App\CountryDesc;
 use App\CountryProvinceState;
@@ -169,7 +170,8 @@ class ShippingRateTableController extends MarketPlace {
 
     public function saveShippingRateProfile(Request $request){
         $shippingProfileData = ShippingProfile::find($request->shipping_profile_id);
-       
+        $sp_old = $shippingProfileData;
+        $update_arr = [];
         if(isset($request->shipping_logo)){
             $fileobject  = $request->shipping_logo;
             $original_file_name = $fileobject->getClientOriginalName();
@@ -193,6 +195,23 @@ class ShippingRateTableController extends MarketPlace {
         $shippingProfileData->use_dimension_weight = isset($request->use_dimension_weight)?'1':'0';
         $shippingProfileData->dimension_factor = $request->dimension_factor;
         $shippingProfileData->updated_at = date('Y-m-d H:i:s');
+
+        if($sp_old->minimal_rate != $shippingProfileData->minimal_rate) {
+            $update_arr['minimal_rate'] = $sp_old->minimal_rate.' => '.$shippingProfileData->minimal_rate;
+        }
+        if($sp_old->maximal_rate != $shippingProfileData->maximal_rate) {
+            $update_arr['maximal_rate'] = $sp_old->maximal_rate.' => '.$shippingProfileData->maximal_rate;
+        }
+        if($sp_old->shipping_calculation_type != $shippingProfileData->shipping_calculation_type) {
+            $update_arr['shipping_calculation_type'] = $sp_old->shipping_calculation_type.' => '.$shippingProfileData->shipping_calculation_type;
+        }
+        if($sp_old->use_dimension_weight != $shippingProfileData->use_dimension_weight) {
+            $update_arr['use_dimension_weight'] = $sp_old->use_dimension_weight.' => '.$shippingProfileData->use_dimension_weight;
+        }
+        if($sp_old->dimension_factor != $shippingProfileData->dimension_factor) {
+            $update_arr['dimension_factor'] = $sp_old->dimension_factor.' => '.$shippingProfileData->dimension_factor;
+        }
+
         //dd($shippingProfileData,$request->all());
         // 
         if(isset($request->csv_rates) && !empty($request->csv_rates)){
@@ -213,6 +232,11 @@ class ShippingRateTableController extends MarketPlace {
 
             $request->delivery_type = 'buyer_address';
             $update_delivery_time = \App\DeliveryTime::updateDeliveryTime($request);
+
+            if($update_arr){
+                $change_log = ['shipping_profile_id'=>$shippingProfileData->id,  'update_detail'=>$update_arr];
+                ShippingProfileLog::updateShippingChangeLog($change_log);
+            }
 
             /*update activity log start*/
             $action_type = "Edit";
@@ -666,17 +690,60 @@ class ShippingRateTableController extends MarketPlace {
 
         if ($validate->passes())
         {
-            
+            $update_arr = [];
             $lang_lists = Language::getLangugeDetails();
+            $country_id = ($request->country_id!='All') ? $request->country_id : "*";
+            $admin_id = Auth::guard('admin_user')->user()->id;
             if(isset($request->rate_id) && $request->rate_id!=''){
                 $shippingProfileRate = ShippingProfileRates::find($request->rate_id);
+                $sprate_old = $shippingProfileRate;
+                $action_type = 'edit';
+                if($shippingProfileRate->country_id != $country_id) {
+                    $update_arr['country_id'] = $shippingProfileRate->country_id.' => '.$country_id;
+                }
+
+                if($shippingProfileRate->zip_from != $request->zip_from) {
+                    $update_arr['zip_from'] = $shippingProfileRate->zip_from.' => '.$request->zip_from;
+                }
+                if($shippingProfileRate->zip_to != $request->zip_to) {
+                    $update_arr['zip_to'] = $shippingProfileRate->zip_to.' => '.$request->zip_to;
+                }
+                if($shippingProfileRate->weight_from != $request->weight_from) {
+                    $update_arr['weight_from'] = $shippingProfileRate->weight_from.' => '.$request->weight_from;
+                }
+                if($shippingProfileRate->weight_to != $request->weight_to) {
+                    $update_arr['weight_to'] = $shippingProfileRate->weight_to.' => '.$request->weight_to;
+                }
+                if($shippingProfileRate->qty_from != $request->qty_from) {
+                    $update_arr['qty_from'] = $shippingProfileRate->qty_from.' => '.$request->qty_from;
+                }
+                if($shippingProfileRate->qty_to != $request->qty_to) {
+                    $update_arr['qty_to'] = $shippingProfileRate->qty_to.' => '.$request->qty_to;
+                }
+                if($shippingProfileRate->price_from != $request->price_from) {
+                    $update_arr['price_from'] = $shippingProfileRate->price_from.' => '.$request->price_from;
+                }
+                if($shippingProfileRate->price_to != $request->price_to) {
+                    $update_arr['price_to'] = $shippingProfileRate->price_to.' => '.$request->price_to;
+                }
+                if($shippingProfileRate->product_type_id != $request->product_type_id) {
+                    $update_arr['product_type_id'] = $shippingProfileRate->product_type_id.' => '.$request->product_type_id;
+                }
+                if($shippingProfileRate->estimate_shipping != $request->estimate_shipping) {
+                    $update_arr['estimate_shipping'] = $shippingProfileRate->estimate_shipping.' => '.$request->estimate_shipping;
+                }
+                $shippingProfileRate->updated_at = date('Y-m-d H:i:s');
+                $shippingProfileRate->updated_by = $admin_id;
             }else{
                 $shippingProfileRate = new ShippingProfileRates;
+                $action_type = 'add';
+                $shippingProfileRate->created_at = date('Y-m-d H:i:s');
+                $shippingProfileRate->created_by = $admin_id;
             }
             // The requested data vill be check before save to manage duplicacy. | Start 
             // The requested data vill be check before save to manage duplicacy. | End 
 
-            $country_id = ($request->country_id!='All') ? $request->country_id : "*";
+            
 
             // $district_city_id = ($request->district_city_id!='All') ? $request->district_city_id : "*";
             // $province_state_id = ($request->province_state_id!='All') ? $request->province_state_id : "*";
@@ -731,8 +798,44 @@ class ShippingRateTableController extends MarketPlace {
             }
             
             $shippingProfileRate->priority = $request->priority;
-            $shippingProfileRate->created_at = date('Y-m-d H:i:s');
 
+            if($action_type == 'edit'){
+                if($sprate_old->base_rate_for_order != $shippingProfileRate->base_rate_for_order) {
+                    $update_arr['base_rate_for_order'] = $sprate_old->estimate_shipping.' => '.$shippingProfileRate->estimate_shipping;
+                }
+
+                if($sprate_old->logistic_base_rate_for_order != $shippingProfileRate->logistic_base_rate_for_order) {
+                    $update_arr['base_rate_for_order'] = $sprate_old->logistic_base_rate_for_order.' => '.$shippingProfileRate->logistic_base_rate_for_order;
+                }
+
+                if($sprate_old->logistic_base_rate_for_order != $shippingProfileRate->logistic_base_rate_for_order) {
+                    $update_arr['base_rate_for_order'] = $sprate_old->logistic_base_rate_for_order.' => '.$shippingProfileRate->logistic_base_rate_for_order;
+                }
+
+                if($sprate_old->percentage_rate_per_product != $shippingProfileRate->percentage_rate_per_product) {
+                    $update_arr['percentage_rate_per_product'] = $sprate_old->percentage_rate_per_product.' => '.$shippingProfileRate->percentage_rate_per_product;
+                }
+
+                if($sprate_old->logistic_percentage_rate_per_product != $shippingProfileRate->logistic_percentage_rate_per_product) {
+                    $update_arr['logistic_percentage_rate_per_product'] = $sprate_old->logistic_percentage_rate_per_product.' => '.$shippingProfileRate->logistic_percentage_rate_per_product;
+                }
+
+                if($sprate_old->fixed_rate_per_product != $shippingProfileRate->fixed_rate_per_product) {
+                    $update_arr['fixed_rate_per_product'] = $sprate_old->fixed_rate_per_product.' => '.$shippingProfileRate->fixed_rate_per_product;
+                }
+
+                if($sprate_old->logistic_fixed_rate_per_product != $shippingProfileRate->logistic_fixed_rate_per_product) {
+                    $update_arr['logistic_fixed_rate_per_product'] = $sprate_old->logistic_fixed_rate_per_product.' => '.$shippingProfileRate->logistic_fixed_rate_per_product;
+                }
+
+                if($sprate_old->fixed_rate_per_unit_weight != $shippingProfileRate->fixed_rate_per_unit_weight) {
+                    $update_arr['fixed_rate_per_unit_weight'] = $sprate_old->fixed_rate_per_unit_weight.' => '.$shippingProfileRate->fixed_rate_per_unit_weight;
+                }
+
+                if($sprate_old->logistic_fixed_rate_per_unit_weight != $shippingProfileRate->logistic_fixed_rate_per_unit_weight) {
+                    $update_arr['logistic_fixed_rate_per_unit_weight'] = $sprate_old->logistic_fixed_rate_per_unit_weight.' => '.$shippingProfileRate->logistic_fixed_rate_per_unit_weight;
+                }
+            }
             //dd($shippingProfileRate);
             // Code to check if same rate exist in rate table | Start
 
@@ -745,8 +848,11 @@ class ShippingRateTableController extends MarketPlace {
 
                         if(!empty($rateDescData)){
                             $rateDescObj = \App\ShippingProfileRatesDesc::where('id',$rateDescData->id)->first();
+                            $action_desc = 'edit';
+                            $rateDesc_old = $rateDescObj;
                         }else{
                             $rateDescObj = new \App\ShippingProfileRatesDesc;
+                            $action_desc = 'add';
                         }
                         
                         $rateDescObj->rate_id = $shippingRateId;
@@ -771,8 +877,35 @@ class ShippingRateTableController extends MarketPlace {
                         }else{
                             $rateDescObj->sub_district = $request->sub_district;
                         }
+
+                        if($action_desc == 'edit'){
+                            if($rateDesc_old->province_state != $rateDescObj->province_state) {
+                                $update_arr['province_state'] = $sprate_old->province_state.' => '.$rateDescObj->province_state;
+                            }
+
+                            if($rateDesc_old->district_city != $rateDescObj->district_city) {
+                                $update_arr['district_city'] = $sprate_old->district_city.' => '.$rateDescObj->district_city;
+                            }
+
+                            if($rateDesc_old->sub_district != $rateDescObj->sub_district) {
+                                $update_arr['sub_district'] = $sprate_old->sub_district.' => '.$rateDescObj->sub_district;
+                            }
+                        }
                         //dd($rateDescObj);
                         $rateDescObj->save();
+                    }
+
+                    if($action_type == 'edit'){
+                        $change_log = ['shipping_profile_id'=>$shippingProfileRate->shipping_profile_id, 'shipping_profile_rate_id'=>$shippingProfileRate->id, 'update_detail'=>$update_arr];
+                        ShippingProfileLog::updateShippingChangeLog($change_log);
+                    }else{
+                        $change_log = ['shipping_profile_id'=>$shippingProfileRate->shipping_profile_id, 'shipping_profile_rate_id'=>$shippingProfileRate->id, 'remark'=>'New rate created'];
+                        ShippingProfileLog::updateShippingChangeLog($change_log);
+                    }
+
+                    if($action_type == 'add'){
+                        $change_log = ['shipping_profile_id'=>$shippingProfileRate->shipping_profile_id, 'shipping_profile_rate_id'=>$shippingProfileRate->id, 'remark'=>'New rate created'];
+                        ShippingProfileLog::updateShippingChangeLog($change_log);
                     }
                     // end
                     /*update activity log start*/
