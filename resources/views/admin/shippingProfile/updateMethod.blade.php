@@ -988,7 +988,7 @@
             minWidth: 150,
             render : function(ui) {
                 return {
-                    text:'<a href="javascript:void(0);" class="link-primary">&nbsp<a href="'+ui.rowData.edit_url+'" class="link-primary">@lang("admin_common.edit")</a>&nbsp|&nbsp<a href="javascript:void(0);" class="link-primary" onclick="deleteRecord(\''+ui.rowData.delete_url+'\')">@lang("admin_common.delete")</a>',    
+                    text:'<a href="javascript:void(0);" class="link-primary">&nbsp<a href="'+ui.rowData.edit_url+'" class="link-primary">@lang("admin_common.edit")</a>&nbsp|&nbsp<a href="javascript:void(0);" class="link-primary" onclick="deleteRecord(\''+ui.rowData.delete_url+'\')">@lang("admin_common.delete")</a>&nbsp|&nbsp<a href="javascript:void(0);" class="link-primary">&nbsp<a href="'+ui.rowData.log_url+'" class="link-primary">@lang("admin_common.log")</a>',    
                 };
             },
         }, 

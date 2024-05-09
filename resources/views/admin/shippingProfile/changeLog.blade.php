@@ -20,9 +20,9 @@
 
         <div class="header-title">
             <h1 class="title">@lang('admin_shipping.shipping_change_log') : {{$table_rate->id}} </h1>
-            <a href="{{action('Admin\ShippingProfile\ShippingRateTableController@changeLog',$id)}}" class="btn btn-back">&lt;@lang('admin_common.back')</a>
-            </div>            
-        </div>  
+            <a href="{{action('Admin\ShippingProfile\ShippingRateTableController@changeLog',$rate_id)}}" class="btn btn-back">&lt;@lang('admin_common.back')</a>
+        </div>            
+        
 
         <!-- Main content -->
         <div class="content-wrap">
@@ -46,7 +46,7 @@
                 <tbody>
                 @php
                 $i = 0;
-                foreach($prod_log_list as $log_key=>$log_detail) {
+                foreach($log_list as $log_key=>$log_detail) {
 
                     $update_detail = json_decode($log_detail->update_detail);
 
@@ -61,7 +61,7 @@
                             <td>{{ $value_arr['0'] }}</td>
                             <td>{{ $value_arr['1'] }}</td>
                             <td>{{ $log_detail->updated_by }}</td>
-                            <td>{{ getDateFormat($log_detail->updated_at) }}</td>
+                            <td>{{ getDateFormat($log_detail->updated_at,9) }}</td>
                         </tr> 
                     @php
                     }
