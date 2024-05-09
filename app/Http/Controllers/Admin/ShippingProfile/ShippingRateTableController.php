@@ -1763,4 +1763,16 @@ class ShippingRateTableController extends MarketPlace {
         $this->setFilter('shipping-profile-updateMethod',$request);
         return $response;
     }
+
+    public function changeLog(Request $request,$id){
+        
+        $table_rate = ShippingProfileRates::where('id',$id)->first();
+        if(!$table_rate){
+            abort(404);
+        }
+
+        $log_list = ShippingProfileLog::where(['shipping_profile_rate_id'=>$id])->latest()->get();
+
+        return view('admin.shippingProfile.changeLog', ['rate_id'=>$id, 'log_list'=>$log_list,'table_rate'=>$table_rate]);
+    }
 }
