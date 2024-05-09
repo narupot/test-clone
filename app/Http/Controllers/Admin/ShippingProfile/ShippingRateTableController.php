@@ -1755,6 +1755,7 @@ class ShippingRateTableController extends MarketPlace {
                 }
                 $response[$key]->edit_url = action('Admin\ShippingProfile\ShippingRateTableController@editRate',['id'=>$row->id]);
                 $response[$key]->delete_url = action('Admin\ShippingProfile\ShippingRateTableController@deleteRate',['id'=>$row->id]);
+                $response[$key]->log_url = action('Admin\ShippingProfile\ShippingRateTableController@changeLog',['id'=>$row->id]);
             }      
         } catch (QueryException $e) {
             $response = ['status' => 'fail', 'msg' => $e->getMessage()];
@@ -1765,7 +1766,7 @@ class ShippingRateTableController extends MarketPlace {
     }
 
     public function changeLog(Request $request,$id){
-        
+
         $table_rate = ShippingProfileRates::where('id',$id)->first();
         if(!$table_rate){
             abort(404);
