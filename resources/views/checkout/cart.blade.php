@@ -64,13 +64,14 @@
                                 <i class="fas fa-cubes"></i> <span>@lang('checkout.pick_up_at_center')</span>
                             </a>
                         </li>
+                        {{--
                         <li>
                             <a class="ship-method-list" data-toggle="tab" href="#shop_address" id="pick_up_at_the_store">
                                 <input type="radio" value="2" name="ship_method" id="ship-store">
                                 <i class="fas fa-warehouse"></i> <span>@lang('checkout.pick_up_at_the_store')</span>
                             </a>
                         </li>
-                        
+                        --}}
 
                     </ul>
                     <p id="e_ship_method" class="error"></p>
@@ -149,7 +150,9 @@
                                 
                             </div>
                         </div>
-                        <div class="tab-pane" id="shop_address">
+                        {{-- <!--hide because this shipping is not available
+                            6615925039-->
+                            <div class="tab-pane" id="shop_address">
                             <div class="ship-info">
                                 @if(count($shop_address))
                                     @foreach($shop_address as $val)
@@ -169,7 +172,7 @@
                                     @endforeach
                                 @endif
                             </div>
-                        </div>
+                        </div>--}}
                         
                     </div>      
                 </div>
