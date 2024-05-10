@@ -20,7 +20,7 @@
 
         <div class="header-title">
             <h1 class="title">@lang('admin_shipping.shipping_change_log') : {{$table_rate->id}} </h1>
-            <a href="{{action('Admin\ShippingProfile\ShippingRateTableController@changeLog',$rate_id)}}" class="btn btn-back">&lt;@lang('admin_common.back')</a>
+            <a href="{{action('Admin\ShippingProfile\ShippingRateTableController@deliveryAtAddress')}}" class="btn btn-back">&lt;@lang('admin_common.back')</a>
         </div>            
         
 
@@ -49,22 +49,24 @@
                 foreach($log_list as $log_key=>$log_detail) {
 
                     $update_detail = json_decode($log_detail->update_detail);
+                    if($update_detail){
+                        foreach($update_detail as $key=>$value) {
 
-                    foreach($update_detail as $key=>$value) {
+                            $value_arr = explode('=>', $value);
 
-                        $value_arr = explode('=>', $value);
-
-                        @endphp                                   
-                        <tr>
-                            <td>{{ ++$i }}</td>
-                            <td>{{ ucwords(str_replace('_', ' ', $key)) }}</td>
-                            <td>{{ $value_arr['0'] }}</td>
-                            <td>{{ $value_arr['1'] }}</td>
-                            <td>{{ $log_detail->updated_by }}</td>
-                            <td>{{ getDateFormat($log_detail->updated_at,9) }}</td>
-                        </tr> 
-                    @php
+                            @endphp                                   
+                            <tr>
+                                <td>{{ ++$i }}</td>
+                                <td>{{ ucwords(str_replace('_', ' ', $key)) }}</td>
+                                <td>{{ $value_arr['0'] }}</td>
+                                <td>{{ $value_arr['1'] }}</td>
+                                <td>{{ $log_detail->updated_by }}</td>
+                                <td>{{ getDateFormat($log_detail->updated_at,9) }}</td>
+                            </tr> 
+                        @php
+                        }
                     }
+                    
                 }
                 @endphp
                 </tbody>

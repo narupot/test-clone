@@ -164,8 +164,10 @@ class ShippingRateTableController extends MarketPlace {
             $delivery_time->time_slot = explode(',', $delivery_time->time_slot);
         }
 
+        $log_list = ShippingProfileLog::where(['shipping_profile_id'=>$id,'shipping_profile_rate_id'=>0])->latest()->get();
+
         $filter = $this->getFilter('shipping-profile-updateMethod');
-        return view('admin.shippingProfile.updateMethod', ['shippingRateData'=>$shippingRateData,'rates'=>$rates,'custGroup'=>$custGroup,'fielddata'=>$ratesFieldData,'session_data'=>session('additional_msg'),'session_rates'=>session('additional_rate_msg'),'delivery_time'=>$delivery_time,'search'=>isset($request->searchtxt)?$request->searchtxt:'', 'search_type'=>isset($request->search_type)?$request->search_type:'','filter'=>$filter]);
+        return view('admin.shippingProfile.updateMethod', ['shippingRateData'=>$shippingRateData,'rates'=>$rates,'custGroup'=>$custGroup,'fielddata'=>$ratesFieldData,'session_data'=>session('additional_msg'),'session_rates'=>session('additional_rate_msg'),'delivery_time'=>$delivery_time,'search'=>isset($request->searchtxt)?$request->searchtxt:'', 'search_type'=>isset($request->search_type)?$request->search_type:'','filter'=>$filter,'log_list'=>$log_list]);
     }
 
     public function saveShippingRateProfile(Request $request){
@@ -1636,8 +1638,8 @@ class ShippingRateTableController extends MarketPlace {
 
         $start_index = ($current_page - 1) * $perpage;
         
-        $order_by = 'spr.priority';
-        $order_by_val = 'asc';
+        $order_by = 'spr.id';
+        $order_by_val = 'desc';
 
         if(isset($request->pq_sort)){
             $sort_data = jsonDecodeArr($request->pq_sort);
