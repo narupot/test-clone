@@ -400,7 +400,7 @@
             Route::get('pickup-at-store','Admin\Config\SystemConfigController@pickupAtStore');
             Route::get('delivery-at-address','Admin\ShippingProfile\ShippingRateTableController@deliveryAtAddress');
             Route::post('get-delivery-at-address','Admin\ShippingProfile\ShippingRateTableController@getDeliveryAtAddress');
-            
+            Route::get('rate-change-log/{id}','Admin\ShippingProfile\ShippingRateTableController@changeLog');
             Route::get('delivery-at-address/editRate/{id}','Admin\ShippingProfile\ShippingRateTableController@editRate');
             Route::get('delivery-at-address/deleteRate/{id}','Admin\ShippingProfile\ShippingRateTableController@deleteRate');
             Route::post('delivery-at-address/saveShippingRateProfile','Admin\ShippingProfile\ShippingRateTableController@saveShippingRateProfile');

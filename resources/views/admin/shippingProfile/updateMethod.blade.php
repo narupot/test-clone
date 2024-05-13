@@ -61,7 +61,7 @@
       };
       /**** This code used for columns setting of table where field is field name of database filed.*****/
       var columsSetting = [
-      	{  
+        {  
           field : 'Action',
           displayName : 'Action',
           cellTemplate: '<a href="<%row.entity.edit_url%>" class="primary-color">@lang('admin_shipping.edit')</a> | <a href="<%row.entity.delete_url%>" class="primary-color">@lang('admin_shipping.delete')</a> ',
@@ -69,7 +69,7 @@
           cellClass:_getInfo('action','align'),
           enableSorting : false,
         },
-       	{
+        {
           field : 'id',
           displayName : '@lang('admin_shipping.sno')',
           cellTemplate : '<span><%grid.appScope.seqNumber(row)+1%></span>',
@@ -268,6 +268,7 @@
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" id="import_tab" data-target="#import" @if(!empty($session_data)) class="active" @endif >@lang('admin_shipping.import')</a></li>
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" id="methods_and_rates_tab" data-target="#methods_and_rates" @if(!empty($session_rates)) class="active" @endif>@lang('admin_shipping.methods_and_rates')</a></li>
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" id="delivery_time_tab" data-target="#delivery_time" @if(!empty($session_rates)) class="active" @endif>@lang('admin_shipping.delivery_time')</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" id="log_tab" data-target="#shiplog" @if(!empty($session_rates)) class="active" @endif>@lang('admin_shipping.log')</a></li>
                     </ul>
                 </div>
             </div>
@@ -580,6 +581,52 @@
                                 </div>
                                 <ui class="css-board"></ui>
                             </div>
+                        
+                    </div>
+
+                    <div id="shiplog" class="tab-pane fade @if(!empty($session_rates)) show active @endif">
+                        
+                        <h2 class="title-prod">@lang('admin_shipping.log')</h2>
+
+                        <table class="table table-bordered" id="table">
+                            <thead>
+                                <tr class="filters">
+                                    <th>@lang('admin_common.slno')</th>
+                                    <th>@lang('admin_common.activity')</th>
+                                    <th>@lang('admin_shipping.change_from')</th>
+                                    <th>@lang('admin_shipping.change_to')</th>
+                                    <th>@lang('admin_common.updated_by')</th>
+                                    <th>@lang('admin_common.updated_at')</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @php
+                            $i = 0;
+                            foreach($log_list as $log_key=>$log_detail) {
+
+                                $update_detail = json_decode($log_detail->update_detail);
+                                if($update_detail){
+                                    foreach($update_detail as $key=>$value) {
+
+                                        $value_arr = explode('=>', $value);
+
+                                        @endphp                                   
+                                        <tr>
+                                            <td>{{ ++$i }}</td>
+                                            <td>{{ ucwords(str_replace('_', ' ', $key)) }}</td>
+                                            <td>{{ $value_arr['0'] }}</td>
+                                            <td>{{ $value_arr['1'] }}</td>
+                                            <td>{{ $log_detail->updated_by }}</td>
+                                            <td>{{ getDateFormat($log_detail->updated_at,9) }}</td>
+                                        </tr> 
+                                    @php
+                                    }
+                                }
+                                
+                            }
+                            @endphp
+                            </tbody>
+                        </table>
                         
                     </div>
                 </div>
@@ -988,7 +1035,7 @@
             minWidth: 150,
             render : function(ui) {
                 return {
-                    text:'<a href="javascript:void(0);" class="link-primary">&nbsp<a href="'+ui.rowData.edit_url+'" class="link-primary">@lang("admin_common.edit")</a>&nbsp|&nbsp<a href="javascript:void(0);" class="link-primary" onclick="deleteRecord(\''+ui.rowData.delete_url+'\')">@lang("admin_common.delete")</a>',    
+                    text:'<a href="javascript:void(0);" class="link-primary">&nbsp<a href="'+ui.rowData.edit_url+'" class="link-primary">@lang("admin_common.edit")</a>&nbsp|&nbsp<a href="javascript:void(0);" class="link-primary" onclick="deleteRecord(\''+ui.rowData.delete_url+'\')">@lang("admin_common.delete")</a>&nbsp|&nbsp<a href="javascript:void(0);" class="link-primary">&nbsp<a href="'+ui.rowData.log_url+'" class="link-primary">@lang("admin_common.log")</a>',    
                 };
             },
         }, 
