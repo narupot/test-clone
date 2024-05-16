@@ -1127,12 +1127,28 @@ class CartController extends MarketPlace {
         /****calculating pickup time*******/
         $pickup_datetime = null;
         if(isset($request->pickup_time)){
+        	$delivery_type = \App\DeliveryTime::getDeliverYType($orderInfo->ship_method);
+			$delivery_detail = \App\DeliveryTime::getDeliveryTime($delivery_type);
             $pickup_time = $request->pickup_time;
             $nextday = !empty($request->nexday)?$request->nexday:'';
             $ptime = str_replace('_n', '', $pickup_time);
+			$time_slot = $delivery_detail->time_slot;
+			if($time_slot){
+				$exp_slot = explode(',',$time_slot);
+				if(!in_array($ptime, $exp_slot)){
+					return ['status'=>'fail','type'=>'pickup_time','msg'=>'รอบการจัดส่งสินค้าที่คุณเลือกไว้หมดเวลาแล้ว กรุณาเลือกรอบการจัดส่งใหม่'];
+				}
+			}
             if(strrpos($pickup_time,'_n')!==false){
-                $tomorrow = date("Y-m-d", strtotime("+1 day"));
-                $pdate = $tomorrow.' '.$ptime.':00:00';
+            	$cur_hr = date('H');
+				$time_cal = $cur_hr + $delivery_detail->delivery_time_after;
+				
+				if($cur_hr <=3 && $ptime >= $time_cal){
+					$pdate = date('Y-m-d').' '.$ptime.':00:00';
+				}else{
+					$tomorrow = date("Y-m-d", strtotime("+1 day"));
+					$pdate = $tomorrow.' '.$ptime.':00:00';
+				}
             }else{
                 $pdate = date('Y-m-d').' '.$ptime.':00:00';
             }
@@ -1140,7 +1156,7 @@ class CartController extends MarketPlace {
             $new_time = date("Y-m-d H:i:s", strtotime('+3 hours'));
 
             if(strtotime($new_time) > strtotime($pickup_datetime)){
-            	return ['status'=>'fail','type'=>'pickup_time','msg'=>Lang::get('checkout.invalid_pickup_time')];
+            	return ['status'=>'fail','type'=>'pickup_time','msg'=>'รอบการจัดส่งสินค้าที่เลือกไว้หมดเวลาแล้ว กรุณาเลือกรอบการจัดส่งสินค้าใหม่อีกครั้ง'];
             }
         }
         $payment_slug = $pay_det->slug;
