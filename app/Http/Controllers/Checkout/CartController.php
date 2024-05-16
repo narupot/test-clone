@@ -1127,7 +1127,7 @@ class CartController extends MarketPlace {
         /****calculating pickup time*******/
         $pickup_datetime = null;
         if(isset($request->pickup_time)){
-        	$delivery_type = \App\DeliveryTime::getDeliverYType($orderInfo->ship_method);
+        	$delivery_type = \App\DeliveryTime::getDeliverYType($orderInfo->shipping_method);
 			$delivery_detail = \App\DeliveryTime::getDeliveryTime($delivery_type);
             $pickup_time = $request->pickup_time;
             $nextday = !empty($request->nexday)?$request->nexday:'';
