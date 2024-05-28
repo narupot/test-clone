@@ -1321,6 +1321,17 @@ function getChannel($key) {
 function getSortingItems(){
 	return [
 		[
+			"name"=>"unit_price",
+			"by"=>"ASC",
+			"value"=>Lang::get('product.price_low_to_high'),
+		],
+		[
+
+			"name"=>"unit_price",
+			"by"=>"DESC",
+			"value"=>Lang::get('product.price_high_to_low')
+		],
+		[
 			"name"=>"created_at",
 			"by"=>"desc",
 			"value"=>Lang::get('product.new')
@@ -1340,17 +1351,6 @@ function getSortingItems(){
 		// 	"name"=>"prod_name_desc",
 		// 	"value"=>Lang::get('product.name_desc')
 		// ],
-		[
-			"name"=>"unit_price",
-			"by"=>"ASC",
-			"value"=>Lang::get('product.price_low_to_high'),
-		],
-		[
-
-			"name"=>"unit_price",
-			"by"=>"DESC",
-			"value"=>Lang::get('product.price_high_to_low')
-		],
 		[
 			"name"=>"avg_star",
 			"by"=>"ASC",
