@@ -62,14 +62,14 @@
             <!-- <button class="btn-default">Print</button> -->
         </div>
     </div>
-    <div class="d-flex mb-2">
+    <div class="d-flex mb-3 mt-3 align-items-start">
         <div class="track-status form-group">
             <button class="btn-blue">@lang('common.status') : <span id="order_status">{{$main_order->getOrderStatus->status ?? "NA" }}</span></button>                                 
             <span class="ship-track-time">{{getDateFormat($main_order->updated_at,7)}}</span>
         </div>
         @if($main_order->payment_status==0 && $main_order->order_status==1)
             <a class="btn-blue" href="{{action('User\OrderController@orderPayment',$main_order->formatted_id)}}"> @lang('admin_order.pay_now')</a> 
-            <div class="red pb-2">{!! getStaticBlock('before-checkout-notifiction') !!}</div>
+            <div class="red pl-3">{!! getStaticBlock('before-checkout-notifiction') !!}</div>
         @endif
     </div>
 </div>          
