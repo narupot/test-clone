@@ -37,8 +37,11 @@ class ClearApiLog extends Command
      * @return mixed
      */
     public function handle()
-    {
-        $clear_log = \App\ApiLog::where('created_at','<',$del_time)->delete();
+    {   
+        //$clear_hr = \App\SystemConfig::getSystemValFromDb('CART_CLEAR_TIME');
+        //$date = date('Y-m-d H:i:s');
+        //$new_time = date("Y-m-d H:i:s", strtotime('-'.$clear_hr, strtotime($date)));
+        //$clear_log = \App\ApiLog::where('created_at','<',$del_time)->delete();
     }
   
 } 
