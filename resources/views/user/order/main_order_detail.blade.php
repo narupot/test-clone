@@ -68,9 +68,10 @@
             <span class="ship-track-time">{{getDateFormat($main_order->updated_at,7)}}</span>
         </div>
         @if($main_order->payment_status==0 && $main_order->order_status==1)
-            <a class="btn-blue" href="{{action('User\OrderController@orderPayment',$main_order->formatted_id)}}"> @lang('admin_order.pay_now')</a> 
+            <a class="btn-blue" href="{{action('User\OrderController@orderPayment',$main_order->formatted_id)}}"> @lang('admin_order.pay_now')</a>
+            <div class="red ml-auto pl-3">{!! getStaticBlock('before-checkout-notifiction') !!}</div> 
         @endif
-        <div class="red ml-auto pl-3">{!! getStaticBlock('before-checkout-notifiction') !!}</div>
+        
     </div>
 </div>          
 <div class="title-track-info">
