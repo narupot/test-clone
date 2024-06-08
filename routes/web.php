@@ -762,6 +762,8 @@
         Route::post('updateCartPrice', 'Checkout\CartController@updateCartPrice');
         Route::get('shopping-cart', 'Checkout\CartController@shoppingCart');
         Route::get('paid-product', 'Checkout\CartController@alreadyPaid');
+        Route::get('cart-removed', 'Checkout\CartController@deleteTempOrder');
+        Route::get('check-cart-exist', 'Checkout\CartController@checkCartExist');
         Route::get('thanks/{id?}', 'Checkout\OrderController@thanks');
         Route::get('cancel', 'Checkout\OrderController@cancel');
         Route::post('payProduct', 'Checkout\CartController@payProduct');
