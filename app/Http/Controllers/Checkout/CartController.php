@@ -892,7 +892,7 @@ class CartController extends MarketPlace {
 			$orderInfo = OrdersTemp::where(['formatted_order_id'=>$formatedId,'user_id'=>$userid,'order_status'=>'0'])->first();
 
 			if(empty($orderInfo)){
-				return ['status'=>'fail','msg'=>Lang::get('checkout.invalid_order')];
+				return ['status'=>'fail','msg'=>Lang::get('checkout.invalid_order'),'type'=>'invalid'];
 			}
 			/***only end shopping means order has paid product already*****/
 			if($request->checkout_type =='end-shopping'){

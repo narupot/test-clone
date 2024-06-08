@@ -32,6 +32,7 @@
     var tot_delivery_time = "{{ $delivery_details['item_pickup_time'] }}";
     var updateCartPrice = "{{ action('Checkout\CartController@updateCartPrice') }}";
     var checkCartUrl = "{{action('Checkout\CartController@checkCartExist')}}";
+    var deletetemporder = "{{action('Checkout\CartController@deleteTempOrder')}}";
 @endsection
 
 @section('content')
@@ -404,7 +405,7 @@
         });
     });
 
-    setInterval(check_cart_exist, 10000);
+    setInterval(check_cart_exist, 1000);
 
     function check_cart_exist(){
        callAjax(checkCartUrl, 'GET', {}, result=>{
