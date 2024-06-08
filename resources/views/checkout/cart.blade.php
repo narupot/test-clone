@@ -405,7 +405,7 @@
         });
     });
 
-    setInterval(check_cart_exist, 1000);
+    setInterval(check_cart_exist, 5000);
 
     function check_cart_exist(){
        callAjax(checkCartUrl, 'GET', {}, result=>{
