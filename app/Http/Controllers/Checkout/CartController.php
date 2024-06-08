@@ -52,7 +52,7 @@ class CartController extends MarketPlace {
 				return redirect(action('User\OrderController@mainOrderDetail',$check_pending_order->formatted_id));
 			}
 
-			abort(404);
+			return redirect(action('Checkout\CartController@deleteTempOrder'));
 		}
 
 		$update_cart = Cart::where(['order_id'=>$orderInfo->id,'cart_status'=>2])->update(['cart_status'=>1]);
@@ -239,6 +239,21 @@ class CartController extends MarketPlace {
         //dd($shipping_address);
 		return view('checkout.cart',compact('def_country_dtl','ship_province_str','user_address','shipping_address','billing_address','payment_option','checkout_type','pickup_center_address','delivery_details'), ['orderInfo' => $orderInfo, 'orderDetails'=>$orderDetails, 'page_class'=>'cart-wrap','breadcrumb'=>$breadcrumb,'shop_address'=>$shop_address,'main_order'=>$main_order,'paid_product'=>$paid_product,'shipping_fee'=>$shipping_fee,'user_odd_info'=>$user_odd_info,'time_arr'=>[],'delivery_time_arr'=>$delivery_time_arr]);        
 	} 
+
+	public function deleteTempOrder(Request $request){
+
+        return view('checkout.cartRemove');
+    }
+
+    public function checkCartExist(Request $request){
+    	$userid = Auth::User()->id;
+		$orderInfo = OrdersTemp::where(['user_id'=>$userid,'order_status'=>'0'])->first();
+		if(!$orderInfo){
+			return['status'=>'notexist','url'=>action('Checkout\CartController@deleteTempOrder')];
+		}else{
+			return['status'=>'exist'];
+		}
+    }
 
 	public function pickupTime(Request $request){
 		$logistic_time_arr = [10,14,16,18,20,22];

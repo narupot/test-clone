@@ -31,6 +31,7 @@
     var pickup_time_url = "{{ action('Checkout\CartController@pickupTime') }}" ;
     var tot_delivery_time = "{{ $delivery_details['item_pickup_time'] }}";
     var updateCartPrice = "{{ action('Checkout\CartController@updateCartPrice') }}";
+    var checkCartUrl = "{{action('Checkout\CartController@checkCartExist')}}";
 @endsection
 
 @section('content')
@@ -402,5 +403,15 @@
             console.log;
         });
     });
+
+    setInterval(check_cart_exist, 10000);
+
+    function check_cart_exist(){
+       callAjax(checkCartUrl, 'GET', {}, result=>{
+            if(result.status=='notexist'){
+                window.location.href=result.url;
+            }
+        });
+    }
 </script>
 @stop
