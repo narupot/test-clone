@@ -820,7 +820,12 @@
 }
 
 
+
+
 @media all and (max-width: 767px) {
+	.show_mod {
+		display: none;
+	}
 	input[type="date"], .date-select {
 		&::-webkit-calendar-picker-indicator, 
 		&::-webkit-inner-spin-button,
