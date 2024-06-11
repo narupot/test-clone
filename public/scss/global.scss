@@ -818,8 +818,11 @@
 		background: red !important;
 	}
 }
-.notification_text br {
-	display: none !important;
+.notification_text {
+	text-align: center;
+	br {
+		display: none !important;
+	}
 }
 
 
