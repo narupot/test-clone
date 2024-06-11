@@ -818,6 +818,9 @@
 		background: red !important;
 	}
 }
+.notification_text br {
+	display: none !important;
+}
 
 
 @media all and (max-width: 991px) {

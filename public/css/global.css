@@ -1960,6 +1960,9 @@ textarea, select, .date-select, .btn, .btn-blue, .btn-grey, .btn-default, .btn-g
 .head-red th {
   background: red !important; }
 
+.notification_text br {
+  display: none !important; }
+
 @media all and (max-width: 991px) {
   .show_mod {
     display: none; }
