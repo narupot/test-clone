@@ -1960,10 +1960,16 @@ textarea, select, .date-select, .btn, .btn-blue, .btn-grey, .btn-default, .btn-g
 .head-red th {
   background: red !important; }
 
-@media all and (max-width: 767px) {
+@media all and (max-width: 991px) {
   .show_mod {
     display: none; }
 
+  .status_wrappers {
+    flex-direction: column; }
+
+  .notification_text {
+    padding: 1rem 0 !important; } }
+@media all and (max-width: 767px) {
   input[type="date"]::-webkit-calendar-picker-indicator, input[type="date"]::-webkit-inner-spin-button, .date-select::-webkit-calendar-picker-indicator, .date-select::-webkit-inner-spin-button {
     visibility: hidden; }
   input[type="date"]::-webkit-inner-spin-button, .date-select::-webkit-inner-spin-button {
