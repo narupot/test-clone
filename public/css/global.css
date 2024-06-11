@@ -1961,6 +1961,9 @@ textarea, select, .date-select, .btn, .btn-blue, .btn-grey, .btn-default, .btn-g
   background: red !important; }
 
 @media all and (max-width: 767px) {
+  .show_mod {
+    display: none; }
+
   input[type="date"]::-webkit-calendar-picker-indicator, input[type="date"]::-webkit-inner-spin-button, .date-select::-webkit-calendar-picker-indicator, .date-select::-webkit-inner-spin-button {
     visibility: hidden; }
   input[type="date"]::-webkit-inner-spin-button, .date-select::-webkit-inner-spin-button {
