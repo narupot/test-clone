@@ -820,12 +820,19 @@
 }
 
 
-
-
-@media all and (max-width: 767px) {
+@media all and (max-width: 991px) {
 	.show_mod {
 		display: none;
 	}
+	.status_wrappers {
+		flex-direction: column;
+	}
+	.notification_text {
+		padding: 1rem 0 !important;
+	}
+}
+
+@media all and (max-width: 767px) {
 	input[type="date"], .date-select {
 		&::-webkit-calendar-picker-indicator, 
 		&::-webkit-inner-spin-button,
