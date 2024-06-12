@@ -365,7 +365,7 @@
                                     <span id="tot_order_amount">{{convert_string($tot_amount) }}</span> @lang('common.baht')</span>
                             </div>
                         </div>
-                        <div class="red text-center pb-3">
+                        <div class="red notification_text">
                              {!! getStaticBlock('before-checkout-notifiction') !!}
                         </div>
                         <div class="row">                               
