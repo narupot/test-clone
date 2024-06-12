@@ -820,16 +820,12 @@
 }
 .notification_text {
 	text-align: center;
-	br {
-		display: none !important;
-	}
+	font-size: 13px;
+	margin: 0 auto
 }
 
 
 @media all and (max-width: 991px) {
-	.show_mod {
-		display: none;
-	}
 	.status_wrappers {
 		flex-direction: column;
 	}
