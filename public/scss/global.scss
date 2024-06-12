@@ -820,17 +820,25 @@
 }
 .notification_text {
 	text-align: center;
-	font-size: 13px;
-	margin: 0 auto
+	font-size: 12px;
+	margin: 0 auto;
+	padding: 1rem 0;
 }
 
+
+@media all and (min-width: 768px) {
+	.notification_text {
+		&.re_pay {
+			padding-top: 0;
+		}
+	}
+}
 
 @media all and (max-width: 991px) {
 	.status_wrappers {
 		flex-direction: column;
 	}
 	.notification_text {
-		padding: 1rem 0 !important;
 	}
 }
 
