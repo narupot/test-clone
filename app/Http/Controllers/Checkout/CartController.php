@@ -52,7 +52,7 @@ class CartController extends MarketPlace {
 				return redirect(action('User\OrderController@mainOrderDetail',$check_pending_order->formatted_id));
 			}
 
-			abort(404);
+			return redirect(action('Checkout\CartController@deleteTempOrder'));
 		}
 
 		$update_cart = Cart::where(['order_id'=>$orderInfo->id,'cart_status'=>2])->update(['cart_status'=>1]);
@@ -239,6 +239,21 @@ class CartController extends MarketPlace {
         //dd($shipping_address);
 		return view('checkout.cart',compact('def_country_dtl','ship_province_str','user_address','shipping_address','billing_address','payment_option','checkout_type','pickup_center_address','delivery_details'), ['orderInfo' => $orderInfo, 'orderDetails'=>$orderDetails, 'page_class'=>'cart-wrap','breadcrumb'=>$breadcrumb,'shop_address'=>$shop_address,'main_order'=>$main_order,'paid_product'=>$paid_product,'shipping_fee'=>$shipping_fee,'user_odd_info'=>$user_odd_info,'time_arr'=>[],'delivery_time_arr'=>$delivery_time_arr]);        
 	} 
+
+	public function deleteTempOrder(Request $request){
+
+        return view('checkout.cartRemove');
+    }
+
+    public function checkCartExist(Request $request){
+    	$userid = Auth::User()->id;
+		$orderInfo = OrdersTemp::where(['user_id'=>$userid,'order_status'=>'0'])->first();
+		if(!$orderInfo){
+			return['status'=>'notexist','url'=>action('Checkout\CartController@deleteTempOrder')];
+		}else{
+			return['status'=>'exist'];
+		}
+    }
 
 	public function pickupTime(Request $request){
 		$logistic_time_arr = [10,14,16,18,20,22];
@@ -877,7 +892,7 @@ class CartController extends MarketPlace {
 			$orderInfo = OrdersTemp::where(['formatted_order_id'=>$formatedId,'user_id'=>$userid,'order_status'=>'0'])->first();
 
 			if(empty($orderInfo)){
-				return ['status'=>'fail','msg'=>Lang::get('checkout.invalid_order')];
+				return ['status'=>'fail','msg'=>Lang::get('checkout.invalid_order'),'type'=>'invalid'];
 			}
 			/***only end shopping means order has paid product already*****/
 			if($request->checkout_type =='end-shopping'){
@@ -1127,12 +1142,28 @@ class CartController extends MarketPlace {
         /****calculating pickup time*******/
         $pickup_datetime = null;
         if(isset($request->pickup_time)){
+        	$delivery_type = \App\DeliveryTime::getDeliverYType($orderInfo->shipping_method);
+			$delivery_detail = \App\DeliveryTime::getDeliveryTime($delivery_type);
             $pickup_time = $request->pickup_time;
             $nextday = !empty($request->nexday)?$request->nexday:'';
             $ptime = str_replace('_n', '', $pickup_time);
+			$time_slot = $delivery_detail->time_slot;
+			if($time_slot){
+				$exp_slot = explode(',',$time_slot);
+				if(!in_array($ptime, $exp_slot)){
+					return ['status'=>'fail','type'=>'pickup_time','msg'=>'รอบการจัดส่งสินค้าที่คุณเลือกไว้หมดเวลาแล้ว กรุณาเลือกรอบการจัดส่งใหม่'];
+				}
+			}
             if(strrpos($pickup_time,'_n')!==false){
-                $tomorrow = date("Y-m-d", strtotime("+1 day"));
-                $pdate = $tomorrow.' '.$ptime.':00:00';
+            	$cur_hr = date('H');
+				$time_cal = $cur_hr + $delivery_detail->delivery_time_after;
+				
+				if($cur_hr <=3 && $ptime >= $time_cal){
+					$pdate = date('Y-m-d').' '.$ptime.':00:00';
+				}else{
+					$tomorrow = date("Y-m-d", strtotime("+1 day"));
+					$pdate = $tomorrow.' '.$ptime.':00:00';
+				}
             }else{
                 $pdate = date('Y-m-d').' '.$ptime.':00:00';
             }
@@ -1140,7 +1171,7 @@ class CartController extends MarketPlace {
             $new_time = date("Y-m-d H:i:s", strtotime('+3 hours'));
 
             if(strtotime($new_time) > strtotime($pickup_datetime)){
-            	return ['status'=>'fail','type'=>'pickup_time','msg'=>Lang::get('checkout.invalid_pickup_time')];
+            	return ['status'=>'fail','type'=>'pickup_time','msg'=>'รอบการจัดส่งสินค้าที่เลือกไว้หมดเวลาแล้ว กรุณาเลือกรอบการจัดส่งสินค้าใหม่อีกครั้ง'];
             }
         }
         $payment_slug = $pay_det->slug;

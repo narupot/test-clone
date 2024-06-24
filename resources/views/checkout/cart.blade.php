@@ -31,6 +31,8 @@
     var pickup_time_url = "{{ action('Checkout\CartController@pickupTime') }}" ;
     var tot_delivery_time = "{{ $delivery_details['item_pickup_time'] }}";
     var updateCartPrice = "{{ action('Checkout\CartController@updateCartPrice') }}";
+    var checkCartUrl = "{{action('Checkout\CartController@checkCartExist')}}";
+    var deletetemporder = "{{action('Checkout\CartController@deleteTempOrder')}}";
 @endsection
 
 @section('content')
@@ -363,7 +365,9 @@
                                     <span id="tot_order_amount">{{convert_string($tot_amount) }}</span> @lang('common.baht')</span>
                             </div>
                         </div>
-              
+                        <div class="red notification_text">
+                             {!! getStaticBlock('before-checkout-notifiction') !!}
+                        </div>
                         <div class="row">                               
                             <button type="button" class="col-12 btn-blue2" id="btn_checkout">@lang('checkout.confirm_order_to_end_shopping')</button>
                         </div>
@@ -400,5 +404,15 @@
             console.log;
         });
     });
+
+    setInterval(check_cart_exist, 5000);
+
+    function check_cart_exist(){
+       callAjax(checkCartUrl, 'GET', {}, result=>{
+            if(result.status=='notexist'){
+                window.location.href=result.url;
+            }
+        });
+    }
 </script>
 @stop
