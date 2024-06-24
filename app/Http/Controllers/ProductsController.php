@@ -797,7 +797,7 @@ class ProductsController extends MarketPlace {
         }
        
         //getting product data which has low price.
-        $data_prd = \App\MongoProduct::select(DB::raw('min(unit_price) as minunit'),'cat_id')->where('status','1')->where('stock','1')->whereIn('cat_id',$res_cat_id)->whereNotIn('shop_id',$shop_closed_id)->groupby('cat_id')->orderBy('minunit','asc')->get()->toArray();
+        $data_prd = \App\Product::select(DB::raw('min(unit_price) as minunit'),'cat_id')->where('status','1')->where('stock','1')->whereIn('cat_id',$res_cat_id)->whereNotIn('shop_id',$shop_closed_id)->groupby('cat_id')->orderBy('minunit','asc')->get()->toArray();
         $main_res_data = [];
         $i=0;
         foreach ($data_prd as $rkey => $res) {
@@ -825,7 +825,7 @@ class ProductsController extends MarketPlace {
 
         /*return ['detail'=>$product_data,'status'=>'success','cat_data'=>$product_cats,'badges'=>$all_badges,'price_flag'=>$range_flag];*/
     }
-    
+
     public function getProductsShopByCategory(Request $request){
 
         $name = stripTags($request->search);
