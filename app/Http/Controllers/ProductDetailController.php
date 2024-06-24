@@ -16,7 +16,6 @@ use Config;
 use App\Product;
 use App\OrdersTemp;
 use App\Cart;
-use App\MongoProduct;
 
 class ProductDetailController extends MarketPlace
 {
@@ -398,7 +397,7 @@ class ProductDetailController extends MarketPlace
     public function getRelatedProducts(Request $request){
         $product_id = (int)$request->product_id ?? 0;
 
-        $check_prd = MongoProduct::where('_id',$product_id)->first();
+        $check_prd = \App\MongoProduct::where('_id',$product_id)->first();
         if(!empty($check_prd)){
             $cat_id = $check_prd->cat_id;
             $shop_id = $check_prd->shop_id;
@@ -502,7 +501,7 @@ class ProductDetailController extends MarketPlace
 
     public function getBuyerOrderHistory(Request $request){
         $product_id = (int)$request->product_id ?? 0;
-        $check_prd = MongoProduct::where('_id',$product_id)->first();
+        $check_prd = \App\MongoProduct::where('_id',$product_id)->first();
         if(!empty($check_prd) && Auth::check()){
             $cat_id = $check_prd->cat_id;
             $user_id = Auth::id();

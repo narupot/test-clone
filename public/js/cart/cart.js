@@ -399,6 +399,8 @@
                         $('#cart_'+response.cart_id+' li.price_li').append('<br><a href="javascript:;" class="update_cart_price text-primary">'+error_msg.update_price+'</a>')
                         $("#btn_checkout").prop("disabled",false);
                         showSweetAlertError(response.msg);
+                    }else if(response.type=='invalid'){
+                        window.location.href=deletetemporder;
                     }else if(response.type=='pickup_time'){
                         $("#btn_checkout").prop("disabled", false);
                         swal({

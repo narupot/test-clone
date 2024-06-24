@@ -205,7 +205,9 @@ class ProductsController extends MarketPlace {
         $page_item = $request->itemsPerPage;
 
         $cat_data = \App\MongoCategory::where('_id',$cat_id)->first();
-
+        if(!$cat_data){
+            return ['status'=>'fail'];
+        }
         //dd($cat_data);
 
         $filter_attributes = $request->fillterAttributes;
@@ -490,6 +492,9 @@ class ProductsController extends MarketPlace {
 
         //$this->validate($request, ['search' => 'required']);
         $cat_da = \App\MongoCategory::where('url',$url)->select('category_name','img','url','parent_id')->first();
+        if(!$cat_da){
+            return redirect()->action('HomeController@index');
+        }
         if($cat_da->parent_id!=0){
             return redirect()->action('ProductsController@category',$url);
         
@@ -840,15 +845,19 @@ class ProductsController extends MarketPlace {
             $product_data_list = $product_data_list->toArray(); 
             $product_cat_ids = array_unique(array_column($product_data_list, 'cat_id'));
         }*/
+        $cat_array = [];
+        $product_data = [];
         $cat_check= \App\MongoCategory::where('category_name',$name)->where('status',"1")->first();
         if($cat_check){
             $categor_id =$cat_check->_id;
             $cat_array= \App\MongoCategory::where('parent_id',$categor_id)->pluck('_id')->toArray();
         }
-        $shop_closed_id = \App\MongoShop::where('shop_status','close')->orWhere('status','0')->pluck('_id')->toArray();
-        $cat_Ids = \App\MongoProduct::where('status','1')->where('stock','1');
-        $cat_Ids = $cat_Ids->whereNotIn('shop_id',$shop_closed_id)->whereIn('cat_id',$cat_array)->pluck('cat_id','cat_id')->toArray();
-        $product_data = \App\MongoCategory::whereIn('_id', $cat_Ids)->where('status',"1")->select('category_name','img','url')->get()->toArray(); 
+        if($cat_array){
+            $shop_closed_id = \App\MongoShop::where('shop_status','close')->orWhere('status','0')->pluck('_id')->toArray();
+            $cat_Ids = \App\MongoProduct::where('status','1')->where('stock','1');
+            $cat_Ids = $cat_Ids->whereNotIn('shop_id',$shop_closed_id)->whereIn('cat_id',$cat_array)->pluck('cat_id','cat_id')->toArray();
+            $product_data = \App\MongoCategory::whereIn('_id', $cat_Ids)->where('status',"1")->select('category_name','img','url')->get()->toArray();
+        }
         
         //$product_data = \App\MongoCategory::whereIn('_id',$product_cat_ids)->select('category_name','img','url')->get()->toArray();
         
