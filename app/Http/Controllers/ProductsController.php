@@ -787,46 +787,45 @@ class ProductsController extends MarketPlace {
         $order = $request->order;*/
         $cat_ids= null; 
 
-        /*$cat_data = \App\MongoCategory::where('category_name','like','%'.$name.'%')->where('status',"1")->where('parent_id','>',0)->select('category_name','img','url')->get()->toArray();
-        if(count($cat_data)){
-            $cat_ids = array_unique(array_column($cat_data, '_id'));
-        }else{
-            $cat_ids = [];  
-        }
-        $product_data_list =  \App\MongoProduct::whereIn('cat_id',$cat_ids)->where('status',"1")->select('badge_id','unit_price','cat_id')->get();
-        $product_cat_ids = [];
-        if(count($product_data_list)){
-            $product_data_list = $product_data_list->toArray(); 
-            $product_cat_ids = array_unique(array_column($product_data_list, 'cat_id'));
-        }*/
-
         $shop_closed_id = \App\MongoShop::where('shop_status','close')->orWhere('status','0')->pluck('_id')->toArray();
-        $cat_Ids = \App\MongoProduct::where('status','1')->where('stock','1');
-        $cat_Ids = $cat_Ids->whereNotIn('shop_id',$shop_closed_id)->pluck('cat_id','cat_id')->toArray();
-        $product_data = \App\MongoCategory::whereIn('_id', $cat_Ids)->where('category_name','like','%'.$name.'%')->where('status',"1")->where('parent_id','>',0)->select('category_name','img','url')->get()->toArray(); 
-        
-        //$product_data = \App\MongoCategory::whereIn('_id',$product_cat_ids)->select('category_name','img','url')->get()->toArray();
-        
-        $i=0;
-        foreach ($product_data as $key => $result) {            
-            $product_data[$i]['url'] = action('ProductsController@categorySearch', $result['url']);
-            $product_data[$i]['name'] = $result['category_name'];
-            $product_data[$i]['value'] = $result['category_name'];
-            $product_data[$i]['sku'] = '';
-            $product_data[$i]['price'] = '';
-            $product_data[$i]['image'] = getCategoryImageUrl($result['img']);
 
-            $product_data[$i]['shop_name'] = '';//$result['shop']['shop_name'];
-            $product_data[$i]['type'] = 'product';
-            $product_data[$i]['i'] = $i;            
-            $i++;            
+        $product_data = \App\MongoCategory::where('category_name','like','%'.$name.'%')->where('status',"1")->where('parent_id','>',0)->select('category_name','img','url','_id')->get()->toArray(); 
+        $res_cat_id=[];
+        foreach ($product_data as $key => $value) {
+            $product_data[$value['_id']]=['category_name'=>$value['category_name'],'img'=>$value['img'],'url'=>$value['url']];
+            $res_cat_id[] = $value['_id'];
+        }
+       
+        //getting product data which has low price.
+        $data_prd = \App\MongoProduct::select(DB::raw('min(unit_price) as minunit'),'cat_id')->where('status','1')->where('stock','1')->whereIn('cat_id',$res_cat_id)->whereNotIn('shop_id',$shop_closed_id)->groupby('cat_id')->orderBy('minunit','asc')->get()->toArray();
+        $main_res_data = [];
+        $i=0;
+        foreach ($data_prd as $rkey => $res) {
+            if(isset($product_data[$res['cat_id']])){
+                $result = $product_data[$res['cat_id']];
+
+                $main_res_data[$i]['url'] = action('ProductsController@categorySearch', $result['url']);
+                $main_res_data[$i]['name'] = $result['category_name'];
+                $main_res_data[$i]['value'] = $result['category_name'];
+                $main_res_data[$i]['sku'] = '';
+                $main_res_data[$i]['price'] = '';
+                $main_res_data[$i]['cat_id'] = $res['cat_id'];
+                $main_res_data[$i]['image'] = getCategoryImageUrl($result['img']);
+
+                $main_res_data[$i]['shop_name'] = '';//$result['shop']['shop_name'];
+                $main_res_data[$i]['type'] = 'product';
+                $main_res_data[$i]['i'] = $i;            
+                $i++; 
+
+            }
+            
         }
 
-
-        return ['detail'=>$product_data,'status'=>'success'];
+        return ['detail'=>$main_res_data,'status'=>'success'];
 
         /*return ['detail'=>$product_data,'status'=>'success','cat_data'=>$product_cats,'badges'=>$all_badges,'price_flag'=>$range_flag];*/
     }
+    
     public function getProductsShopByCategory(Request $request){
 
         $name = stripTags($request->search);
