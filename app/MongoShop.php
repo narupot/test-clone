@@ -100,4 +100,22 @@ class MongoShop extends Molequent
 
         Self::where('_id', (int)$unit_id)->delete();
     }
+
+    public static function getShopClosedId(){
+        $cache_key = 'shop_closed_ids';
+        $shop_closed_id = [];
+        if (cache_hasKey($cache_key) && \Config::get('constants.enable_cache')) {
+            $shop_closed_id = cache_getDate($cache_key);
+        }
+        else{
+            $shop_closed_id = Self::where('shop_status','close')->orWhere('status','0')->pluck('_id')->toArray();
+            cache_putData($cache_key,$shop_closed_id);
+        }
+        return $shop_closed_id;
+    }
+
+    function static deleteShopClosedIdCache(){
+        $cache_key = 'shop_closed_ids';
+        cache_deleteKey($cache_key);
+    }
 }
