@@ -114,7 +114,7 @@ class MongoShop extends Molequent
         return $shop_closed_id;
     }
 
-    function static deleteShopClosedIdCache(){
+    public static function deleteShopClosedIdCache(){
         $cache_key = 'shop_closed_ids';
         cache_deleteKey($cache_key);
     }
