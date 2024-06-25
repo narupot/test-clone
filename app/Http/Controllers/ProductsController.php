@@ -275,7 +275,7 @@ class ProductsController extends MarketPlace {
 
         $all_badges = null;
         
-        $shop_closed_id = \App\MongoShop::where('shop_status','close')->orWhere('status','0')->pluck('_id')->toArray();
+        $shop_closed_id = \App\MongoShop::getShopClosedId();
         
         $product_data = \App\MongoProduct::select('url', 'sku', 'shop_id', 'avg_star', 'cat_id','badge_id','show_price', 'unit_price', 'stock', 'quantity','order_qty_limit','min_order_qty','thumbnail_image','is_tier_price','package_id','base_unit_id','weight_per_unit','status','created_at','updated_at','created_by','updated_by','created_from', 'updated_from', 'description', 'image')
             ->where(['cat_id'=>$cat_id,'status'=>"1"])
@@ -314,7 +314,7 @@ class ProductsController extends MarketPlace {
         $range_flag = false;
         $order_by = $request->orderBy;
         $order = $request->order;
-        $shop_closed_id = \App\MongoShop::where('shop_status','close')->orWhere('status','0')->pluck('_id')->toArray();
+        $shop_closed_id = \App\MongoShop::getShopClosedId();
         //dd($filter_attributes)
         if(!is_null($filter_attributes)){
             $price_range = isset($filter_attributes['price']) ? $filter_attributes['price'] : null;
@@ -852,7 +852,7 @@ class ProductsController extends MarketPlace {
             $cat_array= \App\MongoCategory::where('parent_id',$categor_id)->pluck('_id')->toArray();
         }
         if($cat_array){
-            $shop_closed_id = \App\MongoShop::where('shop_status','close')->orWhere('status','0')->pluck('_id')->toArray();
+            $shop_closed_id = \App\MongoShop::getShopClosedId();
             $cat_Ids = \App\MongoProduct::where('status','1')->where('stock','1');
             $cat_Ids = $cat_Ids->whereNotIn('shop_id',$shop_closed_id)->whereIn('cat_id',$cat_array)->pluck('cat_id','cat_id')->toArray();
             $product_data = \App\MongoCategory::whereIn('_id', $cat_Ids)->where('status',"1")->select('category_name','img','url')->get()->toArray();
@@ -886,7 +886,7 @@ class ProductsController extends MarketPlace {
         //$filter_attributes = $request->fillterAttributes;
         $name = stripTags($request->search);
 
-        $shop_closed_id = \App\MongoShop::where('shop_status','close')->pluck('_id')->toArray();
+        $shop_closed_id = \App\MongoShop::getShopClosedId();
         $cat_Ids = [];
         $shop_ids = [];
         $cat_check= \App\MongoCategory::where('category_name',$name)->where('status',"1")->first();
@@ -925,7 +925,7 @@ class ProductsController extends MarketPlace {
         //$filter_attributes = $request->fillterAttributes;
         $name = stripTags($request->search);
 
-        $shop_closed_id = \App\MongoShop::where('shop_status','close')->pluck('_id')->toArray();
+        $shop_closed_id = \App\MongoShop::getShopClosedId();
         $cat_Ids = [];
         $cat_Ids = \App\MongoProduct::where('status','1')->where('stock','1');
         $cat_Ids = $cat_Ids->whereNotIn('shop_id',$shop_closed_id)->pluck('cat_id')->toArray();
@@ -962,7 +962,7 @@ class ProductsController extends MarketPlace {
         $data = [];
         if($request->searchtype=='all'){
            
-            $shop_closed_id = \App\MongoShop::where('shop_status','close')->orWhere('status','0')->pluck('_id')->toArray();
+            $shop_closed_id = \App\MongoShop::getShopClosedId();
             $cat_Ids = \App\MongoProduct::where('status','1')->where('stock','1');
             $cat_Ids = $cat_Ids->whereNotIn('shop_id',$shop_closed_id)->pluck('cat_id','cat_id')->toArray();
             
