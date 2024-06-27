@@ -531,8 +531,9 @@ class SellerController extends MarketPlace
                 $shop_id = \App\Shop::where('user_id',$id)->value('id');
                 $update_data = \App\MongoShop::updateShopColumn($shop_id,'shop_status','close');
                 $update_data = \App\MongoShop::updateShopColumn($shop_id,'status','0');
-            }
 
+            }
+            $deleteshopclosedidcache = \App\MongoShop::deleteShopClosedIdCache();
             return ['status'=>'success'];
         }else{
             return ['status'=>'unsuccess'];
@@ -553,6 +554,10 @@ class SellerController extends MarketPlace
                    $shop_status = ($status==1)?"open":"close";
                    $update_shop = \App\Shop::where('user_id',$id)->update(['status'=>$status,'shop_status'=>$shop_status]);
                    $status_val = ($status)?'active':'inactive';
+
+                    $shop_id = \App\Shop::where('user_id',$id)->value('id');
+                    $update_data = \App\MongoShop::updateShopColumn($shop_id,'shop_status',$shop_status);
+                    $update_data = \App\MongoShop::updateShopColumn($shop_id,'status',$status);
                     $action_type = "updated";             
                     $username = $userdata->email.' '.$userdata->ph_number;
                     $logdetails = "Admin has ".$action_type." seller ".$username." $this->module_name to ".$status_val;
@@ -561,6 +566,7 @@ class SellerController extends MarketPlace
                     $this->updateLogActivity($logdata);
                 }    
             }
+            $deleteshopclosedidcache = \App\MongoShop::deleteShopClosedIdCache();
             return ['status'=>'success'];
         }else{
            return ['status'=>'unsuccess'];

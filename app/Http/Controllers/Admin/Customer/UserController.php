@@ -516,6 +516,9 @@ class UserController extends MarketPlace
                 if($update_data['status'] == 'fail'){
                     return $update_data;
                 }
+
+                $deleteshopclosedidcache = \App\MongoShop::deleteShopClosedIdCache();
+                
                 /** Logging category delete information **/
                 $action_type = "updated"; //Change action name like: created,updated,deleted
                 $module_name = "Seller";   //Changes module name like : blog etc         
