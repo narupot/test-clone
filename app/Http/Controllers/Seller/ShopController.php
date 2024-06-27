@@ -238,6 +238,8 @@ class ShopController extends MarketPlace
                 $update_data = \App\MongoShop::updateShopColumn($shop_id,'status',$status);
             }
 
+            $deleteshopclosedidcache = \App\MongoShop::deleteShopClosedIdCache();
+
             $response = ['status'=>'success','msg'=>Lang::get('common.records_updated_successfully'),'value'=>$return];
             
         }catch(Exception $e){
