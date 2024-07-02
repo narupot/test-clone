@@ -47,11 +47,13 @@ class CartController extends MarketPlace {
 		
 		$main_order = [];
 		if(empty($orderInfo)){
+			/*
+			this functionality removed
 			$check_pending_order = Order::where(['user_id'=>$userid,'payment_status'=>0,'order_status'=>1])->orderBy('id','desc')->first();
 			if($check_pending_order){
 				return redirect(action('User\OrderController@mainOrderDetail',$check_pending_order->formatted_id));
 			}
-
+			*/
 			return redirect(action('Checkout\CartController@deleteTempOrder'));
 		}
 
