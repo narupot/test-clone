@@ -166,7 +166,7 @@
                             </div>
                         </div>
                     @else
-                        <div>No record found</div>
+                        <div>@lang('common.no_record_found')</div>
                     @endif
                 </div>
             </div>     
