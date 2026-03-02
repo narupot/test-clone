@@ -161,7 +161,6 @@
 
             flatpickr("#end_date", {
                 onChange: function(dateObj, dateStr) {  
-                    console.log("fdfsdfdf");   
                     flatpickr("#start_date", {
                         maxDate : dateObj
                     });

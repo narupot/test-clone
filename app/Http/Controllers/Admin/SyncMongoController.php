@@ -7,6 +7,8 @@ use App\Http\Controllers\MarketPlace;
 use Illuminate\Http\Request;
 use Config;
 use Lang;
+use Illuminate\Support\Facades\Log;
+
 
 class SyncMongoController extends MarketPlace
 {
@@ -61,6 +63,17 @@ class SyncMongoController extends MarketPlace
                         break;
                     case 'sizegrade':
                         $unit = $this->sizegradeSync();
+                        break;
+                    case 'producttypetag':
+                        $unit = $this->productTypeTagSync();
+                        break;
+                    case 'producttypetagcustom':
+                        $start = $request->start ?? null;
+                        $end = $request->end ?? null;
+                        $unit = $this->productTypeTagCustomSync($start, $end);
+                        break;
+                     case 'parentcategory':
+                        $unit = $this->parentCategorySync();
                         break;
                     
                     default:
@@ -171,5 +184,119 @@ class SyncMongoController extends MarketPlace
         
         
     }
+
+    public function productTypeTagSync()
+    {
+        try {
+            \App\MongoProductTypeTag::where('_id', '>', 0)->delete();
+            $tags = \App\ProductTypeTag::all();
+            foreach ($tags as $tag) {
+                $data = [
+                    'product_type_id' => $tag->product_type_id,
+                    'tag'             => $tag->tag,
+                    'tag_status'      => $tag->tag_status,
+                    'created_at'      => $tag->created_at,
+                    'updated_at'      => $tag->updated_at,
+                ];
+                \App\MongoProductTypeTag::updateOrCreate(
+                    ['product_type_id' => $tag->product_type_id, 'tag' => $tag->tag],
+                    $data
+                );
+            }
+            return response()->json([
+                'status'  => 'success',
+                'message' => 'Product Type Tags synced successfully!',
+            ]);
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            Log::error('Error syncing Product Type Tags: ' . $e->getMessage());
+        }
+      
+    }
+
+    public function parentCategorySync()
+    {
+        try {
+            
+            \App\MongoParentCategory::truncate();
+            
+            $categories = \App\ParentCategory::all();
+
+            foreach ($categories as $cat) {
+                
+                $data = [
+                    'category_name'    => $cat->category_name,
+                    'url'              => $cat->url,
+                    'img'              => $cat->img,
+                    'is_deleted'       => $cat->is_deleted,
+                    'meta_title'       => $cat->meta_title,
+                    'sorting_no'       => $cat->sorting_no,
+                    'group_id'         => $cat->group_id,
+                    'subgroup_id'      => $cat->subgroup_id,
+                    'meta_keyword'     => $cat->meta_keyword,
+                    'meta_description' => $cat->meta_description,
+                    'cat_description'  => $cat->cat_description,
+                    'created_at'       => $cat->created_at, 
+                    'created_by'       => $cat->created_by,
+                    'updated_at'       => $cat->updated_at,
+                    'updated_by'       => $cat->updated_by,
+                    'mysql_id'         => $cat->id,
+                ];
+
+                \App\MongoParentCategory::updateOrCreate(
+                    ['mysql_id' => $cat->id],
+                    $data
+                );
+            }
+
+            return response()->json([
+                'status'  => 'success',
+                'message' => 'Parent Categories synced successfully!',
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Error syncing Parent Categories: ' . $e->getMessage());
+            
+            return response()->json([
+                'status'  => 'error',
+                'message Parent Categories' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function productTypeTagCustomSync($start,$end)
+    {
+        if(!$start || !$end){
+            echo "Please provide start and end values.";
+            return;
+        }
+
+        try {
+            $tags = \App\ProductTypeTag::whereBetween('id', [$start, $end])->get();
+            foreach ($tags as $tag) {
+                $data = [
+                    'product_type_id' => $tag->product_type_id,
+                    'tag'             => $tag->tag,
+                    'tag_status'      => $tag->tag_status,
+                    'created_at'      => $tag->created_at,
+                    'updated_at'      => $tag->updated_at,
+                ];
+                \App\MongoProductTypeTag::updateOrCreate(
+                    ['product_type_id' => $tag->product_type_id, 'tag' => $tag->tag],
+                    $data
+                );
+            }
+            return response()->json([
+                'status'  => 'success',
+                'message' => 'Product Type Tags custom synced successfully!',
+            ]);
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            Log::error('Error custom syncing Product Type Tags: ' . $e->getMessage());
+        }
+      
+    }
+
+
 
 }

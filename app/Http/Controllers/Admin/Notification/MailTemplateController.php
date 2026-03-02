@@ -1555,6 +1555,4 @@ class MailTemplateController extends MarketPlace
         }
     }
 
-
-
 }

@@ -102,7 +102,7 @@
       throw new Error("Something went badly wrong!");
     } catch (e) {
       //_messageHandler('error','Something went wrong!','Oops...')
-      console.log("Opps " + e);
+      // console.log("Opps " + e);
     };
   };
 

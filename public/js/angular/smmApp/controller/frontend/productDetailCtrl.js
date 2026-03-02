@@ -359,7 +359,7 @@
             var response = dataManipulation.beforeCart(viewType, action, prdInfo, prdData, prdSelectedAttrs, matrixData);
             // console.log(response);     
             if(response.qtcheck){
-                swal("Opps..", error_msg.quantity_error, 'warning');
+                swal(error_msg.quantity_error, 'warning');
                 response.gotocart = "no";
             }
             // else if(response.vtcheck){
@@ -422,6 +422,9 @@
             //send data to server 
             salesfactoryData.getData (addProductToCart, 'POST', cartData)
             .then(function (response){ 
+                // console.log('function addToCart called with:', strflag, response);
+                let $instock =  document.getElementById('instock');
+                angular.element($instock).html(response.data.product_quantity);
                 if(typeof response === "undefined" || response.data === null || response.xhrStatus === "error") return;
                 if(response.data.status && response.data.status ==="success"){
                     if(strflag === "buynow"){
@@ -431,18 +434,19 @@
                     // angular.element(document.getElementById('totalCartProduct')).html(response.data.cart_quantity);
                     // angular.element(document.getElementById('addToCartdiv')).modal('show');
                     let $add_to_cart_modal = document.getElementById('addToCartdiv'),
-                        $cart_quantity= document.getElementById('tot_cart_noti'),
+                        $cart_quantity= document.getElementsByClassName('tot_prd_noti'),
                         $cart_price = document.getElementById('totalCartPrice'),
                         /*$user_cart_a = angular.element($cart_quantity).parent(),
                         $user_cart_icon = angular.element($cart_quantity).prev(),*/
                         $bargaining =  document.getElementById('tot_bar_noti'),
-                        $wating_for_payment = document.getElementById('tot_prd_noti'),
+                        $wating_for_payment = document.getElementsByClassName('tot_prd_noti'),
                         $paid_product = document.getElementById('tot_paid_noti'),                        
                         cd = response.data.cart_quantity || "";
-                        cd && cd['bargain_prd'] && parseInt(cd['bargain_prd'])>0 && angular.element($bargaining).show().text(cd['bargain_prd']);
-                        cd && cd['cart_prd'] && parseInt(cd['cart_prd'])>0 && angular.element($wating_for_payment).show().text(cd['cart_prd']);
-                        cd && cd['paid_prd'] && parseInt(cd['paid_prd'])>0 && angular.element($paid_product).show().text(cd['paid_prd'] );
-                        cd && cd['tot'] && parseInt(cd['tot'])>0 && angular.element($cart_quantity).show().text(cd['tot'] );
+
+                    cd && cd['bargain_prd'] && parseInt(cd['bargain_prd'])>0 && angular.element($bargaining).show().text(cd['bargain_prd']);
+                    cd && cd['cart_prd'] && parseInt(cd['cart_prd'])>0 && angular.element($wating_for_payment).show().text(cd['cart_prd']);
+                    cd && cd['paid_prd'] && parseInt(cd['paid_prd'])>0 && angular.element($paid_product).show().text(cd['paid_prd'] );
+                    cd && cd['tot'] && parseInt(cd['tot'])>0 && angular.element($cart_quantity).show().text(cd['tot'] );
                    
                     angular.element($cart_price).html(response.data.cart_price);
                     angular.element($add_to_cart_modal).modal('show');
@@ -454,11 +458,35 @@
                         angular.element($cart_quantity).removeClass('cart-run');
                         // angular.element($user_cart_a).removeClass('glow');
                     }, 800);
-                }else if (response.data.status && response.data.status ==="fail"){
+
+                     swal({
+                        type: "success",
+                        title: "ทำรายการสำเร็จแล้ว",
+                        text: "ท่านได้เพิ่มสินค้าในหน้าตะกร้าสินค้าเรียบร้อยแล้ว"
+                    }).then(() => {
+                        // window.location.reload();
+                    });
+
+                }
+                else if(response.data.status && response.data.status ==="check_qty_stock"){
+                     swal('', response.data.msg,'warning'); 
+                }
+                else if(response.data.status && response.data.status ==="stock_zero"){
                      swal('', response.data.msg,'error'); 
+                } 
+                else if(response.data.status && response.data.status ==="zero"){
+                     swal('', response.data.msg,'error'); 
+                } 
+                else if (response.data.status && response.data.status ==="fail"){
+                     swal('', response.data.msg,'error');
+                }
+                else if (response.data.status && response.data.status ==="price_changed"){
+                     swal('', response.data.msg,'error');  
+                     window.location.reload();
                 }else{
                     swal('Opps', error_msg.server_error,'error');                               
                 }
+
             }, function (err){
                 swal('Opps', error_msg.server_error,'error'); 
             })
@@ -698,6 +726,11 @@
             // .finally(function (){
             //    _enbdsbLodBtn('disabled',false);
             // });
+
+            let $add_to_cart_modal = document.getElementById('addToCartdiv');
+            setTimeout(function() {
+                angular.element($add_to_cart_modal).modal('hide');
+            }, 2000);
         };
 
         //this function used to set rating of product
@@ -786,15 +819,17 @@
         *@param : index
         ***/
         rvCtrl.incDcrQuntity = function($event, valMax, str, prdDetail, index){
+            
             $event.stopPropagation();     
             /*in case of min_order_qty user can't decrease less than min_order_qty*/
             /*if(parseInt(prdDetail.min_order_qty)>=0 && parseInt(prdDetail.quantity)<=parseInt(prdDetail.min_order_qty)){
                 prdDetail.quantity = prdDetail.min_order_qty;
             }
-
-            console.log(prdDetail); */      
+            */  
+       
             var res = dataManipulation.quantityHandler(valMax, str, prdDetail, prd_info[0].product_type);
             if(res && res.status === "success"){
+                
                 var qty_zero;
                 if(prdDetail.quantity == 0) qty_zero = 1;
                 //update price model array and call price function 
@@ -811,11 +846,29 @@
 
                 //update price calculation model for total price               
                 var cpindx = _.findIndex(customData.products, {"product_id" : prdDetail.id});
-                if(cpindx>=0){                    
+                if(cpindx >= 0 && prdDetail.quantity === '0'){                 
                     customData.products[cpindx].quantity = prdDetail.quantity;
+                     swal('', "คุณไม่สามารถเพิ่มสินค้าในตะกร้าได้เนื่องจากสต๊อกไม่เพียงพอ" , 'warning'); 
                     // if(rvCtrl.oneProductInfo.prdType === "bundle")
                     //    totalPriceCalculation(customData.products, rvCtrl.oneProductInfo.prdType);
-                }                         
+                }   
+
+            }else{
+                prdDetail.quantity = parseInt(prdDetail.quantity ?? 0);
+                valMax = parseInt(valMax ?? 0);
+                prdDetail.stock = String(prdDetail.stock ?? '1');
+
+                if (!prdDetail.quantity || prdDetail.quantity === 0) {
+                    swal('', res.msg, 'warning');
+                    prdDetail.quantity = 1;
+                }
+                else if (prdDetail.stock == '0' && prdDetail.quantity >= valMax) {
+                    swal('', res.msg, 'warning');
+                }
+                else {
+                    swal('', res.msg, 'warning');
+                }
+     
             }
         };
 
@@ -1143,7 +1196,7 @@
                         /*$user_cart_a = angular.element($cart_quantity).parent(),
                         $user_cart_icon = angular.element($cart_quantity).prev(),*/
                         $bargaining =  document.getElementById('tot_bar_noti'),
-                        $wating_for_payment = document.getElementById('tot_prd_noti'),
+                        $wating_for_payment = document.getElementsByClassName('tot_prd_noti'),
                         $paid_product = document.getElementById('tot_paid_noti'),                        
                         cd = response.data.cart_quantity || "";
                         cd && cd['bargain_prd'] && parseInt(cd['bargain_prd'])>0 && angular.element($bargaining).show().text(cd['bargain_prd']);

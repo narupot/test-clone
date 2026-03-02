@@ -15,7 +15,6 @@ $('body').on('click','#update_profile',function(){
 	var profile_frm = $('#update_profile_frm');
 	var ajax_url = profile_frm.attr('action');
 	var data = profile_frm.serialize();
-	//console.log(ajax_url, data);
     callAjaxRequest(ajax_url, 'post', data, function(result) {
     	result = JSON.parse(result);
         if(result.status == 'success') {

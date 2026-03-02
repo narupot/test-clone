@@ -77,9 +77,7 @@
 	         		//if(nv) return;
 					if(nv && !ov) { scope.$apply();}
 					//UPDATE SELECTED IDs FOR QUERY
-					//console.log(ov);
 					//get the root node
-					//console.log(nv);
 					var rootNode = nv[0];
 					//get all elements where checked == true
 					// var a = _.flatten(_.map(nv, function(node){treeNodeService.getSelected(node, [])}));
@@ -91,7 +89,6 @@
 		            var x = _.map(nv,function(node){
 		              return treeNodeService.getSelected(node, []);
 		            });
-		           // console.log(x);
 		            x = _.flatten(x);
 		            x = _.pluck(x,'id');
 		            scope.selected = x;
@@ -183,7 +180,6 @@
 		    }
 		};
 		function setSelected(node,arr){
-			//console.log(node);
 		};	
         return {
 	       getAllChildren:getAllChildren,

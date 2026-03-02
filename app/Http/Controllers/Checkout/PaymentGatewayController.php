@@ -91,6 +91,7 @@ class PaymentGatewayController extends MarketPlace {
     }
 
     /*****this function check when kbank qrcode hit for check tracking hit********/
+    /*
     public function Check($order_id){
 
         $order = Order::select("*")->where("kbank_qrcode_id",'like','%'.$order_id.'%')->where('payment_status',1)->first();
@@ -103,6 +104,48 @@ class PaymentGatewayController extends MarketPlace {
             return ['status'=>'success','url'=>$url];
         }else{
             return ['status'=>'pending'];
+        }
+    }
+    */
+    public function Check($order_id){
+        try {
+            // ตรวจสอบ order_id
+            if(empty($order_id)) {
+                return response()->json(['status' => 'error', 'message' => 'Order ID is required'], 400);
+            }
+
+            // ค้นหา order
+            $order = Order::where("kbank_qrcode_id", 'like', '%'.$order_id.'%')
+                        ->first();
+
+            // ถ้าไม่พบ order
+            if(empty($order)) {
+                return ['status' => 'not_found'];
+            }
+
+            // ถ้าพบ order แต่ยังไม่ชำระเงิน
+            if($order->payment_status == 0) {
+                return ['status' => 'unpaid', 'message' => 'รอการชำระเงิน'];
+            }
+
+            // ถ้าชำระเงินแล้ว (payment_status = 1)
+            if($order->payment_status == 1) {
+                // ตรวจสอบวันที่ช้อปปิ้ง
+                if(!empty($order->end_shopping_date) && strtotime($order->end_shopping_date) > 0) {
+                    $url = action('Checkout\OrderController@thanks', $order->formatted_id ?? '');
+                    return ['status' => 'success', 'url' => $url];
+                } else {
+                    $url = action('Checkout\CartController@alreadyPaid');
+                    return ['status' => 'completed', 'url' => $url];
+                }
+            }
+
+            // กรณีอื่นๆ
+            return ['status' => 'pending'];
+
+        } catch (\Exception $e) {
+            Log::error("Payment check error: " . $e->getMessage());
+            return response()->json(['status' => 'error', 'message' => 'Internal server error'], 500);
         }
     }
 

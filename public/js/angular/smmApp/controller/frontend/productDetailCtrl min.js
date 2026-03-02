@@ -83,8 +83,6 @@
 			}
 		});
 
-		//console.log(rvCtrl.totalQtyVal);
-		
 		rvCtrl.prdBlogUrl = prdBlogUrl;
 		rvCtrl.productImg = productData.productImage;
 		rvCtrl.curCode = curCode;
@@ -126,11 +124,8 @@
 		//this function used for change attribute
 		//$index,atr.attributedesc.attr_id,prdDetails.mainProductId
 		rvCtrl.changeContent = (index,attrId,mainPrdId,prdId,pIndex)=> { 
-			//console.log(index,pIndex);
 			rvCtrl.totalQtyVal[pIndex]=1;
 			$scope.styleopacity =true;
-			console.log('mainPrdId : ' + mainPrdId);
-			console.log('product id ::' + prdId);
 			let prd_type = (!_.isUndefined(productData.oneProductInfo.prdType))? productData.oneProductInfo.prdType : ' ';
 			//$scope.mainProductId = rvCtrl.productInfo.mainProductId;
 			var dataObj ={
@@ -145,18 +140,14 @@
 
 			salesfactoryData.getData(getVarientProduct,'POST',dataObj)
 			.then((r)=>{
-				console.log(r);
-				//console.log(r.data); return false;
 				if(r.status===200 && Object.keys(r.data).length>0){
 					var data = r.data;
 					//var tmp_path =data.productUrl.split('product/')[1];
 					if(prd_type==='bundle'){
-						console.log('parent index   :' + pIndex);
 						rvCtrl.productInfo[pIndex] = data.productInfo
 						rvCtrl.selAttrVal[mainPrdId] = data.selectedAttrVal;
 						rvCtrl.totalQtyVal[pIndex] = 0;
 					}else if(prd_type === "configrable"){
-						console.log('here');
 						rvCtrl.productImg = data.productImage;
 						rvCtrl.productInfo[pIndex] = data.productInfo;
 						rvCtrl.selAttrVal[mainPrdId] = data.selectedAttrVal;
@@ -166,15 +157,9 @@
 						//rvCtrl.orderInfo = (Object.keys(data.orderInfo).length !== 0)?data.orderInfo : '';
 						//rvCtrl.starModal= data.productInfo.userProductRating;
 						//rvCtrl.feedbackForm = (rvCtrl.starModal)?false:true;
-						console.log(rvCtrl.productInfo);
 						_createThumbVideoHtml(rvCtrl.productImg);
 					}
 
-				//	console.log(JSON.stringify(data));
-					// console.log('combination array');
-					// console.log(JSON.stringify(rvCtrl.cmobsArr));
-					// console.log('slected attribute here')
-					// console.log(JSON.stringify(rvCtrl.selAttrVal));
 
 					//let a = rvCtrl.getCombArr(rvCtrl.cmobsArr),b = rvCtrl.getCombArr(rvCtrl.selAttrVal);
 					//a= a.concat(b);
@@ -217,9 +202,7 @@
 		};
 		//this function used for get price by option
 		rvCtrl.getPriceByOption = ($event,str,prdId,index)=> { 
-			console.log('product id \t'+prdId +'\n'+ 'index \t'+ index);
 			// $scope.$evalAsync(function(){
-				console.log(rvCtrl.totalQtyVal);
 			// })
 			
 			if(str==="tqchange" && (_.isUndefined(rvCtrl.totalQtyVal[index]) || rvCtrl.totalQtyVal[index]==0) ) return;
@@ -403,7 +386,6 @@
 				return false;
 			}
 			
-			// console.log(JSON.stringify(dataObj));
 			salesfactoryData.getData(addProductToCart, 'POST', dataObj)
 			.then((response)=> {
 				_enbdsbLodBtn('disabled',false);
@@ -584,16 +566,13 @@
       			});
       		},
       		controller : function($scope){
-      			//console.log($scope);
       			//Listen on increase/decrease quantity
       			$scope.quntCounter = function($event, totalQnt, dirFlag, pdeatil,index){
       				$event.preventDefault();
       				//$scope.$evalAsync(function(){
 	      				//in case of direction up->increase
 	      				if((dirFlag!==undefined && dirFlag ==="up") && ($scope.field!==undefined && $scope.field < totalQnt)){
-	      					//console.log(typeof $scope.field);
 	      					$scope.field = 1 +parseInt($scope.field);
-	      					//console.log($scope);
 	      					$scope.getPriceByOption({$event : $event, str : dirFlag, prd_id :pdeatil.id, prd_ind : index});      					
 	      				}else if((dirFlag!==undefined && dirFlag ==="down") && ($scope.field!==undefined && $scope.field >=1)){
 	      					$scope.field = parseInt($scope.field) - 1;

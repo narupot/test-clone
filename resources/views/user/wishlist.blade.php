@@ -53,7 +53,9 @@
         @include('includes.product_listing')
         
         <div class="category-products" ng-if="varModel.no_result_found">      
-            {!! getStaticBlock('search-not-found') !!}
+            {{-- {!! getStaticBlock('search-not-found') !!} --}}
+            <x-not-found />
+
         </div>
         <!-- add to cart modal -->
         <div id="addToCartdiv" class="modal modal-Cartdiv modal-address fade in formone-size" role="dialog">
@@ -67,7 +69,7 @@
                      <div class="modal-body">
                          <div class="">
                            <div class="mt-10">
-                            <button class="btn-blue" class="close" data-dismiss="modal" aria-label="Close">@lang('checkout.continue_shopping')</button>
+                            <button class="btn- btn" class="close" data-dismiss="modal" aria-label="Close">@lang('checkout.continue_shopping')</button>
                             </div>
                            <div class="mt-3 or mb-3">@lang('checkout.or')</div>
                            <div class="mt-10">

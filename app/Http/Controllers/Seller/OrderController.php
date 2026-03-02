@@ -63,10 +63,10 @@ class OrderController extends MarketPlace {
         $order_data= DB::table(with(new OrderShop)->getTable().' as os')
                 ->join(with(new Order)->getTable().' as o', 'os.order_id', '=', 'o.id')
                 ->join(with(new \App\OrderStatusDesc)->getTable().' as osd', 'os.order_status', '=', 'osd.order_status_id')
-                ->select('os.end_shopping_date','os.shop_formatted_id','os.user_name','os.shipping_method','osd.status')
+                ->select('os.end_shopping_date','os.shop_formatted_id','os.user_name','os.shipping_method','osd.status','os.order_id')
                 ->where('os.shop_id',$shop_id)
                 ->Where(function($query) use($check_date){
-                    $query->whereIn('os.order_status',[3,4]);
+                    $query->whereIn('os.order_status',[2,3,4]);
                     $query->orWhere('o.pickup_time','<',$check_date);
                 });
 
@@ -80,10 +80,13 @@ class OrderController extends MarketPlace {
 
             foreach ($order_list as $ord_val){
 
+                $shortOrderId = substr($ord_val->order_id, -4);
+
                 $nestedData['end_shopping_date'] = getDateFormat($ord_val->end_shopping_date,7);
 
                 $nestedData['buyer_name'] = $ord_val->user_name;
-                $nestedData['shop_formatted_id'] = '<a href="'.action('Seller\OrderController@details',$ord_val->shop_formatted_id).'" class="link-skyblue">'.$ord_val->shop_formatted_id.'</a>';
+                // $nestedData['shop_formatted_id'] = '<a href="'.action('Seller\OrderController@details',$ord_val->shop_formatted_id).'" class="link-skyblue">'.$ord_val->shop_formatted_id.'</a>';
+                $nestedData['shop_formatted_id'] = '<a href="'.action('Seller\OrderController@details',$ord_val->shop_formatted_id).'" class="link-skyblue">'.$shortOrderId.'</a>';
 
                 $nestedData['status'] = $ord_val->status;
 

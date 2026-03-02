@@ -13,6 +13,8 @@ use App\Helpers\GeneralFunctions;
 use Lang;
 use Config;
 use DB;
+
+
 class HomeController extends MarketPlace
 {
 
@@ -23,7 +25,6 @@ class HomeController extends MarketPlace
 
     public function index() {
         //dd("ok");
-
       return view('home');
     }
 

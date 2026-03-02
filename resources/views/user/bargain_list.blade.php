@@ -65,7 +65,7 @@
                                 <span class="chk-mark">@lang('bargain.select_all')</span>
                               </label>
                               
-                              <button type="button" class="btn-blue add_to_cart_all_bargain">@lang('bargain.add_to_cart_all_product')</button>
+                              <button type="button" class="btn- btn add_to_cart_all_bargain">@lang('bargain.add_to_cart_all_product')</button>
 
                               <button type="button" class="btn-dark-grey delete_all_bargain">@lang('bargain.delete_all')</button>
                             </div>
@@ -352,7 +352,7 @@
                                                      <input type="hidden" name="action" value="">
                                                      <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}">
                                                      <div class="action-ans-buyer">
-                                                       <a class="btn-blue addtoCartorBuyNow" rel="{{$result->bargain_id}}" rev="addtocartfrombargin">@lang('bargain.add_to_cart')</a>  
+                                                       <a class="btn- btn addtoCartorBuyNow" rel="{{$result->bargain_id}}" rev="addtocartfrombargin">@lang('bargain.add_to_cart')</a>  
                                                        <!-- act-accept-->
                                                        <a class="btn  addtoCartorBuyNow d-none" rel="{{$result->bargain_id}}" rev="buynowfrombargin">@lang('bargain.buy_now')</a>
                                                      </div>
@@ -380,7 +380,7 @@
                                 <input type="checkbox">
                                 <span class="chk-mark">@lang('bargain.select_all')</span>
                               </label>
-                              <button type="button" class="btn-blue add_to_cart_all_bargain">@lang('bargain.add_to_cart_all_product')</button>
+                              <button type="button" class="btn- btn add_to_cart_all_bargain">@lang('bargain.add_to_cart_all_product')</button>
                               <button type="button" class="btn-dark-grey delete_all_bargain">@lang('bargain.delete_all')</button>
                             </div>
                         </div>
@@ -670,7 +670,7 @@
 	                                                     <input type="hidden" name="bar_id" value="{{$result->bargain_id}}">
 	                                                     <input type="hidden" name="action" value="">
 	                                                     <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}">
-	                                                     <a class="btn-blue addtoCartorBuyNow" rel="{{$result->bargain_id}}" rev="addtocartfrombargin">@lang('bargain.add_to_cart')</a>  
+	                                                     <a class="btn- btn addtoCartorBuyNow" rel="{{$result->bargain_id}}" rev="addtocartfrombargin">@lang('bargain.add_to_cart')</a>  
 	                                                     <a class="btn addtoCartorBuyNow d-none" rel="{{$result->bargain_id}}" rev="buynowfrombargin">@lang('bargain.buy_now')</a>
 	                                                  </form>
 	                                                </div>
@@ -880,7 +880,7 @@
 									                 <input type="hidden" name="bar_id" value="{{$result->bargain_id}}">
 									                 <input type="hidden" name="action" value="">
 									                 <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}">
-									                 <a class="btn-blue addtoCartorBuyNow" rel="{{$result->bargain_id}}" rev="addtocartfrombargin">@lang('bargain.add_to_cart')</a>  
+									                 <a class="btn- btn addtoCartorBuyNow" rel="{{$result->bargain_id}}" rev="addtocartfrombargin">@lang('bargain.add_to_cart')</a>  
 									                 <a class="btn addtoCartorBuyNow d-none" rel="{{$result->bargain_id}}" rev="buynowfrombargin">@lang('bargain.buy_now')</a>
 									              </form>
 									            </div>
@@ -908,8 +908,8 @@
                                 <span class="chk-mark">@lang('bargain.select_all')</span>
                               </label>
                               <div class="btn-group">
-                                <button type="button" class="btn-blue add_to_cart_all_bargain">@lang('bargain.add_to_cart_all_product')</button>
-                                <button type="button" class="btn-blue delete_all_bargain mr-0" >@lang('bargain.delete_all')</button>
+                                <button type="button" class="btn- btn add_to_cart_all_bargain">@lang('bargain.add_to_cart_all_product')</button>
+                                <button type="button" class="btn- btn delete_all_bargain mr-0" >@lang('bargain.delete_all')</button>
                               </div>
                             </div>
                           </div>
@@ -1154,7 +1154,7 @@
 	                                                     <input type="hidden" name="bar_id" value="{{$result->bargain_id}}">
 	                                                     <input type="hidden" name="action" value="">
 	                                                     <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}">
-	                                                     <a class="btn-blue addtoCartorBuyNow" rel="{{$result->bargain_id}}" rev="addtocartfrombargin">@lang('bargain.add_to_cart')</a>  
+	                                                     <a class="btn- btn addtoCartorBuyNow" rel="{{$result->bargain_id}}" rev="addtocartfrombargin">@lang('bargain.add_to_cart')</a>  
 	                                                     <a class="btn act-accept addtoCartorBuyNow d-none" rel="{{$result->bargain_id}}" rev="buynowfrombargin">@lang('bargain.buy_now')</a>
 	                                                  </form>   
 	                                                </div>
@@ -1349,7 +1349,7 @@
 							                        <input type="hidden" name="bar_id" value="{{$result->bargain_id}}">
 							                        <input type="hidden" name="action" value="">
 							                        <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}">
-							                        <a class="btn-blue addtoCartorBuyNow" rel="{{$result->bargain_id}}" rev="addtocartfrombargin">@lang('bargain.add_to_cart')</a>  
+							                        <a class="btn- btn addtoCartorBuyNow" rel="{{$result->bargain_id}}" rev="addtocartfrombargin">@lang('bargain.add_to_cart')</a>  
 							                        <a class="btn act-accept addtoCartorBuyNow d-none" rel="{{$result->bargain_id}}" rev="buynowfrombargin">@lang('bargain.buy_now')</a>
 							                    </form>   
 							                </div>

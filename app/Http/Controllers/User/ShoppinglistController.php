@@ -279,7 +279,7 @@ class ShoppinglistController extends MarketPlace
                             //$totalWPItems = 0;
                             //$totalBargainItems = 0;
 
-                            $goToPrdList = '<a href="'.action('ProductsController@category',['url'=>$item['category_url']]).'" class="btn-blue go-to-list btn-sm">'.Lang::get('shopping_list.go_to_product_list').'</a>';
+                            $goToPrdList = '<a href="'.action('ProductsController@category',['url'=>$item['category_url']]).'" class="btn- btn go-to-list btn-sm">'.Lang::get('shopping_list.go_to_product_list').'</a>';
                             $paidItemHtml = $waitPItemHtml = $bargainItemHtml = '';
                             if($totalPaidItems){
                                 $paidItemHtml = '<a href="'.action('Checkout\CartController@alreadyPaid').'" class="btn-grey go-to-list btn-sm"> <span class="btn-txt">'.Lang::get('shopping_list.paid_item_list').'</span> <span class="btn-qty">'.$totalPaidItems.'</span> <span class="list-text">'.Lang::get('shopping_list.list').'</span> </a>';
@@ -339,9 +339,9 @@ class ShoppinglistController extends MarketPlace
                                 $edit_price_btn = '';
                             	$edit_qty_btn = '';
                             }else{
-                                $edit_badge_btn = '<a href="javascript://" class="btn-blue go-to-list btn-sm edit_standered"  data-item_id="'.$item['id'].'" data-shopping_id="'.$shoppingData->id.'" data-cat_id="'.$item['cat_id'].'">'.Lang::get('shopping_list.edit').'</a>';
-                                $edit_price_btn = '<a href="javascript://" class="btn-blue go-to-list btn-sm edit_price"  data-item_id="'.$item['id'].'" data-shopping_id="'.$shoppingData->id.'" data-cat_id="'.$item['cat_id'].'">'.Lang::get('shopping_list.edit').'</a>';
-                                $edit_qty_btn = '<a href="javascript://" class="btn-blue go-to-list btn-sm edit_qty"  data-item_id="'.$item['id'].'" data-shopping_id="'.$shoppingData->id.'" data-cat_id="'.$item['cat_id'].'">'.Lang::get('shopping_list.edit').'</a>';
+                                $edit_badge_btn = '<a href="javascript://" class="btn- btn go-to-list btn-sm edit_standered"  data-item_id="'.$item['id'].'" data-shopping_id="'.$shoppingData->id.'" data-cat_id="'.$item['cat_id'].'">'.Lang::get('shopping_list.edit').'</a>';
+                                $edit_price_btn = '<a href="javascript://" class="btn- btn go-to-list btn-sm edit_price"  data-item_id="'.$item['id'].'" data-shopping_id="'.$shoppingData->id.'" data-cat_id="'.$item['cat_id'].'">'.Lang::get('shopping_list.edit').'</a>';
+                                $edit_qty_btn = '<a href="javascript://" class="btn- btn go-to-list btn-sm edit_qty"  data-item_id="'.$item['id'].'" data-shopping_id="'.$shoppingData->id.'" data-cat_id="'.$item['cat_id'].'">'.Lang::get('shopping_list.edit').'</a>';
                             }
 
                             
@@ -353,7 +353,7 @@ class ShoppinglistController extends MarketPlace
                         }
 
                         // chat button condition
-                        $chatBtn = (isset($item['chatBtn']) && $item['chatBtn'])?'<a href="javascript::void(0)" class="btn-blue go-to-list btn-sm">'.Lang::get('shopping_list.seller_chat_btn').'</a>':'';
+                        $chatBtn = (isset($item['chatBtn']) && $item['chatBtn'])?'<a href="javascript::void(0)" class="btn- btn go-to-list btn-sm">'.Lang::get('shopping_list.seller_chat_btn').'</a>':'';
                         $chatBtn = '';
                         $seller_name = (isset($item['shop_name']) && $item['shop_name']!='') ?' | '.$item['shop_name']:'';
                         // end

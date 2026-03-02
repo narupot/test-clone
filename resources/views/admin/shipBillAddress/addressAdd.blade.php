@@ -151,7 +151,6 @@
 
         $.fn.applyEditableSelect = function($element){
             $element.editableSelect().on('select.editable-select', function (e, li){
-                // console.log($(this), li.val() + '. ' + li.text());
                 dropDownHandler(li.val(), $(this).attr('name'), $(this).attr('address_seq'));
             });
         };

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\PackageDesc;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
@@ -189,6 +190,12 @@ class AjaxController extends MarketPlace
 
         echo json_encode($data_arr);
     }         
+
+    public function WeightPerPackage(Request $request){
+        $packageid = $request->packageid;
+        $packagedesc = PackageDesc::where("package_id",$packageid)->select("package_name")->first();
+        return response()->json(['status' => 'success', 'message' => 'กิโลกรัม/'.$packagedesc->package_name]);
+    }
 }
 
 

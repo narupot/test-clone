@@ -47,5 +47,12 @@ class Shop extends Model
     public function getShopSeller(){
         return $this->hasOne('App\Seller', 'user_id', 'id');  
     }
-    
+    public function product()
+    {
+        return $this->hasMany('App\Product','shop_id','id');
+    }
+    public function favoriteShop()
+    {
+        return $this->hasMany('App\FavoriteShop','shop_id','id');
+    }
 }

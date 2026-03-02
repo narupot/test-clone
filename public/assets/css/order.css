@@ -29,6 +29,7 @@
 /* button with custom colors */
 /* Button Size variant */
 /* Pagination Mixin */
+
 .request-circle {
   position: relative;
   /*top: -5px;*/
@@ -877,3 +878,9 @@ ul.steplist {
       padding-bottom: 0px; }
   .shadow-box .order-comment {
     margin-bottom: 0px; }
+
+.strike-text {
+  text-decoration: line-through !important;
+  opacity: 0.6;
+  background-color: #dfdede;
+}

@@ -1,7 +1,6 @@
 jQuery(document).ready(function($){
 
 	var default_shopping = $("#shoppinglist_from").val();
-    //console.log(default_shopping);
 	loadItemsFromShoppingList(default_shopping);
 
 	$(document).on("show.bs.modal",'#edit_shopping_list', function(e){
@@ -317,7 +316,6 @@ jQuery(document).ready(function($){
 
     
 	function loadItemsFromShoppingList(slist){
-        //console.log(slist);
 		switch(slist){
 			case 'create_new_list':
 				var create_html = "<label>"+error_msg.create_shopping_list_name+"</label><div class=\"createlist-block\"><input type=\"text\" name=\"shopping_list_name\" id=\"shopping_list_name\"><button class=\"btn\" id=\"create_shopping_list\">"+error_msg.create_shopping_list+"</button></div>";
@@ -379,7 +377,6 @@ jQuery(document).ready(function($){
             });
         });
 
-        //console.log(reqObj);
     });
 
 });

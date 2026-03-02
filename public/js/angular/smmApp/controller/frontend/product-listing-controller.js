@@ -147,7 +147,6 @@
             .then(function(response) {
                 if (typeof response === "undefined" || response.data === null || response.xhrStatus === "error") return;
                 var result = response.data;
-                // console.log(result);
                 if (result) {
                     $scope.shop_filter_data = result;
                     if(cat_data && $scope.shop_filter_data.category){
@@ -162,7 +161,6 @@
                             //
                         }
                     }
-                    // console.log($scope.shop_filter_data);
                 } else {
                     $scope.shop_filter_data = {};
                 }

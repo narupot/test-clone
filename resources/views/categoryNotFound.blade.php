@@ -10,7 +10,8 @@
 
 @section('content')
     <div>
-        {!! getStaticBlock('category-not-found') !!}
+        {{-- {!! getStaticBlock('category-not-found') !!} --}}
+        <x-not-found />
     </div>
 @endsection 
 

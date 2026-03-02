@@ -501,6 +501,6 @@ class AdminController extends MarketPlace {
         $validate = Validator::make($input, $rules, $error_msg);
         //echo '<pre>';print_r($validate->errors());die;
         return $validate; 
-    }         
-       
+    }  
+
 }

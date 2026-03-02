@@ -49,7 +49,7 @@
                      <a href="javascript:void(0)" class="dropdown-item">@lang('cms.page_builder')</a>
                      <a href="{{ action('Admin\WebsiteMaintenance\WebsiteMaintenanceController@index') }}" class="dropdown-item">@lang('cms.theme')</a>
                      <!-- <a href="javascript:void(0)" class="dropdown-item">Magic block</a>
-                     <a href="javascript:void(0)" class="dropdown-item btns btn-blue"><i class="fas fa-angle-left"></i> Exit to Shop</a> -->
+                     <a href="javascript:void(0)" class="dropdown-item btns btn- btn"><i class="fas fa-angle-left"></i> Exit to Shop</a> -->
                   </div>
                </div>
                <div class="header-col half-line view-pages"><a href="javascript:void(0);"><span class="text-nwrap"><i class="far fa-copy"></i> @lang('cms.my_pages')</span></a></div>

@@ -106,7 +106,6 @@ $rating = 0;
 	            		$('#rating-'+review_data.product_id+'-'+review_data.order_id).html('<div class="review-star" ><div class="grey-stars"></div><div class="filled-stars" style="width: '+response.rating +'%"></div></div>');
 	            		$('#review-'+review_data.product_id+'-'+review_data.order_id).html('<span>'+response.review+'</span>')
 	            	}else{
-	            		// console.log(review_data);
 	            	}
 	            	//In case of product deatil page first need to select order id for review 
 	            	if(review_data.page && review_data.page === 'product_detail' && $('#product_order_review option').length === 2){

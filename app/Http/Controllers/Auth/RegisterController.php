@@ -501,7 +501,7 @@ class RegisterController extends MarketPlace {
                     $updateotp = User::where('id',$user_id)->update(['phone_otp_token'=>$token,'otp_generated_at'=>currentDateTime()]);
                     return ['status'=>'success'];
                 }else{
-                    return ['status'=>'fail','msg'=>Lang::get('customer.phone_otp_error'),'error'=>$otp_response['msg']];
+                    return ['status'=>'fail','msg'=>Lang::get('customer.phone_otp_error ' + $user_id),'error'=>$otp_response['msg']];
                 }
             }else{
                 return $this->sendOtpToEmail($user_det);

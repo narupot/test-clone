@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\ApiLog;
 use DB;
 
 class ClearApiLog extends Command
@@ -19,29 +20,29 @@ class ClearApiLog extends Command
      *
      * @var string
      */
-    protected $description = 'It will delete buyer and seller api log';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
+    protected $description = 'Delete API logs older than 3 days';
 
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return int
      */
     public function handle()
-    {   
-        //$clear_hr = \App\SystemConfig::getSystemValFromDb('CART_CLEAR_TIME');
-        //$date = date('Y-m-d H:i:s');
-        //$new_time = date("Y-m-d H:i:s", strtotime('-'.$clear_hr, strtotime($date)));
-        //$clear_log = \App\ApiLog::where('created_at','<',$del_time)->delete();
+    {
+        try {
+            
+            $del_time = now()->subDays(3);
+            $deleted = ApiLog::where('created_at', '<', $del_time)->delete();
+
+            DB::statement("ALTER TABLE smm_api_log ENGINE=InnoDB");
+
+            $this->info("Deleted {$deleted} API logs older than 3 days.");
+            return 0;
+
+        } catch (\Exception $e) {
+            $this->error("Error: " . $e->getMessage());
+            \Log::error("ClearApiLog Error: " . $e->getMessage());
+            return 1;
+        }
     }
-  
-} 
+}

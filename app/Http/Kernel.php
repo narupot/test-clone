@@ -65,5 +65,6 @@ class Kernel extends HttpKernel
         'escape-back-history' => \App\Http\Middleware\EscapeBackHistory::class,  
         'authenticate' => \App\Http\Middleware\Authenticate::class,
         'is-seller' => \App\Http\Middleware\IsSeller::class,
+        'wms.api-key' => \App\Http\Middleware\ValidateWmsApiKey::class,
     ];
 }

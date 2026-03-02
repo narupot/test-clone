@@ -1,20 +1,20 @@
 @php $tot_cart_prd_noti = getCartProduct(); @endphp
 
-<div class="end-shopping-wrap form-group">
+{{-- <div class="end-shopping-wrap form-group">
     <div class="row align-items-center">
-        <div class="col-sm-8">
+        <div class="col-sm-8"> --}}
             {{--<div class="product-purchase">@lang('checkout.purchased_products') <span>{{isset($purchased_products)?$purchased_products:''}}</span> @lang('checkout.item')<span> | <span></span> </div>--}}
             <!-- <div class="product-amount"> Paid <span>2000</span> Baht | Qty <span>10</span> Products </div> -->
             {{-- {{isset($list_of_shopping_list)?$list_of_shopping_list:''}}
             @lang('checkout.list_of_shopping_list') --}}
-        </div>
-        @if($tot_cart_prd_noti['cart_prd']>0)
+        {{-- </div>
+        @if($tot_cart_prd_noti['cart_prd']>0) --}}
             {{-- <div class="col-sm-4 text-right">                                   
                     <a href="{{ route('buy-now-end-shopping') }}" class="btn-blue2">@lang('checkout.end_shopping')</a>                                  
             </div>  --}}
-        @endif                             
+        {{-- @endif                             
     </div>
-</div>
+</div> --}}
 
 
 <div class="seller-panneltab form-group">

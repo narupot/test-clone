@@ -258,7 +258,7 @@
                                     <td>{{ $val->quantity }} {{ $detail_json['package'][session('default_lang')] ?? $val->package_name }}
                                         <br> <span style="color:#F00;">{{convertString($val->total_weight) }} {{$val->base_unit}}<br> / {{$val->package_name}}</span></td>
                                     <td>{{numberFormat($val->total_price) }} @lang('common.baht')</td>
-                                    <td>{!!$detail_json['payment_method'][session('default_lang')] ?? str_replace('_',' ',strtoupper($val->payment_slug)) !!}</td>
+                                    <td>{!! CustomHelpers::formatPaymentMethodName($val->payment_slug, $detail_json['payment_method'] ?? null) !!}</td>
                                     <td><span style="color:#F00;">{{ $val->getOrderStatus->status??'' }}</span></td>
                                     <!-- <td>{{$val->api_remark}}</td> -->
                                     @php 

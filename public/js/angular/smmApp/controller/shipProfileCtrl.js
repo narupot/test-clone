@@ -17,7 +17,6 @@
 		}
 		$scope.countryArr = myArr;
 		$scope.selectedProvince=[];
-		//console.log(selProvinceInd);
 		if ($scope.provinceData.length >= 1) {
 			provinceData.map(function(val, key) {
 				if (selProvinceInd.indexOf(val.id) != -1) {

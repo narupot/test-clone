@@ -39,4 +39,17 @@ class ShopAssignCategory extends Model {
         return $this->hasOne('App\ShopDesc', 'shop_id', 'shop_id')->where('lang_id', session('default_lang'));  
     }
 
+    public function categoryDesc()
+    {
+        return $this->hasOne(CategoryDesc::class, 'cat_id', 'category_id')
+                    ->where('lang_id', session('default_lang'));
+    }
+
+    public function getCategory()
+    {
+        return $this->belongsTo(Category::class, 'category_id', 'id')
+                    ->where('status', '1');
+    }
+
+
 }

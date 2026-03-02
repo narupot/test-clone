@@ -44,8 +44,8 @@ class ProductStockMemo extends Model {
             }
             
             if($update_qty === true) {
-                $product_data->quantity = $product_qty;
-                $product_data->save();
+                // $product_data->quantity = $product_qty;
+                // $product_data->save();
                 \App\MongoProduct::updatePrdQunatity($product_id, $product_qty);
 
                 $stock_memo = new \App\ProductStockMemo;

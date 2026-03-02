@@ -104,6 +104,7 @@ class MongoProduct extends Molequent
             $obj->save();
         }
     }
+    
 
 
 
@@ -186,4 +187,5 @@ class MongoProduct extends Molequent
                 dd($value['unit_price'],(array)$value['_id']);
             }
     }
+    
 }

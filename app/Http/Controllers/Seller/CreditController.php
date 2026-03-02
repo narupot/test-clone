@@ -260,7 +260,7 @@ class CreditController extends MarketPlace
                 $nestedData['action'] = "<div class='view-action'>
                                             <div class='d-flex align-items-center'>
                                                <a href='".$view_history_url."' class='link'>".Lang::get('shop.view_history')."</a>
-                                               <button class='btn-blue give_credit' data-toggle='modal' data-target='#giveCredit' data-select_options='".$select_option."' data-customer_name='".$credit->display_name."' data-customer_email='".$credit->email."' data-id='".$credit->id."' data-image='".$img_url."'>".Lang::get('shop.give')."</button>
+                                               <button class='btn give_credit' data-toggle='modal' data-target='#giveCredit' data-select_options='".$select_option."' data-customer_name='".$credit->display_name."' data-customer_email='".$credit->email."' data-id='".$credit->id."' data-image='".$img_url."'>".Lang::get('shop.give')."</button>
                                                <button class='btn reject_credit' id='".$credit->id."'>".Lang::get('shop.reject')."</button>
                                             </div>
                                         </div>";

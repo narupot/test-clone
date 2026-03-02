@@ -5,6 +5,12 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Helpers\GeneralFunctions;
 use DB;
+use App\Order;  
+use App\OrderShop;
+use App\OrderDetail;
+
+use Carbon\Carbon;
+
 class CompleteOrder extends Command {
     /**
      * The name and signature of the console command.
@@ -35,25 +41,63 @@ class CompleteOrder extends Command {
      * @return mixed
      */
     public function handle() {
-
+        echo "✅ Cron command started\n";
         // complete online order
 
         $before_date = date("Y-m-d", strtotime("-2 day"));
-        $order_data = \App\Order::where(['payment_status'=>1])->whereNotIn('order_status',[3,4])->where(DB::raw('date(pickup_time)'),'>=',$before_date)->get();
+        $order_data = \App\Order::where(['payment_status'=>1])->whereIn('order_status',[2])->where(DB::raw('date(pickup_time)'),'>=',$before_date)->get();
         $curtime = date('Y-m-d H:i:s');
+
+        $pickup_time = $order_data->first()->pickup_time;
+        $pickup_day = date('d', strtotime($pickup_time));
+
+        // สร้าง pattern สำหรับการค้นหา: SMM + ปี(2หลัก) + เดือน(2หลัก)
+        $pickup_ym = date('ym', strtotime($pickup_time));
+        $search_pattern = 'SMM' . $pickup_ym;
         
+        if($pickup_day == '01') {
+            // ถ้าเป็นวันที่ 1 ให้ running = 1
+            $newRunning = 1;
+        } else {
+            
+            
+            // หา max shipping_rept_no ที่ตรงกับ pattern
+            $maxShippingNo = \App\Order::where(DB::raw('substring(shipping_rept_no, 1, 7)'), '=', $search_pattern)
+                                    ->max('shipping_rept_no');
+            
+            if($maxShippingNo === null || $maxShippingNo == '') {
+                $newRunning = 1;
+            } else {
+                // ดึงเลข running ออกมาจาก 4 หลักสุดท้าย
+                $newRunning = intval(substr($maxShippingNo, -4)) + 1;
+            }
+        }
+
+
+        echo "จำนวน order: " . count($order_data) . "\n";
+        \Log::info("🔍 Found orders: " . count($order_data));
         if(count($order_data)) { 
             foreach ($order_data as $key => $value) {
                 $pickup_time = $value->pickup_time;
                 
                 if(strtotime($curtime) >= strtotime($pickup_time)){
-
+                                        
                     /****update order to complete*****/
-                    $complete_ord = \App\Order::where('id',$value->id)->update(['order_status'=>3]);
+                    if(($value->shipping_method == 3) || ($value->shipping_method == 1 && $value->transaction_fee > 0)){
+                        $shippingReptNo=$search_pattern.str_pad($newRunning, 4, '0', STR_PAD_LEFT) ;
+                        $complete_ord = \App\Order::where('id',$value->id)->whereIn('order_status',[2])
+                        ->update(['order_status'=>3,'shipping_rept_no' => $shippingReptNo]);
+                        $newRunning ++;
+                    } else {
+                        $complete_ord = \App\Order::where('id',$value->id)->whereIn('order_status',[2])
+                        ->update(['order_status'=>3]);
+                    }
+                    // $complete_ord = \App\Order::where('id',$value->id)->whereIn('order_status',[2])
+                    // ->update(['order_status'=>3,'shipping_rept_no' => $shippingReptNo]);
 
-                    $update_details = \App\OrderShop::where(['order_id'=>$value->id])->whereNotIn('order_status',[4,9,10,11,12])->update(['order_status'=>3]);
+                    $update_details = \App\OrderShop::where(['order_id'=>$value->id])->whereIn('order_status',[2])->update(['order_status'=>3]);
 
-                    $update_details = \App\OrderDetail::where(['order_id'=>$value->id])->whereNotIn('status',[4,9,10,11,12])->update(['status'=>3]);
+                    $update_details = \App\OrderDetail::where(['order_id'=>$value->id])->whereIn('status',[2])->update(['status'=>3]);
 
                     //cteating order transaction
                     //$comment = 'Online Order cancelled'
@@ -69,11 +113,45 @@ class CompleteOrder extends Command {
 
                         $update_transaction = \App\OrderTransaction::updateOrdTrans($transaction_arr);
                     }
+                    
                 }
             }
 
             echo "Cron run for order ".count($order_data);
+
+          
         }
-     
+
+            $today = Carbon::today()->toDateString();
+
+            $orderShops = OrderShop::with(['order', 'shop'])
+                ->where('order_status', 3)
+                ->whereHas('order', function ($q) use ($today) {
+                    $q->whereDate('pickup_time', $today);
+                })
+                ->whereHas('shop')
+                ->get();
+
+          
+
+            foreach ($orderShops as $os) {
+                if ($os->shop && $os->total_final_price) {
+                    $rate = $os->shop->commission_rate ?? 0;
+                    $total = $os->total_final_price;
+                    $fee = $total * $rate / 100;
+                    $pay = $total - $fee;
+
+                    if($os->shop->comm_effective_date <= $today){
+                        $os->commission_rate = $rate;
+                        $os->commission_fee = $fee;
+                        $os->total_smm_pay = $pay;
+                    }else{
+                        $os->total_smm_pay = $total;
+                    }
+                    $os->save();
+                }
+            }
+
+            echo "✅ Updated commission on {$orderShops->count()} order_shop records\n";
     }
 }

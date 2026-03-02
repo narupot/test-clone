@@ -49,6 +49,13 @@ return [
             'days' => 7,
         ],
 
+        'worker' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/laravel-worker.log'),
+            'level' => 'info',
+            'days' => 7,
+        ],
+        
         'syslog' => [
             'driver' => 'syslog',
             'level' => 'debug',

@@ -207,27 +207,133 @@ class LayoutHtmlHelpers {
                     });
               </script>';
 
-        return $html;             
+        return $html;
     }
 
-    public static function AddSellerProductQtyPop(){
-        
-        //$result = \App\MongoProduct::where('_id', $product_id)->first();
-        $html ='<div class="modal" id="changePriceModel">
-                    <div class="modal-dialog modal-sm modal-dialog-centered">
-                      <div class="modal-content">
-                         
-                       </div>
+    public static function AddSellerProductQtyPop() {
+        $html = '
+                <div class="modal fade" id="changePriceModel" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <!-- เนื้อหาโหลดภายหลัง -->
+                        </div>
                     </div>
-              </div><script>
-                    $(\'body\').on(\'click\', \'a.changePriceModel\',function(e){ e.preventDefault();
-                        var currCap = $(this);
-                        $(\'#changePriceModel\').modal(\'show\').find(\'.modal-content\').load(currCap.attr(\'href\'));  
-                    });
-              </script>';
+                </div>
 
-        return $html;             
+                <style>
+                    .skeleton {
+                        background: #eee;
+                        border-radius: 4px;
+                        position: relative;
+                        overflow: hidden;
+                    }
+                    .skeleton::after {
+                        content: "";
+                        position: absolute;
+                        top: 0; left: -150px;
+                        height: 100%; width: 150px;
+                        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+                        animation: shimmer 1.2s infinite;
+                    }
+                    @keyframes shimmer {
+                        0% { transform: translateX(0); }
+                        100% { transform: translateX(100%); }
+                    }
+                    .skeleton.text { height: 16px; margin-bottom: 10px; }
+                    .skeleton.image { height: 100px; width: 100%; margin: 10px auto; }
+                </style>
+
+                <script>
+                $(document).ready(function () {
+                    $("body").on("click", "a.changePriceModel", function(e){
+                        e.preventDefault();
+                        var url = $(this).attr("href");
+
+                        // แสดง modal
+                        var modal = $("#changePriceModel");
+                        modal.modal("show");
+
+                        // เคลียร์เนื้อหาเก่า แล้วใส่ Skeleton Loader
+                        modal.find(".modal-content").html(`
+                            <div class="p-3 text-center">
+                                <div class="skeleton image"></div>
+                                <div class="skeleton text" style="width: 80%; margin: auto;"></div>
+                                <div class="skeleton text" style="width: 60%; margin: auto;"></div>
+                                <div class="skeleton text" style="width: 40%; margin: auto;"></div>
+                            </div>
+                        `);
+
+                        // โหลดข้อมูลจริงมาแทนที่
+                        modal.find(".modal-content").load(url);
+                    });
+
+                    
+                });
+                </script>';
+
+                return $html;
     }
 
+    public static function AddSellerProductQtyUnitPop() {
+        $html = '
+                <div class="modal fade" id="changePriceUnitModel" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <!-- เนื้อหาโหลดภายหลัง -->
+                        </div>
+                    </div>
+                </div>
+
+                <style>
+                    .skeleton {
+                        background: #eee;
+                        border-radius: 4px;
+                        position: relative;
+                        overflow: hidden;
+                    }
+                    .skeleton::after {
+                        content: "";
+                        position: absolute;
+                        top: 0; left: -150px;
+                        height: 100%; width: 150px;
+                        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+                        animation: shimmer 1.2s infinite;
+                    }
+                    @keyframes shimmer {
+                        0% { transform: translateX(0); }
+                        100% { transform: translateX(100%); }
+                    }
+                    .skeleton.text { height: 16px; margin-bottom: 10px; }
+                    .skeleton.image { height: 100px; width: 100%; margin: 10px auto; }
+                </style>
+
+                <script>
+                $(document).ready(function () {
+                    $("body").on("click", "a.changePriceUnitModel", function(e){
+                        e.preventDefault();
+                        var url = $(this).attr("href");
+
+                        // แสดง modal
+                        var modal = $("#changePriceUnitModel");
+                        modal.modal("show");
+
+                        // เคลียร์เนื้อหาเก่า แล้วใส่ Skeleton Loader
+                        modal.find(".modal-content").html(`
+                            <div class="p-3 text-center">
+                                <div class="skeleton image"></div>
+                                <div class="skeleton text" style="width: 80%; margin: auto;"></div>
+                                <div class="skeleton text" style="width: 60%; margin: auto;"></div>
+                                <div class="skeleton text" style="width: 40%; margin: auto;"></div>
+                            </div>
+                        `);
+
+                        // โหลดข้อมูลจริงมาแทนที่
+                        modal.find(".modal-content").load(url);
+                    });
+                });
+                </script>';
+
+                return $html;
+    }
 
 }

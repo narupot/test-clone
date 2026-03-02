@@ -90,7 +90,6 @@
 
     	$('.select1').selectize({});
         $(".select").selectize().change(function (event) {
-            //console.log($(event.target).val());
             var cat_id = $(event.target).val();
             var data = {'cat_id':cat_id};
             callAjaxRequest(get_shopping_list_prd_shop_url, 'post', data, function(response){

@@ -1,6 +1,5 @@
   <script>
     window.userFolderDefaultPath = "{{Config::get('constants.froala_img_path').md5('sdfsdfs').'/'}}";
-    //console.log(window.userFolderDefaultPath);
 
     froalaloadimages_url = "{{action('FroalaEditorController@froalaLoadImages')}}";
     froaladeletefolder_url = "{{action('FroalaEditorController@froalaDeleteFolder')}}";

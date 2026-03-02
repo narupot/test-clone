@@ -18,7 +18,20 @@ use Validator;
 use Lang;
 use App\Currency;
 use App\Unit;
+use App\ProductSubGroup;
+use App\ProductGroup;
+use App\ParentCategory;
+use App\ProductTypeTag;
+use App\Package;
+use App\ParentCatPackage;
+Use App\ParentCatBaseUnit;
+use Carbon\Carbon;
+use App\MongoParentCategory;
+use App\MongoProductTypeTag;
+
+
 use Config;
+use Illuminate\Support\Facades\Log;
 
 
 class CategoryController extends MarketPlace
@@ -60,13 +73,49 @@ class CategoryController extends MarketPlace
         if($permission === true) {
             $created_by = Auth::guard('admin_user')->user()->id;
             $categories = Category::where(['parent_id' => '0', 'created_by' => $created_by])->get();
+            $categoriesids = $category = '';
+            $category = null;
+            if (!empty($id)) {
+                $category = Category::where(['id' => $id,'status' => '1'])->first();
+            } else {
+                 
+                $cat_id = 0;
+                $categoriesids = Category::select('id')->where(['status' => '1'])->where('is_default','!=','1')->where('parent_id', $cat_id)->get();
+
+                $categorydropdown=$this->getCategoriesdropdown($cat_id, 0); 
+
+                //dd($categorydropdown);
+            }
             $seo_status='1';
             $active_tab = 'category';
             $units = Unit::where('status','1')->get();
+            $packages = Package::where('status','1')->get();
+            $productGroups = ProductGroup::where('status', 1)->orderBy('sorting_no', 'asc')->get();
+            $productTypeTags = [];
 
-            return view('admin.category-management.create', ['categories' => $categories,'active_tab'=>$active_tab, 'units'=>$units, 'status'=>0]);
+            return view('admin.category-management.create', 
+            ['category' => $category
+            ,'categories' => $categories
+            ,'active_tab'=>$active_tab
+            , 'units'=>$units
+            , 'status'=>0
+            , 'categorydropdown'=>$categorydropdown
+            , 'seo_status'=>$seo_status
+            , 'productGroups' => $productGroups
+            , 'packages' => $packages
+            , 'productTypeTags' => $productTypeTags
+           ]);
         }
 
+    }
+
+    public function getParentCategoryName($subgroupId)
+    {
+        // ดึงข้อมูล Category ทั้งหมดที่เกี่ยวข้องกับ subgroup_id
+        $categories = ParentCategory::where('subgroup_id', $subgroupId)->get(['id', 'category_name']);
+
+        // ส่งข้อมูลกลับในรูปแบบ JSON
+        return response()->json($categories);
     }
 
     public function categorieslist(){
@@ -78,7 +127,7 @@ class CategoryController extends MarketPlace
         foreach ($cat_data_set as $a){
             $new[$a['parent_id']][] = $a;
         }
-        //dd($new[0]); 
+        // dd($new[0]); 
         $tree = $this->createTree($new, $new[0]); // changed         
           
         }
@@ -94,108 +143,296 @@ class CategoryController extends MarketPlace
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {  
-    
-
-        $default_lang = session('default_lang');
-        $created_by = Auth::guard('admin_user')->user()->id;
-        $name = $request->category_name[$default_lang];
-        $url = createUrl($request->url);
-        $request->merge(array('name' => $name)); 
-        $fileobject = $request->file('category_image');
-
-
-        $default_cat_id = 0;
-        if($request->parent_id<1){
-            // if category don't have parent assign assign it in default
-            $parent_id = $default_cat_id;
-        }else{
-            $parent_id = $request->parent_id;
-        }
-
-        $this->validate($request, 
-                ['url' => 'required|unique:category','name' => ['required']], $this->messages());
-
-        $category = new Category;
-        $category->created_by = $created_by;
-        $category->parent_id = $parent_id;
-        $category->comment = $request->cat_comment;
-        $category->updated_by = $created_by;
-        $category->status = $request->status;
-        // upload category image 
-
-        if(isset($request->category_image) && !empty($request->category_image)){
-           $extension = 'jpg'; 
-           $image_name = 'cat'.md5(microtime()).'.'.$extension;
-           $cat_image_dir_path = Config::get('constants.category_img_path').'/';
-           $image = $request->category_image;
-           $this->base64UploadImage($image, $cat_image_dir_path, $image_name);
-           $category->img = $image_name;
+    {
         
-        }
+        $default_lang = session('default_lang');
+        $created_by   = Auth::guard('admin_user')->id();
+        $now          = now();
 
-        try {
-            $category->save();
+        $this->validate($request, [
+            'url'           => 'required|unique:parent_category,url',
+        ], $this->messages());
 
-            /** Logging category create information **/
-              $action_type = "created";
-              $logdetails = "Admin has created $this->module_name with name $name and url  $url";
-              $logdata = array('action_type' =>$action_type,'module_name' =>$this->module_name,'logdetails' =>$logdetails);
-              $this->updateLogActivity($logdata);
-            /** Logging category create information end **/
-
-
-        } catch (QueryException $ex) {
-            echo $ex->getMessage();
-        }
+        $category = new Category();
+        $category->url        = createUrl($request->url);
+        $category->parent_id  = $request->parent_id ?? 0;
+        $category->status     = $request->status ?? 1;
+        $category->img        = null;
+        $category->sequence   = $request->sequence ?? 0;
+        $category->comment    = $request->cat_comment ?? null;
+        $category->created_by = $created_by;
+        $category->updated_by = $created_by;
+        $category->created_at = $now;
+        $category->updated_at = $now;
+        $category->save();
 
         $cat_id = $category->id;
-        $catCount = Category::where('url', $url)->count();
-        if($catCount>0){
-           $category->url = $url.'-'.$cat_id;
-        }else{
-           $category->url = $url;
-        }
-        $category->save();
-        $data = array();
-        $lang_ids = Language::where('status', '1')->pluck('id');
-        foreach ($lang_ids as $lang_id) {
-            $data[$lang_id] = ["cat_id" => $cat_id, "lang_id" => $lang_id, "category_name" => $name, "cat_description" => $this->addslashes($request->cat_description[$lang_id]), 
-                'meta_title' => $this->addslashes($request->meta_title[$lang_id]), 
-                'meta_keyword' => $this->addslashes($request->meta_keyword[$lang_id]), 
-                'meta_description' => $this->addslashes($request->meta_description[$lang_id])
-                ];
+
+        if ($request->filled('category_image')) {
+            $image_name = 'cat' . md5(microtime()) . '.jpg';
+            $cat_image_dir_path = Config::get('constants.category_img_path') . '/';
+            $this->base64UploadImage($request->category_image, $cat_image_dir_path, $image_name);
+
+            $category->img = $image_name;
+            $category->save();
         }
 
-        DB::table($this->tableCategoryDesc)->insert($data);
-        
-        $units = isset($request->unit)?$request->unit:[];
-        if(count($units)>0){
-            $unit_cat_data = [];
-            foreach($units as $unit_id){
-                $unit_cat_data[]=[
-                    'cat_id'=>$cat_id,
-                    'unit_id'=>$unit_id
-                ];
+        $desc = new CategoryDesc();
+        $desc->cat_id           = $cat_id;
+        $desc->lang_id          = $default_lang;
+        $desc->category_name    = $this->addslashes($request->category_name ?? '');
+        $desc->meta_title       = $this->addslashes($request->meta_title ?? '');
+        $desc->meta_keyword     = $this->addslashes($request->meta_keyword ?? '');
+        $desc->meta_description = $this->addslashes($request->meta_description ?? '');
+        $desc->cat_description  = $this->addslashes($request->cat_description ?? '');
+        $desc->save();
+
+        if ($request->has('keywords')) {
+            $keywords = json_decode($request->input('keywords', '[]'), true);
+
+            if (is_array($keywords) && count($keywords) > 0) {
+                $insertData = [];
+                foreach ($keywords as $tag) {
+                    $insertData[] = [
+                        'product_type_id' => $cat_id,
+                        'tag'             => $tag,
+                        'tag_status'      => 1,
+                        'created_at'      => $now,
+                        'created_by'      => $created_by,
+                        'updated_date'    => $now,
+                        'updated_by'      => $created_by,
+                    ];
+                }
+                ProductTypeTag::insert($insertData);
             }
-            if(count($unit_cat_data)){
-                \App\CategoryUnit::insert($unit_cat_data);
-            }
         }
 
-        /*****update category in mongo******/
-        $category_data = Category::categoryData($cat_id);
-        $store = MongoCategory::updateData($category_data);
+        $product_tag_data = ProductTypeTag::where('product_type_id', $category->id)->get();
+        MongoProductTypeTag::updateProductTypeTag($category->id, $product_tag_data);
 
-        return redirect()->action('Admin\CategoryManagement\CategoryController@edit', $cat_id)->with('message', 'The category has been added.');
+        $category_data = Category::with('categorydesc')->find($cat_id);
+        MongoCategory::updateData($category_data);
+
+        return redirect()
+        ->action([CategoryController::class, 'edit'], $cat_id)
+        ->with('message', 'Category has been created successfully.');
     }
 
+
+    public function updateCategory(Request $request, $id)
+    {
+        $newUrl = createUrl($request->url);
+
+        $request->validate([
+            'url' => [
+                'required',
+                Rule::unique('category', 'url')->ignore($id),
+            ],
+            'parent_id' => 'required',
+        ]);
+
+        $category   = Category::findOrFail($id);
+        $created_by = Auth::guard('admin_user')->user()->id;
+        $now        = now();
+
+        try {
+            $image_name = $category->img;
+            if ($request->has('category_image') && !empty($request->category_image)) {
+                if (strlen($request->category_image) > 100) { 
+
+                    $image_name = 'cat' . md5(microtime()) . '.jpg';
+                    $cat_image_dir_path = Config::get('constants.category_img_path') . '/';
+                    $this->base64UploadImage($request->category_image, $cat_image_dir_path, $image_name);
+                }
+            }
+
+            $category->url        = $newUrl;
+            $category->parent_id  = $request->parent_id ?? 0;
+            $category->status     = $request->status ?? 1;
+            $category->img        = $image_name;
+            $category->comment    = $request->cat_comment ?? null;
+            $category->updated_at = $now;
+            $category->updated_by = $created_by;
+            $category->save();
+            \Log::info("After category->save()");
+
+            CategoryDesc::updateOrCreate(
+            [
+                'cat_id'  => $category->id,
+                'lang_id' => session('default_lang'),
+            ],
+            [
+                'category_name'    => $this->addslashes($request->category_name ?? ''),
+                'meta_title'       => $this->addslashes($request->meta_title ?? ''),
+                'meta_keyword'     => $this->addslashes($request->meta_keyword ?? ''),
+                'meta_description' => $this->addslashes($request->meta_description ?? ''),
+                'cat_description'  => $this->addslashes($request->cat_description ?? ''),
+            ]
+        );
+
+            ProductTypeTag::where('product_type_id', $category->id)->delete();
+
+            if ($request->has('keywords')) {
+                $keywords = json_decode($request->input('keywords', '[]'), true);
+                if (is_array($keywords) && count($keywords) > 0) {
+                    $insertData = [];
+                    foreach ($keywords as $tag) {
+                        $insertData[] = [
+                            'product_type_id' => $category->id,
+                            'tag'             => $tag,
+                            'tag_status'      => 1,
+                            'created_at'      => $now,
+                            'created_by'      => $created_by,
+                            'updated_date'    => $now,
+                            'updated_by'      => $created_by,
+                        ];
+                    }
+                    ProductTypeTag::insert($insertData);
+                }
+            }
+            $product_tag_data = ProductTypeTag::where('product_type_id', $category->id)->get();
+            MongoProductTypeTag::updateProductTypeTag($category->id, $product_tag_data);
+            $category_data = Category::with('categorydesc')->find($category->id);
+            MongoCategory::updateData($category_data);
+
+            \Log::info("After MongoCategory::updateData()");
+            return redirect()
+            ->action([CategoryController::class, 'edit'], $category->id)
+            ->with('message', 'Category has been updated successfully.');
+
+        } catch (\Exception $e) {
+            \Log::error("Update category error: " . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
+            throw $e;
+        }
+    }
+
+
+    public function storeParentCategory(Request $request)
+    {
+      
+            $created_by = Auth::guard('admin_user')->user()->id;
+            $default_lang = session('default_lang');
+            $now = Carbon::now();
+
+            $name = $request->category_name;
+            $url = createUrl($request->url);
+            $request->merge(['name' => $name]);
+
+            $this->validate($request, [
+                'url'           => 'required|unique:parent_category,url',
+                'category_name' => 'required|unique:parent_category,category_name',
+                'product_group'      => 'required',
+                'product_subgroup'   => 'required',
+                'package'          => 'required',  
+                'unit'             => 'required',   
+            ], $this->messages());
+
+            $image_name = null;
+            if (isset($request->category_image) && !empty($request->category_image)) {
+                $extension = 'jpg';
+                $image_name = 'cat' . md5(microtime()) . '.' . $extension;
+                $cat_image_dir_path = Config::get('constants.category_img_path') . '/';
+                $this->base64UploadImage($request->category_image, $cat_image_dir_path, $image_name);
+            }
+
+            try {
+                DB::beginTransaction();
+
+                $parentCategory = new ParentCategory;
+                $parentCategory->category_name      = $name;
+                $parentCategory->url                = $url;
+                $parentCategory->img                = $image_name;
+                $parentCategory->is_deleted         = 0;
+                $parentCategory->meta_title         = $this->addslashes($request->meta_title ?? '');
+                $parentCategory->meta_keyword       = $this->addslashes($request->meta_keyword ?? '');
+                $parentCategory->meta_description   = $this->addslashes($request->meta_description ?? '');
+                $parentCategory->cat_description    = $this->addslashes($request->cat_description ?? '');
+                $parentCategory->sorting_no         = $request->sorting_no ?? 0;
+                $parentCategory->group_id           = $request->product_group ?? 0;
+                $parentCategory->subgroup_id        = $request->product_subgroup ?? 0;
+                $parentCategory->created_at         = $now;
+                $parentCategory->created_by         = $created_by;
+                $parentCategory->updated_at         = $now;
+                $parentCategory->updated_by         = $created_by;
+                $parentCategory->save();
+
+                $parent_cat_id = $parentCategory->id;
+
+                if (!empty($request->sorting_no)) {
+                    DB::table('parent_category')
+                        ->where('id', '!=', $parent_cat_id)
+                        ->where('sorting_no', '>=', $request->sorting_no)
+                        ->increment('sorting_no');
+                }
+
+                $url_count = ParentCategory::where('url', $url)->where('id', '!=', $parent_cat_id)->count();
+                if ($url_count > 0) {
+                    $parentCategory->url = $url . '-' . $parent_cat_id;
+                    $parentCategory->save();
+                }
+
+                $packages = $request->input('package');
+                if (!empty($packages)) {
+                    $package_data = collect($packages)->map(function ($package_id) use ($parent_cat_id, $created_by, $now) {
+                        return [
+                            'parent_cat_id' => $parent_cat_id,
+                            'package_id' => $package_id,
+                            'created_by' => $created_by,
+                            'updated_by' => $created_by,
+                            'created_at' => $now,
+                            'updated_at' => $now,
+                        ];
+                    })->all();
+                    ParentCatPackage::insert($package_data);
+                }
+
+                $units = $request->input('unit');
+                if (!empty($units)) {
+                    $unit_data = collect($units)->map(function ($base_unit_id) use ($parent_cat_id, $created_by, $now) {
+                        return [
+                            'parent_cat_id' => $parent_cat_id,
+                            'base_unit_id' => $base_unit_id,
+                            'created_by' => $created_by,
+                            'updated_by' => $created_by,
+                            'created_at' => $now,
+                            'updated_at' => $now,
+                        ];
+                    })->all();
+                    ParentCatBaseUnit::insert($unit_data);
+                }
+
+                $mongo_data = ParentCategory::find($parent_cat_id);
+                MongoParentCategory::updateData($mongo_data);
+
+                DB::commit();
+
+                $action_type = "created";
+                $log_details = "Admin has created a Parent Category with name '$name' and URL '$parentCategory->url'";
+                $log_data = ['action_type' => $action_type, 'module_name' => 'Parent Category', 'logdetails' => $log_details];
+                $this->updateLogActivity($log_data);
+
+                return redirect()->action('Admin\CategoryManagement\CategoryController@ParentCategoryEdit', $parent_cat_id)->with('message', 'The parent category has been added successfully.');
+
+            } catch (QueryException $ex) {
+                DB::rollBack();
+                return redirect()->back()->withInput()->with('errorMsg', 'Error saving data: ' . $ex->getMessage());
+            }
+    }
+    
+    
     public function messages() {
 
         return [
             'name.required' => Lang::get('admin_category.please_enter_category_name'),
             'url.required' => Lang::get('admin_category.please_enter_category_url'),
             'url.unique' => Lang::get('admin_category.category_url_in_already_used'),
+            'category_name.unique' => Lang::get('admin_category.category_name_in_already_used'),
+            'category_name.required' => 'กรุณากรอกชื่อหมวดหมู่',
+            'group_id.required'      => 'กรุณาเลือกกลุ่ม',
+            'subgroup_id.required'   => 'กรุณาเลือกหมวด',
+            'package.required'   => 'กรุณาเลือกแพ็กเกจ',
+            'unit.required'   => 'กรุณาเลือกหน่วยสินค้า',
+            'parent_id.required'   => 'กรุณาประเภทสินค้า',
         ];
     }
 
@@ -252,14 +489,31 @@ class CategoryController extends MarketPlace
         //
     }
 
-    public function getParentID($id){
-        $catArr=Category::select('id','parent_id')->where('id',$id)->first()->toArray();
-        if($catArr['parent_id']>0){
-            return $this->getParentID($catArr['parent_id']);
-        }else{
-            return $catArr['id'];
+    public function getParentID($id)
+    {
+        $visited = [];
+        while ($id > 0) {
+            if (in_array($id, $visited)) {
+                \Log::warning("Category loop detected", ['id' => $id, 'visited' => $visited]);
+                break;
+            }
+
+            $visited[] = $id;
+            $cat = Category::select('id','parent_id')->find($id);
+            if (!$cat) {
+                return null;
+            }
+
+            if ($cat->parent_id == 0) {
+                return $cat->id;
+            }
+
+            $id = $cat->parent_id;
         }
+
+        return $id;
     }
+
 
 
 
@@ -269,37 +523,299 @@ class CategoryController extends MarketPlace
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {
+public function edit($id)
+{
+    \Log::info("edit() start", ['id' => $id]);
+    $permission = $this->checkUrlPermission('edit_category'); 
     
-        $permission = $this->checkUrlPermission('edit_category');  
-        if($permission === true) {
-            $created_by = Auth::guard('admin_user')->user()->id;
-            $category = Category::where('id',$id)->with('categorydesc')->first();
-            
-            if(isset($category->categorydesc->category_name))
-            {
-                $subcat_mesg = $category->categorydesc->category_name;
-            }else{
-                $subcat_mesg = '';
-            }  
+    if ($permission === true) {
+        $created_by = Auth::guard('admin_user')->user()->id;
 
-            if (!$category) {
-                abort(404);
+        $category = Category::with(['categorydesc', 'productTypeTags'])->findOrFail($id);
+
+        $subcat_mesg = $category->categorydesc->category_name ?? '';
+        $categories = Category::where('parent_id', 0)->get();
+
+        $parent_id = $category->parent_id;
+        \Log::info("edit() parent_id", ['parent_id' => $parent_id]);
+
+        $parentCategory = \App\ParentCategory::select('group_id', 'subgroup_id')
+            ->where('id', $category->parent_id)
+            ->first();
+
+        $productGroups = ProductGroup::where('status', 1)->orderBy('sorting_no', 'asc')->get();
+        $productSubGroups = ProductSubGroup::where('status', 1)->orderBy('sorting_no', 'asc')->get();
+
+        $active_tab = 'category';
+        $shop_data = \App\Shop::with(['shopUser','shopDesc'])->get();
+
+        $assign_seller = ShopAssignCategory::where('category_id', $id)->pluck('shop_id')->toArray();
+        $productTypeTags = $category->productTypeTags->pluck('tag')->toArray();
+
+        // 5️⃣ ตรวจสอบว่า parentCategory มีไหม
+        $currentGroupId = $parentCategory->group_id 
+            ?? $category->product_group_id 
+            ?? null;
+
+        $currentSubGroupId = $parentCategory->subgroup_id 
+            ?? $category->product_sub_group_id 
+            ?? null;
+
+        $status = $category->status;
+
+        \Log::info("edit() before return view", [
+            'subcat_mesg' => $subcat_mesg,
+            'category_id' => $category->id,
+            'parent_id' => $parent_id,
+            'currentGroupId' => $currentGroupId,
+            'currentSubGroupId' => $currentSubGroupId
+        ]);
+
+        return view('admin.category-management.subCreate', compact(
+            'subcat_mesg',
+            'category',
+            'categories',
+            'parent_id',
+            'active_tab',
+            'shop_data',
+            'assign_seller',
+            'productTypeTags',
+            'productGroups',
+            'productSubGroups',
+            'status',
+            'currentGroupId',
+            'currentSubGroupId'
+        ))->with('tableCategoryDesc', $this->tableCategoryDesc);
+    }
+
+    abort(403, 'You do not have permission to edit this category.');
+}
+
+    public function ParentCategoryEdit($id)
+    {
+        $permission = $this->checkUrlPermission('edit_category');  
+        if ($permission !== true) {
+            abort(403);
+        }
+
+        $created_by = Auth::guard('admin_user')->user()->id;
+
+        $category = ParentCategory::with([
+            'group',
+            'subgroup',
+        ])->findOrFail($id);
+
+        $subcat_mesg = $category->category_name ?? '';
+
+        $productGroups = ProductGroup::where('status', 1)->orderBy('sorting_no', 'asc')->get();
+        $productSubGroups = ProductSubGroup::where('status', 1)
+                            ->where('pro_group_id', $category->group_id)
+                            ->orderBy('sorting_no', 'asc')
+                            ->get();
+
+
+    
+
+        $packages = Package::get(); 
+        $selectedPackages = ParentCatPackage::where('parent_cat_id',$id)
+                                ->pluck('package_id')
+                                ->toArray(); 
+
+        $units = Unit::where('status','1')->get();
+
+        $selectedUnits = ParentCatBaseUnit::where('parent_cat_id', $id)
+                            ->pluck('base_unit_id')
+                            ->toArray();
+      
+        return view('admin.category-management.create', [
+            'category'        => $category,
+            'subcat_mesg'     => $subcat_mesg,
+            'productGroups'   => $productGroups,
+            'productSubGroups'=> $productSubGroups,
+            'units'           => $units,
+            'selectedUnits'   => $selectedUnits,
+            'packages'        => $packages,
+            'selectedPackages' => $selectedPackages,
+            'status'          => $category->is_deleted,
+        ]);
+    }
+
+    public function updateParentCategory(Request $request, $id)
+    {
+       
+        $updated_by = Auth::guard('admin_user')->user()->id;
+        $default_lang = session('default_lang');
+        $now = Carbon::now();
+
+        $name = $request->category_name;
+        $url = createUrl($request->url);
+        $request->merge(['name' => $name]);
+
+        $this->validate($request, [
+            'url' => 'required|unique:parent_category,url,' . $id,
+            "category_name" => 'required',
+            'product_group'      => 'required',
+            'product_subgroup'   => 'required',
+            'package'          => 'required',  
+            'unit'             => 'required', 
+        ]);
+
+        $parentCategory = ParentCategory::findOrFail($id);
+
+        if (isset($request->category_image) && !empty($request->category_image)) {
+            $cat_image_dir_path = Config::get('constants.category_img_path') . '/';
+
+            if (str_contains($request->category_image, ';base64,')) {
+                $extension = 'jpg';
+                $image_name = 'cat' . md5(microtime()) . '.' . $extension;
+                $this->base64UploadImage($request->category_image, $cat_image_dir_path, $image_name);
+                $parentCategory->img = $image_name;
+            } 
+            else {
+                $parentCategory->img = $request->category_image;
             }
-            
-            $categories = Category::where(['parent_id' => '0'])->get();
-            $parent_id=$this->getParentID($id); 
-            $active_tab = 'category';   
-            $shop_data = \App\Shop::with(['shopUser','shopDesc'])->get();
-            $assign_seller = ShopAssignCategory::where('category_id',$id)->pluck('shop_id')->toArray();
-            
-            $units = Unit::where('status','1')->get();
-            $catunit =  \App\CategoryUnit::where('cat_id', $id)->pluck('id','unit_id');
- 
-            
-            return view('admin.category-management.edit', ['subcat_mesg'=>$subcat_mesg,'category' => $category, 'categories' => $categories, 'tableCategoryDesc' => $this->tableCategoryDesc,'top_parent_id'=>$parent_id, 'active_tab'=>$active_tab,'shop_data'=>$shop_data,'assign_seller'=>$assign_seller, 'units'=>$units, 'catunit'=>$catunit]);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $parentCategory->category_name      = $name;
+            $parentCategory->url                = $url;
+            $parentCategory->group_id           = $request->product_group ?? 0;
+            $parentCategory->subgroup_id        = $request->product_subgroup ?? 0;
+            $parentCategory->meta_title         = $this->addslashes($request->meta_title ?? '');
+            $parentCategory->meta_keyword       = $this->addslashes($request->meta_keyword ?? '');
+            $parentCategory->meta_description   = $this->addslashes($request->meta_description ?? '');
+            $parentCategory->cat_description    = $this->addslashes($request->cat_description ?? '');
+            $parentCategory->sorting_no         = $request->sorting_no ?? 0;
+            $parentCategory->updated_at         = $now;
+            $parentCategory->updated_by         = $updated_by;
+            $parentCategory->is_deleted = $request->is_deleted;
+            $parentCategory->save();
+
+            // ---- จัดการ sorting_no ----
+           if (!empty($request->sorting_no)) {
+                $new_sort = (int) $request->sorting_no;
+                $parentCategory->sorting_no = $new_sort;
+                $parentCategory->save();
+
+                $all = ParentCategory::orderBy('sorting_no')->orderBy('id')->get();
+                $counter = 1;
+                foreach ($all as $cat) {
+                    if ($cat->id == $parentCategory->id) {
+                        $cat->sorting_no = $new_sort;
+                    } else {
+                        if ($counter == $new_sort) {
+                            $counter++; 
+                        }
+                        $cat->sorting_no = $counter;
+                        $counter++;
+                    }
+                    $cat->save();
+                }
+            }
+
+            $url_count = ParentCategory::where('url', $url)->where('id', '!=', $id)->count();
+            if ($url_count > 0) {
+                $parentCategory->url = $url . '-' . $id;
+                $parentCategory->save();
+            }
+
+            ParentCatPackage::where('parent_cat_id', $id)->delete();
+            $packages = $request->input('package');
+            if (!empty($packages)) {
+                $package_data = collect($packages)->map(function ($package_id) use ($id, $updated_by, $now) {
+                    return [
+                        'parent_cat_id' => $id,
+                        'package_id' => $package_id,
+                        'created_by' => $updated_by,
+                        'updated_by' => $updated_by,
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ];
+                })->all();
+                ParentCatPackage::insert($package_data);
+            }
+
+            ParentCatBaseUnit::where('parent_cat_id', $id)->delete();
+            $units = $request->input('unit');
+            if (!empty($units)) {
+                $unit_data = collect($units)->map(function ($base_unit_id) use ($id, $updated_by, $now) {
+                    return [
+                        'parent_cat_id' => $id,
+                        'base_unit_id' => $base_unit_id,
+                        'created_by' => $updated_by,
+                        'updated_by' => $updated_by,
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ];
+                })->all();
+                ParentCatBaseUnit::insert($unit_data);
+            }
+
+            $mongo_data = ParentCategory::find($id);
+            MongoCategory::updateData($mongo_data);
+
+            DB::commit();
+
+            $action_type = "updated";
+            $log_details = "Admin has updated Parent Category with name '$name' and URL '$parentCategory->url'";
+            $log_data = ['action_type' => $action_type, 'module_name' => 'Parent Category', 'logdetails' => $log_details];
+            $this->updateLogActivity($log_data);
+
+            return redirect()->back()->with('message', 'The parent category has been updated successfully.');
+
+        } catch (QueryException $ex) {
+            DB::rollBack();
+            return redirect()->back()->withInput()->with('errorMsg', 'Error updating data: ' . $ex->getMessage());
         }
     }
+
+    public function editParent($id)
+    {
+        $permission = $this->checkUrlPermission('edit_category');  
+        if ($permission !== true) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $created_by = Auth::guard('admin_user')->id();
+        $category = ParentCategory::find($id);
+        if (!$category) {
+            abort(404, 'Parent Category not found');
+        }
+        $subcat_mesg = $category->category_name;
+
+        $categories = ParentCategory::where('subgroup_id', 0)
+            ->where('group_id', 0)
+            ->get();
+
+        $parent_id = $this->getParentID($id);
+
+        $active_tab = 'category';
+        $shop_data = \App\Shop::with(['shopUser','shopDesc'])->get();
+
+        $assign_seller = ShopAssignCategory::where('category_id', $id)
+            ->pluck('shop_id')
+            ->toArray();
+
+        $units = Unit::where('status', 1)->get();
+        $catunit = \App\CategoryUnit::where('cat_id', $id)
+            ->pluck('id', 'unit_id');
+
+        return view('admin.category-management.edit', [
+            'subcat_mesg'       => $subcat_mesg,
+            'category'          => $category,
+            'categories'        => $categories,
+            'tableCategoryDesc' => $this->tableCategoryDesc,
+            'top_parent_id'     => $parent_id,
+            'active_tab'        => $active_tab,
+            'shop_data'         => $shop_data,
+            'assign_seller'     => $assign_seller,
+            'units'             => $units,
+            'catunit'           => $catunit,
+        ]);
+    }
+
 
 
    
@@ -579,7 +1095,15 @@ class CategoryController extends MarketPlace
 
             $active_tab = 'subcategory';
 
-            return view('admin.category-management.subCreate', ['categories' => $categories, 'category' => $category, 'categoriesids' => $categoriesids, 'seo_status'=>$seo_status,'subcat_mesg'=> $subcategory_message,'active_tab'=>$active_tab, 'categorydropdown'=>$categorydropdown, 'units'=>$units, 'status'=>1]);
+            $productGroups = ProductGroup::where('status', 1)
+            ->orderBy('sorting_no', 'asc')
+            ->get();
+
+            return view('admin.category-management.subCreate', ['categories' => $categories, 'category' => $category, 'categoriesids' => $categoriesids,
+             'seo_status'=>$seo_status,'subcat_mesg'=> $subcategory_message,
+             'active_tab'=>$active_tab, 'categorydropdown'=>$categorydropdown,
+              'units'=>$units, 'status'=>1 , 'productGroups' => $productGroups
+            ,'productTypeTags'=>'' , 'parent_id' => '', 'currentGroupId' => '', 'currentSubGroupId' => '']);
         }
     }
 
@@ -707,6 +1231,17 @@ class CategoryController extends MarketPlace
         return $catunit;
     }
 
+    public function assignTag(Request $request){
+        $id = $request->input('id');
+        
+        if (!$id) {
+            return response()->json([], 400);
+        }
+        $cattag = ProductTypeTag::where('product_type_id', $id)->pluck('tag');
+        
+        return response()->json($cattag);
+    }
+
     public function subcategorylist()
     {
        $filter = $this->getFilter('sub_category');
@@ -787,110 +1322,350 @@ class CategoryController extends MarketPlace
 		}
     }
 	
-	function categoryListData(Request $request){
-        //dd($request->all());
-		$page_type = !empty($request->page_type) ? $request->page_type : 'category';
-        $perpage = !empty($request->pq_rpp) ? $request->pq_rpp : getPagination('limit');
-        $request->page = $current_page = !empty($request->pq_curpage)?$request->pq_curpage:0;
+	// function categoryListData(Request $request){
+    //     //dd($request->all());
+	// 	$page_type = !empty($request->page_type) ? $request->page_type : 'category';
+    //     $perpage = !empty($request->pq_rpp) ? $request->pq_rpp : getPagination('limit');
+    //     $request->page = $current_page = !empty($request->pq_curpage)?$request->pq_curpage:0;
+
+    //     $start_index = ($current_page - 1) * $perpage;
+    //     //dd($perpage,$request->page);
+        
+    //     $order_by = 'id';
+    //     $order_by_val = 'desc';
+    //     if(isset($request->pq_sort)){
+    //         $sort_data = jsonDecodeArr($request->pq_sort);
+    //         $order_by = $sort_data[0]['dataIndx'];
+    //         $order_by_val = ($sort_data[0]['dir']=='up')?'asc':'desc';
+    //     }
+
+    //     try{
+            
+    //         $query = DB::table(with(new \App\Category)->getTable().' as b')
+    //         ->Leftjoin(with(new \App\CategoryDesc)->getTable().' as bd', [['b.id', '=', 'bd.cat_id'], ['bd.lang_id', '=' , DB::raw(session('default_lang'))]])
+    //         ->leftjoin(with(new \App\AdminUser)->getTable().' as au','au.id', '=', 'b.created_by');	 
+	// 		if(isset($page_type) && $page_type=='sub_category')
+	// 		{
+	// 			$query = $query->where('b.parent_id','!=','0');
+	// 		}
+	// 		else
+	// 		{
+	// 			$query = $query->where(['b.parent_id'=>'0']);
+	// 		}
+	// 		$query = $query->select('b.*', 'bd.category_name','au.nick_name');
+            
+    //         if(isset($request->pq_filter)){
+    //             $filter_req = json_decode($request->pq_filter,true);
+    //             if(!empty($filter_req['data'])){
+    //                 $filter_arr = $filter_req['data'];
+    //                 foreach ($filter_arr as $fkey => $fvalue) {
+
+    //                     $searchval = $fvalue['value'];
+    //                     switch ($fvalue['dataIndx']) {
+    //                         case 'category_name':$query->where('bd.category_name','like', '%'.$searchval.'%'); break;
+	// 						case 'url':$query->where('b.url','like', '%'.$searchval.'%'); 
+	// 							break;
+	// 						case 'parent_category_name':
+	// 							$parent_cat_ids=getParentCategoryIdsBySearchName($searchval);
+	// 							$query->whereIn('b.parent_id',$parent_cat_ids);
+	// 							break;
+    //                         case 'status':$query->whereIn('b.status',$searchval); break;
+	// 						case 'nick_name':$query->where('au.nick_name','like', '%'.$searchval.'%'); break;
+    //                         case 'created_at':
+    //                             $from_date = $fvalue['value']??'';
+    //                             $to_date = $fvalue['value2']??'';
+    //                             createDateFilter($query,'b.created_at',$from_date,$to_date);
+    //                         break;
+    //                         case 'updated_at':
+    //                             $from_date = $fvalue['value']??'';
+    //                             $to_date = $fvalue['value2']??'';
+    //                             createDateFilter($query,'b.updated_at',$from_date,$to_date);
+    //                         break;
+                            
+    //                     }
+                        
+    //                 }
+    //             }
+    //         }
+    //         $response = $query->orderBy($order_by,$order_by_val)->paginate($perpage,['*'],'page',$current_page);
+    //         $totrec = $response->total();
+    //         //dd($response);
+    //         if($start_index >= $totrec) {
+    //             $current_page = ceil($totrec/$perpage);
+                
+    //             $response = $query->orderBy($order_by,$order_by_val)->paginate($perpage,['*'],'page',$current_page);
+    //         }
+
+    //         if(count($response)){
+    //             foreach($response as $key=>$mainCategory){
+    //                 $response[$key]->category_mage = getCategoryImageUrl($mainCategory->img);
+	// 				if(isset($page_type) && $page_type=='sub_category')
+	// 				{
+	// 					$response[$key]->parent_category_name = getParentCategory($mainCategory->parent_id);
+	// 				}
+	// 				$response[$key]->created_at = getDateFormat($mainCategory->created_at, '1');
+	// 				$response[$key]->updated_at = getDateFormat($mainCategory->updated_at, '1');
+    //             }       
+    //         }
+
+            
+    //     }catch(QueryException $e){
+    //         $response = ['status'=>'fail','msg'=>$e->getMessage()];
+    //     }
+        
+    //     return $response;
+    // }
+
+    public function categoryListData(Request $request)
+    {
+        $page_type = $request->page_type ?? 'category';
+        $perpage   = $request->pq_rpp ?? getPagination('limit');
+        $request->page = $current_page = $request->pq_curpage ?? 1;
 
         $start_index = ($current_page - 1) * $perpage;
-        //dd($perpage,$request->page);
-        
-        $order_by = 'id';
-        $order_by_val = 'desc';
-        if(isset($request->pq_sort)){
-            $sort_data = jsonDecodeArr($request->pq_sort);
-            $order_by = $sort_data[0]['dataIndx'];
-            $order_by_val = ($sort_data[0]['dir']=='up')?'asc':'desc';
+
+        // $order_by     = 'pc.id';
+        // $order_by_val = 'desc';
+        $order_by   = 'pc.sorting_no'; 
+        $order_by_val = 'asc'; 
+
+        if ($request->pq_sort) {
+            $sort_data   = jsonDecodeArr($request->pq_sort);
+            $order_by    = $sort_data[0]['dataIndx'];
+            $order_by_val = ($sort_data[0]['dir'] == 'up') ? 'asc' : 'desc';
         }
 
-        try{
+        try {
+            $query = DB::table(with(new \App\ParentCategory)->getTable().' as pc')
+            ->leftJoin(with(new \App\ProductGroup)->getTable().' as pg', 'pg.id', '=', 'pc.group_id')
+            ->leftJoin(with(new \App\ProductSubGroup)->getTable().' as psg', 'psg.id', '=', 'pc.subgroup_id')
+            ->leftJoin(with(new \App\AdminUser)->getTable().' as au', 'au.id', '=', 'pc.created_by');
             
-            $query = DB::table(with(new \App\Category)->getTable().' as b')
-            ->Leftjoin(with(new \App\CategoryDesc)->getTable().' as bd', [['b.id', '=', 'bd.cat_id'], ['bd.lang_id', '=' , DB::raw(session('default_lang'))]])
-            ->leftjoin(with(new \App\AdminUser)->getTable().' as au','au.id', '=', 'b.created_by');	 
-			if(isset($page_type) && $page_type=='sub_category')
-			{
-				$query = $query->where('b.parent_id','!=','0');
-			}
-			else
-			{
-				$query = $query->where(['b.parent_id'=>'0']);
-			}
-			$query = $query->select('b.*', 'bd.category_name','au.nick_name');
-            
-            if(isset($request->pq_filter)){
-                $filter_req = json_decode($request->pq_filter,true);
-                if(!empty($filter_req['data'])){
-                    $filter_arr = $filter_req['data'];
-                    foreach ($filter_arr as $fkey => $fvalue) {
+            if ($request->pq_filter) {
+                $filter_req = json_decode($request->pq_filter, true);
+                if (!empty($filter_req['data'])) {
+                    foreach ($filter_req['data'] as $fvalue) {
+                        $searchval = $fvalue['value'] ?? null;
 
-                        $searchval = $fvalue['value'];
                         switch ($fvalue['dataIndx']) {
-                            case 'category_name':$query->where('bd.category_name','like', '%'.$searchval.'%'); break;
-							case 'url':$query->where('b.url','like', '%'.$searchval.'%'); 
-								break;
-							case 'parent_category_name':
-								$parent_cat_ids=getParentCategoryIdsBySearchName($searchval);
-								$query->whereIn('b.parent_id',$parent_cat_ids);
-								break;
-                            case 'status':$query->whereIn('b.status',$searchval); break;
-							case 'nick_name':$query->where('au.nick_name','like', '%'.$searchval.'%'); break;
+                            case 'category_name':
+                                $query->where('pc.category_name', 'like', '%'.$searchval.'%');
+                                break;
+                            case 'url':
+                                $query->where('pc.url', 'like', '%'.$searchval.'%');
+                                break;
+                            case 'group_name':
+                                $query->where('pg.name', 'like', '%'.$searchval.'%');
+                                break;
+                            case 'subgroup_name':
+                                $query->where('psg.subgroup_name', 'like', '%'.$searchval.'%');
+                                break;
+                           case 'nick_name':
+                                $query->where(function ($q) use ($searchval) { 
+                                    if (!empty($searchval)) {
+                                        $q->where('au.nick_name', 'like', '%'.$searchval.'%')
+                                        ->orWhereNull('pc.created_by'); 
+                                    } else {
+                                        $q->whereNotNull('au.nick_name')
+                                        ->orWhereNull('pc.created_by'); 
+                                    }
+                                });
+                                break;
                             case 'created_at':
-                                $from_date = $fvalue['value']??'';
-                                $to_date = $fvalue['value2']??'';
-                                createDateFilter($query,'b.created_at',$from_date,$to_date);
-                            break;
+                                $from_date = $fvalue['value'] ?? '';
+                                $to_date   = $fvalue['value2'] ?? '';
+                                createDateFilter($query, 'pc.created_at', $from_date, $to_date);
+                                break;
                             case 'updated_at':
-                                $from_date = $fvalue['value']??'';
-                                $to_date = $fvalue['value2']??'';
-                                createDateFilter($query,'b.updated_at',$from_date,$to_date);
-                            break;
-                            
+                                $from_date = $fvalue['value'] ?? '';
+                                $to_date   = $fvalue['value2'] ?? '';
+                                createDateFilter($query, 'pc.updated_at', $from_date, $to_date);
+                                break;
                         }
-                        
                     }
                 }
             }
-            $response = $query->orderBy($order_by,$order_by_val)->paginate($perpage,['*'],'page',$current_page);
+
+            $query = $query->select(
+                'pc.id',
+                'pc.category_name',
+                'pc.url',
+                'pc.img',
+                'pc.is_deleted',
+                'pc.meta_title',
+                'pc.sorting_no',
+                'pc.group_id',
+                'pc.subgroup_id',
+                'pc.meta_keyword',
+                'pc.meta_description',
+                'pc.cat_description',
+                'pc.created_at',
+                'pc.updated_at',
+                'au.nick_name',
+                'pg.name as group_name',
+                'pg.image as group_image',
+                'psg.subgroup_name',
+                'psg.images as subgroup_image'
+            );
+
+            $response = $query->orderBy($order_by, $order_by_val)
+                ->paginate($perpage, ['*'], 'page', $current_page);
+
             $totrec = $response->total();
-            //dd($response);
-            if($start_index >= $totrec) {
-                $current_page = ceil($totrec/$perpage);
-                
-                $response = $query->orderBy($order_by,$order_by_val)->paginate($perpage,['*'],'page',$current_page);
+
+            if ($start_index >= $totrec) {
+                $current_page = ceil($totrec / $perpage);
+                $response = $query->orderBy($order_by, $order_by_val)
+                    ->paginate($perpage, ['*'], 'page', $current_page);
             }
 
-            if(count($response)){
-                foreach($response as $key=>$mainCategory){
-                    $response[$key]->category_mage = getCategoryImageUrl($mainCategory->img);
-					if(isset($page_type) && $page_type=='sub_category')
-					{
-						$response[$key]->parent_category_name = getParentCategory($mainCategory->parent_id);
-					}
-					$response[$key]->created_at = getDateFormat($mainCategory->created_at, '1');
-					$response[$key]->updated_at = getDateFormat($mainCategory->updated_at, '1');
-                }       
+            if ($response->count()) {
+                foreach ($response as $key => $row) {
+                    $response[$key]->category_image   = getCategoryImageUrl($row->img);
+                    $response[$key]->created_at     = getDateFormat($row->created_at, '1');
+                    $response[$key]->updated_at     = getDateFormat($row->updated_at, '1');
+                }
             }
-
-            /***save filter****/
-			/*
-			if(isset($page_type) && $page_type=='sub_category')
-			{
-				$this->setFilter('sub_category',$request);
-			}
-			else
-			{
-				$this->setFilter('category',$request);
-			}
-			*/
-            
-
-            
-        }catch(QueryException $e){
-            $response = ['status'=>'fail','msg'=>$e->getMessage()];
+        } catch (QueryException $e) {
+            $response = ['status' => 'fail', 'msg' => $e->getMessage()];
         }
         
+        return $response;
+    }
+
+    public function categoryTypeListData(Request $request)
+    {
+        $page_type = $request->page_type ?? 'category';
+        $perpage   = $request->pq_rpp ?? getPagination('limit');
+        $request->page = $current_page = $request->pq_curpage ?? 1;
+        $start_index = ($current_page - 1) * $perpage;
+
+        $order_by   = 'cd.category_name'; 
+        $order_by_val = 'asc'; 
+
+        if ($request->pq_sort) {
+            $sort_data   = jsonDecodeArr($request->pq_sort);
+            $order_by    = $sort_data[0]['dataIndx'];
+            $order_by_val = ($sort_data[0]['dir'] == 'up') ? 'asc' : 'desc';
+        }
+
+        try {
+
+            $query = DB::table(with(new \App\Category)->getTable().' as pc')
+                ->leftJoin(with(new \App\CategoryDesc)->getTable().' as cd', 'cd.cat_id', '=', 'pc.id')
+                ->leftJoin(with(new \App\ParentCategory)->getTable().' as parent_cat', 'parent_cat.id', '=', 'pc.parent_id')
+                ->leftJoin(with(new \App\ProductGroup)->getTable().' as pg', 'pg.id', '=', 'parent_cat.group_id')
+                ->leftJoin(with(new \App\ProductSubGroup)->getTable().' as psg', 'psg.id', '=', 'parent_cat.subgroup_id')
+                ->leftJoin(with(new \App\AdminUser)->getTable().' as au', 'au.id', '=', 'pc.created_by')
+                ->where('pc.is_deleted', '0')
+                ->where('pc.parent_id','!=', 0);
+
+            if ($request->pq_filter) {
+                $filter_req = json_decode($request->pq_filter, true);
+                if (!empty($filter_req['data'])) {
+                    foreach ($filter_req['data'] as $fvalue) {
+                        $searchval = $fvalue['value'] ?? null;
+
+                        switch ($fvalue['dataIndx']) {
+                            case 'category_name':
+                                $query->where('cd.category_name', 'like', '%'.$searchval.'%');
+                                break;
+
+                            case 'parent_name':
+                                $query->where('parent_cat.category_name', 'like', '%'.$searchval.'%');
+                                break;
+
+                            case 'description':
+                                $query->where('cd.description', 'like', '%'.$searchval.'%');
+                                break;
+
+                            case 'group_name':
+                                $query->where('pg.name', 'like', '%'.$searchval.'%');
+                                break;
+
+                            case 'subgroup_name':
+                                $query->where('psg.subgroup_name', 'like', '%'.$searchval.'%');
+                                break;
+
+                            case 'status':
+                                $query->where('pc.status', 'like', '%'.$searchval.'%');
+                                break;
+
+                            case 'nick_name':
+                                $query->where(function ($q) use ($searchval) { 
+                                    if (!empty($searchval)) {
+                                        $q->where('au.nick_name', 'like', '%'.$searchval.'%')
+                                        ->orWhereNull('pc.created_by'); 
+                                    } else {
+                                        $q->whereNotNull('au.nick_name')
+                                        ->orWhereNull('pc.created_by'); 
+                                    }
+                                });
+                                break;
+
+                            case 'created_at':
+                                $from_date = $fvalue['value'] ?? '';
+                                $to_date   = $fvalue['value2'] ?? '';
+                                createDateFilter($query, 'pc.created_at', $from_date, $to_date);
+                                break;
+
+                            case 'updated_at':
+                                $from_date = $fvalue['value'] ?? '';
+                                $to_date   = $fvalue['value2'] ?? '';
+                                createDateFilter($query, 'pc.updated_at', $from_date, $to_date);
+                                break;
+                        }
+                    }
+                }
+            }
+
+            $query = $query->select(
+                'pc.id',
+                'cd.category_name',
+                'pc.url',
+                'pc.img',
+                'pc.status',
+                'parent_cat.group_id',
+                'parent_cat.subgroup_id',
+                'pc.parent_id',
+                'cd.meta_title',
+                'cd.meta_keyword',
+                'cd.meta_description',
+                'cd.cat_description',
+                'pc.is_deleted',
+                'pc.created_at',
+                'pc.updated_at',
+                'parent_cat.category_name as parent_name',
+                'pg.name as group_name',
+                'pg.image as group_image',
+                'psg.subgroup_name',
+                'psg.images as subgroup_image',
+                'au.nick_name'
+            );
+
+            $response = $query->orderBy($order_by, $order_by_val)
+                ->paginate($perpage, ['*'], 'page', $current_page);
+
+            $totrec = $response->total();
+
+            if ($start_index >= $totrec) {
+                $current_page = ceil($totrec / $perpage);
+                $response = $query->orderBy($order_by, $order_by_val)
+                    ->paginate($perpage, ['*'], 'page', $current_page);
+            }
+
+            if ($response->count()) {
+                foreach ($response as $key => $row) {
+                    $response[$key]->category_image = getProductImageUrl($row->img,'original');
+                    $response[$key]->created_at = getDateFormat($row->created_at, '1');
+                    $response[$key]->updated_at = getDateFormat($row->updated_at, '1');
+                }
+            }
+
+        } catch (QueryException $e) {
+            $response = ['status' => 'fail', 'msg' => $e->getMessage()];
+        }
+
         return $response;
     }
 

@@ -1,6 +1,6 @@
 @extends('layouts.error')
 
-<link rel="stylesheet" type="text/css" href="{{ Config::get('constants.theme_url').session('default_theme').'/css/global.css' }}" />
+<link rel="stylesheet" type="text/css" href="{{ Config::get('constants.theme_url').session('default_theme').'css/global.css' }}" />
 
 
 @section('content')

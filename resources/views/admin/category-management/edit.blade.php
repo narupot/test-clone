@@ -4,6 +4,110 @@
     @lang('admin_category.edit_category')
 @stop
 @section('header_styles')
+
+    <style>
+/* การจัดวาง: ใช้ Grid Layout เพื่อสร้างคอลัมน์แบบปรับขนาดได้ */
+.unit-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 4px; 
+}
+
+.unit-option {
+    display: flex;
+    align-items: center;
+    padding: 4px 8px; 
+    border: 1px solid #d2d2d7;
+    border-radius: 6px; 
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.unit-option:hover {
+    border-color: #0071e3;
+    background: #f5f5f7;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05); 
+}
+
+.unit-checkbox {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    accent-color: #0071e3;
+    margin-right: 6px; 
+}
+
+.unit-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #1d1d1f;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
+
+/* Container หลัก */
+.keyword-container {
+    max-width: 100%;
+}
+
+/* Label */
+.keyword-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1d1d1f;
+}
+
+/* พื้นที่สำหรับ Input และ Button */
+.keyword-input-area {
+    display: flex;
+    gap: 8px; /* เพิ่มระยะห่างระหว่าง input และ button */
+    margin-bottom: 12px;
+}
+
+/* ส่วนแสดง Tag */
+.keyword-tags-container {
+    display: flex;
+    flex-wrap: wrap; /* ให้แท็กลงบรรทัดใหม่เมื่อเต็ม */
+    gap: 8px; /* ระยะห่างระหว่างแท็ก */
+    padding: 8px;
+    background-color: #f8f9fa; /* สีพื้นหลัง */
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    min-height: 48px; /* กำหนดความสูงขั้นต่ำ */
+}
+
+/* รูปแบบของแต่ละ Tag */
+.keyword-tag {
+    display: flex;
+    align-items: center;
+    padding: 4px 8px;
+    background-color: #e9ecef; /* สีพื้นหลังของแท็ก */
+    border-radius: 16px; /* ทำให้ขอบโค้งมน */
+    font-size: 0.875rem;
+    color: #495057;
+    white-space: nowrap; /* ป้องกันข้อความไม่ให้ขึ้นบรรทัดใหม่ */
+}
+
+/* ปุ่มลบใน Tag */
+.keyword-tag .remove-btn {
+    margin-left: 8px;
+    background: none;
+    border: none;
+    color: #6c757d;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    padding: 0;
+}
+
+.keyword-tag .remove-btn:hover {
+    color: #dc3545;
+}
+</style>
     <link rel="stylesheet" type="text/css" href="{{Config('constants.admin_css_url') }}cropper.min.css">
     <?php  
         $cropper_setting = [
@@ -83,7 +187,7 @@
              <a ng-if="previewUrl"  class="btn btn-secondary deleteUrlcate" ng-href="<%previewUrl%>" target="_blank">@lang('admin_product.preview')</a>
              <a ng-if="deleteUrl" onclick="return confirm({{$confirm}});" class="btn btn-delete btn-danger deleteUrlcate" ng-href="<%deleteUrl%>">@lang('admin_category.remove_fruit')</a>   
                              
-            <button class="btn btn-save btn-success" onclick="document.getElementById('sellerCategoryForm').submit();">@lang('admin_category.save_fruit')</button>
+            <button class="btn btn-save btn-success" onclick="document.getElementById('sellerCategoryForm').submit();">@lang('admin_category.save_category')</button>
         </div>     
     </div>
     <div class="content-wrap clearfix">
@@ -111,7 +215,7 @@
             <div ng-if="!cat_mesg">
                 <h2 id="cat_mesg" class="title-prod">
                     @if(isset($subcat_mesg))
-                        @lang('admin_category.fruit_name'): {{$subcat_mesg}}                        
+                        @lang('admin_category.fruit_name'): {{$subcat_mesg}}
                     @endif
                 </h2>
             </div>
@@ -128,7 +232,7 @@
                 {!! Form::open(['action' => ['Admin\CategoryManagement\CategoryController@update', $category->id], 'method' => 'put','id'=>'sellerCategoryForm', 'class'=>'form-horizontal','enctype' => 'multipart/form-data']) !!}
                 <div class="box nobg pt-0" style="clear:both;">
                     <div class="tab-content row">
-                        <div id="cetegory-general-info" class="tab-pane fade show active">
+                        <div id="cetegory-general-info" class="tab-pane fade show active col-sm-7">
                             <input type="hidden" name="catmoveerror" value="<%catmoveerror%>">
 
                             {!! Form::hidden('parent_id', old('parent_id', $category->parent_id?$category->parent_id:0), ['id'=>'parent_id']) !!}
@@ -138,9 +242,9 @@
                             <div class="category-gen-form">
 
                                 <div class="form-group" >
-                                 {!! CustomHelpers::fieldstabWithLanuage([['field'=>'text', 'name'=>'category_name', 'label'=>Lang::get('admin_category.fruit_name'), 'cssClass'=>'', 'errorkey'=>'name']], '3', $errors)!!}
+                                 {!! CustomHelpers::fieldstabWithLanuage([['field'=>'text', 'name'=>'category_name', 'label'=>Lang::get('admin_category.create_main_product_type'), 'cssClass'=>'', 'errorkey'=>'name']], '3', $errors)!!}
                                 </div>
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label>@lang('admin_category.allow_base_unit')</label>
                                     <div class="check-group">
                                         @foreach($units as $unit)
@@ -148,6 +252,32 @@
                                            {{ Form::checkbox('unit',$unit->id,isset($catunit[$unit->id]), array('name'=>'unit[]')) }}
                                          <span class="chk-label">{{$unit->unitdesc->unit_name}}</span>  
                                          </label>  
+                                        @endforeach
+                                    </div>
+                                </div> -->
+
+                                <div class="form-group" style="max-width: 100%;">
+                                    <label style="font-size: 1rem; font-weight: 600; color: #1d1d1f;">
+                                        @lang('admin_category.allow_base_unit')
+                                    </label>
+
+                                    <!-- ช่องค้นหา -->
+                                    <div class="input-group input-group-sm mb-3" style="max-width: 350px;">
+                                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                        <input type="text" id="unitSearchInput" class="form-control" 
+                                            placeholder="@lang('admin_category.search_unit_placeholder')">
+                                        <button class="btn btn-outline-secondary" type="button" id="clearSearchBtn" style="display: none;">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+
+                                    <!-- กล่อง checkbox -->
+                                    <div class="unit-grid">
+                                        @foreach($units->sortBy(fn($u) => mb_strtolower($u->unitdesc->unit_name)) as $unit)
+                                            <label class="unit-option">
+                                                {{ Form::checkbox('unit[]', $unit->id, isset($catunit[$unit->id]), ['class' => 'unit-checkbox']) }}
+                                                <span class="unit-label">{{ $unit->unitdesc->unit_name }}</span>
+                                            </label>
                                         @endforeach
                                     </div>
                                 </div>
@@ -187,7 +317,8 @@
                                         </div>                                
                                         @include('includes.common_cropper_upload') 
                                     </div>
-                                </div>                                
+                                </div>
+
                             </div>
                            
 
@@ -200,7 +331,20 @@
 
                             <!-- <button type="submit" class="btn">@lang('admin_product.save_category')</button> -->
                             <input type="hidden" name="productids" id="assigned_product_ids">
-                            
+                                <div class="form-group keyword-container" id="keyword-div">
+                                    <label class="form-label keyword-label">
+                                        @lang('admin_category.tag')
+                                    </label>
+
+                                    <div class="keyword-input-area">
+                                        <input type="text" id="keyword-input" class="form-control" placeholder="พิมพ์คีย์เวิร์ดแล้วกดเพิ่ม">
+                                        <button type="button" id="add-keyword" class="btn btn-primary">เพิ่ม</button>
+                                    </div>
+
+                                    <div id="keyword-tags" class="keyword-tags-container"></div>
+
+                                    <input type="hidden" name="keywords" id="keywords-hidden" value="{{ old('keywords', isset($keywords) ? json_encode($keywords) : '[]') }}">
+                                </div>
 
                         </div>
                         
@@ -260,5 +404,143 @@
 
         });
     </script>
+
+        <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            const unitSearchInput = document.getElementById('unitSearchInput');
+            const unitOptions = document.querySelectorAll('.unit-option');
+            const clearSearchBtn = document.getElementById('clearSearchBtn'); 
+
+            const filterUnits = (searchTerm) => {
+                unitOptions.forEach(option => {
+                    const unitName = option.querySelector('.unit-label').textContent.toLowerCase();
+                    if (unitName.includes(searchTerm)) {
+                        option.style.display = 'flex';
+                    } else {
+                        option.style.display = 'none';
+                    }
+                });
+            };
+
+            unitSearchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                filterUnits(searchTerm);
+                
+                
+                if (searchTerm.length > 0) {
+                    clearSearchBtn.style.display = 'block';
+                } else {
+                    clearSearchBtn.style.display = 'none';
+                }
+            });
+
+            clearSearchBtn.addEventListener('click', function() {
+                unitSearchInput.value = ''; 
+                filterUnits(''); 
+                this.style.display = 'none'; 
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        const keywordInput = document.getElementById('keyword-input');
+        const addKeywordBtn = document.getElementById('add-keyword');
+        const keywordTagsContainer = document.getElementById('keyword-tags');
+        const hiddenInput = document.getElementById('keywords-hidden');
+        const alertMessage = document.createElement('div');
+        alertMessage.className = 'text-danger mt-2';
+        alertMessage.style.display = 'none';
+        keywordInput.parentNode.appendChild(alertMessage);
+
+        let keywords = [];
+
+        // ฟังก์ชันสำหรับดึงข้อมูลแท็กจาก Controller
+        function fetchKeywords(categoryId) {
+            
+            // ใช้ fetch() เพื่อเรียก API
+            fetch(`admin/category-management/assign-tag?id=${categoryId}`)
+                
+                .then(response => response.json())
+                .then(data => {
+                    // แปลงข้อมูลที่ได้จาก {id: 'tag'} ให้เป็น array ของ strings
+                    keywords = Object.values(data);
+                    renderKeywords();
+                })
+                .catch(error => {
+                    console.error('Error fetching keywords:', error);
+                });
+        }
+
+        function renderKeywords() {
+            keywordTagsContainer.innerHTML = '';
+            keywords.forEach(keyword => {
+                const tag = document.createElement('div');
+                tag.className = 'keyword-tag';
+                tag.innerHTML = `
+                    <span>${keyword}</span>
+                    <button type="button" class="remove-btn">&times;</button>
+                `;
+                keywordTagsContainer.appendChild(tag);
+            });
+            hiddenInput.value = JSON.stringify(keywords);
+        }
+
+        function addKeywords() {
+            const inputKeywords = keywordInput.value.split(',').map(k => k.trim()).filter(k => k.length > 0);
+            let duplicateFound = false;
+
+            inputKeywords.forEach(keyword => {
+                if (!keywords.includes(keyword)) {
+                    keywords.push(keyword);
+                } else {
+                    duplicateFound = true;
+                }
+            });
+
+            renderKeywords();
+            keywordInput.value = '';
+
+            if (duplicateFound) {
+                alertMessage.textContent = 'มีบางคำซ้ำกับคีย์เวิร์ดที่มีอยู่แล้ว';
+                alertMessage.style.display = 'block';
+            } else {
+                alertMessage.style.display = 'none';
+            }
+        }
+
+        // --- ส่วนการจัดการ Event Listener เหมือนเดิม ---
+        keywordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addKeywords();
+            }
+        });
+
+        addKeywordBtn.addEventListener('click', addKeywords);
+
+        keywordTagsContainer.addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-btn')) {
+                const tagToRemove = e.target.closest('.keyword-tag');
+                const keywordText = tagToRemove.querySelector('span').textContent;
+                keywords = keywords.filter(k => k !== keywordText);
+                renderKeywords();
+                alertMessage.style.display = 'none';
+            }
+        });
+
+        keywordInput.addEventListener('input', function() {
+            alertMessage.style.display = 'none';
+        });
+
+        // --- แก้ไขส่วนนี้เพื่อดึงข้อมูลเมื่อหน้าเว็บโหลด ---
+        // สมมติว่าคุณมี input hidden ที่เก็บ category_id
+        const categoryId = document.getElementById('category_id').value;
+       
+        if (categoryId) {
+            fetchKeywords(categoryId);
+        }
+    });
+</script>
 
 @stop

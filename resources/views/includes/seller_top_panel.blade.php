@@ -6,12 +6,15 @@
                     <span class="menu-txt">@lang('shop.seller_panel')</span>
                 </a>
             </li> -->
-            <li>
+            <!-- อ๊อฟปิด Star 09-06-2568 <li>
                 <a href="{{action('Seller\ProductController@sellerProduct')}}" class="sel-paneltxt @if(strpos( $_SERVER['REQUEST_URI'], 'seller-product') !== false or strpos( $_SERVER['REQUEST_URI'], 'bargain/bytime') !== false or strpos( $_SERVER['REQUEST_URI'], 'order/delivery-list') !== false) active @endif">
                     <span class="menu-txt"><i class="fa-duotone fas fa-wallet"></i> @lang('shop.seller_panel')</span>
                 </a>
-            </li>
+            </li> End --> 
+
+            
             <li>
+                
                 <a href="{{ action('Seller\OrderController@orderHistory') }}" class="@if(strpos( $_SERVER['REQUEST_URI'], 'seller/order/history' ) !== false) active @endif">
                     <i class="fas fa-history"></i> @lang('product.order_history_menu')
                 </a>

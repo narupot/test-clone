@@ -37,6 +37,10 @@
     <script src="{{ Config('constants.admin_js_url') }}bootstrap-typeahead.js"></script>    
     <script src="{{ Config('constants.admin_js_url').'sweetalert2.min.js' }}"></script>
     <script src="{{ Config('constants.admin_js_url').'toastr.min.js' }}"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+
     <!-- end of global css -->
     
     <!--page level css-->
@@ -68,9 +72,52 @@
             'export' :  "@lang('admin_common.export')",
             "format":  "@lang('admin_common.format')",
         };
+         var shipping_default_noti = "{{Session::get('menu_permision_arr.shipping_export')}}";
     </script>   
-   
+   <style>
+    
+        .swal2-container:not(.swal2-in) {
+            pointer-events: inherit !important;
+        }
+        .content-wrap{
+            background-color: lightgray;
+            min-height: 100%;
+        }
+        .wrapper select{
+            width: 100%;
+            min-width: auto;
+        }
+
+        .notification-card {
+            background-color: #E2E2E2;  /* พื้นสีเทาอ่อน */
+            color: #dc3545;   /* ตัวหนังสือแดง */
+            font-weight: bold;
+            min-width: 130px;
+            padding: 8px 13px;  /* เพิ่ม padding */
+            border-radius: 8px; /* มน ๆ */
+            display: inline-flex;
+            align-items: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+       }
+
+       .notification-title {  
+            font-size: 0.80rem; 
+       }
+
+       .notification-count {
+           padding-left: 62px;
+           font-size: 0.70rem;
+           color: #dc3545;
+           font-weight: bold;
+       }
+    
+    </style>
 </head>
+@if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
 
 <div class="loader-wrapper bg-white d-none" id="showHideLoader">
     <span class="loader p-1">
@@ -160,6 +207,26 @@
                     <div class="time-label">@lang('admin.time_zone') :</div>
                     <span class="user-nm">{{session('default_time_zone_label')}}</span>
                 </div>
+
+            @php
+                $shipping_address_noti = CustomHelpers::getshippingAddressCount();  
+                $permission_shipping_address_noti = checkPermission('shipping_export');  
+            @endphp
+ 
+                @if($permission_shipping_address_noti)
+                <div class="notification-card d-inline-flex align-items-center p-2 rounded">
+                    <div class="d-flex flex-column">
+                        <span class="notification-title">
+                            <i class="fas fa-map-marker-alt fa-1x me-2 text-danger"></i> สถานที่จัดส่งใหม่
+                        </span>
+                        <span class="notification-count">
+                            {{$shipping_address_noti}} รายการ
+                        </span>
+                    </div>
+                </div>&nbsp;&nbsp;
+                @endif
+            
+
                 <div class="header-col border-left-0 pl-0">
                     <div class="dropdown d-inline-block">
                         <a herf="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
@@ -207,17 +274,17 @@
     <section class="wrapper">
         <!-- Left side column. contains the logo and sidebar -->
         <div class="green_clkmenu">
-            <a href="javascript:;" class="mbSlide"><span></span></a>        
+            <a href="javascript:;" class="mbSlide"><span></span></a>
         </div>
         <!-- BEGIN LEFT SIDEBAR MENU -->
         <aside class="admin-sidebar">
             <section class="sidebar ">
-                <nav class="admin-menu">        
-                    <ul id="navmenu">               
+                <nav class="admin-menu">
+                    <ul id="navmenu">
                         {!! CustomHelpers::getUserMenu() !!}
                     </ul>
                 </nav>
-            </section>   
+            </section>
         </aside>
         <!-- END LEFT SIDEBAR MENU -->
         
@@ -233,7 +300,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h2>@lang('admin_notification.broadcast_message')</h2>
-                    <span class="close icon-remove" data-dismiss="modal">                                  
+                    <span class="close icon-remove" data-dismiss="modal">
                     </span>
                 </div>
                 <div class="modal-body">
@@ -254,12 +321,12 @@
         </div>
     </div>
 
-    <script type="text/javascript">   
+    <script type="text/javascript">
         $(window).on('load',function(){
-            var is_set_popup = 
+            var is_set_popup =
             $('#popupdivbrodcast').modal('show');
         });
-    </script>    
+    </script>
     @endif
     
 
@@ -279,16 +346,17 @@
     </script>
     <script src="{{ Config('constants.js_url') }}common.js"></script>
     <script src="{{ Config('constants.admin_js_url') }}custom-admin.js"></script>
+
     <!-- end of global js -->
-    @if(Session::has('succMsg'))    
-        <script type="text/javascript">               
-            _toastrMessage('success', "{{ Session::get('succMsg') }}");    
-        </script>                              
+    @if(Session::has('succMsg'))
+        <script type="text/javascript">
+            _toastrMessage('success', "{{ Session::get('succMsg') }}");
+        </script>
     @endif
     @if(Session::has('errorMsg'))
-        <script type="text/javascript">               
-            _toastrMessage('error', "{{ Session::get('errorMsg') }}");    
-        </script>    
+        <script type="text/javascript">
+            _toastrMessage('error', "{{ Session::get('errorMsg') }}");
+        </script>
     @endif
     <!-- begin page level js -->
     @yield('footer_scripts_include')

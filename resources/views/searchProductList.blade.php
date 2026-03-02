@@ -161,28 +161,28 @@
             <ul class="filter-select">               
                 <li data-ng-repeat="item in filter_action.filter_list track by $index">
                     <!-- for badge -->
-                    <span class="btn btn-blue" ng-if="item.badge_name">
+                    <span class="btn btn-" ng-if="item.badge_name">
                         <%item.badge_name%> 
                         <a href="javascript:void(0)" ng-click="filter_action.removeFilterHandler(item);">
                             <i class="fas fa-times"></i>
                         </a>
                     </span> 
                      <!-- for badge -->
-                    <span class="btn btn-blue" ng-if="item.f_type=='cate'">
+                    <span class="btn btn-" ng-if="item.f_type=='cate'">
                         <%item.category_name%> 
                         <a href="javascript:void(0)" ng-click="filter_action.removeFilterHandler(item);">
                             <i class="fas fa-times"></i>
                         </a>
                     </span>
                     <!-- for price -->
-                    <span class="btn btn-blue" ng-if="item.price_type">
+                    <span class="btn btn-" ng-if="item.price_type">
                         @lang('product.price')<%item.value%>
                         <a href="javascript:void(0)" ng-click="filter_action.removeFilterHandler(item);">
                             <i class="fas fa-times"></i>
                         </a>
                     </span>
                     <!-- for review -->
-                    <span class="btn btn-blue" ng-if="item.type && item.type ==='rating'">
+                    <span class="btn btn-" ng-if="item.type && item.type ==='rating'">
                         <div class="review-star">
                           <div class="grey-stars"></div>
                           <div class="filled-stars" style="width: <%item.rating*20%>%"></div>
@@ -203,12 +203,13 @@
             <span class="btn btn-blue">20-100 บาท/ถุง <a href="#"><i class="fas fa-times"></i></a></span> -->
         </div>
     </div>
-
-    <!-- product listing section -->
-    @include('includes.product_listing')
-
+    <div  ng-if="!varModel.no_result_found">
+        <!-- product listing section -->
+        @include('includes.product_listing')
+    </div>
     <div class="category-products" ng-if="varModel.no_result_found">
-        {!! getStaticBlock('search-not-found') !!}
+        {{-- {!! getStaticBlock('search-not-found') !!} --}}
+        <x-not-found />
     </div>
 
     <!-- add to cart modal -->

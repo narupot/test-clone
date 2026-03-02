@@ -31,11 +31,12 @@
                     <a href="{{ $previous_url ?? 'javacript:;' }}" class="btn-grey"><i><</i> @lang('common.back')</a>
                     <!-- <button class="btn-default print">@lang('common.print')</button> -->
                 </div>
-                <h2>@lang('order.shop_order_no') : {{$orderShopData->shop_formatted_id}}</h2>
+                <!--<h2>@lang('order.shop_order_no') : {{$orderShopData->shop_formatted_id}}</h2>-->
+                <h2>@lang('order.shop_order_no') : {{ substr($orderShopData->order_id, -4) }}</h2>
                 
             </div>
             <div class="track-status">
-                <button class="btn-blue">@lang('shop.status') : {{$orderShopData->getOrderStatus->status ?? "NA" }}</button>                                 
+                <button class="btn- btn">@lang('shop.status') : {{$orderShopData->getOrderStatus->status ?? "NA" }}</button>                                 
                 <span class="ship-track-time">{{getDateFormat($orderShopData->updated_at,7)}}</span>
             </div>
         </div>
@@ -208,7 +209,7 @@
                 </label>
             </div>
             <div class="form-group">
-                <button class="btn-blue" id="btn_submit">Submit</button>
+                <button class="btn- btn" id="btn_submit">Submit</button>
             </div>
         </div>
 
@@ -260,27 +261,37 @@
 <script type="text/javascript">
     var status_url = "{{ action('Seller\OrderController@updateShopOrdStatus') }}";
     var deliver_url = "{{action('Seller\OrderController@deliveryList')}}";
+    var deliver_ready_url = "{{action('Seller\OrderController@deliveryList',['section'=>'ready'])}}";
     $('#btn_submit').click(function(e){
         if($('input[name="ord-radio"]:checked').length>0){
             var status = $('input[name="ord-radio"]:checked').val();
-            var data = {ord_status:status,ord_id:{{ $orderShopData->id }} };
-            callAjaxRequest(status_url,'post',data,function(result){
-                if(result.status=='success'){
+            var section = status; // หรือจะ Mapping ตามที่ต้องการ เช่น status เป็น ready หรือ prepare ก็ใช้เป็น section
+            
+            var data = {ord_status: status, ord_id: {{ $orderShopData->id }} };
+            
+            callAjaxRequest(status_url, 'post', data, function(result){
+                if(result.status == 'success'){
                     swal({
-                            type: "success", 
-                            title: lang_success, 
-                            text: result.msg,
-                            confirmButtonText : lang_ok,
-                        }).then(function(){
-                            window.location.href=deliver_url;
-                        });
-                    //swal(lang_success, result.msg, "success");
+                        type: "success", 
+                        title: lang_success, 
+                        text: result.msg,
+                        confirmButtonText : lang_ok,
+                    }).then(function(){
+                        const rsSection = result.section || section; 
+                        // console.log("Section:", rsSection);
+                        
+                        if (rsSection === 'sent') {
+                            window.location.href = deliver_ready_url + '?section=' + rsSection;
+                        }else{
+                            window.location.href = deliver_url + '?section=' + rsSection;
+                        }
+                    });
                 }else{
                     showSweetAlertError(result.msg);
                 }
             });
         }
-        
     });
+
 </script>
 @endsection

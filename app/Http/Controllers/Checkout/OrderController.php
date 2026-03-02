@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Checkout;
 use App\Http\Controllers\MarketPlace;
 use Illuminate\Http\Request;
 use DB;
-Use Lang;
+use Lang;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
 use App\Order;
@@ -14,7 +14,7 @@ use App\OrderDetail;
 use App\Cart;
 use App\OrdersTemp;
 use App\ShippingAddress;
-use App\Helpers\GeneralFunctions; 
+use App\Helpers\GeneralFunctions;
 use App\Helpers\CustomHelpers;
 use App\Helpers\EmailHelpers;
 use App\User;
@@ -23,6 +23,7 @@ use Session;
 use Config;
 use File;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 
 class OrderController extends MarketPlace {
@@ -36,12 +37,10 @@ class OrderController extends MarketPlace {
     public static function saveFinalOrder($orderId){
 
         $orderInfo = OrdersTemp::getTempOrderInfo($orderId);
-
         $user = \App\User::where('id',$orderInfo->user_id)->first();
-        $current_date = currentDateTime();
 
         /*****getting cart info for selected product*********/
-        $cartInfo = Cart::where(['order_id'=>$orderInfo->id])->with(['getPrd','getCat'])->get();
+        $cartInfo = Cart::where(['order_id'=>$orderInfo->id,'is_selected'=>true])->with(['getPrd','getCat'])->get();
 
         $shop_id_arr = $shop_detail_arr = [];
         $shop_cart_detail = [];
@@ -54,28 +53,46 @@ class OrderController extends MarketPlace {
                     $shop_detail_arr[$cvalue->shop_id] = self::getShopArr($shop_detail);
                 }
                 $shop_cart_detail[$cvalue->shop_id][] = $cvalue;
-                
+
+                // ajust stock
+                $prodInfo = $cvalue->getPrd;
+                if($prodInfo->stock === '0') {
+                    $prodInfo->quantity -= $cvalue->quantity;
+                    $prodInfo->save();
+                }
             }
         }
-
         
         if($orderInfo->shipping_method == '3') {
 
+            $billAddInfo = null;
+            $billAddArr = null;
             $shipAddInfo = ShippingAddress::find($orderInfo->shipping_address_id);
             $shipAddArr = self::getAddressArr($shipAddInfo,'ship');
             if($orderInfo->shipping_address_id != $orderInfo->billing_address_id) {
                 $billAddInfo = ShippingAddress::find($orderInfo->billing_address_id);
                 $billAddArr = self::getAddressArr($billAddInfo);
             }else{
-                $billAddInfo = $shipAddInfo;
-                //$billAddArr = $shipAddArr;
                 $billAddArr = self::getAddressArr($shipAddInfo);
             }
-
             $order_json = jsonEncode(['shipping_address'=>$shipAddArr,'billing_address'=>$billAddArr,'total_logistic_cost'=>$orderInfo->total_logistic_cost]);
 
-        }elseif($orderInfo->shipping_method == '1'){
-            $order_json = \App\SystemConfig::where('system_name','PICKUP_CENTER')->value('system_val');
+        }elseif ($orderInfo->shipping_method == '1') {
+
+               // pickup_center: decode JSON string เป็น array
+                $pickupCenterInfo = \App\SystemConfig::where('system_name','PICKUP_CENTER')->value('system_val');
+                $pickupCenterArr = json_decode($pickupCenterInfo, true);
+
+                // billing address
+                $billAddInfo = ShippingAddress::find($orderInfo->billing_address_id);
+                $billAddArr = self::getAddressArr($billAddInfo);
+
+                $order_json = jsonEncode([
+                    'name'            => $pickupCenterArr['name'],
+                    'location'        => $pickupCenterArr['location'],
+                    'contact'         => $pickupCenterArr['contact'],
+                    'billing_address' => $billAddArr
+                ]);
 
         }elseif($orderInfo->shipping_method == '2'){
             if(count($shop_detail_arr)){
@@ -86,12 +103,10 @@ class OrderController extends MarketPlace {
         $orderInfo->order_json = $order_json;
 
         $main_order = Order::createMainOrder($orderInfo,$user);
-
         $main_order_id = $main_order->id;
 
-
         $order_detail_id_arr = [];
-        if(count($shop_id_arr)){
+        if (!empty($shop_id_arr)) {
             /***entry into order shop if data exist then update otherwise create*********/
             foreach ($shop_id_arr as $skey => $svalue) {
 
@@ -103,8 +118,7 @@ class OrderController extends MarketPlace {
                 $shop_order_id = $shop_order->id;
 
                 /***entry into order details*******/
-                if(isset($shop_cart_detail[$svalue]) && count($shop_cart_detail[$svalue])){
-                    $shop_total_price = $total_credit_amount = 0;
+                if (!empty($shop_cart_detail[$svalue])) {
                     $shop_data = [];
                     foreach ($shop_cart_detail[$svalue] as $key => $detail) {
                         if(isset($shop_detail_arr[$svalue]) && count($shop_detail_arr[$svalue])){
@@ -115,7 +129,7 @@ class OrderController extends MarketPlace {
                         $create_order_details = OrderDetail::createOrderDetail($main_order_id,$shop_order_id,$orderInfo,$detail,$shop_data);
                         $order_detail_id_arr[] = $create_order_details;
                         /****deleting this cart after success payment*******/
-                        $delete_cart = Cart::where('id',$detail->id)->delete();
+                        $delete_cart = Cart::where('id',$detail->id)->where('user_id',$user->id)->where('is_selected',true)->delete();
                     }
 
                 }
@@ -128,22 +142,17 @@ class OrderController extends MarketPlace {
         $update_ord_price = Order::updateMainOrderPrice($main_order_id);
         
         /****delete temp order****/
-        $del = OrdersTemp::where('id',$orderId)->delete();
+        // $del = OrdersTemp::where('id',$orderId)->delete();
         return $main_order_id;
     }
 
     public static function saveOrderEndShopping($orderId,$main_order,$temp_ord_info=null) {
-        if(empty($temp_ord_info))
+        if(empty($temp_ord_info)){
             $temp_ord_info = OrdersTemp::where('id',$orderId)->first();
-        //dd($temp_ord_info);
+        }
         $current_date = currentDateTime();
-
         $shop_order = OrderShop::where('order_id',$main_order->id)->get();
-
         $order_json = '';
-        // logistic cost
-
-        
 
         $shop_detail_arr = [];
         if($temp_ord_info->shipping_method == '3') {
@@ -173,8 +182,6 @@ class OrderController extends MarketPlace {
             }
         }
 
-
-        
         $main_order->shipping_method      = $temp_ord_info->shipping_method;
         $main_order->pickup_time          = $temp_ord_info->pickup_time;
         $main_order->user_phone_no        = $temp_ord_info->user_phone_no;
@@ -183,6 +190,9 @@ class OrderController extends MarketPlace {
         $main_order->end_shopping_date    = $current_date;
         $main_order->order_status         = 2;
         $main_order->order_json           = $order_json;
+        $main_order->shipping_discount    = $temp_ord_info->total_logistic_cost;
+        $main_order->dcc_purchase_discount    = $temp_ord_info->dcc_purchase_discount;
+        $main_order->dcc_shipping_discount    = $temp_ord_info->dcc_shipping_discount;
         $main_order->save();
 
         if(count($shop_order)){
@@ -319,9 +329,8 @@ class OrderController extends MarketPlace {
   
     public function thanks(Request $request){
     
-        $formatted_id = $request->id; 
+        $formatted_id = $request->id;
         $main_order = Order::where('formatted_id',$formatted_id)->with('getUser')->first();
-        // dd($main_order,$formatted_id);
         if(empty($main_order)){
           abort(404);
         }
@@ -349,10 +358,52 @@ class OrderController extends MarketPlace {
         $orderInfoJson = jsonDecodeArr($main_order->order_json);
         $total_logistic_cost = isset($orderInfoJson['total_logistic_cost'])?$orderInfoJson['total_logistic_cost']:0;
         
+        // ดึงข้อมูล transaction_fee_name เฉพาะสำหรับ Beam payment methods เท่านั้น
+        $transaction_fee_name = '';
+        $current_tf_percentage = '';
+        if(isset($main_order->transaction_fee) && $main_order->transaction_fee > 0 && isset($main_order->payment_slug)) {
+            $payment_slug = $main_order->payment_slug;
+            
+            // ตรวจสอบว่าเป็น Beam payment method หรือไม่
+            if(strpos($payment_slug, 'beam') === 0) {
+                // Map payment slug ไปยัง transaction fee config name เฉพาะ Beam
+                $slug_to_config_name = [
+                    'beam-qr' => 'QR Code',
+                    'beam-credit' => 'Credit_Debit Card',
+                    'beam-banking' => 'Mobile Banking',
+                    'beam-ewallet' => 'Wallet'
+                ];
+                
+                if(isset($slug_to_config_name[$payment_slug])) {
+                    $config_name = $slug_to_config_name[$payment_slug];
+                    $transaction_fee_config = \App\TransactionFeeConfig::where('name', $config_name)->first();
+                    if($transaction_fee_config) {
+                        $transaction_fee_name = $transaction_fee_config->message ?: $config_name;
+                        $current_tf_percentage = $transaction_fee_config->current_tf;
+                    }
+                }
+                
+                // หากไม่พบจาก config ให้ใช้ language key
+                if(empty($transaction_fee_name)) {
+                    $slug_to_lang_key = [
+                        'beam-qr' => 'checkout.transaction_fee_qr',
+                        'beam-credit' => 'checkout.transaction_fee_credit',
+                        'beam-banking' => 'checkout.transaction_fee_banking',
+                        'beam-ewallet' => 'checkout.transaction_fee_wallet'
+                    ];
+                    
+                    if(isset($slug_to_lang_key[$payment_slug])) {
+                        $lang_key = $slug_to_lang_key[$payment_slug];
+                        $transaction_fee_name = Lang::get($lang_key);
+                    }
+                }
+            }
+            // หากไม่ใช่ Beam payment method ให้ไม่แสดง transaction fee
+        }
 
         $referer_url = $request->headers->get('referer');
         $breadcrumb = $this->getBreadcrumb($referer_url);
-        return view(loadFrontTheme('checkout/thanks'),['main_order' => $main_order,'order_detail'=>$order_detail,'page'=>'thanks','breadcrumb'=>$breadcrumb,'shop_order'=>$shop_order,'total_logistic_cost'=>$total_logistic_cost]);
+        return view(loadFrontTheme('checkout/thanks'),['main_order' => $main_order,'order_detail'=>$order_detail,'page'=>'thanks','breadcrumb'=>$breadcrumb,'shop_order'=>$shop_order,'total_logistic_cost'=>$total_logistic_cost,'transaction_fee_name'=>$transaction_fee_name,'current_tf_percentage'=>$current_tf_percentage]);
     }
 
     public function cancel(Request $request){
@@ -426,6 +477,13 @@ class OrderController extends MarketPlace {
         $post_array = array('amount'=>$orderInfo->total_final_price,'currency'=>'THB','description'=>'item','source_type'=>'qr','reference_order'=>$ref_no);
         $post_json = json_encode($post_array);
 
+        Log::info('KBank API Request', [
+            'url'    => $kbank_details['qr_url']."order",
+            'header' => ['x-api-key' => '***hidden***'],
+            'body'   => $post_array,
+            'order'  => $orderInfo->id
+        ]);
+
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL,$kbank_details['qr_url']."order");
@@ -452,6 +510,11 @@ class OrderController extends MarketPlace {
             $update_ord = Order::where('id',$orderInfo->id)->update(['kbank_qrcode_id'=>$ref_id]);
             return $response->id;
         }else{
+
+            Log::warning('KBank API Response Invalid', [
+                'order'    => $orderInfo->id,
+                'response' => $response
+            ]);
             return 0;
         }
         

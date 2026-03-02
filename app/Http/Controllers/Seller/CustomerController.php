@@ -129,9 +129,13 @@ class CustomerController extends MarketPlace
 
         Paginator::currentPageResolver(function () use ($start, $length) {
             return ($start / $length + 1);
-        });
-
-        $results = \App\OrderShop::where(['user_id'=>$request->user_id,'shop_id'=>$shopData->id])->with(['getOrderDetail','getOrderStatus']);
+        });  
+         // P แก้ ให้ cancelled ออก start
+          // $results = \App\OrderShop::where(['user_id'=>$request->user_id,'shop_id'=>$shopData->id])->with(['getOrderDetail','getOrderStatus']);
+        $results = \App\OrderShop::where(['user_id'=>$request->user_id,'shop_id'=>$shopData->id])
+                                    ->where('order_status','!=',4) // Exclude cancelled orders
+                                    ->with(['getOrderDetail','getOrderStatus']);
+        // P แก้ ให้ cancelled ออก end
         $shopOrderList = $results->orderBy('end_shopping_date', $dir)->paginate($length);
         $data = array();
         if(!empty($shopOrderList))
@@ -140,7 +144,7 @@ class CustomerController extends MarketPlace
             {
                 $order_detail_json = json_decode($cr_request->getOrderDetail->order_detail_json);
                 $action = "<a class='skyblue' href='".action('Seller\OrderController@details',['id'=>$cr_request->shop_formatted_id])."'>".Lang::get('shop.detail')."</a>";
-                $nestedData['order_number'] = "<span class='skyblue'>".$cr_request->shop_formatted_id.'</span>';
+                $nestedData['order_number'] = "<span class='skyblue'>".mb_substr($cr_request->order_id, -4).'</span>';
                 $nestedData['date'] = "<span class='gray'>".getDateFormat($cr_request->end_shopping_date,8)."</span>";
                 $nestedData['credit_status'] = $cr_request->getOrderStatus->status;
                 $nestedData['shipping_method'] = GeneralFunctions::getShippingMethod($cr_request->shipping_method);

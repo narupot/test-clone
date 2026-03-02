@@ -218,21 +218,33 @@ class GeneralFunctions {
     }
 
 
-    public static function getPlaceholderImage($systemname){
-        $system_val = getConfigValue($systemname);
-        $placeholder = '';
-        
-        if(!empty($system_val)){
-            if($systemname == 'USER_IMAGE' || $systemname == 'USER_IMAGE_FEMALE') {
-                $img_name = \App\AdminAvatar::select('name')->where(['id'=>$system_val])->first();
-                $placeholder = Config::get('constants.avtar_images_url').$img_name->name;
-            }
-            else {
-                $placeholder = Config::get('constants.placeholder_url').$system_val;
-            }           
+    public static function getPlaceholderImage($systemname)
+    {
+        static $configCache = [];
+        static $avatarCache = [];
+
+        if (!isset($configCache[$systemname])) {
+            $configCache[$systemname] = getConfigValue($systemname);
         }
-        return $placeholder;
+
+        $system_val = $configCache[$systemname];
+
+        if (empty($system_val)) {
+            return '';
+        }
+
+        if (in_array($systemname, ['USER_IMAGE', 'USER_IMAGE_FEMALE'])) {
+            if (!isset($avatarCache[$system_val])) {
+                $avatarCache[$system_val] = \App\AdminAvatar::select('name')->find($system_val);
+            }
+
+            $img_name = $avatarCache[$system_val];
+            return $img_name ? Config::get('constants.avtar_images_url') . $img_name->name : '';
+        }
+
+        return Config::get('constants.placeholder_url') . $system_val;
     }
+
 
     public static function payStatusCircle($value){
         //dd($value);
@@ -441,17 +453,18 @@ class GeneralFunctions {
         
         $static_left = $static_header = $static_right = $slider = $static_footer = 0;
           $section = \App\Block::getBlockByIdArr();
+        //   dd($section);
           $section_arr = [];
           foreach ($section as $key => $value) {
             $section_arr[$value->section_id][] = $value;
           }
-          //dd($section_arr);
+        //   dd($section_arr);
           $header_section = isset($section_arr[1]) ? $section_arr[1] : [];
           $footer_section = isset($section_arr[2]) ? $section_arr[2] : [];
           $left_section = isset($section_arr[3]) ? $section_arr[3] : [];
           $right_section = isset($section_arr[4]) ? $section_arr[4] : [];
           $main_section = isset($section_arr[5]) ? $section_arr[5] : [];
-          //dd($main_section);
+        //   dd($main_section);
           //dd($header_section);
           
           $header_content = Self::checkSection($header_section,$page);
@@ -459,7 +472,7 @@ class GeneralFunctions {
           $right_content = Self::checkSection($right_section,$page);
           $main_content = Self::checkSection($main_section,$page);
           $footer_content = Self::checkSection($footer_section,$page);
-          //dd($main_content);
+        //   dd($main_content);
           if(count($header_content)){
             $static_header = 1;
           }
@@ -537,7 +550,6 @@ class GeneralFunctions {
                         $datecon = 1;
                     }
                 }
-
 
                 if($ipcon && $datecon){
                     /***checking group*****/
@@ -807,6 +819,9 @@ class GeneralFunctions {
 
             case 'order_receive_buyer':
                 $val = 'Order '.$item_name.' items  received';
+                break;
+            case 'edit_payment_status':
+                $val = 'Order '.$item_name.' payment status updated';
                 break;
             default:
                 # code...

@@ -271,10 +271,7 @@
                     dataIndx:'id', 
                      minWidth: 100,
                     render : function(ui) { 
-                        console.log('mithilehs');
-                        console.log(ui);
                         var front_btn = '';
-                        console.log(typeof ui.rowData.seller_mesg);
                         if(ui.rowData.rating>0 && ui.rowData.is_deleted!='1' && typeof ui.rowData.seller_mesg == 'string'){
                             return {
                             text:'<a href="'+delete_url+'/'+ui.rowData.review_id+'" class="btn btn-danger" onclick="return confirm(\'@lang("admin_common.do_you_wanto_delete_this_data")\')">@lang("admin_common.delete")</a>'+front_btn,    

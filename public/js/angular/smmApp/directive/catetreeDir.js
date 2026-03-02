@@ -15,7 +15,7 @@
 	            //$scope.tree = angular.copy($scope.tree);
 	            $scope.expandNode = function(n,$event) {
 	                $event.stopPropagation();
-	                console.log(n);
+	                // console.log(n);
 	                n.toggle();
 	            };
 	          	$scope.itemSelect = function(item) {

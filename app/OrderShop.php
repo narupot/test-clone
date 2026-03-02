@@ -9,20 +9,26 @@ class OrderShop extends Model
 {
     protected $table = 'order_shop';
 
+    protected $fillable = [
+        'order_id','shop_id','shop_user_id','user_id','user_name','user_email','ph_number','order_status'
+        ,'payment_slug','shop_json','order_json','shipping_method','total_core_cost','total_final_price'
+        ,'total_credit_amount','shop_formatted_id' ,'commission_rate','commission_fee','total_smm_pay'
+    ];
+
     public function getShop(){
-        return $this->hasOne('App\Shop', 'id', 'shop_id');  
+        return $this->hasOne('App\Shop', 'id', 'shop_id');
     }
 
     public function getShopDesc(){
-        return $this->hasOne('App\ShopDesc', 'shop_id', 'shop_id')->where('lang_id', session('default_lang'))->select('shop_id','shop_name'); 
+        return $this->hasOne('App\ShopDesc', 'shop_id', 'shop_id')->where('lang_id', session('default_lang'))->select('shop_id','shop_name');
     }
 
     public function getUser(){
-        return $this->hasOne('App\User', 'id', 'user_id');  
+        return $this->hasOne('App\User', 'id', 'user_id');
     }
 
     public function getOrderDetail(){
-        return $this->hasOne('App\OrderDetail', 'order_shop_id', 'id');  
+        return $this->hasOne('App\OrderDetail', 'order_shop_id', 'id');
     }
 
     public function getSellerDetail(){
@@ -30,7 +36,20 @@ class OrderShop extends Model
     }
 
     public function getOrderStatus(){
-        return $this->hasOne('App\OrderStatusDesc', 'order_status_id', 'order_status')->where('lang_id', session('default_lang')); 
+        return $this->hasOne('App\OrderStatusDesc', 'order_status_id', 'order_status')->where('lang_id', session('default_lang'));
+    }
+    public function order(){
+        return $this->belongsTo(Order::class,'order_id');
+    }
+
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class, 'shop_id');
+    }
+    
+    public function orderDetail()
+    {
+        return $this->hasMany(OrderDetail::class, 'order_shop_id');
     }
 
     public static function formattedOrder($shop_id){
@@ -94,4 +113,5 @@ class OrderShop extends Model
   
         return $core_price;
     }
+
 }

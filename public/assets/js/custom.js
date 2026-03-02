@@ -134,9 +134,9 @@ jQuery(document).ready(function(){
 
 
 
-jQuery(window).on("load", function() {
-   $(".ralated-slider").slick({
-       slidesToShow: 4,
-       slidesToScroll: 1
-   });
-});
+// jQuery(window).on("load", function() {
+//    $(".ralated-slider").slick({
+//        slidesToShow: 4,
+//        slidesToScroll: 1
+//    });
+// });

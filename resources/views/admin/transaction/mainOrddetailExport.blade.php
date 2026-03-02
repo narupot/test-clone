@@ -70,6 +70,11 @@
     .red {
         color: #F00;
     }
+    .strike-text {
+        text-decoration: line-through;
+        opacity: 0.6;
+        background-color: #dfdede;
+    }
 
     /*  */
     @media  print {    
@@ -230,8 +235,9 @@
                                         $detail_json = jsonDecodeArr($val->order_detail_json);
                                         $shop_url = action('ShopController@index',$detail_json['shop_url'] ??'');
                                         $prd_url = action('ProductDetailController@display',[$detail_json['cat_url']??'',$val->sku]);
+                                        $chk_class_cancel = in_array($val->status, [4,9,10,11,12]) ? "strike-text" : "";
                                     @endphp
-                                    <tr>
+                                    <tr class="{{$chk_class_cancel}}">
                                         <td style="text-align:left;">
                                             <div style="margin-bottom:4px;"><img src="{{ getProductImageUrlRunTime($detail_json['thumbnail_image']??'','thumb') }}" alt="img" width="50"> </div>
                                             <div style="margin-bottom: 2px;">{{ $detail_json['name'][session('default_lang')]??$val->category_name }}</div>
@@ -250,7 +256,7 @@
                                         <td>{{ $val->quantity }} {{ $detail_json['package'][session('default_lang')] ?? $val->package_name }}
                                             <br> <span style="color:#F00;">{{convertString($val->total_weight) }} {{$val->base_unit}}<br> / {{$val->package_name}}</span></td>
                                         <td>{{numberFormat($val->total_price) }} @lang('common.baht')</td>
-                                        <td>{!!$detail_json['payment_method'][session('default_lang')] ?? str_replace('_',' ',strtoupper($val->payment_slug)) !!}</td>
+                                        <td>{!! CustomHelpers::formatPaymentMethodName($val->payment_slug, $detail_json['payment_method'] ?? null) !!}</td>
                                         <td><span style="color:#F00;">{{ $val->getOrderStatus->status??'' }}</span></td>
                                         <td>{{$val->api_remark}}</td>
                                         @php 

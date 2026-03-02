@@ -65,7 +65,7 @@
             field : 'action',
             displayName : '@lang('common.action')',
             cellTooltip: true,
-            cellTemplate: '<a href="<%row.entity.history_view_url%>" class="btn-grey">@lang('customer.view_history')</a> <a href="<%row.entity.manage_credit_url%>" ng-if="row.entity.manage_credit_url" class="btn-blue d-none"> @lang('customer.manage_credit')</a>',
+            cellTemplate: '<a href="<%row.entity.history_view_url%>" class="btn-grey">@lang('customer.view_history')</a> <a href="<%row.entity.manage_credit_url%>" ng-if="row.entity.manage_credit_url" class="btn- btn d-none"> @lang('customer.manage_credit')</a>',
             enableSorting : false,
             width : 230,
             cellClass : "text-align:'text-center'",

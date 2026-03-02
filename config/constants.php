@@ -38,6 +38,9 @@ return [
     'site_loader_path'=> $files_path.'/site_loader',
     'color_path'=>$files_path.'/color',
     'banner_path'=>$files_path.'/banner',
+    'campaign_path'=>$files_path.'/campaign',
+    'discount_code_path'=>$files_path.'/discount_code',
+    'discount_code_url'=>$files_url.'/discount_code',
     'social_share_path' => $files_path.'/social_share',
     'social_icon_path' => $files_path.'/social_icon', 
     'froala_img_path'=>'/files/media_manager/',
@@ -122,8 +125,25 @@ return [
     'mobile_app_url' => $mobile_app_url,
     'mobile_app_chat_url'=> env('MOBILE_APP_CHAT_URL'),
     'send_order_json_url'=> env('SEND_ORDER_JSON_URL'),
-
-
+    
+    'send_order_wms_url'=> env('SEND_ORDER_WMS_URL'),
+    'wms_api_key'=> env('WMS_API_KEY'),
+    
+    
+    'movemax_api_url' => 'https://lg-smm.movemax.me/public-api/tms/v1/shipping-note',
+    'movemax_api_key' => 'aM$a0UcHDdSeeh9r&T%CWIL*qgG7OVQgnXLwsZnH@(lD@9m9xeh#GWU0hN6ZgpDW',
+    'movemax_merchant_code' => 'SMM',
+    'movemax_project_code' => 'PJ001',
+    'movemax_distribution_center' => 'SMM-DC001',
+    'movemax_sender_name' => 'สี่มุมเมืองออนไลน์',
+    'movemax_sender_code' => 'SMM',
+    'movemax_sender_address_desc' => '-',
+    'movemax_sender_address' => '355/115-116 หมู่ที่ 15 ถนนพหลโยธิน ต.คูคต อ.ลำลูกกา จ.ปทุมธานี 12130',
+    'movemax_sender_phone' => '0630823718',
+    'movemax_pickup_address_desc' => 'Pickup address description',
+    'movemax_pickup_address' => '355/115-116 หมู่ที่ 15 ถนนพหลโยธิน ต.คูคต อ.ลำลูกกา จ.ปทุมธานี 12130',
+    'movemax_pickup_contact' => 'สี่มุมเมืองออนไลน์',
+    'movemax_pickup_phone' => '0630823718',
 
 ];
 

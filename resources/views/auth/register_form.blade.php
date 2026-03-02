@@ -36,7 +36,7 @@
     	</div>
     	<div class="col-md-4 form-group mb-2">
             <select class="w-100" name="year">
-                @for($i=date('Y')-15; $i>1960; $i--)
+                @for($i=date('Y')-15; $i>1949; $i--)
                     <option value="{{$i}}">{{$i}}</option>
                 @endfor
             </select>
@@ -79,7 +79,13 @@
     <div class="form-group">
         <label class="chk-wrap">
             <input type="checkbox" name="terms_condition">
-            <span class="chk-mark">@lang('common.shinup_terms_and_condition') <a href="{{ action('StaticPageController@pagedata',['url'=>'terms-and-condition'])}}" target="_blank">@lang('common.shinup_terms_and_condition_text')</a></span>
+            <span class="chk-mark">
+                @lang('common.shinup_terms_and_condition') 
+                <a class="red" href="{{ action('StaticPageController@pagedata',['url'=>'terms-and-condition'])}}" target="_blank">@lang('common.shinup_terms_and_condition_text')</a>
+                และ
+                <a class="red" href="https://www.simummuangonline.com/page/pdpa-v06062025" target="_blank">นโยบายความเป็นส่วนตัว</a>
+                ทั้งหมด
+            </span>
         </label>
         <p class="error error-msg" id="terms_condition">{{ $errors->first('terms_condition') }}</p>
     </div>

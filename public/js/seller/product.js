@@ -177,85 +177,156 @@ $('body').on('click','#create_prod_btn, #update_prod_btn,  #copy_prod_btn',funct
 });
 
 
-$('body').on('click','a.action-del',function(e){
-    e.preventDefault();
-    var ajax_url = $(this).attr('rel');
+// $('body').on('click','a.action-del',function(e){
+//     consoles.log('Delete button clicked');
+//     e.preventDefault();
+//     var ajax_url = $(this).attr('rel');
    
+//     swal({
+//         title: error_msg.txt_delete_confirm,
+//         type: "warning",
+//         showCancelButton: true,
+//         confirmButtonText: error_msg.yes_delete_it,
+//         cancelButtonText: error_msg.txt_no,
+//         closeOnConfirm: true,
+//         closeOnCancel: true,
+//     }).then(rep =>{
+//         callAjaxFormRequest(ajax_url, 'get', '', function(response){
+//             response = JSON.parse(response);
+//             if(response.status == 'success'){
+
+//                  window.location = response.url;
+//                 /*swal({
+//                     type: 'success',
+//                     text: response.message,
+//                     confirmButtonColor: '#d33',
+//                     confirmButtonText: text_ok_btn
+//                 })
+//                .then(function(){ window.location = response.url}); */
+//             }
+//             else if(response.status == 'validate_error'){
+//                 swal({
+//                     type: 'error',
+//                     text: response.message,
+//                     confirmButtonColor: '#d33',
+//                     confirmButtonText: text_ok_btn
+//                 }); 
+//             } 
+//         });
+//     }, er=>{
+//         //error code 
+//     });
+    
+// });
+
+// ในไฟล์ js/seller/product.js หรือใน <script>
+// $('body').on('click', '.action-del', function(e) {
+//     e.preventDefault();
+
+//     // อ่าน URL จาก data-url หรือ rel
+//     var deleteUrl = $(this).data('url') || $(this).attr('rel');
+//     console.log("deleteUrl =", deleteUrl);
+
+//     if (!deleteUrl) {
+//         console.error('Delete URL not found or invalid.');
+//         return;
+//     }
+
+//     // SweetAlert (เวอร์ชัน 1.x)
+//     swal({
+//         title: error_msg.txt_delete_confirm,
+//         text: "คุณจะไม่สามารถกู้คืนข้อมูลนี้ได้",
+//         type: "warning",
+//         showCancelButton: true,
+//         confirmButtonColor: "#3085d6",
+//         cancelButtonColor: "#d33",
+//         confirmButtonText: error_msg.yes_delete_it,
+//         cancelButtonText: error_msg.txt_no,
+//         closeOnConfirm: false,
+//         showLoaderOnConfirm: true
+//     }, function(isConfirm) {
+//         if (isConfirm) {
+//             console.log("User confirmed delete");
+
+//             // AJAX GET เพื่อเรียกลบสินค้า
+//             $.get(deleteUrl, function(response) {
+//                 console.log("Server response:", response);
+
+//                 if (response.status === 'success') {
+//                     swal({
+//                         title: "สำเร็จ!",
+//                         text: response.message || "ลบข้อมูลสำเร็จ",
+//                         type: "success"
+//                     }, function() {
+//                         if (response.url) window.location = response.url;
+//                         else location.reload();
+//                     });
+//                 } else {
+//                     swal("เกิดข้อผิดพลาด", response.message || "ไม่สามารถลบข้อมูลได้", "error");
+//                 }
+//             }).fail(function() {
+//                 swal("ข้อผิดพลาด", "@lang('common.api_error')", "error");
+//             });
+//         }
+//     });
+// });
+
+
+
+
+$('body').on('click', '.action-del', function(e) {
+    e.preventDefault();
+
+    var deleteUrl = $(this).data('url') || $(this).attr('rel');
+    if (!deleteUrl) {
+        console.error('Delete URL not found or invalid.');
+        return;
+    }
+
     swal({
         title: error_msg.txt_delete_confirm,
-        type: "warning",
-        showCancelButton: true,
+        text: "คุณจะไม่สามารถกู้คืนข้อมูลนี้ได้",
+        type: 'warning',
+        showConfirmButton: true,
         confirmButtonText: error_msg.yes_delete_it,
         cancelButtonText: error_msg.txt_no,
-        closeOnConfirm: true,
-        closeOnCancel: true,
-    }).then(rep =>{
-        callAjaxFormRequest(ajax_url, 'get', '', function(response){
-            response = JSON.parse(response);
-            if(response.status == 'success'){
+        showCancelButton: true,
+    }).then(function() {
 
-                 window.location = response.url;
-                /*swal({
-                    type: 'success',
-                    text: response.message,
-                    confirmButtonColor: '#d33',
-                    confirmButtonText: text_ok_btn
-                })
-               .then(function(){ window.location = response.url}); */
+        // ใช้ Ajax แบบเดียวกับ act-reject
+        callAjaxFormRequest(deleteUrl, 'get', '', function(response) {
+    if (response.status == 'success') {
+        swal({
+            type: 'success',
+            text: response.message || "ลบข้อมูลสำเร็จ",
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: text_ok_btn
+        }).then(function() {
+            if (response.url) {
+                window.location = response.url;
+            } else {
+                location.reload();
             }
-            else if(response.status == 'validate_error'){
-                swal({
-                    type: 'error',
-                    text: response.message,
-                    confirmButtonColor: '#d33',
-                    confirmButtonText: text_ok_btn
-                }); 
-            } 
         });
-    }, er=>{
-        //error code 
-    });
-    
+    } else if (response.status == 'validate_error') {
+        swal({
+            type: 'error',
+            text: response.message || "ข้อมูลไม่ถูกต้อง",
+            confirmButtonColor: '#d33',
+            confirmButtonText: text_ok_btn
+        });
+    } else {
+        swal({
+            type: 'error',
+            text: response.message || "เกิดข้อผิดพลาดในการลบข้อมูล",
+            confirmButtonColor: '#d33',
+            confirmButtonText: text_ok_btn
+        });
+    }
 });
-
-
-
-$('body').on('click','.act-reject',function(e){
-    e.preventDefault();
-    var ajax_url = $(this).attr('rel');
-    //var confirms = confirm(rejectMessage);
-    swal({text:rejectMessage,
-          type:'warning',
-          showConfirmButton:true,
-          confirmButtonText: text_ok_btn,
-          cancelButtonText: txt_no,
-          showCancelButton:true,
-    }).then(function(){
-        callAjaxFormRequest(ajax_url, 'get', '', function(response){
-            response = JSON.parse(response);
-            if(response.status == 'success'){
-                db.collection("chats").doc(response.docName).collection("messages").add(response.chat_data).then(function(docRef) {
-                    db.collection('chats').doc(response.docName).collection("messages").doc(docRef.id).update({createdAt: firebase.firestore.FieldValue.serverTimestamp()});
-                });
-                swal({
-                    type: 'success',
-                    text: response.message,
-                    confirmButtonColor: '#d33',
-                    confirmButtonText: text_ok_btn
-                })
-               .then(function(){ window.location = response.url}); 
-            }
-            else if(response.status == 'validate_error'){
-                swal({
-                    type: 'error',
-                    text: response.message,
-                    confirmButtonColor: '#d33',
-                    confirmButtonText: text_ok_btn
-                }); 
-            } 
-        });
     });
 });
+
 
 
 $('body').on('click','.act-accept',function(e){
@@ -412,32 +483,59 @@ $(document).ready(function() {
     });*/
 
 
-    $('body').on('click', 'input:radio[name="product_cat"]', function(e){
+    // $('body').on('click', 'input:radio[name="product_cat"]', function(e){
+    //     if ($(this).is(':checked')) {
+    //         var cat_id = $(this).val();
+    //         var data = new Array;
+    //         var ajax_url = base_unit_url+'/'+cat_id;
+    //         callAjaxFormRequest(ajax_url, 'get', data, function(response){
+    //             //response = JSON.parse(response);
+                
+    //             var html = '<option value="">---'+lang_json.select+'---</option>';
+    //             var selected = '';
+    //             //var html = '';
+    //             $.each(response, function( index, value ) {
+    //                 selected = '';
+    //                 if(base_unit_id == value.id){
+    //                     selected = 'selected="selected"';
+    //                 }
+    //                 html += '<option value="'+value.id+'" '+selected+' >'+value.unit_name+'</option>';
+    //             });
+
+    //             $('#baseunit').html(html);
+              
+    //         });
+    //     }
+       
+    // });
+
+    $('body').on('click', 'input:radio[name="product_cat"]', function(e) {
         if ($(this).is(':checked')) {
             var cat_id = $(this).val();
-            var data = new Array;
-            var ajax_url = base_unit_url+'/'+cat_id;
-            callAjaxFormRequest(ajax_url, 'get', data, function(response){
-                //response = JSON.parse(response);
-                
-                var html = '<option value="">---'+lang_json.select+'---</option>';
-                var selected = '';
-                //console.log(response);
-                //var html = '';
-                $.each(response, function( index, value ) {
-                    selected = '';
-                    if(base_unit_id == value.id){
-                        selected = 'selected="selected"';
-                    }
-                    html += '<option value="'+value.id+'" '+selected+' >'+value.unit_name+'</option>';
+            var ajax_url = parent_cat_data_url + '/' + cat_id;
+            
+            callAjaxFormRequest(ajax_url, 'get', {}, function(response) {
+       
+                //Base Unit
+                var baseUnitHtml = '<option value="">---'+lang_json.select+'---</option>';
+                $.each(response.base_units, function(index, value) {
+                    var selected = (base_unit_id == value.id) ? 'selected="selected"' : '';
+                    baseUnitHtml += '<option value="'+value.id+'" '+selected+'>'+value.unit_name+'</option>';
                 });
+                $('#baseunit').html(baseUnitHtml);
 
-                $('#baseunit').html(html);
-              
+                //Package
+                var packageHtml = '<option value="">---'+lang_json.select+'---</option>';
+                $.each(response.packages, function(index, value) {
+                    var selected = (package_id == value.package_id) ? 'selected="selected"' : '';
+                    packageHtml += '<option value="'+value.package_id+'" '+selected+'>'+value.package_name+'</option>';
+                });
+               
+                $('#weightperunit').html(packageHtml);
             });
         }
-       
     });
+
 
     /*$('input:radio[name="product_cat"]').change(function(){
         
@@ -489,8 +587,6 @@ $(document).on('click', 'button.refuse_all_bargaining', function(evt){
         callAjaxRequest(rejectAllBargain, 'post', {'data':JSON.stringify(data)}, result=>{
             if(result.status == 'success'){
                $.each(result.data_charts, function( index, response ) {
-
-                    //console.log(response.docName, response.chat_data);
 
                     db.collection("chats").doc(response.docName).collection("messages").add(response.chat_data).then(function(docRef) {
                         db.collection('chats').doc(response.docName).collection("messages").doc(docRef.id).update({createdAt: firebase.firestore.FieldValue.serverTimestamp()});

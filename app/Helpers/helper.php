@@ -1,5 +1,29 @@
 <?php
 
+
+if (!function_exists('diffThaiTime')) {
+    function diffThaiTime($datetime) {
+        $now = \Carbon\Carbon::now();
+        $target = \Carbon\Carbon::parse($datetime);
+        $diffInMinutes = $target->diffInMinutes($now);
+
+        $days = floor($diffInMinutes / 1440);
+        $hours = floor(($diffInMinutes % 1440) / 60);
+        $minutes = $diffInMinutes % 60;
+
+        $result = '';
+        if ($days > 0) $result .= $days . ' วัน ';
+        if ($hours > 0) $result .= $hours . ' ชั่วโมง ';
+        if ($minutes > 0 || ($days == 0 && $hours == 0)) {
+            $result .= $minutes . ' นาที ';
+        }
+
+        return $result . 'ที่ผ่านมา';
+    }
+}
+
+
+
 function getSiteName() {
 	return session('site_name');
 }
@@ -10,53 +34,138 @@ if (! function_exists('loadFrontTheme')) {
 	}
 }
 
+function formatThaiDateTime($datetime) {
+    if (!$datetime) return '';
+
+    $dt = \Carbon\Carbon::parse($datetime)->locale('th');
+    $thaiDate = $dt->translatedFormat('j F Y เวลา H:i') . ' น.';
+
+    $yearBE = (int) $dt->format('Y') + 543;
+    $thaiDate = str_replace($dt->format('Y'), $yearBE, $thaiDate);
+
+    return $thaiDate;
+}
+
+// function getDateFormat($date_time, $type=Null) {
+//     //echo '====>'.session('default_time_zone');die;
+//     if(strtotime($date_time)>0 && session('default_time_zone')) {
+//         $date_time = date('Y-m-d H:i:s', strtotime($date_time));
+
+//         /* Note :: Please dont uncomment bellow line, on local default time zone is UTC and live 'Asia/Bangkok' and date in db according to timezone so no need to set timezone again */
+
+//         //$date_time = GeneralFunctions::getDateByTimezone($date_time,'UTC','Y-m-d H:i:s',session('default_time_zone'),'Y-m-d H:i:s');
+//     }
+    
+//     switch ($type) {
+//         case '1':
+//             $date_return = date('M d Y h:i a', strtotime($date_time));
+//             break;
+//         case '2':
+//             $date_return = date('M d / Y', strtotime($date_time));
+//             break;
+//         case '3':
+//             $date_return = date('d M Y', strtotime($date_time));
+//             break;                
+//         case '4':
+//             $date_return = date('M d, Y h:i A', strtotime($date_time));
+//             break;
+//         case '5':
+//             $date_return = date('d M, Y', strtotime($date_time));
+//             break;  
+//         case '6':
+//             $date_return = date('M d, Y', strtotime($date_time));
+//             break;  
+//         case '7':
+//             $date_return = date('d/m/Y H:i', strtotime($date_time));
+//             break;   
+//         case '8':
+//             $date_return = date('M d Y H:i', strtotime($date_time));
+//             break;  
+// 		case '9':
+//             $date_return = date('Y-m-d H:i:s', strtotime($date_time));
+//             break;
+//         case 'Y':
+//             $date_return = date('Y', strtotime($date_time));
+//             break;
+//         case 'T':
+//             $date_return = date('H:i', strtotime($date_time));
+//             break;            
+//         default:
+//             $date_return = date('d/m/Y', strtotime($date_time));
+//             break;             
+//     }
+    
+//     return $date_return;
+// }
+
 function getDateFormat($date_time, $type=Null) {
-    //echo '====>'.session('default_time_zone');die;
+    
+    $thai_months = [
+        1 => 'มกราคม', 2 => 'กุมภาพันธ์', 3 => 'มีนาคม', 4 => 'เมษายน',
+        5 => 'พฤษภาคม', 6 => 'มิถุนายน', 7 => 'กรกฎาคม', 8 => 'สิงหาคม',
+        9 => 'กันยายน', 10 => 'ตุลาคม', 11 => 'พฤศจิกายน', 12 => 'ธันวาคม'
+    ];
+
     if(strtotime($date_time)>0 && session('default_time_zone')) {
         $date_time = date('Y-m-d H:i:s', strtotime($date_time));
-
-        /* Note :: Please dont uncomment bellow line, on local default time zone is UTC and live 'Asia/Bangkok' and date in db according to timezone so no need to set timezone again */
-
-        //$date_time = GeneralFunctions::getDateByTimezone($date_time,'UTC','Y-m-d H:i:s',session('default_time_zone'),'Y-m-d H:i:s');
     }
+    
+    if (strtotime($date_time) === false) {
+        return $date_time;
+    }
+
+    $timestamp = strtotime($date_time);
     
     switch ($type) {
         case '1':
-            $date_return = date('M d Y h:i a', strtotime($date_time));
+            $date_return = date('M d Y h:i a', $timestamp);
             break;
         case '2':
-            $date_return = date('M d / Y', strtotime($date_time));
+            $date_return = date('M d / Y', $timestamp);
             break;
         case '3':
-            $date_return = date('d M Y', strtotime($date_time));
-            break;                
+            $date_return = date('d M Y', $timestamp);
+            break;
         case '4':
-            $date_return = date('M d, Y h:i A', strtotime($date_time));
+            $date_return = date('M d, Y h:i A', $timestamp);
             break;
         case '5':
-            $date_return = date('d M, Y', strtotime($date_time));
-            break;  
+            $date_return = date('d M, Y', $timestamp);
+            break;
         case '6':
-            $date_return = date('M d, Y', strtotime($date_time));
-            break;  
+            $date_return = date('M d, Y', $timestamp);
+            break;
         case '7':
-            $date_return = date('d/m/Y H:i', strtotime($date_time));
-            break;   
+            $date_return = date('d/m/Y H:i', $timestamp);
+            break;
         case '8':
-            $date_return = date('M d Y H:i', strtotime($date_time));
-            break;  
-		case '9':
-            $date_return = date('Y-m-d H:i:s', strtotime($date_time));
+            $date_return = date('M d Y H:i', $timestamp);
+            break;
+        case '9':
+            $date_return = date('Y-m-d H:i:s', $timestamp);
             break;
         case 'Y':
-            $date_return = date('Y', strtotime($date_time));
+            $date_return = date('Y', $timestamp);
             break;
         case 'T':
-            $date_return = date('H:i', strtotime($date_time));
-            break;            
+            $date_return = date('H:i', $timestamp);
+            break;
+
+        case 'Thai':
+        case '10': 
+            $day = date('j', $timestamp); 
+            $month_index = (int)date('n', $timestamp); 
+            $year_ad = (int)date('Y', $timestamp); 
+
+            $thai_month_name = $thai_months[$month_index];
+            $thai_year_be = $year_ad + 543; 
+
+            $date_return = "{$day} {$thai_month_name} {$thai_year_be}";
+            break;
+
         default:
-            $date_return = date('d/m/Y', strtotime($date_time));
-            break;             
+            $date_return = date('d/m/Y', $timestamp);
+            break;
     }
     
     return $date_return;
@@ -335,6 +444,16 @@ if (! function_exists('numberFormat')) {
 		}
 		
 	}
+}
+
+if (! function_exists('format_number')) {
+    function format_number($number) {
+        $number = (float) $number;
+        if (fmod($number, 1) === 0.0) {
+            return number_format($number, 0);
+        }
+        return number_format($number, 2);
+    }
 }
 
 if (! function_exists('convertString')) {
@@ -797,6 +916,30 @@ function getPayImgUrl($image_name) {
 	return $blog_image_url;	
 }
 
+function getMultiplePayImgUrls($image_name) {
+	// ถ้าไม่มีเครื่องหมายจุลภาค แสดงว่ามีภาพเดียว
+	if (empty($image_name) || strpos($image_name, ',') === false) {
+		return [getPayImgUrl($image_name)];
+	}
+	
+	// แยกชื่อภาพด้วยเครื่องหมายจุลภาค
+	$image_names = array_map('trim', explode(',', $image_name));
+	$image_urls = [];
+	
+	foreach ($image_names as $img_name) {
+		if (!empty($img_name)) {
+			$image_urls[] = getPayImgUrl($img_name);
+		}
+	}
+	
+	// ถ้าไม่มีภาพที่ถูกต้อง ให้ใช้ภาพ placeholder
+	if (empty($image_urls)) {
+		$image_urls[] = Config::get('constants.placeholder_url').'pay_opt_image.jpg';
+	}
+	
+	return $image_urls;
+}
+
 function getBankImageUrl($image_name){
 	$bank_image_path = Config::get('constants.payment_bank_path').'/'.$image_name;
 	if(!empty($image_name) && file_exists($bank_image_path)) {
@@ -893,7 +1036,7 @@ function getPagination($type='') {
 		return $limit;
 	}
 	else {
-	   	$limit_opt = array(10,20,50,100,200);
+	   	$limit_opt = array(10,20,50,100,200,500,1000);
 	   	foreach($limit_opt as $value){
 	       $data[] = array('key' => $value, 'value' => $value);
 	   	}
@@ -998,25 +1141,32 @@ function getDomainNameByBaseUrl($url){
 	return str_replace('/','',end($url_array));
 }
 
-function getProductImageUrl($image_name, $size='', $parent_id=0) {
-	
-	if($image_name && $size){
-		
-		$prd_url = Config::get('constants.product_img_url').$size.'/'.$image_name;
-		$prd_path = Config::get('constants.product_path').'/'.$size.'/'.$image_name;
-	}else {
-		$prd_url = Config::get('constants.product_url').'thumb_104x145/'.$image_name;
-		$prd_path = Config::get('constants.product_path').'/thumb_104x145/'.$image_name;
-	}
+function getProductImageUrl($image_name, $size = '', $parent_id = 0)
+{
+    if (empty($image_name)) {
+        return GeneralFunctions::getPlaceholderImage(getSizeName($size));
+    }
 
-	if(file_exists($prd_path) && $image_name){
-			return $prd_url;
-	}
-	else{
-		$size_name = getSizeName($size);
-		return GeneralFunctions::getPlaceholderImage($size_name);
-	}
+    $size_folder = $size ?: 'thumb_104x145';
+    $prd_url = Config::get('constants.product_img_url') . $size_folder . '/' . $image_name;
+    $prd_path = Config::get('constants.product_path') . '/' . $size_folder . '/' . $image_name;
+
+    // ใช้ cache key จาก path
+    $cacheKey = 'img_exists_' . md5($prd_path);
+
+    // Cache ไว้ 10 นาที (หรือมากกว่านี้ถ้าภาพไม่เปลี่ยนบ่อย)
+    $exists = Cache::remember($cacheKey, 600, function () use ($prd_path) {
+        return is_file($prd_path);
+    });
+
+    if ($exists) {
+        return $prd_url;
+    }
+
+    return GeneralFunctions::getPlaceholderImage(getSizeName($size));
 }
+
+
 
 function getProductImageUrlRunTime($image_name, $folder='') {
 	$image_name = $image_name? $image_name:'product_image.jpg';
@@ -1093,15 +1243,25 @@ function getShopLogoImageUrl($image,$size){
 
 function getFolderSize($folder_path){
 	$file_size = 0;
-	//$all_files = File::allFiles($folder_path);
-	//dd($all_files);
-
-	foreach( File::allFiles($folder_path) as $file)
-	{
-	    $file_size += $file->getSize();
+	$start_time = time();
+	$max_execution_time = 120; // จำกัดเวลาไว้ที่ 120 วินาที
+	
+	try {
+		foreach( File::allFiles($folder_path) as $file)
+		{
+			// ตรวจสอบ timeout ทุก 100 ไฟล์
+			if (($file_size % 100) == 0 && (time() - $start_time) > $max_execution_time) {
+				break; // หยุดการทำงานหากใช้เวลานานเกินไป
+			}
+			
+		    $file_size += $file->getSize();
+		}
+	} catch (Exception $e) {
+		// หากเกิด error ให้ return 0
+		return 0;
 	}
+	
 	return $file_size;
-
 }
 
 function websiteMaintenanceMode(){
@@ -1336,7 +1496,7 @@ function getSortingItems(){
 			"by"=>"desc",
 			"value"=>Lang::get('product.new')
 		],
-		[	
+		[
 			"name"=>"created_at",
 			"by"=>"asc",
 			"value"=>Lang::get('product.old'),
@@ -1678,6 +1838,9 @@ function getZip($id=null)
 }
 
 function convert_string($price){
+	if (is_null($price) || $price === '' || !is_numeric($price)) {
+		return '-';
+	}
 	$price = number_format(floatval($price), 2);
 	$price  = (String) $price;
 	$price  = str_replace('.00', '', $price);
@@ -1714,5 +1877,11 @@ if (! function_exists('getMainOrderId')) {
 			}
 		} 
 		return $formated_id;   
+	}
+}
+if(!function_exists('getPendingOrderNoti')){
+	function getPendingOrderNoti()
+	{
+		return \App\Order::getTotPendingOrder();
 	}
 }

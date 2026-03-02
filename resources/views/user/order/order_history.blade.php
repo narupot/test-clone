@@ -28,7 +28,7 @@
 <h1 class="page-title">@lang('order.order_history_buyer')</h1>
 <a class="btn" href="{{ action('User\OrderController@orderHistory') }}">@lang('order.by_main_order')</a> 
 <a class="btn-grey d-none" href="{{ action('User\OrderController@sellerOrderHistory') }}">@lang('order.by_seller_order_buyer')</a>
-<div class="order-history-buyer">
+<div class="order-history-buyer mb-4">
     <div class="table-responsive">
         <table class="table order-history-buyer" id="order_history_buyer">
             <thead>

@@ -208,6 +208,7 @@
             dataJsonUrl = (angular.isUndefined(url) || url ==='')? dataJsonUrl : url;
           
             salesfactoryData.getData(dataJsonUrl,'GET',obj).then(function(rs){
+                console.log(rs);
                 if(typeof rs !== "undefined" && rs.data!= null && rs.xhrStatus !== "error"){
                     var d = rs.data;
                     if(!angular.isUndefined(d.data) && angular.isArray(d.data) && d.data.length){
@@ -514,7 +515,6 @@
         /***** This fnction used for select visible part of table in active section*****/
         $scope.rowVisibleSelectionFun = function(strFlag) {
             //if()
-            console.log(user_action_selection);
             user_action_selection = "select_visible_action";
             if (strFlag == 'visible') {
                 $scope.gridApi.selection.selectAllVisibleRows();
@@ -661,6 +661,8 @@
                         tempRow.entity.register_step = response.data;
                     });
                 break;
+
+
                 case 'approve_change_status' :
                     salesfactoryData.getData(actUrl,'POST',dataObj)
                     .then(function(response) {
@@ -694,6 +696,27 @@
             }
            return rt;
         };
+
+        $scope.toggleProductStatus = function(product) {
+            var targetInt = (product.status === 'Active') ? 1 : 0;
+            
+            var actUrl = base_url + '/seller/update-status/' + product.id + '/' + targetInt;
+
+            salesfactoryData.getData(actUrl, 'GET')
+                .then(function(response) {
+                    var res = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data;
+                    
+                    if (res.status === 'success') {
+                        product.status = res.new_status; 
+                        toastr.success(res.message);
+                    } else {
+                        toastr.error(res.message);
+                    }
+                }, function() {
+                    toastr.error('เกิดข้อผิดพลาดในการอัปเดตสถานะ');
+                });
+        };
+
 
         /*******
          *@ngdoc

@@ -66,6 +66,8 @@ return [
             'engine' => null,
             'options'   => array(
                 PDO::MYSQL_ATTR_LOCAL_INFILE => true,
+                PDO::ATTR_TIMEOUT => 60,
+                PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
             ),
         ],
 

@@ -1,4 +1,4 @@
-@extends('layouts.app') 
+@extends('layouts.app')
 
 @section('header_style')
     {!! CustomHelpers::combineCssJs(['css/myaccount','css/flickity'],'css') !!}
@@ -36,6 +36,99 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
+/* CSS สำหรับส่วนแสดงผลรวมราคาสินค้าทั้งหมดในหน้า thanks */
+        .checkout-summary-section {
+            max-width: 100%;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .checkout-summary-section .checkout-table-footer {
+            display: flex;
+            justify-content: flex-end;
+            width: 100%;
+        }
+
+        .checkout-summary-section .col-sm-5 {
+            flex: 0 0 auto;
+            width: 100%;
+            max-width: 41.66666667%;
+        }
+
+
+        @media (max-width: 767.98px) {
+            .checkout-summary-section .col-sm-5 {
+                max-width: 100%;
+            }
+        }
+
+        .checkout-summary-section .float-right {
+            float: right !important;
+        }
+
+        .checkout-summary-section .row {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            margin-left: -15px !important;
+            margin-right: -15px !important;
+        }
+
+        .checkout-summary-section .row > span.col-6 {
+            flex: 0 0 auto !important;
+            width: 50% !important;
+            padding-left: 15px !important;
+            padding-right: 15px !important;
+        }
+
+        .checkout-summary-section .mb-2 {
+            margin-bottom: 0.5rem !important;
+        }
+
+        .checkout-summary-section .text-danger {
+            color: #dc3545 !important;
+        }
+
+        .checkout-summary-section .text-end {
+            text-align: right !important;
+        }
+
+        .checkout-summary-section .text {
+            color: #212529 !important;
+        }
+
+        .checkout-summary-section hr.my-2 {
+            margin-top: 0.5rem !important;
+            margin-bottom: 0.5rem !important;
+            border: 0 !important;
+            border-top: 1px solid rgba(0,0,0,.1) !important;
+        }
+
+        .checkout-summary-section .grand-total-section {
+            margin-top: 10px !important;
+
+        }
+
+        .checkout-summary-section .grand-total-section .bg-light {
+            background-color: #f8f9fa !important;
+        }
+
+        .checkout-summary-section .grand-total-section .p-2 {
+            padding: 0.5rem !important;
+        }
+
+        .checkout-summary-section .grand-total-section .rounded {
+            border-radius: 0.25rem !important;
+        }
+
+        .checkout-summary-section .grand-total-section .fw-bold {
+            font-weight: 700 !important;
+        }
+
+        .checkout-summary-section .grand-total-section span {
+            color: #333 !important;
+            font-size: 1.1rem !important;
+        }
     </style>
 @endsection
 
@@ -44,22 +137,39 @@
 @endsection
 
 @section('content')
+@if(!in_array($main_order->order_status, [2, 3]))
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="alert alert-danger text-center">
+                    <h4>@lang('checkout.access_denied')</h4>
+                    <p>@lang('checkout.order_status_not_allowed')</p>
+                    <a href="/" class="btn btn-primary">@lang('checkout.back_to_home')</a>
+                </div>
+            </div>
+        </div>
+    </div>
+@else
 <div >
     <div class="confirmation">
         <h1>@lang('checkout.thank_you_for_using_the_simummuang_market')</h1>
         <div class="confirm-msg">
-            <div class="track-msg">@lang('checkout.order_thanks_message')
-            </div>
+            <div class="track-msg">@lang('checkout.order_thanks_message')</div>
             <p class="red"> @lang('checkout.thank_you_for_your_trust_in_our_service')</p>
-            <div class="text-center">
+            <div class="text-center mb-2">
                 <a href="/" class="btn-grey">@lang('checkout.continue_shopping')</a>
                 <a class="btn" href="{{ action('HomeController@index') }}/track-order"><i class="fas fa-truck"></i> @lang('checkout.tracking_order')</a>
             </div>
+            <div class="text-center mb-2">
+                <button type="button" class="btn btn-outline-danger" onclick="printFromUrl('{{ action('Checkout\OrderConfirmationController@downloadOrderConfirmation', ['order_id' => $main_order->formatted_id??null]) }}')">
+                    <i class="fas fa-print"></i> @lang('checkout.order_confirmation_print')
+                </button>
+            </div>
         </div>
     </div>
-    <div class="text-right mb-3">
+    {{-- <div class="text-right mb-3">
         <button class="btn" onclick="printDiv('printsection')">@lang('common.print')</button>
-    </div>
+    </div> --}}
     <div class="combine" id="printsection">
         <div class="track-buyer-info">
             <h2>@lang('checkout.order_no'). {{ $main_order->formatted_id }}</h2>
@@ -108,7 +218,7 @@
                         <div class="col-sm-6">
                             <div class="tInfo-row">
                                 <h4 class="d"><strong>@lang('checkout.billing_address') : </strong></h4>
-                                {{ CustomHelpers::buyerShipBillTo($main_order->order_json,'billing_address') }}
+                                {{ CustomHelpers::buyerShipBillingTo($main_order->order_json,'billing_address') }}
                             </div>
                         </div>
                     @endif
@@ -120,7 +230,7 @@
                 <div class="table-header">
                     <ul>
                         <li>@lang('checkout.seller')</li>
-                        <li>@lang('checkout.product')</li>                              
+                        <li>@lang('checkout.product')</li>
                         <li>@lang('checkout.unit_price')</li>
                         <li>@lang('checkout.qty')</li>
                         <li>@lang('checkout.price')</li>
@@ -129,9 +239,9 @@
                     </ul>
                 </div>
                 <div class="table-content">
-                    @php $id_arr=[]; @endphp 
+                    @php $id_arr=[]; @endphp
                     @foreach($order_detail as $key => $val)
-                        @php 
+                        @php
                             $detail_json = jsonDecodeArr($val->order_detail_json);
                             $shop_url = action('ShopController@index',$detail_json['shop_url'] ??'');
                             $prd_url = action('ProductDetailController@display',[$detail_json['cat_url']??'',$val->sku]);
@@ -147,7 +257,7 @@
                                 <span class="prod-img"><img src="{{getImgUrl($detail_json['logo'] ??'','logo')}}" width="50" height="50" alt=""></span>
                                 <span class="shopname"><a class="pshop-name" href="{{ $shop_url }}">{{ $detail_json['shop_name'][session('default_lang')]??'' }}</a></span>
                                 </a>
-                            </li>                                      
+                            </li>
                             <li class="product">
                                 <div class="dbox-flex">
 
@@ -158,60 +268,99 @@
 
                                     <div class="ml-2">
                                         <span class="prod-name d-block mb-2"><a href="{{ $prd_url}}">{{ $detail_json['name'][session('default_lang')]??$val->category_name }}</a></span>
-                                        <span class="la"><img src="{{ getBadgeImageUrl($detail_json['badge']['icon'] ?? '' )}}" width="30"></span>
+                                        <span class="la"><img src="{{ getBadgeImageUrl($detail_json['badge']['icon'] ?? '' )}}" width="30" alt="badge"></span>
                                     </div>
-                                </div>                                                
+                                </div>
                             </li>
 
-                            <li>{{numberFormat($val->last_price) }} @lang('common.baht') /{{ $detail_json['package'][session('default_lang')] ?? $val->package_name }}</li>
+                            <li>{{number_format($val->last_price,2) }} @lang('common.baht') /{{ $detail_json['package'][session('default_lang')] ?? $val->package_name }}</li>
 
                             <li class="add-rem-qty">
                                 {{ $val->quantity }} {{ $detail_json['package'][session('default_lang')] ?? $val->package_name }}
                             </li>
 
                             <li>
-                                {{numberFormat($val->total_price) }} @lang('common.baht')
-                            </li>  
+                                {{number_format($val->total_price,2) }} @lang('common.baht')
+                            </li>
 
-                            <li>{{ $val->payment_type=='credit'? numberFormat($val->total_price):'' }} @lang('common.baht')</li>     
+                            <li>{{ $val->payment_type=='credit'? number_format($val->total_price,2):'' }} @lang('common.baht')</li>
 
-                            <li>{{$detail_json['payment_method'][session('default_lang')] ?? str_replace('_',' ',strtoupper($val->payment_slug)) }}</li>     
+                            <li>{{$detail_json['payment_method'][session('default_lang')] ?? str_replace('_',' ',strtoupper($val->payment_slug)) }}</li>
 
                         </ul>
-                    @endforeach                     
+                    @endforeach
                     
                 </div>
             </div>
-            <div class="checkout-table-footer clearfix">
-                <div class="col-sm-5 float-right">
-                    <div class="row">
-                        <span class="col-6">@lang('checkout.total')</span>
-                        <span class="col-6">{{numberFormat($main_order->total_core_cost)}} @lang('common.baht')</span>
-                    </div>
-                    <!-- ///////////////////// -->
-                    @if($main_order->total_shipping_cost>0)
-                    <div class="row">
-                        <span class="col-6">@lang('checkout.shipping_charge')</span>
-                        <span class="col-6">{{numberFormat($main_order->total_shipping_cost)}} @lang('common.baht')</span>
-                    </div>
-                    @else
-                        @if($total_logistic_cost>0)
-                        <div class="row">
-                            <span class="col-6">@lang('checkout.delivery_fee')</span>
-                            <span class="col-6">{{numberFormat($total_logistic_cost)}} @lang('common.baht')</span>
-                        </div>
-                        <div class="row">
-                            <span class="col-6">@lang('checkout.discount_delivery_fee')</span>
-                            <span class="col-6"> - {{numberFormat($total_logistic_cost)}} @lang('common.baht')</span>
-                        </div>
-                        @endif
+            <div class="checkout-summary-section">
+                <div class="checkout-table-footer clearfix">
+                    <div class="col-sm-8 col-md-8 col-lg-8">
+                        <div class="checkout-table-footer clearfix">
+                            <div class="col float-right">
+                                <div class="row">
+                                    <div class="d-flex pt-1 w-100">
+                                        <span class="col-6"><strong>@lang('checkout.total')</strong></span>
+                                        <span class="col-6">{{ number_format($main_order->total_core_cost,2) }} @lang('common.baht')</span>
+                                    </div>
+                                </div>
 
-                    @endif
-                    <!-- ///////////////// -->
-                    <div class="bg-grey">
-                        <div class="row">
-                            <span class="col-6">@lang('checkout.grand_total')</span>
-                            <span class="col-6">{{numberFormat($main_order->total_final_price)}} @lang('common.baht')</span>
+
+                                @if($main_order->dcc_purchase_discount > 0)
+                                <div class="row" id="dcc_purchase">
+                                    <div class="d-flex justify-content-around p-2 pl-3 text-danger w-100">
+                                        <span class="flex-grow-1">@lang('checkout.code_discount')</span>
+                                        <span class="">-{{ number_format($main_order->dcc_purchase_discount,2) }} @lang('common.baht')</span>
+                                    </div>
+                                </div>
+                                @endif
+
+                                @if($main_order->total_shipping_cost > 0)
+                                <div class="row" id="delvery_fee_div">
+                                    <div class="d-flex justify-content-around w-100 border-top pt-1">
+                                        <span class="col-6"><strong>@lang('checkout.delivery_fee')</strong></span>
+                                        <span class="col-6">{{ number_format($main_order->total_shipping_cost,2) }} @lang('common.baht')</span>
+                                    </div>
+                                </div>
+                                @endif
+
+                                @if(isset($main_order->dcc_shipping_discount) && $main_order->dcc_shipping_discount > 0)
+                                <div class="row" id="dcc_shipping">
+                                    <div class="d-flex justify-content-around p-2 pl-3 text-danger w-100">
+                                        <span class="flex-grow-1">@lang('checkout.discount_delivery_fee')</span>
+                                        <span class="">-{{ number_format($main_order->dcc_shipping_discount,2) }} @lang('common.baht')</span>
+                                    </div>
+                                </div>
+                                @endif
+
+                                @if(isset($main_order->transaction_fee) && $main_order->transaction_fee > 0 && isset($main_order->payment_slug) && strpos($main_order->payment_slug, 'beam') === 0)
+                                <div class="row" id="transaction_fee_row">
+                                    <div class="d-flex border-top pt-1 w-100">
+                                        <span class="col-6" id="transaction_fee_label">
+                                            @if(isset($transaction_fee_name) && !empty($transaction_fee_name))
+                                                <strong>{{ $transaction_fee_name }}</strong>
+                                            @else
+                                                <strong>@lang('checkout.transaction_fee')</strong>
+                                            @endif
+                                            <span class="text-danger"> 
+                                                @if(isset($current_tf_percentage) && !empty($current_tf_percentage))
+                                                    ({{ number_format($current_tf_percentage, 2) }}%)
+                                                @else
+                                                    (ฟรีค่าธรรมเนียม)
+                                                @endif
+                                            </span>
+                                        </span>
+                                        <span class="col-6 text-danger" id="transaction_fee_amount">{{ number_format($main_order->transaction_fee,2) }} @lang('common.baht')</span>
+                                    </div>
+                                </div>
+                                @endif
+
+                                <div class="row bg-light border-top pt-1">
+                                    <div class="col-6"><strong>@lang('checkout.grand_total')</strong></div>
+                                    <div class="col-6">
+                                        <strong id="tot_order_amount">{{ number_format($main_order->total_final_price,2) }} @lang('common.baht')</strong>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -219,6 +368,7 @@
         </div>
         
     </div>
+@endif
 
 </div>
 
@@ -229,6 +379,13 @@
             document.body.innerHTML = printContents;
             window.print();
             document.body.innerHTML = originalContents;
+    }
+    function printFromUrl(url) {
+        var printWindow = window.open(url, '_blank');
+        printWindow.focus();
+        printWindow.onload = function () {
+            printWindow.print();
+        };
     }
 </script>
 @endsection

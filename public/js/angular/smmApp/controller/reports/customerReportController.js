@@ -185,7 +185,7 @@ function($scope, salesfactoryData, $rootScope, $parse, $timeout, uiGridConstants
 			}
 		});
 		gridApi.selection.on.rowSelectionChanged($scope, function(row) {
-			console.log(row);
+			// console.log(row);
 			if($scope.gridApi.selection.getSelectedRows().length >0)
 			 	$scope.selBoxActBtn = true;
 			else
@@ -257,7 +257,7 @@ function($scope, salesfactoryData, $rootScope, $parse, $timeout, uiGridConstants
 	 * and dataAttr.entity is used to get all field value like dataAttr.entity.id.
 	 * ******/
 	$scope.funEdit = function(dataAttr) {
-		console.log(dataAttr.entity);
+		// console.log(dataAttr.entity);
 	}
 	/********
 	* This both actionOnDataGrid and actionBtnClick function used for Action on Grid Data Like Delete ,Enable and Disable etc 
@@ -379,7 +379,7 @@ function($scope, salesfactoryData, $rootScope, $parse, $timeout, uiGridConstants
 	    var abc= $scope.gridApi.grid.rows.filter(function(o){
 	     	return o.visible;
 	     })
-	    console.log(abc);
+	    // console.log(abc);
 		//console.log($scope.gridApi.grid.renderContainers.body.renderedRows);
 
 	}
@@ -442,7 +442,7 @@ function($scope, salesfactoryData, $rootScope, $parse, $timeout, uiGridConstants
 	$scope.selectVisibleColumnsAll = function(strFlag) {
 		if (strFlag == 'visible') {
 			$scope.gridApi.selection.selectAllVisibleRows();
-			console.log($scope.gridApi.selection);
+			// console.log($scope.gridApi.selection);
 			$scope.selectItemTotalAll = ($scope.gridApi.core.getVisibleRows($scope.gridApi.grid).length);
 		} else if (strFlag == 'unVisible') {
 			$scope.gridApi.selection.clearSelectedRows();
@@ -474,15 +474,15 @@ function($scope, salesfactoryData, $rootScope, $parse, $timeout, uiGridConstants
 	$scope.getFilterDataFromServer = function() {
 		var objData = angular.merge({}, $scope.filterDataObj, $rootScope.dropdownValList)
 		//angular.extend($scope.filterDataObj,$rootScope.dropdownValList);
-		console.log(objData);
-		console.log($scope.filterDataObj);
-		console.log($rootScope.drodownValList);
+		// console.log(objData);
+		// console.log($scope.filterDataObj);
+		// console.log($rootScope.drodownValList);
 		return false;
 		if (angular.isObject($scope.filterDataObj) && !angular.equals({}, $scope.filterDataObj)) {
 			var obj = $scope.filterDataObj;
 			salesfactoryData.getData('admin/users/json', obj).then(function(res) {
 				//$scope.gridOptions.data = res.salesData;
-				console.log(res);
+				// console.log(res);
 				//$scope.salesData = [];
 				//$scope.salesData = res.salesData;
 				//angular.copy(res.salesData, $scope.salesData);
@@ -521,22 +521,22 @@ function($scope, salesfactoryData, $rootScope, $parse, $timeout, uiGridConstants
 	};
 	/*****This function used for table row add in backend using dynamic url ******/
 	$scope.addRowInBackendTable = function(strUrl, strAction) {
-		console.log($scope.addtableRowData);
+		// console.log($scope.addtableRowData);
 	};
 	/****** This function used for get selected value form option box******/
 	$scope.getSelectedOptionVal = function() {
-		console.log($scope.filterUrlSelectBoxModel);
-		console.log('just chil don dhhu');
+		// console.log($scope.filterUrlSelectBoxModel);
+		// console.log('just chil don dhhu');
 	};
 	$scope.testFunction = function() {
-		console.log($scope.test);
+		// console.log($scope.test);
 	};
 	$scope.getTableHeight = function() {
 		 var rowHeight = 45; // your row height
 		 var headerHeight = 39; // your header height
 		 //var footerRowHeight = 32; // pre-calculated
 		 var as = $scope.gridApi.core.getVisibleRows().length;
-		 console.log();
+		//  console.log();
 		 return {
 		    height: (as * rowHeight + headerHeight) + "px"
 		 };

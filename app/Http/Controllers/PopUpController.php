@@ -201,7 +201,7 @@ class PopUpController extends MarketPlace
 
     public function getSellerProductPopUp($id=null){
         
-        $productdetail = Product::getProductDetailByID($id); 
+        $productdetail = Product::getProductDetailByID2Edit($id);
         //dd($productdetail);
         if(empty($productdetail)){
             abort(404);
@@ -211,6 +211,21 @@ class PopUpController extends MarketPlace
         $quantity = $productdetail->stock?'unlimited':$productdetail->quantity;
         $productdetail->total_quantity = $quantity;
         return view('sellerProductsQty',['productDetail'=>$productdetail]);
+
+    }
+
+    public function getSellerProductUnitEditPopUp($id=null){
+        
+        $productdetail = Product::getProductDetailByID2Edit($id);
+        //dd($productdetail);
+        if(empty($productdetail)){
+            abort(404);
+        }
+        $productdetail->package_name = getPackageName($productdetail->package_id);
+        $productdetail->unit_name = getUnitName($productdetail->base_unit_id);
+        $quantity = $productdetail->stock?'unlimited':$productdetail->quantity;
+        $productdetail->total_quantity = $quantity;
+        return view('sellerProductsEditQtyUnit',['productDetail'=>$productdetail]);
 
     }
 
@@ -225,10 +240,55 @@ class PopUpController extends MarketPlace
             $prodata = \App\Product::where('id', $request->product_id)->where('shop_id',$shop_id)->first();
             if(!empty($prodata)){
                 $unit_price = str_replace(',', '',$request->unit_price);
+                $weight_per_unit = $prodata->weight_per_unit;
+                $sum_convert_price = ($unit_price / $weight_per_unit);
+
                 $prodata->unit_price = $unit_price;
+                $prodata->unit_convert_price = $sum_convert_price;
                 $prodata->save();
                 $id = $prodata->id;
                 MongoProduct::updatePrice($id, $unit_price);
+                if(!empty($id)){
+                    $msg_text = Lang::get('product.product_price_has_been_updated_successfully');
+                    return json_encode(array('status'=>'success', 'message'=>$msg_text, 'url'=>'#'));   
+                }else{
+
+                   $msg_text = Lang::get('product.something_went_wrong');
+                   return json_encode(array('status'=>'validate_error','message'=>$msg_text));
+                }
+
+                  
+            }else{
+                $msg_text = Lang::get('product.something_went_wrong');
+                return json_encode(array('status'=>'validate_error','message'=>$msg_text));
+            }
+                    
+        }
+        else{
+
+            $errors = json_decode($validate->errors()); 
+            return json_encode(array('status'=>'validate_error','message'=>$errors));
+        }
+    }
+
+    public function saveUnitPrice(Request $request){
+        $user_id = Auth::id();
+        $input = $request->all();
+        $input['user_id'] = $user_id;
+        $shop_id = session('user_shop_id');
+        $validate = $this->validateForPriceForm($input);
+        if ($validate->passes()) {
+            $prodata = \App\Product::where('id', $request->product_id)->where('shop_id',$shop_id)->first();
+            if(!empty($prodata)){
+                $unit_price = str_replace(',', '',$request->unit_price);
+                $weight_per_unit = $prodata->weight_per_unit;
+                $sum_convert_price = ($unit_price * $weight_per_unit);
+                
+                $prodata->unit_convert_price = $unit_price;
+                $prodata->unit_price = $sum_convert_price;
+                $prodata->save();
+                $id = $prodata->id;
+                // MongoProduct::updatePrice($id, $unit_price);
                 if(!empty($id)){
                     $msg_text = Lang::get('product.product_price_has_been_updated_successfully');
                     return json_encode(array('status'=>'success', 'message'=>$msg_text, 'url'=>'#'));   

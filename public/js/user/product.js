@@ -138,7 +138,6 @@ $('body').on('click', 'a.submitAdjustprice',function(e){
                     db.collection("chats").doc(response.docName).collection("messages").add(response.chat_data).then(function(docRef) {
                         db.collection('chats').doc(response.docName).collection("messages").doc(docRef.id).update({createdAt: firebase.firestore.FieldValue.serverTimestamp()});
                     });
-                    //console.log(docRef, firebase.firestore.FieldValue.serverTimestamp());
 
                           
               
@@ -244,13 +243,11 @@ $('body').on('click', 'a.addtoCartorBuyNow',function(e){
     }).then(function(){
         callAjaxFormRequest(ajax_url, 'post', data, function(response){
             if(response.status == 'success'){
-                console.log(response.chat_data.bargainDetailId);
                 if(cart_action == "buynowfrombargin" || cart_action == 'addtocartfrombargin'){
                     db.collection('chats').doc(response.docName).collection("messages").where('bargainId', '==', response.chat_data.bargainId)
                     .orderBy("createdAt", "desc")
                     .get().then(function(querySnapshot){                        
                         querySnapshot.forEach(function(doc){
-                            //console.log(doc.data().bargainDetailId);
                             if (doc.data().bargainDetailId != response.chat_data.bargainDetailId) {
                                 db.collection('chats').doc(response.docName).collection("messages").doc(doc.id).update({ disabled: true });    
                             }                       
@@ -339,7 +336,6 @@ $(document).on('click', 'button.add_to_cart_all_bargain', function(evt){
                     .orderBy("createdAt", "desc")
                     .get().then(function(querySnapshot){                        
                         querySnapshot.forEach(function(doc){
-                            //console.log(doc.data().bargainDetailId);
                             if (doc.data().bargainDetailId != response.chat_data.bargainDetailId) {
                                 db.collection('chats').doc(response.docName).collection("messages").doc(doc.id).update({ disabled: true });    
                             }                       
@@ -396,7 +392,6 @@ $(document).on('click', 'a.action-delBarg', function(evt){
                     .orderBy("createdAt", "desc")
                     .get().then(function(querySnapshot){                        
                         querySnapshot.forEach(function(doc){
-                            //console.log(doc.data().bargainDetailId, doc.data().id);
                             db.collection('chats').doc(result.docName).collection("messages").doc(doc.id).update({ disabled: true });  
                                                    
                         })
@@ -458,7 +453,6 @@ $(document).on('click', 'button.delete_all_bargain', function(evt){
                         .orderBy("createdAt", "desc")
                         .get().then(function(querySnapshot){                        
                             querySnapshot.forEach(function(doc){
-                                //console.log(doc.data().bargainDetailId, doc.data().id);
                                 db.collection('chats').doc(response.docName).collection("messages").doc(doc.id).update({ disabled: true });  
                                                        
                             })

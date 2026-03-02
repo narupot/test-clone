@@ -19,7 +19,7 @@
         <h2>@lang('order.shop_order_no'). {{$orderShopData->shop_formatter_id}}</h2>
     </div>
     <div class="track-status">
-        <button class="btn-blue">@lang('shop.status') : {{($orderShopData->getOrderStatus->status) ? $orderShopData->getOrderStatus->status : "NA" }}</button>                                 
+        <button class="btn- btn">@lang('shop.status') : {{($orderShopData->getOrderStatus->status) ? $orderShopData->getOrderStatus->status : "NA" }}</button>                                 
         <span class="ship-track-time">{{getDateFormat($orderShopData->updated_at,7)}}</span>
     </div>
 </div>          

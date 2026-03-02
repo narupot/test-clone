@@ -593,7 +593,6 @@
                     cache: false,
                     data : formData,
                     success : function(response){
-                        //console.log(result);return false;
                         $('p[class="error"]').html('');
                         if(response.status=='fail'){
                         

@@ -1,4 +1,4 @@
-<div class="category-products" ng-if="!varModel.no_result_found" >
+{{-- <div class="category-products" ng-if="!varModel.no_result_found" >
     <div class="toolbar border-bottom-0">
         <div class="title-bg-red"><span>@lang('product.products')</span></div>
         <!--div class="view-mode" ng-show="show_layout">
@@ -41,8 +41,9 @@
         </div>    
     </div--> 
     
-</div>
+</div> --}}
 
+{{-- 
 <div class="category-products" ng-if="!varModel.no_result_found1" >
     <div class="toolbar border-bottom-0">
         <div class="title-bg-red"><span>@lang('product.shops')</span></div>
@@ -80,4 +81,85 @@
         </div>
     </div>
     
+</div> --}}
+
+
+
+
+
+
+{{-- <input type="hidden" name="searchUrl" value="{{$page =='category' ? action('ProductController@category') : ($page =='categorys'?action('ProductController@categorys') : '') }}"> --}}
+
+<div class="">
+    <div class="row pt-4">
+        <h1>ชนิดสินค้า  <span class="text-danger">"{{('search')}}"</span></h1>
+
+        @if (isset($product_type) && count($product_type) > 1)
+        <div class="col-12 mb-5">
+            <x-product-type-card :producttype="$product_type" />
+        </div>
+        @endif
+
+        @if (isset($shop_list) && count($shop_list) > 0)
+        
+        <div class="col-12 mb-5">
+            <x-shop-card :shoplist="$shop_list" />
+        </div>
+
+        @endif
+
+    </div>
+
+
+    <div class="row">
+        @if (isset($product_list) && $product_list->total()>0)
+        
+        <div class="col-12 mb-3">
+            <h2>ผลการค้นหา <span class="text-danger">"{{request('search')}}"</span></h2>
+            <div>
+                <span>{{$product_list->total()??0}} รายการ</span>
+                {{-- <div>
+                    <label for=""></label>
+                    <select name="" id="">
+                        <option value="">รายการแนะนำ</option>
+                        <option value=""></option>
+                        <option value=""></option>
+                    </select>
+                </div> --}}
+            </div>
+        </div>
+
+        <div class="col-lg-3 filter-field  mb-4">
+                <x-product-filter :productsize="$product_size" :productgrade="$product_grade" />
+        </div>
+        <div class="col-lg-9">
+            <div class="product_list_warpper row ml-lg-1">
+
+                    @foreach ($product_list ?? [] as $product)
+                    <x-product-card :product="$product" :row="4" />
+                    @endforeach
+
+            </div>
+            <div>
+                @if ($product_list??false)                        
+                {!! $product_list->links('components.pagination') !!}
+                @endif
+                
+            </div>
+            
+        </div>
+
+        
+        @else
+            {{-- <div class="text-center p-5">
+                {!!getStaticBlock('no-item')!!}
+            </div> --}}
+            <x-not-found />
+        @endif
+        
+    </div>
+
+
+
+
 </div>

@@ -6,7 +6,7 @@
 @endsection
 
 @section('header_script')
-    var getproductURL = "{{action('ProductsController@getSearchProducts')}}";
+    {{-- var getproductURL = "{{action('ProductsController@getSearchProducts')}}";
     //for routing url (query string)
     var browser_url =  window.location.pathname;
     var cate_id = {!! $parent_cat_detail !!};  
@@ -41,11 +41,11 @@
     var selectedAttributes =  '{!! $selectedAttributes !!}';
     var badges = {!! $badges ? $badges : "''" !!};
    
-    var price_flag = {!! $price_flag ? $price_flag : 0 !!};
+    var price_flag = {!! $price_flag ? $price_flag : 0 !!}; --}}
 @endsection
 
 @section('content')
-<div ng-controller="ProductListController" class="listing-page" ng-cloak>
+{{-- <div ng-controller="ProductListController" class="listing-page" ng-cloak> --}}
     <!-- Breadcrumb -->         
     <!-- <ul class="breadcrumb">
         <li><a href="#">หน้าแรก</a></li>
@@ -54,12 +54,12 @@
         <li class="active">ส้มเขียวหวาน</li>
     </ul> -->
 
-    <div class="breadcrumb">
+    {{-- <div class="breadcrumb">
         <ul class="bredcrumb-menu container">
             {!! $breadcrumb !!}
         </ul>  
-    </div>
-    <!--div class="filter-wrap">
+    </div> --}}
+    {{-- <!--div class="filter-wrap">
         <div class="row">
         <div class="col-md-8 col-lg-9">
             <div class="filter-tool">                   
@@ -93,9 +93,9 @@
             </div>
         </div>              
         </div>
-    </div-->
+    </div--> --}}
 
-    <div class="filer-box">
+    {{-- <div class="filer-box">
         <div class="box-grey">
         <h4>มาตรฐานสินค้า</h4>
         <ul class="filter-select">           
@@ -188,16 +188,16 @@
             </span>
             <span class="btn btn-blue">20-100 บาท/ถุง <a href="#"><i class="fas fa-times"></i></a></span> -->
         </div>
-    </div>
+    </div> --}}
 
     <!-- product listing section -->
     @include('includes.product_search_listing')
     
-    <div class="category-products" ng-if="varModel.no_result_found">      
+    {{-- <div class="category-products" ng-if="varModel.no_result_found">      
         {!!getStaticBlock('no-item')!!}
-    </div>
+    </div> --}}
     <!-- add to cart modal -->
-    <div id="addToCartdiv" class="modal modal-Cartdiv modal-address fade in formone-size" role="dialog">
+    {{-- <div id="addToCartdiv" class="modal modal-Cartdiv modal-address fade in formone-size" role="dialog">
          <div class="modal-dialog modal-dialog-centered model-md">
              <!-- Modal content-->
              <div class="modal-content text-center">
@@ -218,7 +218,7 @@
                </div>
              </div>
          </div>        
-    </div>
+    </div> --}}
 </div>
 
     
@@ -227,7 +227,7 @@
 @section('footer_scripts') 
 
 {!! CustomHelpers::combineCssJs(['js/magicscroll','js/magiczoomplus'],'js') !!}
-<script type="text/javascript" src="{{ Config::get('constants.js_url').'jquery.lazy.min.js' }}"></script>
+{{-- <script type="text/javascript" src="{{ Config::get('constants.js_url').'jquery.lazy.min.js' }}"></script>
 <script type="text/javascript" src="{{ Config::get('constants.angular_libs_url').'angular.min.js' }}"></script>
 <script type="text/javascript" src="{{ Config::get('constants.angular_libs_url').'ng-droplet.min.js' }}"></script> 
 <script type="text/javascript" src="{{ Config::get('constants.js_url').'lodash.min.js' }}"></script>
@@ -235,7 +235,7 @@
 <script src="{{ Config::get('constants.angular_front_url').'services/service.js' }}"></script>  
 <script src="{{ Config::get('constants.angular_front_url').'directive/frontPrdListPaginationDir.js' }}"></script>
 <script src="{{ Config::get('constants.angular_front_url').'model/product-listing-app.js' }}"></script>
-<script src="{{ Config::get('constants.angular_front_url').'controller/frontend/product-listing-controller.js' }}"></script> 
+<script src="{{ Config::get('constants.angular_front_url').'controller/frontend/product-listing-controller.js' }}"></script>  --}}
 
 
 @stop

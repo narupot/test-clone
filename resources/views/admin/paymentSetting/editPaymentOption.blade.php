@@ -72,7 +72,18 @@
                 <div class="form-group row">
                     <div class="col-md-5">
                         <label>@lang('admin_payment.payment_option_image') <i class="strick">*</i></label> 
-                        <img src="{{ Config::get('constants.payment_option_url').$pay_opt_detail->image_name }}"> 
+                        @php
+                            $payment_images = getMultiplePayImgUrls($pay_opt_detail->image_name);
+                        @endphp
+                        @if(count($payment_images) == 1)
+                            <img src="{{ $payment_images[0] }}" style="max-width: 100px; max-height: 100px;">
+                        @else
+                            <div class="d-flex" style="gap: 5px;">
+                                @foreach($payment_images as $img_url)
+                                    <img src="{{ $img_url }}" style="max-width: 80px; max-height: 80px; object-fit: contain;">
+                                @endforeach
+                            </div>
+                        @endif
                         <input id="form-file-input" name="image_name" type="file">
                     </div>
                 </div>

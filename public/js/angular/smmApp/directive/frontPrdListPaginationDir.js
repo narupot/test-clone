@@ -184,20 +184,16 @@
 
                     //enable disable directionLinksNext/directionLinksPrev
                     if(totalPages ){
-                        // console.log("currentPage"); console.log("currentPage \t" +  currentPage + " \t totalPages \t" + totalPages);
                         //In current page is one
                         if(currentPage==1 && currentPage<totalPages){
-                            // console.log('in first')
                             scope.directionLinksNext = true;
                             scope.directionLinksPrev = false;
                         }else if(currentPage!==1 && currentPage<totalPages){
                             scope.directionLinksNext = true;
                             scope.directionLinksPrev = true;
-                            // console.log('in second');
                         }else if(currentPage!==1 && currentPage === totalPages){
                            scope.directionLinksNext = false;
                            scope.directionLinksPrev = true; 
-                           // console.log('in last')
                         }else if(currentPage===1 && totalPages === 1){
                             scope.directionLinksNext = false;
                             scope.directionLinksPrev = false;

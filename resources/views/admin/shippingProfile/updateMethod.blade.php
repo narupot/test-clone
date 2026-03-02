@@ -5,6 +5,12 @@
 @stop
 
 @section('header_styles')
+<style>
+  /* ซ่อนปุ่มที่มีคลาสเหล่านี้โดยเฉพาะ */
+    .ui-button.ui-corner-all.ui-widget {
+        display: none !important;
+    }
+  </style>
 {!!CustomHelpers::dataTableCss()!!}
 <link rel="stylesheet" type="text/css" href="{{Config('constants.css_url') }}ui-grid-unstable.css"> 
 
@@ -547,7 +553,7 @@
                                                 <label>@lang('admin_shipping.time_slot_for_delivery')</label>
                                                 <select name="time_slot[]">
                                                     <option value="">Select</option>
-                                                    @for($i=7; $i<=23;$i++)
+                                                    @for($i=0; $i<=23;$i++)
                                                         
                                                         <option value="{{ $i }}" @if($tval == $i) selected="selected" @endif>{{ $i.':00'}}</option>
                                                         
@@ -567,7 +573,7 @@
                                         <label>@lang('admin_shipping.time_slot_for_delivery')</label>
                                         <select name="time_slot[]" id="times_slots">
                                             <option value="">Select</option>
-                                            @for($i=7; $i<=23;$i++)
+                                            @for($i=0; $i<=23;$i++)
                                                 
                                                 <option value="{{ $i }}">{{ $i.':00'}}</option>
                                                 

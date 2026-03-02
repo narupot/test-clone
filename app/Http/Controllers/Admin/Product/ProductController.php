@@ -21,7 +21,12 @@ use App\Seller;
 use App\User;
 use App\Product;
 use App\ProductImage;
-
+use App\PackageDesc;
+use App\SizeGrade;
+use App\SizeGradeDesc;
+use App\UnitDesc;
+use Carbon\Carbon;
+use App\Helpers\CustomHelpers;
 
 
 class ProductController extends MarketPlace
@@ -57,17 +62,18 @@ class ProductController extends MarketPlace
     {
         
         $filter = $this->getFilter('product');
-        //dd($filter);
+
        return view('admin.product.list', ['filter'=>$filter]);
     }
+
 
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(){   
-        $permission = $this->checkUrlPermission('add_product');  
+    public function create(){
+        $permission = $this->checkUrlPermission('add_product');
         if($permission === true) {
             $seller_prod_cat = ShopAssignCategory::getShopCategory();
             $prod_badge = Badge::getBadge();
@@ -80,25 +86,25 @@ class ProductController extends MarketPlace
 
     public function getSellerCategory(Request $request){
         $shop_id = !empty($request->shop_id) ? $request->shop_id : '';
-        $permission = $this->checkUrlPermission('add_product'); 
+        $permission = $this->checkUrlPermission('add_product');
         
-        $html = ''; 
+        $html = '';
         if($permission === true) {
             $shop_prod_cat = ShopAssignCategory::getShopCategory($shop_id);
             if(count($shop_prod_cat) > 0){
                 foreach($shop_prod_cat as $prod_cat){
-                    $html.='<li style="min-width:90px; text-align:center;"><div class="img-block" style="position:relative;"><img src="'.getCategoryImageUrl($prod_cat->img).'" width="76" height="57" alt="">
-                            <label class="radio-wrap">
-                            <input type="radio" name="product_cat" value="'.$prod_cat->id.'">
-                                <span class="radio-mark"></span>
+                    $html .= '
+                        <li class="category-item">
+                            <label class="category-option">
+                                <input type="radio" name="product_cat" value="'.$prod_cat->id.'">
+                                <span class="category-name">'.$prod_cat->category_name.'</span>
                             </label>
-                            </div>                            
-                            <div class="prod-name">'.$prod_cat->category_name.'</div>
-                            </li>';
+                        </li>
+                    ';
                 }
             }
-        } 
-        echo $html;   
+        }
+        echo $html;
     }
 
 
@@ -106,7 +112,6 @@ class ProductController extends MarketPlace
 
         $perpage = !empty($request->pq_rpp) ? $request->pq_rpp : 10;
         $currentPage = !empty($request->pq_curpage)?$request->pq_curpage:0;
-        //dd($request->all());
         $offset = ($currentPage - 1) * $perpage;
 
         $order_by = 'id';
@@ -140,13 +145,10 @@ class ProductController extends MarketPlace
                 }
             }
 
-
            $tcount = $results->count();
            $results = $results->limit($perpage)->offset($offset)->get()->toArray();
            $response = ['data'=>$results, 'total'=>$tcount, 'current_page'=>$currentPage];
 
-
-           //$response = \App\User::where('user_type','seller')->paginate($perpage); 
         }catch(QueryException $e){
             $response = ['status'=>'fail','msg'=>$e->getMessage()];
         }
@@ -154,16 +156,10 @@ class ProductController extends MarketPlace
         return $response;
     }
 
-
-    
-
     function productListData(Request $request){
-        //dd($request->all());
         $perpage = !empty($request->pq_rpp) ? $request->pq_rpp : 10;
         $request->page = $current_page = !empty($request->pq_curpage)?$request->pq_curpage:0;
-
         $start_index = ($current_page - 1) * $perpage;
-        //dd($perpage,$request->page);
         
         $order_by = 'id';
         $order_by_val = 'desc';
@@ -174,27 +170,64 @@ class ProductController extends MarketPlace
         }
 
         try{
-            
             $query = DB::table(with(new \App\Product)->getTable().' as p')
-                ->join(with(new \App\CategoryDesc)->getTable().' as cd', 
-                            [
-                              ['p.cat_id', '=', 'cd.cat_id']
-                            ]
-                )
-                ->join(with(new \App\Category)->getTable().' as c', 'p.cat_id', '=', 'c.id')
-                ->join(with(new \App\BadgeDesc)->getTable().' as bd', 
-                            [
-                              ['p.badge_id', '=', 'bd.badge_id']
-                            ]
-                )
-                ->join(with(new Shop)->getTable().' as s','p.shop_id', '=', 's.id')
-                  ->join(with(new ShopDesc)->getTable().' as sd',
-                            [
-                                ['s.id', '=', 'sd.shop_id']
+                // ->join(with(new \App\CategoryDesc)->getTable().' as cd',
+                //             [
+                //               ['p.cat_id', '=', 'cd.cat_id']
+                //             ]
+                // )
+                // ->join(with(new \App\PackageDesc())->getTable().' as pd', 'p.package_id', '=', 'pd.package_id')
+                // ->join(with(new \App\UnitDesc())->getTable().' as ud', 'p.base_unit_id', '=', 'ud.unit_id')
+                // ->join(with(new \App\BadgeDesc)->getTable().' as bd',
+                //             [
+                //               ['p.badge_id', '=', 'bd.badge_id']
+                //             ]
+                // )
+                //   ->join(with(new \App\ProductDesc())->getTable().' as pdd', 'p.id', '=', 'pdd.product_id')
+                //   ->join(with(new SizeGradeDesc())->getTable().' as sgds','sg.id', '=', 'sgds.size_grade_id')
+                //   ->join(with(new SizeGradeDesc())->getTable().' as sgdg','sgg.id', '=', 'sgdg.size_grade_id')
+                //   ->join(with(new ShopDesc)->getTable().' as sd',
+                //             [
+                //                 ['s.id', '=', 'sd.shop_id']
 
-                            ])
+                //             ])
+                
+                ->join(with(new \App\CategoryDesc)->getTable().' as cd', function ($join) {
+                    $join->on('p.cat_id', '=', 'cd.cat_id')->where('cd.lang_id', 0);
+                })
+                ->join(with(new \App\Category)->getTable().' as c', 'p.cat_id', '=', 'c.id')
+                
+                ->join(with(new \App\PackageDesc)->getTable().' as pd', function ($join) {
+                    $join->on('p.package_id', '=', 'pd.package_id')->where('pd.lang_id', 0);
+                })
+                ->join(with(new \App\UnitDesc)->getTable().' as ud', function ($join) {
+                    $join->on('p.base_unit_id', '=', 'ud.unit_id')->where('ud.lang_id', 0);
+                })
+                ->join(with(new \App\BadgeDesc)->getTable().' as bd', function ($join) {
+                    $join->on('p.badge_id', '=', 'bd.badge_id')->where('bd.lang_id', 0);
+                })
+                ->join(with(new \App\ProductDesc)->getTable().' as pdd', function ($join) {
+                    $join->on('p.id', '=', 'pdd.product_id')->where('pdd.lang_id', 0);
+                })
+                  ->join(with(new Badge())->getTable().' as b','p.badge_id', '=', 'b.id')
+                  ->join(with(new SizeGrade())->getTable().' as sg','b.size', '=', 'sg.slug')
+                
+                ->join(with(new \App\SizeGradeDesc)->getTable().' as sgds', function ($join) {
+                    $join->on('sg.id', '=', 'sgds.size_grade_id')->where('sgds.lang_id', 0);
+                })
+                  ->join(with(new SizeGrade())->getTable().' as sgg','b.grade', '=', 'sgg.slug')
+                
+                ->join(with(new \App\SizeGradeDesc)->getTable().' as sgdg', function ($join) {
+                    $join->on('sgg.id', '=', 'sgdg.size_grade_id')->where('sgdg.lang_id', 0);
+                })  
+                  ->join(with(new Shop)->getTable().' as s','p.shop_id', '=', 's.id')
+                
+                ->join(with(new \App\ShopDesc)->getTable().' as sd', function ($join) {
+                    $join->on('s.id', '=', 'sd.shop_id')->where('sd.lang_id', 0);
+                })
                   ->join(with(new User)->getTable().' as u','s.user_id', '=', 'u.id');
-                 $query = $query->select('p.id','p.sku','p.thumbnail_image', 'cd.category_name', 'bd.badge_name', 'p.show_price', 'p.unit_price', 'p.stock', 'p.quantity', 'p.status', 'p.created_at', 'p.updated_at', 'p.created_from','s.shop_url','sd.shop_name','u.display_name','c.url as caturl');
+                 $query = $query->select('p.id','p.sku','p.thumbnail_image', 'cd.category_name', 'bd.badge_name', 'p.show_price', 'p.unit_price', 'p.stock', 'p.quantity', 'p.status', 'p.created_at', 'p.updated_at', 'p.created_from','s.shop_url','sd.shop_name','u.display_name','c.url as caturl','pd.package_name','ud.unit_name','pdd.description','p.weight_per_unit', 'p.order_qty_limit', 'sgg.slug AS grade_slug', 'sg.slug AS size_slug', 's.bargaining',
+                DB::raw('ROUND(smm_p.unit_price / NULLIF(smm_p.weight_per_unit, 0),2) AS price_per_weight'));  
             
             if(isset($request->pq_filter)){
                 $filter_req = json_decode($request->pq_filter,true);
@@ -209,8 +242,16 @@ class ProductController extends MarketPlace
                             case 'badge_name':$query->where('bd.badge_name','like', '%'.$searchval.'%'); break;
                             case 'display_name':$query->where('u.display_name','like', '%'.$searchval.'%'); break;
                             case 'shop_name':$query->where('sd.shop_name','like', '%'.$searchval.'%'); break;
+                            case 'package_name':$query->where('pd.package_name','like', '%'.$searchval.'%'); break;
+                            case 'unit_name':$query->where('ud.unit_name','like', '%'.$searchval.'%'); break;
+                            case 'description':$query->where('pdd.description','like', '%'.$searchval.'%'); break;
                             case 'status':$query->whereIn('p.status',$searchval); break;
-                            case 'show_price':$query->whereIn('p.show_price',$searchval); break;
+                            // case 'show_price':$query->whereIn('p.show_price',$searchval); break;
+                            case 'bargaining':$query->whereIn('s.bargaining',$searchval); break;
+                            case 'stock':$query->whereIn('p.stock',$searchval); break;
+                            case 'order_qty_limit':$query->whereIn('p.order_qty_limit',$searchval); break;
+                            case 'grade_name':$query->where('sgdg.name','like', ''.$searchval.'%'); break;
+                            case 'size_name':$query->where('sgds.name','like', ''.$searchval.'%'); break;
                             break;
                             case 'created_at':
                                 $from_date = $fvalue['value']??'';
@@ -230,7 +271,6 @@ class ProductController extends MarketPlace
             }
             $response = $query->orderBy($order_by,$order_by_val)->paginate($perpage,['*'],'page',$current_page);
             $totrec = $response->total();
-            //dd($response);
             if($start_index >= $totrec) {
                 $current_page = ceil($totrec/$perpage);
                 
@@ -239,13 +279,17 @@ class ProductController extends MarketPlace
 
             if(count($response)){
                 foreach($response as $key=>$unitproduct){
+                    $response[$key]->size_name = !empty($unitproduct->size_slug) ? CustomHelpers::getBadgeSize($unitproduct->size_slug): '';
+                    $response[$key]->grade_name = !empty($unitproduct->grade_slug) ? CustomHelpers::getBadgeGrade($unitproduct->grade_slug): '';
+
                     $response[$key]->product_thumb = getProductImageUrl($unitproduct->thumbnail_image,'original');
-                }       
+                    $response[$key]->price_per_weight = number_format((float) $unitproduct->price_per_weight,2,'.',',');
+                    $response[$key]->unit_price = number_format($unitproduct->unit_price, 0, '.', ',');
+                }
             }
 
             /***save filter****/
             $this->setFilter('product',$request);
-
             
         }catch(QueryException $e){
             $response = ['status'=>'fail','msg'=>$e->getMessage()];
@@ -260,7 +304,7 @@ class ProductController extends MarketPlace
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request){  
+    public function store(Request $request){
 
         $input = $request->all();
         if($request->is_tier_price == '1') {
@@ -299,7 +343,7 @@ class ProductController extends MarketPlace
         }else{
             return  redirect()->action('Admin\Product\ProductController@create')->withInput()->withErrors($validate->errors());
             
-        } 
+        }
     }
     /**
      * Display the specified resource.
@@ -322,8 +366,7 @@ class ProductController extends MarketPlace
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        //dd($id);        
-        $permission = $this->checkUrlPermission('edit_product');  
+        $permission = $this->checkUrlPermission('edit_product');
         if($permission === true) {
             $result = \App\Product::where('id',$id)->first();
             $seller_prod_cat = ShopAssignCategory::getShopCategory($result->shop_id);
@@ -331,14 +374,14 @@ class ProductController extends MarketPlace
             $badge = Badge::badgeData($result->badge_id);
             
             $currency_dtl = Currency::getDefaultCurrency();
+           
             return view('admin.product.edit', ['seller_prod_cat'=>$seller_prod_cat, 'prod_badge'=>$prod_badge, 'currency_dtl' => $currency_dtl, 'result'=>$result, 'type'=>'edit','badge'=>$badge]);
         }
     }
 
 
     public function copy($id) {
-        //dd($id);        
-        $permission = $this->checkUrlPermission('edit_product');  
+        $permission = $this->checkUrlPermission('edit_product');
         if($permission === true) {
             $result = \App\Product::where('id',$id)->first();
             $seller_prod_cat = ShopAssignCategory::getShopCategory($result->shop_id);
@@ -360,53 +403,60 @@ class ProductController extends MarketPlace
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id){
-        
-        $permission = $this->checkUrlPermission('edit_product'); 
+        // dd($request);
+        try {
+            $permission = $this->checkUrlPermission('edit_product');
 
-        $result = \App\Product::where('id',$id)->first();
-        if(empty($result)){
-          abort(404);  
-        }
-        $input = $request->all();
-        if($request->is_tier_price == '1') {
-            $tier_price = '';
-            foreach ($request->tier_price['min_qty'] as $key => $value) {
-                $start_qty = $value;
-                $end_qty = $request->tier_price['max_qty'][$key];
-                $unit_price = floatval($request->tier_price['tier_unit_price'][$key]);
-                if(($start_qty < $end_qty) && $unit_price > 0) {
-                    $tier_price = '1';
+            $result = \App\Product::where('id',$id)->first();
+            if(empty($result)){
+                abort(404);
+            }
+            $input = $request->all();
+            if($request->is_tier_price == '1') {
+                $tier_price = '';
+                foreach ($request->tier_price['min_qty'] as $key => $value) {
+                    $start_qty = $value;
+                    $end_qty = $request->tier_price['max_qty'][$key];
+                    $unit_price = floatval($request->tier_price['tier_unit_price'][$key]);
+                    if(($start_qty < $end_qty) && $unit_price > 0) {
+                        $tier_price = '1';
+                    }
+                }
+                $input['tier_price'] = $tier_price;
+            }
+
+            $input['product_badge'] = '';
+            if(isset($request->grade) && isset($request->size)){
+                $badge = Badge::where('grade', $request->grade)->where('size', $request->size)->first();
+                if(!empty($badge)){
+                    $input['product_badge'] =  $badge->id;
+                    $request->merge(['product_badge' => $badge->id]);
                 }
             }
-            $input['tier_price'] = $tier_price;
-        }
 
-        $input['product_badge'] = '';
-        if(isset($request->grade) && isset($request->size)){
-            $badge = Badge::where('grade', $request->grade)->where('size', $request->size)->first();
-            if(!empty($badge)){
-                $input['product_badge'] =  $badge->id;
-                $request->product_badge = $badge->id;
+            $validate = $this->validateProductForm($input, $id);
+            if ($validate->passes()) {
+                $data_arr['shop_id'] = $result->shop_id;
+                $data_arr['updated_by'] = Auth::guard('admin_user')->user()->id;
+                $data_arr['updated_from'] = 'admin';
+                $this->saveProduct($request, $data_arr, $id);
+                $msg_text = Lang::get('product.product_updated_successfully');
+                return redirect()->action('Admin\Product\ProductController@index')->with('succMsg', $msg_text);
+            }else{
+                return redirect()->action('Admin\Product\ProductController@edit', $id)->withInput()->withErrors($validate->errors());
             }
+        } catch (\Exception $e) {
+            \Log::error('Product update failed', [
+                'id' => $id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('errorMsg', 'เกิดข้อผิดพลาดระหว่างการอัปเดตสินค้า กรุณาลองใหม่อีกครั้ง');
         }
-
-        $validate = $this->validateProductForm($input, $id);
-        if ($validate->passes()) {
-            //$shop_id = session('user_shop_id');
-            $data_arr['shop_id'] = $result->shop_id;
-            $data_arr['updated_by'] = Auth::guard('admin_user')->user()->id;
-            $data_arr['updated_from'] = 'admin';
-            $this->saveProduct($request, $data_arr, $id);
-            $msg_text = Lang::get('product.product_updated_successfully');
-            return redirect()->action('Admin\Product\ProductController@index')->with('succMsg', $msg_text);
-        }else{
-            // dd($validate->errors());
-            return redirect()->action('Admin\Product\ProductController@edit', $id)->withInput()->withErrors($validate->errors());
-        } 
-
-
-        
-       
     }
 
   
@@ -452,7 +502,7 @@ class ProductController extends MarketPlace
     }*/
 
 
-    public function copystore(Request $request, $id){  
+    public function copystore(Request $request, $id){
         $input = $request->all();
         if($request->is_tier_price == '1') {
             $tier_price = '';
@@ -480,12 +530,8 @@ class ProductController extends MarketPlace
         }else{
             return  redirect()->action('Admin\Product\ProductController@copy', $id)->withInput()->withErrors($validate->errors());
             
-        } 
-           
-
+        }
     }
-
-
 
     /**
      * Remove the specified resource from storage.
@@ -496,38 +542,77 @@ class ProductController extends MarketPlace
 
     
 
-    public function deleteproduct($id) {
-        $permission = $this->checkUrlPermission('delete_product');
-        $result = \App\Product::where('id', $id)->first(); 
-        if (!$result) {
-            abort(404);
-        }
-        try{
-            $product_images = \App\ProductImage::where('product_id',$id)->pluck('image')->toArray();
-            if(count($product_images)){
-                $product_images = array_unique($product_images);
-                $del = $this->deletePrdImageByImages($product_images);
-            }
-           $result->delete();
-           \App\MongoProduct::deleteData($id);
-            $msg_text = Lang::get('product.product_delete_successfully');
-            return redirect()->action('Admin\Product\ProductController@index')->with('succMsg', $msg_text);  
-        }catch(Exception $e) {
-            $msg_text = Lang::get('product.something_went_wrong');
-            return json_encode(array('status'=>'validate_error','message'=>$msg_text));
-        }
+    // public function deleteproduct($id) {
+    //     $permission = $this->checkUrlPermission('delete_product');
+    //     $result = \App\Product::where('id', $id)->first(); 
+    //     if (!$result) {
+    //         abort(404);
+    //     }
+    //     try{
+    //         $product_images = \App\ProductImage::where('product_id',$id)->pluck('image')->toArray();
+    //         if(count($product_images)){
+    //             $product_images = array_unique($product_images);
+    //             $del = $this->deletePrdImageByImages($product_images);
+    //         }
+    //        $result->delete();
+    //        \App\MongoProduct::deleteData($id);
+    //         $msg_text = Lang::get('product.product_delete_successfully');
+    //         return redirect()->action('Admin\Product\ProductController@index')->with('succMsg', $msg_text);  
+    //     }catch(Exception $e) {
+    //         $msg_text = Lang::get('product.something_went_wrong');
+    //         return json_encode(array('status'=>'validate_error','message'=>$msg_text));
+    //     }
+    // }
+
+        public function deleteProduct($id)
+{
+    $shop_id = session('user_shop_id');
+    $user_id = session('user_id'); 
+
+    $result = \App\Product::where('id', $id)
+        ->where('shop_id', $shop_id)
+        ->first();
+
+    if (!$result) {
+        abort(404);
     }
+
+    try {
+        // Soft delete ด้วยการตั้งค่า deleted_at / deleted_by
+        $result->status = '0';
+        $result->deleted_at = Carbon::now();
+        $result->deleted_by = $user_id;
+        $result->save();
+
+        // ลบข้อมูลใน Mongo ถ้ามี
+        \App\MongoProduct::deleteData($id);
+
+        $msg_text = Lang::get('product.product_delete_successfully');
+        return response()->json([
+            'status'  => 'success',
+            'message' => $msg_text,
+            'url'     => action('Admin\Product\ProductController@index')
+        ]);
+
+    } catch (\Illuminate\Database\QueryException $e) {
+        // Debug ชั่วคราวดู error จริง
+        // dd($e->getMessage());
+        $msg_text = Lang::get('product.something_went_wrong');
+        return response()->json([
+            'status'  => 'validate_error',
+            'message' => $msg_text
+        ]);
+    }
+}
+
 
 
     public function deleteSelectedproducts(Request $request) {
         $permission = $this->checkUrlPermission('delete_product');
-        //dd($request->ids);
         $ids = isset($request->ids)?$request->ids:null;
         if(count($ids)){
             foreach($ids as $id){
-                //dd($id);
                 $result = \App\Product::where('id', $id)->first(); 
-                //dd($result);
                 if (!$result){
                     abort(404);
                 }
@@ -538,25 +623,10 @@ class ProductController extends MarketPlace
                 }
                 $result->delete();
                 \App\MongoProduct::deleteData($id);
-                /*try{
-                   $result->delete();
-                   \App\MongoProduct::deleteData($id);
-                    //$msg_text = Lang::get('product.product_delete_successfully');
-                    //return redirect()->action('Admin\Product\ProductController@index')->with('succMsg', $msg_text);  
-                }catch(Exception $e) {
-                    $msg_text = Lang::get('product.something_went_wrong');
-                    return json_encode(array('status'=>'validate_error','message'=>$msg_text));
-                }*/
             }
-
             return ['status'=>'success'];
-            //$msg_text = Lang::get('product.product_delete_successfully');
-            //return redirect()->action('Admin\Product\ProductController@index')->with('succMsg', $msg_text); 
         }else{
             return ['status'=>'unsuccess'];
-           /* $msg_text = Lang::get('product.something_went_wrong');
-            return json_encode(array('status'=>'validate_error','message'=>$msg_text));*/
-
         }    
     }
     
@@ -564,7 +634,6 @@ class ProductController extends MarketPlace
         $permission = $this->checkUrlPermission('edit_product'); 
         $status = isset($request->status)?$request->status:null;
         $ids = isset($request->ids)?$request->ids:null;
-        //dd($ids);
         if(count($ids) && $status !== null){
             foreach ($ids as $id) {
                 $prodata = \App\Product::where('id', $id)->first();
@@ -573,7 +642,7 @@ class ProductController extends MarketPlace
                    $prodata->save();
                    $id = $prodata->id; 
                    \App\MongoProduct::updateStatus($id, $status); 
-                }    
+                }
             }
             return ['status'=>'success'];
         }else{
@@ -593,10 +662,138 @@ class ProductController extends MarketPlace
                 );
 
             $sql =  $sql->select('u.id','ud.unit_name')->where('u.status','1')->where('cu.cat_id', $cat_id)->get(); 
-
-            return $sql;   
+            return $sql;
         }
     }
+
+    public function parentBaseUnit($parent_cat_id = null)
+    {
+        if (!empty($parent_cat_id)) {
+            $default_lang = 0;
+
+            $sql = DB::table(with(new \App\ParentCatBaseUnit)->getTable().' as pbu')
+                ->join(with(new \App\Unit)->getTable().' as u', 'u.id', '=', 'pbu.base_unit_id')
+                ->join(with(new \App\UnitDesc)->getTable().' as ud', [
+                    ['u.id', '=', 'ud.unit_id'],
+                    ['ud.lang_id', '=', DB::raw($default_lang)]
+                ])
+                ->select('u.id', 'ud.unit_name')
+                ->where('u.status', '1')
+                ->where('pbu.parent_cat_id', $parent_cat_id)
+                ->get();
+
+            return $sql;
+        }
+        return collect();
+    }
+
+    public function parentCatPackage($parent_cat_id = null)
+    {
+        if (!empty($parent_cat_id)) {
+            $default_lang = 0;
+
+            $sql = DB::table(with(new \App\ParentCatPackage)->getTable().' as pcp')
+                ->join(with(new \App\Package)->getTable().' as p', 'p.id', '=', 'pcp.package_id')
+                ->join(with(new \App\PackageDesc)->getTable().' as pd', [
+                    ['p.id', '=', 'pd.package_id'],
+                    ['pd.lang_id', '=', DB::raw($default_lang)]
+                ])
+                ->select('p.id', 'pd.package_name')
+                ->where('p.status', '1')
+                ->where('pcp.parent_cat_id', $parent_cat_id)
+                ->get();
+
+            return $sql;
+        }
+        return collect();
+    }
+
+    // public function getParentCatData($parent_cat_id)
+    // {
+    //     $default_lang = 0;
+
+    //     //Base Units
+    //     $base_units = DB::table(with(new \App\ParentCatBaseUnit)->getTable().' as pbu')
+    //         ->join(with(new \App\Unit)->getTable().' as u', 'u.id', '=', 'pbu.base_unit_id')
+    //         ->join(with(new \App\UnitDesc)->getTable().' as ud', [
+    //             ['u.id', '=', 'ud.unit_id'],
+    //             ['ud.lang_id', '=', DB::raw($default_lang)]
+    //         ])
+    //         ->select('u.id', 'ud.unit_name')
+    //         ->where('u.status', '1')
+    //         ->where('pbu.parent_cat_id', $parent_cat_id)
+    //         ->get();
+
+    //     //Packages
+    //     $packages = DB::table(with(new \App\ParentCatPackage)->getTable().' as pcp')
+    //         ->join(with(new \App\Package)->getTable().' as p', 'p.id', '=', 'pcp.package_id')
+    //         ->join(with(new \App\PackageDesc)->getTable().' as pd', [
+    //             ['p.id', '=', 'pd.package_id'],
+    //             ['pd.lang_id', '=', DB::raw($default_lang)]
+    //         ])
+    //         ->select('pd.package_id', 'pd.package_name')
+    //         ->where('p.status', '1')
+    //         ->where('pcp.parent_cat_id', $parent_cat_id)
+    //         ->get();
+
+    //     return response()->json([
+    //         'base_units' => $base_units,
+    //         'packages'   => $packages,
+    //     ]);
+    // }
+
+    public function getParentCatData($parent_cat_id)
+    {
+        $default_lang = 0;
+
+        // 🔹 ดึง parent_id จาก Category
+        $category = DB::table(with(new \App\Category)->getTable().' as c')
+            ->select('c.parent_id')
+            ->where('c.id', $parent_cat_id)
+            ->first();
+
+        if (!$category || !$category->parent_id) {
+            return response()->json([
+                'base_units' => [],
+                'packages'   => [],
+            ]);
+        }
+
+        $parentId = $category->parent_id;
+
+        // 🔹 Base Units
+        $base_units = DB::table(with(new \App\ParentCatBaseUnit)->getTable().' as pbu')
+            ->join(with(new \App\Unit)->getTable().' as u', 'u.id', '=', 'pbu.base_unit_id')
+            ->join(with(new \App\UnitDesc)->getTable().' as ud', [
+                ['u.id', '=', 'ud.unit_id'],
+                ['ud.lang_id', '=', DB::raw($default_lang)]
+            ])
+            ->select('u.id', 'ud.unit_name')
+            ->where('u.status', '1')
+            ->where('pbu.parent_cat_id', $parentId) 
+            ->get();
+
+        // 🔹 Packages
+        $packages = DB::table(with(new \App\ParentCatPackage)->getTable().' as pcp')
+            ->join(with(new \App\Package)->getTable().' as p', 'p.id', '=', 'pcp.package_id')
+            ->join(with(new \App\PackageDesc)->getTable().' as pd', [
+                ['p.id', '=', 'pd.package_id'],
+                ['pd.lang_id', '=', DB::raw($default_lang)]
+            ])
+            ->select('pd.package_id', 'pd.package_name')
+            ->where('p.status', '1')
+            ->where('pcp.parent_cat_id', $parentId)
+            ->get();
+
+        return response()->json([
+            'base_units' => $base_units,
+            'packages'   => $packages,
+        ]);
+    }
+
+
+
+
 
     public function deleteProductManual(Request $request){
         $permission = $this->checkUrlPermission('delete_product_manual');
@@ -639,7 +836,7 @@ class ProductController extends MarketPlace
 
                     $response = Product::where('id',$productData->id)->delete();
                     $monog_del = \App\MongoProduct::deleteData($productData->id);
-              
+
                     $logdetails = "Admin has deleted product with sku $sku "; 
 
                     //Prepaire array for send data
@@ -850,7 +1047,7 @@ class ProductController extends MarketPlace
                           $success['message'] = 'upload failure';
 
                         }    
-                
+
                         /*Uploaded Csv Remove From server*/
                         @unlink($filename_with_path);
 
@@ -922,8 +1119,5 @@ class ProductController extends MarketPlace
     }
 
     public function deleteUnusedProductImage(Request $request){
-
-        
     }
-
 }

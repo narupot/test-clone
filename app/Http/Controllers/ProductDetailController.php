@@ -14,6 +14,7 @@ use Lang;
 use DB;
 use Config;
 use App\Product;
+use App\Packagedesc;
 use App\OrdersTemp;
 use App\Cart;
 
@@ -43,15 +44,21 @@ class ProductDetailController extends MarketPlace
     }
 
     public function display(Request $request) {
-        
         $cat_url = $request->cat_url;
         $sku = $request->sku;
         $lang_code = session('default_lang')?'_'.session('lang_code'):'';
 
-        $productdetail = Product::getProductDetail($sku); 
+        $productdetail = Product::getProductDetail($sku);
         
+        // if(empty($productdetail)){
+        //     //abort(404);
+        //     return view('deeplink.product', [
+        //     'category' => $cat_url,
+        //     'id' => $sku
+        //     ]);
+        // }
         if(empty($productdetail)){
-            abort(404);
+            return view('errors.not-found');
         }
         $productImage = $productdetail->images;
         if(!empty($productImage)){
@@ -117,8 +124,9 @@ class ProductDetailController extends MarketPlace
         if(count($required_rev_data)>1)
             $required_rev_data = array_unique($required_rev_data,SORT_REGULAR);
         $page = 'products';
-        return view('productDetail',['productDetail'=>$productdetail,'productImage'=>$productImage,'product_data'=>$prd_data,'show_review_form'=>$show_review_form,'rev_data'=>$required_rev_data,'page'=>$page]);
-        
+        $version = "?ver=".getConfigValue('CSS_JS_VERSION');
+        return view('productDetail',['version'=>$version,'productDetail'=>$productdetail,'productImage'=>$productImage,'product_data'=>$prd_data,'show_review_form'=>$show_review_form,'rev_data'=>$required_rev_data,'page'=>$page]);
+
     }
 
     public function productPriceByQuantity(Request $request){
@@ -144,7 +152,8 @@ class ProductDetailController extends MarketPlace
     public function addProductToCart(Request $request){
         $value = $request->all();
         $userid = Auth::User()->id;
-        $product_from = 'normal'; //means normal add
+
+        $product_from = 'normal';
         /*From Bargaining*/
         if(isset($value['action']) && ($value['action'] == 'addtocartfrombargin' || $value['action'] == 'buynowfrombargin')){
             $bargain_id = isset($value['bar_id'])?$value['bar_id']:0;
@@ -154,28 +163,26 @@ class ProductDetailController extends MarketPlace
                     return ['status'=>'fail','msg'=>Lang::get('checkout.invalid_product')];
                 }
                 $productId = $bardata->product_id;
-                $product_from = 'bargain';//form bargain
+                $product_from = 'bargain';
 
             }else{
                return ['status'=>'fail','msg'=>Lang::get('checkout.invalid_product')];
-
             }
 
-        }else{
-           /*From Normal*/ 
-           $productId = $value['productId'];
         }
+        
+        $productId = $value['productId'];
 
         $productInfo = Product::where('id',$productId)->first();
+        $oldCartDet = Cart::where(['user_id'=>$userid, 'product_id'=>$productId])->first();
+
         if(empty($productInfo)){
             return ['status'=>'fail','msg'=>Lang::get('checkout.invalid_product')];
         }
 
         /*****checking product in bargain if exist then can not add*********/
-        //dd($product_from);
         if($product_from == 'normal'){
             $checkBardata = \App\ProductBargain::where('user_id', $userid)->where('product_id',$productInfo->id)->count();
-            //dd($bardata);
             if($checkBardata){
                 return ['status'=>'fail','msg'=>Lang::get('checkout.this_product_already_added_in_bargain')];
             }
@@ -189,6 +196,39 @@ class ProductDetailController extends MarketPlace
         if($shop_info->shop_status == 'close'){
             return ['status'=>'fail','msg'=>Lang::get('checkout.this_shop_is_close')];
         }
+ 
+        /**** checking stock*******/
+        $packagename = $productInfo->package->packagedesc->packagename??'';
+
+        if($productInfo->stock == 0){
+            if($value['quantity'] + ($oldCartDet ? $oldCartDet->quantity : 0) > $productInfo->quantity ){
+                $msg = "จำนวนที่สามารถสั่งซื้อได้ ".$productInfo->quantity." ".$packagename;
+                return ['status'=>'check_qty_stock','msg'=>$msg];
+            }
+            if($productInfo->quantity <= 0 ){
+                $msg="สินค้าหมด " ;
+                return ['status'=>'stock_zero','msg'=>$msg];
+            }
+        }
+        
+        // เช็คสั่งซื้่อขึ้นต่ำ
+        if($value['quantity'] < $productInfo->min_order_qty ){
+            $msg="จำนวนสั่งซื้อสินค้าขึ้นต่ำ  ".$productInfo->min_order_qty ." ".$packagename;
+            return ['status'=>'fail','msg'=>$msg];
+        }
+
+        // เช็คค่าว่าง
+        if($value['quantity'] == null  ){
+            $msg="จำนวนสั่งซื้อสินค้าขึ้นต่ำ  ".$productInfo->min_order_qty ." ".$packagename;
+            return ['status'=>'zero','msg'=>$msg];
+        }
+
+        if($oldCartDet){
+            if($productInfo->unit_price !== $oldCartDet->original_price??null){
+                $msg="ราคาสินค้ามีการเปลี่ยนแปลงจาก ".($oldCartDet->original_price??0)." บาท เป็น ".$productInfo->unit_price." บาท ";
+                return ['status'=>'price_changed','msg'=>$msg];
+            }
+        }
         
         $low_saf_arr = [];
         $orderqry = OrdersTemp::where(['user_id'=>$userid,'order_status'=>'0'])->first();
@@ -201,7 +241,7 @@ class ProductDetailController extends MarketPlace
             $quantity = $value['quantity'];
             $product_price = $productInfo->unit_price;
             $prdQuantity = $productInfo->quantity;
-            $qty = Cart::where(['user_id'=>$userid,'product_id'=>$productId])->value('quantity');     
+            $qty = Cart::where(['user_id'=>$userid,'product_id'=>$productId])->value('quantity');
         }
             
         
@@ -237,7 +277,7 @@ class ProductDetailController extends MarketPlace
         /***check maximum order amount***/
         $totprdprice = $product_price * $chkquantity;
         
-        $prev_price =!empty($orderqry)?$orderqry->total_final_price:0;
+        $prev_price = !empty($orderqry)?$orderqry->total_final_price:0;
         $total_price = $totprdprice + $prev_price;
         
         if(validOrdAmt($total_price)== false){
@@ -249,11 +289,7 @@ class ProductDetailController extends MarketPlace
         $original_price = $productInfo->unit_price;
         if($product_from == 'normal'){
             $original_price = $product_price = GeneralFunctions::getProductPriceById($productInfo->id,$quantity,$productInfo);
-
-
         }
-
-        
 
         /**
         ** if in order temp table has record of this user then update this order 
@@ -271,7 +307,6 @@ class ProductDetailController extends MarketPlace
         **if this product already in cart of this user then update quantity
         ** otherwise insert in cart
         **/
-        $oldCartDet = Cart::where(['user_id'=>$userid, 'product_id'=>$productId])->first();
         
 
         if(!empty($oldCartDet)){
@@ -283,10 +318,15 @@ class ProductDetailController extends MarketPlace
             $newProductPrice = $product_price;
             $totalPrice = $newProductPrice * $newQuantity;
             /****updating cart with quantity******/
-            $affected = Cart::where(['id' => $cartId])->update(['quantity'=>$newQuantity,'original_price'=>$product_price,'cart_price' => $product_price,'total_price'=>$totalPrice,'cart_status'=>$cart_status]);
-
+            $affected = Cart::where(['id' => $cartId])->update([
+                'quantity'=>$newQuantity,
+                'original_price'=>$product_price,
+                'cart_price' => $product_price,
+                'total_price'=>$totalPrice,
+                'cart_status'=>$cart_status,
+                'is_selected'=>true
+            ]);
             $this->addProductInShoppingList($productInfo);
-            
         }else{
             $totalPrice = $product_price * $quantity;
             /**insert in cart table***/
@@ -302,10 +342,11 @@ class ProductDetailController extends MarketPlace
             $cart->total_price = $product_price * $quantity;
             $cart->cart_status = $cart_status;
             $cart->product_from = $product_from;
+            $cart->is_selected = true;
             $cart->save();
             $this->addProductInShoppingList($productInfo);
-            
         }
+
         /*data delete from bargain*/
         $data_chart = [];
         $docName = '';
@@ -332,7 +373,7 @@ class ProductDetailController extends MarketPlace
                 $bargDetails->total_price = $bardata->curr_total_price;
                 $bargDetails->bar_status = '2';
                 $bargDetails->created_by = 'buyer';
-                $bargDetails->save(); 
+                $bargDetails->save();
                 $bargainDetailId = $bargDetails->id;
            
 
@@ -349,11 +390,18 @@ class ProductDetailController extends MarketPlace
         $updateOrder = OrdersTemp::updateOrderPrice($orderId);
         $cart_quantity = getCartProduct();
         $cart_price = getCartPrice();
-        return ['status'=>'success','cart_quantity'=>$cart_quantity,'cart_price'=>$cart_price, 'docName'=>$docName, 'chat_data'=>$data_chart];
+        return [
+            'status'=>'success',
+            'cart_quantity'=>$cart_quantity,
+            'cart_price'=>$cart_price,
+            'docName'=>$docName,
+            'chat_data'=>$data_chart,
+            'product_quantity'=>$productInfo->quantity??0
+        ];
 
     }
 
-    public function insertOrder($ordArr){
+    public static function insertOrder($ordArr){
         $order = new OrdersTemp;
 
         $order->user_id = $ordArr['user_id'];
@@ -386,7 +434,7 @@ class ProductDetailController extends MarketPlace
         if(count($rev_data)){
             foreach ($rev_data['data'] as $key => $value) {
                 $rev_data['data'][$key]->rating = $value->rating*20; 
-                $rev_data['data'][$key]->time = getcommentDateFormat($value->created_at);                
+                $rev_data['data'][$key]->time = getcommentDateFormat($value->created_at);
             }
             return ['status'=>'success','data'=>$rev_data];
         }else{
@@ -406,14 +454,14 @@ class ProductDetailController extends MarketPlace
 
             /*******related product condition******
             ** It should be 20 from any user and randum order on each refresh .
-            **From same category getting product from review. 
+            **From same category getting product from review.
             **get number of order of this category product.
-            **get last updated product. 
+            **get last updated product.
             ******/
 
             /****getting product from review*****/
             $prd_result = [];
-            $no_of_prd = 20;
+            $no_of_prd = 6;
             $pre = DB::getTablePrefix();
             $p_id_arr = [];
             $prd_id = DB::table(with(new \App\ProductReview)->getTable().' as pr')

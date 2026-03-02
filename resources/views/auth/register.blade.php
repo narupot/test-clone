@@ -18,19 +18,17 @@ var register_by = 'buyer';
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         {{Session::get('verify_msg')}}
     </div>
-    @else          
+    @else
         <div id="register_form_div" style="display: block;" class="adj-mrgin">
             <div class="row login-wrap">
-                <div class="col-sm-6">
-                    <h2 class="title-gred">@lang('auth.be_a_seller')</h2>             
+                {{-- <div class="col-sm-6">
+                    <h2 class="title-gred">@lang('auth.be_a_seller')</h2>
                     <div class="reg-link-wrap col-sm-12">
-                        <p>@lang('auth.seller_register_page_text')</p>                        
+                        <p>@lang('auth.seller_register_page_text')</p>
                         <a href="{{ action('Auth\RegisterController@sellerRegister') }}" class="btn mb-3">@lang('auth.seller_register')</a>
-                       
-                    </div>                      
-                    
-                </div>
-                <div class="col-sm-6 login-content">
+                    </div>
+                </div> --}}
+                <div class="col-sm-6 login-content mx-auto">
                     <h2 class="title-gred2">@lang('auth.register_for_buyers')</h2>
                         @include('auth.register_form')
                 </div>

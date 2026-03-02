@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Helpers\GeneralFunctions; 
+use App\Helpers\GeneralFunctions;
 use App\Helpers\CustomHelpers;
 use DB;
 class OrderDetail extends Model
@@ -14,7 +14,7 @@ class OrderDetail extends Model
 
     	$current_date = currentDateTime();
     	
-    	$product_detail_arr = $package_name_arr = $badge_arr = $pay_name_arr = []; 
+    	$product_detail_arr = $package_name_arr = $badge_arr = $pay_name_arr = [];
         $cat_name = $sku = $package_name = $base_unit = '';
         $weight_per_unit = 0;
         $product_detail_arr = $shop_data;
@@ -34,14 +34,17 @@ class OrderDetail extends Model
             }
 
             /*****getting product detail json******/
-            $product_detail_arr = ['sku'=>$detail->getPrd->sku,'thumbnail_image'=>$detail->getPrd->thumbnail_image];
+            $product_detail_arr = [
+                'sku'=>$detail->getPrd->sku,
+                'thumbnail_image'=>$detail->getPrd->thumbnail_image,
+                'stock'=>$detail->getPrd->stock
+            ];
             $sku = $detail->getPrd->sku;
             $weight_per_unit = $detail->getPrd->weight_per_unit;
 
             $badge_data = \App\Badge::where('id',$detail->getPrd->badge_id)->first();
             if(!empty($badge_data)){
                 $badge_arr = ['title'=>$badge_data->title,'size'=>CustomHelpers::getBadgeSize($badge_data->size),'grade'=>CustomHelpers::getBadgeGrade($badge_data->grade),'icon'=>$badge_data->icon];
-
             }
             
             $package_data = \App\PackageDesc::where('package_id',$detail->getPrd->package_id)->get();
@@ -150,7 +153,7 @@ class OrderDetail extends Model
         return Self::where('order_id',$main_order_id)->orderBy('order_shop_id')->with('getOrderStatus')->get();
     }
 
-    public static function getPackage(){
+    public function getPackage(){
          return $this->hasOne('App\Package','id','unit_id')
               ->select('height','width','depth','id')->get();
     }
@@ -172,29 +175,33 @@ class OrderDetail extends Model
                     
     }
 
-    public function getPrd(){ 
+    public function getPrd(){
        return $this->hasOne('App\Product','id','product_id')
-              ->select('id','thumbnail_image','sku','unit_price','stock','quantity','package_id','badge_id');
+              ->select('id','thumbnail_image','sku','unit_price','stock','quantity','package_id','badge_id','status','min_order_qty');
     }
 
     public function getCat(){
-        return $this->hasOne('App\Category', 'id', 'cat_id')->select('id','url','img'); 
+        return $this->hasOne('App\Category', 'id', 'cat_id')->select('id','url','img');
     }
 
     public function getCatDesc(){
-        return $this->hasOne('App\CategoryDesc', 'cat_id', 'cat_id'); 
+        return $this->hasOne('App\CategoryDesc', 'cat_id', 'cat_id');
     }
 
     public function getShop(){
-        return $this->hasOne('App\Shop', 'id', 'shop_id')->select('id','shop_url','logo','panel_no','market','ph_number'); 
+        return $this->hasOne('App\Shop', 'id', 'shop_id')->select('id','shop_url','logo','panel_no','market','ph_number','status','shop_status');
     }
 
     public function getShopDesc(){
-        return $this->hasOne('App\ShopDesc', 'shop_id', 'shop_id')->where('lang_id', session('default_lang'))->select('shop_id','shop_name'); 
+        return $this->hasOne('App\ShopDesc', 'shop_id', 'shop_id')->where('lang_id', session('default_lang'))->select('shop_id','shop_name');
     }
 
     public function product(){
         return $this->hasOne('App\Product','id','product_id');
+    }
+
+    public function shop(){
+        return $this->hasOne('App\Shop','id','shop_id');
     }
 
     public function order(){

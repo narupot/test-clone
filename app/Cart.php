@@ -6,26 +6,39 @@ use Illuminate\Database\Eloquent\Model;
 use DB;
 
 class Cart extends Model
-{  
+{
     protected $table = 'cart';
 
-    public function getPrd(){ 
+    public function getPrd(){
        return $this->hasOne('App\Product','id','product_id')
-              ->select('id','thumbnail_image','sku','unit_price','stock','quantity','package_id','base_unit_id','badge_id','weight_per_unit','updated_at','status');
+              ->select('id','thumbnail_image','sku','unit_price','stock','quantity','package_id','base_unit_id','badge_id','weight_per_unit','updated_at','status','order_qty_limit','min_order_qty');
     }
 
-    public static function getCartList($order_id,$statusArr=[]){
+    public static function getCartList($order_id,$statusArr=[],$itemsArr=[]){
         
         $qry = Self::with(['getPrd','getShop','getShopDesc','getCat','getCatDesc']);
         if(count($statusArr)){
             $qry->whereIn('cart_status',$statusArr);
         }
-        $res = $qry->where('order_id',$order_id)->get();
-        return $res;
+        if(count($itemsArr)){
+            $qry->whereIn('id',$itemsArr);
+        }
+        return $qry->where('order_id',$order_id)->get();
     }
 
     public function getCat(){
         return $this->hasOne('App\Category', 'id', 'cat_id')->select('id','url'); 
+    }
+
+    public function productGroup(){
+        return $this->hasOneThrough(
+            ProductGroup::class,
+            ProductSubgroup::class,
+            'id',
+            'id',
+            'category_id',
+            'product_group_id'
+        );
     }
 
     public function getCatDesc(){
@@ -34,7 +47,7 @@ class Cart extends Model
     }
 
     public function getShop(){
-        return $this->hasOne('App\Shop', 'id', 'shop_id')->select('id','shop_url','logo','panel_no','market','shop_status','ph_number'); 
+        return $this->hasOne('App\Shop', 'id', 'shop_id')->select('id','shop_url','logo','panel_no','market','shop_status','ph_number','status');
     }
 
     public function getShopDesc(){
@@ -68,7 +81,8 @@ class Cart extends Model
     }
 
     public static function getTotCartPrdNoti(){
-        $userid = \Auth::User()->id;
+        $userid = \Auth::user()->id ?? null;
+        if($userid){
         $totPaidPrd = $totCartPrd = $totBargainPrd = 0;
         $formatted_order_id = OrdersTemp::where('user_id',$userid)->value('formatted_order_id');
         $order_id = Order::whereNull('end_shopping_date')->where('user_id',$userid)->value('id');
@@ -86,7 +100,12 @@ class Cart extends Model
                  ->count();
 
         $tot = $totCartPrd + $totPaidPrd + $totBargainPrd;
-
+        }else{
+            $tot = 0;
+            $totPaidPrd = 0;
+            $totCartPrd = 0;
+            $totBargainPrd = 0;
+        }
         return ['tot'=>$tot,'cart_prd'=>$totCartPrd,'paid_prd'=>$totPaidPrd,'bargain_prd'=>$totBargainPrd];
     }
 
@@ -116,5 +135,56 @@ class Cart extends Model
             }
         }
     }
+
+    public static function unselectById($cartId)
+    {
+        return self::where('id', $cartId)->update(['is_selected' => false]);
+    }
+
+    public static function unselectByIds(array $cartIds)
+    {
+        return self::whereIn('id', $cartIds)->update(['is_selected' => false]);
+    }
+
+    // public function validateItem(): array
+    // {
+    //     $errors = [];
+    //     $product = $this->getPrd;
+    //     $shop = $this->getShop;
+
+    //     if (!$product) {
+    //         $errors[] = 'missing_product';
+    //         return $errors;
+    //     }
+
+    //     if (!$shop) {
+    //         $errors[] = 'missing_shop';
+    //         return $errors;
+    //     }
+
+    //     if ($product->status == '0') {
+    //         $errors[] = 'product_closed';
+    //     }
+
+    //     if ($shop->status == '0') {
+    //         $errors[] = 'shop_closed';
+    //     }
+
+    //     if ($this->cart_price != $product->unit_price) {
+    //         $errors[] = 'price_changed';
+    //     }
+
+    //     if ($product->stock == '1') {
+    //         if (
+    //             $product->quantity < $this->quantity ||
+    //             $product->quantity <= 0 ||
+    //             $product->quantity < $product->min_order_qty
+    //         ) {
+    //             $errors[] = 'out_of_stock';
+    //         }
+    //     }
+
+    //     return $errors;
+    // }
 
 }

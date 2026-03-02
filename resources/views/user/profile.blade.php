@@ -62,7 +62,7 @@
                 <div class="col-sm-2 mb-3">
                     <div class="form-group">
                         <label>&nbsp;</label>
-                        <a href="javascript:;" data-toggle="modal" data-target="#confirmModal" data-dismiss="modal" class="btn btn-blue">@lang('common.change')</a>
+                        <a href="javascript:;" data-toggle="modal" data-target="#confirmModal" data-dismiss="modal" class="btn btn- btn">@lang('common.change')</a>
                     </div>
                 </div>                                
             </div>

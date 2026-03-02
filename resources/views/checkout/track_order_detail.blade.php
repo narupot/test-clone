@@ -69,7 +69,7 @@
             <h2>@lang('order.order_no'). {{$main_order->formatted_id}}</h2>
         </div>
         <div class="track-status">
-            <button class="btn-blue">@lang('common.status') : <span id="order_status">{{$main_order->getOrderStatus->status ?? "NA" }}</span></button>                                 
+            <button class="btn- btn">@lang('common.status') : <span id="order_status">{{$main_order->getOrderStatus->status ?? "NA" }}</span></button>                                 
             <span class="ship-track-time">{{getDateFormat($main_order->updated_at,7)}}</span>
         </div>
     </div>          

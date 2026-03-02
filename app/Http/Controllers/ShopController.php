@@ -35,17 +35,21 @@ class ShopController extends MarketPlace
     }
 
     public function index(Request $request) {  
+         
+        $shop_details = Shop::where('shop_url', $request->shop)
+        ->with(['shopDesc'])
+        ->withCount(['favoriteShop','product'=>function($q){
+           // อ๊อฟแก้
+            //$q->where('status',1)->where('stock',1);
+            $q->where('status',1);
+        }])
+        ->first();
+        if(!$shop_details) abort('404');
         
-        $shop_details = Shop::where('shop_url', $request->shop)->with(['shopDesc','getShopSeller'])->first();
-        if($shop_details===null)
-            abort('404');
-
         $isFavorite = $this->isShopFavorit($request->shop);
         if(Auth::check()){
             $userCreditData = \App\Credits::where(['user_id'=>Auth::user()->id,'shop_id'=>$shop_details->id])->whereIn('seller_approval',['Pending','Approved'])->first();
 
-            // shop owner can't send request to own shop
-            //dd(Auth::user()->id,session('user_shop_id'),$shop_details->id);
             if(session('user_shop_id')==$shop_details->id){
                 $credit_request = 'hide';
             }
@@ -64,16 +68,97 @@ class ShopController extends MarketPlace
             $credit_request = 'show';
         }
 
-        $map_images = !empty($shop_details->map_image)?explode(',', $shop_details->map_image):[];
-        $shop_images = !empty($shop_details->shop_image)?explode(',', $shop_details->shop_image):[];
+        // $map_images = !empty($shop_details->map_image)?explode(',', $shop_details->map_image):[];
+        // $shop_images = !empty($shop_details->shop_image)?explode(',', $shop_details->shop_image):[];
 
-        $cat_data = null;
+        $category = null;
         if(isset($request->cat_url)){
-            $cat_data = \App\Category::where('url',$request->cat_url)->select('id','url')->first();
+            $category = \App\Category::where('url',$request->cat_url)->select('id','url')->first();
         }
+
+
+
+        $perPage = !empty($request->per_page) ? (int)$request->per_page : 12;
+        $search = $request->search;
+        $tab = isset($request->tab)?$request->tab:'home';
+        // if($tab != 'home' && ( $tab != 'all' && $tab != 'bestsell' && $tab != 'recommend' )){
+        //     $tab = 'home';
+        // }
+ 
+        // $order = [];
+        // if($tab == 'bestsell'){
+        //     $order = \App\OrderDetail::query()
+        //     ->where('shop_id', $shop_details->id)
+        //     ->select('product_id',DB::raw('COUNT(product_id) as total'))
+        //     ->groupBy('product_id')
+        //     ->orderByDesc('total')
+        //     ->get()
+        //     ->pluck('product_id')
+        //     ->toArray();
+            
+        //     // if(count($order) > 0){
+        //     //     $order = $order->implode(',');
+        //     // }
+        // }
         
-        //dd($shop_details);
-        return view(loadFrontTheme('shop.shop'),['shop_details'=>$shop_details,'map_images'=>$map_images,'shop_images'=>$shop_images,'isFavorite'=>$isFavorite,'credit_request'=>$credit_request,'show_per_page'=>json_encode(getShowRangePerPage()),'order_by_item'=>json_encode(getSortingItems()),'cat_data'=>$cat_data]); 
+        $product_list = \App\MongoProduct::query()
+            ->where('shop_id', $shop_details->id)
+            ->whereHas('shop', function ($q)  {
+                $q->where('shop_status', 'open')->where('status', '1');
+            })
+            
+            // อ๊อฟแก้
+            //->where('stock', '1')
+            ->where('status', '1')
+            ->when(Auth::check(), function ($query) {
+                $query->with('wishlist');
+            })
+            
+            ->when($search, function ($qq) use ($search) {
+                return $qq->whereHas('category', function ($qqq) use ($search) {
+                    $qqq->where('category_name', 'like', '%' . $search . '%')
+                    ->where('status', '1');
+                });
+            })
+            
+
+            
+            // ->when($tab == 'home',function ($q) use ($search) {
+            //         return $q
+            //     }
+            // )
+            // ->when($tab == 'bestsell', function ($q) use ($order) {
+            //     $q->when($order, function ($qq) use ($order) {
+            //         return $qq->orderBy("created_at", "DESC");
+            //     });
+            // })
+            // ->when($tab == 'recommend', function ($q) {
+            //     return $q->orderby('avg_rating', 'desc');
+            // })
+        // ->orderByDesc('created_at')  
+        ->paginate($perPage)->appends(request()->query());
+        $product_list->each(function ($product) {
+            $product->product_image = $product->thumbnail_image?getProductImageUrl($product->thumbnail_image,'original'):null;
+            $product->shop_name = $product->shop->shop_name?? null;
+            $product->unit_name = $product->base_unit_id?getUnitName($product->base_unit_id):null;
+            $product->badge_img = $product->badge_id?getBadgeImage($product->badge_id):null;
+            $product->cate_name = $product->category->category_name?? null;
+            $product->package_name = $product->package_id?getPackageName($product->package_id): null;
+            
+        });
+
+
+        return view(loadFrontTheme('shop.shop'),[
+            'shop_details'=>$shop_details,
+            // 'map_images'=>$map_images,
+            // 'shop_images'=>$shop_images,
+            'isFavorite'=>$isFavorite,
+            'credit_request'=>$credit_request,
+            'show_per_page'=>json_encode(getShowRangePerPage()),
+            'order_by_item'=>json_encode(getSortingItems()),
+            'category'=>$category,
+            'product_list'=>$product_list,
+        ]); 
         
     }
 
@@ -140,6 +225,7 @@ class ShopController extends MarketPlace
     public function shopList(Request $request,$cat_url=null){
 
         $search = $request->search;
+
         $cat_detail = [];
         if($cat_url){
             $cat_detail = \App\MongoCategory::where('url',$cat_url)->first();
@@ -156,7 +242,7 @@ class ShopController extends MarketPlace
     }
 
     public function shopListData(Request $request,$cat_url=null){
-
+        set_time_limit(120);
         $search_text = $request->search_text;
 
         $perpage = !empty($request->per_page) ? (int)$request->per_page : 10;

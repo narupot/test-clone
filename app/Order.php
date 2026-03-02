@@ -3,32 +3,49 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Helpers\GeneralFunctions; 
+use App\Helpers\GeneralFunctions;
 use DB;
 class Order extends Model
 {
     protected $table = 'order';
 
     public function getOrderDetail(){
-        return $this->hasMany('App\OrderDetail', 'order_id', 'id');  
+        return $this->hasMany('App\OrderDetail', 'order_id', 'id');
     }
 
     public function getAllProductsOrder(){
-        return $this->hasMany('App\OrderDetail', 'order_id', 'id');  
+        return $this->hasMany('App\OrderDetail', 'order_id', 'id');
     }
 
     public function getOrderShop(){
-        return $this->hasMany('App\OrderShop', 'order_id', 'id');  
+        return $this->hasMany('App\OrderShop', 'order_id', 'id');
     }
 
     public function getUser(){
-        return $this->hasOne('App\User', 'id', 'user_id');  
+        return $this->hasOne('App\User', 'id', 'user_id');
     }
 
     public function getOrderStatus(){
         return $this->hasOne('App\OrderStatusDesc', 'order_status_id', 'order_status')->where('lang_id',session('default_lang'));
     }
 
+    public function orderDiscountCode()
+    {
+        return $this->hasOne(OrderDiscountCode::class,'order_id');
+    }
+    
+    public function orderTemp(){
+        return $this->belongsTo(OrdersTemp::class,'temp_formatted_id','formatted_order_id');
+    }
+
+    public function paymentOption(){
+        return $this->belongsTo(PaymentOption::class,'payment_slug','slug');
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class,'user_id');
+    }
+    
     public static function formattedOrder(){
     	$date = date('Ymd');
     	$order_id_key = SystemConfig::select('system_val')->where('system_name','MAIN_ORDER_ID')->first();
@@ -45,30 +62,35 @@ class Order extends Model
         $ph_number = $user->ph_number;
         $formattedOrder = Self::formattedOrder();
 
-        $current_date = currentDateTime();
+        // $current_date = currentDateTime();
         /***inserting order data from temp order table to original order table********/
-        $orderFinalPrice = $orderInfo->total_shipping_cost + $orderInfo->total_final_price;
+        // $orderFinalPrice = $orderInfo->total_shipping_cost + $orderInfo->total_final_price;
 
         /*****entry into main order table********/
-        $Orders = new Order;
-        $Orders->user_id              = $orderInfo->user_id;
-        $Orders->temp_formatted_id    = $orderInfo->formatted_order_id;
-        $Orders->ip_address           = userIpAddress();
-        $Orders->user_email           = $user_email??'';
-        $Orders->user_name            = $user_name;
-        $Orders->ph_number            = $ph_number??'';
-        $Orders->order_status         = 1;
-        $Orders->payment_slug         = $orderInfo->payment_slug;
-        $Orders->shipping_method      = $orderInfo->shipping_method;
-        $Orders->pickup_time          = $orderInfo->pickup_time;
-        $Orders->user_phone_no        = $orderInfo->user_phone_no;
-        $Orders->total_shipping_cost  = $orderInfo->total_shipping_cost;
-        $Orders->kbank_qrcode_id      = $orderInfo->kbank_qrcode_id;
+        $order = new Order;
+        $order->user_id              = $orderInfo->user_id;
+        $order->temp_formatted_id    = $orderInfo->formatted_order_id;
+        $order->ip_address           = userIpAddress();
+        $order->user_email           = $user_email??'';
+        $order->user_name            = $user_name;
+        $order->ph_number            = $ph_number??'';
+        $order->order_status         = 1;
+        $order->payment_slug         = $orderInfo->payment_slug;
+        $order->shipping_method      = $orderInfo->shipping_method;
+        $order->pickup_time          = $orderInfo->pickup_time;
+        $order->user_phone_no        = $orderInfo->user_phone_no;
+        $order->total_shipping_cost  = $orderInfo->total_shipping_cost;
+        $order->kbank_qrcode_id      = $orderInfo->kbank_qrcode_id;
         
-        $Orders->order_json           = isset($orderInfo->order_json)?$orderInfo->order_json:'';
+        $order->shipping_discount       = $orderInfo->total_logistic_cost;
+        $order->dcc_purchase_discount   = $orderInfo->dcc_purchase_discount;
+        $order->dcc_shipping_discount   = $orderInfo->dcc_shipping_discount;
+        $order->transaction_fee         = $orderInfo->transaction_fee ?? 0;
         
-        $Orders->save();
-        $main_order_id = $Orders->id;
+        $order->order_json           = isset($orderInfo->order_json)?$orderInfo->order_json:'';
+        
+        $order->save();
+        $main_order_id = $order->id;
 
         $formattedOrderId = $formattedOrder.$main_order_id;
 
@@ -76,26 +98,34 @@ class Order extends Model
 
         /****update entry in order transaction******/
         $comment = GeneralFunctions::getOrderText('order_created');
-        $transaction_arr = ['order_id'=>$main_order_id,'order_shop_id'=>0,'order_detail_id'=>0,'event'=>'order','comment'=>$comment,'updated_by'=>'buyer'];
+        $transaction_arr = ['order_id'=>$main_order_id,'order_shop_id'=>0,'order_detail_id'=>0,'event'=>'order','comment'=>$comment,'updated_by'=>'buyer', 'payment_method'=>$orderInfo->payment_slug];
 
         $update_transaction = \App\OrderTransaction::updateOrdTrans($transaction_arr);
 
-        return $Orders;
+        return $order->refresh();
     }
 
     public static function updateMainOrderPrice($orderId){
 
         $order_info = Self::where('id',$orderId)->first();
-
         $core_details = OrderDetail::select(DB::raw('sum(total_price) AS tot_price'))->where('order_id',$orderId)->first();
-
         $core_price = $core_details->tot_price;
-
         $shipping_price = $order_info->total_shipping_cost;
-
         $total_final_price = $shipping_price + $core_details->tot_price;
+        $orderTemp = $order_info->orderTemp;
+        $total_discount = 0;
     
-        $affected = Self::where(['id' => $orderId])->update(['total_core_cost'=>$core_price,'total_final_price' => $total_final_price]);
+        if ($orderTemp) {
+            $total_final_price = $orderTemp->total_final_price;
+            $total_discount = $orderTemp->total_discount;
+        }
+ 
+        $affected = Self::where(['id' => $orderId])->update([
+            'total_core_cost'=>$core_price,
+            'total_final_price' => $total_final_price,
+            'total_discount' => $total_discount,
+        ]);
+
   
         return $total_final_price;
     }
@@ -111,50 +141,106 @@ class Order extends Model
 
         $shop_order = OrderShop::where('order_id',$orderInfo->id)->select('id','user_id','shop_id')->get();
         foreach ($shop_order as $key => $value) {
-            foreach ($shop_order as $key => $value) {
-                /***checking credit****/
-                $shop_credit_period = \App\Credits::where(['user_id'=>$value->user_id,'shop_id'=>$value->shop_id,'seller_approval'=>'Approved'])->value('payment_period');
-                if($shop_credit_period){
-                    $credit_due_date = addDaysTodate($current_date,$shop_credit_period);
-                }else{
-                    $credit_due_date = null;
-                }
-                
-                $shop_update = OrderShop::where('id',$value->id)->update(['end_shopping_date'=>$current_date,'credit_due_date'=>$credit_due_date,'updated_at'=>$current_date,'order_status'=>2,'payment_status'=>1]);
-
-                if($orderInfo->payment_type == 'credit'){
-                    $detail = OrderDetail::where('order_shop_id',$value->id)->select('total_price')->get();
-                    foreach ($detail as $dkey => $dvalue) {
-                        $shop_credit_info = \App\Credits::where(['user_id'=>$value->user_id,'shop_id'=>$value->shop_id,'seller_approval'=>'Approved'])->first();
-
-                        if(count($shop_credit_info)){
-                            $used_amount = $shop_credit_info->used_amount + $dvalue->total_price;
-                            $remain_amt = $shop_credit_info->credited_amount - $used_amount;
-
-                            $shop_credit_info->used_amount = $used_amount;
-                            $shop_credit_info->remaining_amount = $remain_amt;
-                            if($shop_credit_info->amount_paid=='1'){
-                                $shop_credit_info->amount_paid = '0';
-                            }
-                            $shop_credit_info->save();
-                        }
-                    }
-                }
+            
+            /***checking credit****/
+            $shop_credit_period = \App\Credits::where(['user_id'=>$value->user_id,'shop_id'=>$value->shop_id,'seller_approval'=>'Approved'])->value('payment_period');
+            if($shop_credit_period){
+                $credit_due_date = addDaysTodate($current_date,$shop_credit_period);
+            }else{
+                $credit_due_date = null;
             }
+            
+            $shop_update = OrderShop::where('id',$value->id)->update(['end_shopping_date'=>$current_date,'credit_due_date'=>$credit_due_date,'updated_at'=>$current_date,'order_status'=>2,'payment_status'=>1]);
+            // \Log::info('Updating OrderShop', ['order_id' => $orderInfo->id]);
+
+
+            // if($orderInfo->payment_type == 'credit'){
+            //     $detail = OrderDetail::where('order_shop_id',$value->id)->select('total_price')->get();
+            //     foreach ($detail as $dkey => $dvalue) {
+            //         $shop_credit_info = \App\Credits::where(['user_id'=>$value->user_id,'shop_id'=>$value->shop_id,'seller_approval'=>'Approved'])->first();
+
+            //         if(count($shop_credit_info)){
+            //             $used_amount = $shop_credit_info->used_amount + $dvalue->total_price;
+            //             $remain_amt = $shop_credit_info->credited_amount - $used_amount;
+
+            //             $shop_credit_info->used_amount = $used_amount;
+            //             $shop_credit_info->remaining_amount = $remain_amt;
+            //             if($shop_credit_info->amount_paid=='1'){
+            //                 $shop_credit_info->amount_paid = '0';
+            //             }
+            //             $shop_credit_info->save();
+            //         }
+            //     }
+            // }
         }
 
-        OrderDetail::where('order_id',$orderInfo->id)->update(['payment_status'=>1,'payment_date'=>$current_date,'status'=>2]);
+        // OrderDetail::where('order_id',$orderInfo->id)->update(['payment_status'=>1,'payment_date'=>$current_date,'status'=>2]);
+        OrderDetail::where([['order_id', '=', $orderInfo->id],['status', '!=', '11']]) // เพิ่มเงื่อนไขยกเลิกสินค้า 11 (กรณีแก้ไขจำนวนสินค้า) ไม่อัพเดท
+                ->update(['payment_status'=>1,'payment_date'=>$current_date,'status'=>2]);
 
          /****update entry in order transaction******/
         //$comment = 'Order end shopping with payment done';
         $comment = GeneralFunctions::getOrderText('order_end_shopping');
 
-        $transaction_arr = ['order_id'=>$orderInfo->id,'order_shop_id'=>0,'order_detail_id'=>0,'event'=>'order','comment'=>$comment,'updated_by'=>$updated_by];
+        $transaction_arr = ['order_id'=>$orderInfo->id,'order_shop_id'=>0,'order_detail_id'=>0,'event'=>'order','comment'=>$comment,'updated_by'=>$updated_by, 'payment_method'=>$orderInfo->payment_slug];
 
         $update_transaction = \App\OrderTransaction::updateOrdTrans($transaction_arr);
 
         return true;
     }
+
+    /***** use to cancel order *******/
+    public static function cancelOrder($orderInfo, $updated_by='buyer')
+    {
+        $current_date = date('Y-m-d H:i:s');
+
+        // ยกเลิก main order
+        $orderInfo->order_status = 4; 
+        $orderInfo->payment_status = 0;
+        $orderInfo->end_shopping_date = null;
+        $orderInfo->save();
+
+        // ยกเลิก shop orders ทั้งหมดใน order นี้
+        $shop_orders = OrderShop::where('order_id', $orderInfo->id)->get();
+        foreach ($shop_orders as $shop) {
+            OrderShop::where('id', $shop->id)->update([
+                'end_shopping_date' => null,
+                'updated_at'        => $current_date,
+                'order_status'      => 4,
+                'payment_status'    => 0,
+            ]);
+        }
+
+        // ยกเลิก order details ทั้งหมด
+        // OrderDetail::where('order_id', $orderInfo->id)->update([
+        //     'payment_status' => 0,
+        //     'payment_date'   => null,
+        //     'status'         => 4,
+        // ]);
+
+        // เพิ่มเงื่อนไขยกเลิกสินค้า 11 (กรณีแก้ไขจำนวนสินค้า) ไม่อัพเดท
+         OrderDetail::where([['order_id', '=', $orderInfo->id],['status', '!=', '11']])->update([
+            'payment_status' => 0,
+            'payment_date'   => null,
+            'status'         => 4,
+        ]);
+
+        // บันทึก transaction log
+        $comment = GeneralFunctions::getOrderText('order_cancelled');
+        $transaction_arr = [
+            'order_id'        => $orderInfo->id,
+            'order_shop_id'   => 0,
+            'order_detail_id' => 0,
+            'event'           => 'order_cancel',
+            'comment'         => $comment,
+            'updated_by'      => $updated_by,
+            'payment_method'  => $orderInfo->payment_slug
+        ];
+        \App\OrderTransaction::updateOrdTrans($transaction_arr);
+
+        return true;
+    }
+
 
     /**currently this function only for cancel and received center status only*******/
     public static function updateOrdStatus($order_id){
@@ -287,7 +373,22 @@ class Order extends Model
         $full_order_json = json_encode($making_json);
         return $full_order_json;
     }
+    
     public function getCurrency(){
         return $this->hasOne('App\Currency','id','currency_id')->select('id','code', 'symbol', 'name');
+    }
+
+    public function getTotPendingOrder(){
+        $userid = \Auth::User()->id;
+        $totPendingOrder = 0;
+        $totPendingOrder = Order::where(['user_id'=>$userid,'order_status'=>'1'])->count();
+        //$totPaidPrd = OrderDetail::where(['user_id'=>$userid,'payment_status'=>'1','order_id'=>$order_id])->count();
+        //$core_details = OrderDetail::select(DB::raw('sum(total_price) AS tot_price'))->where('order_id',$orderId)->first();
+        return ['pendingOrder'=>$totPendingOrder];
+    }
+
+    public function orderDiscountCodes()
+    {
+        return $this->hasMany(OrderDiscountCode::class, 'order_id', 'id');
     }
 }

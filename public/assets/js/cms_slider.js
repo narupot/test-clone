@@ -176,7 +176,7 @@ jQuery(document).ready(function(){
 	        	}else{
 	        		var height = height_two;
 	        	}
-	        	console.log(intval,width,height);
+	        	// console.log(intval,width,height);
 	        	cropper_setting.width = parseInt(width);
 	        	cropper_setting.height = 0;
 	        }

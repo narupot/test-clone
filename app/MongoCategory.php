@@ -96,4 +96,24 @@ class MongoCategory extends Molequent
 
         return $result;
     }
+
+    public function product()
+    {
+        return $this->hasMany('App\MongoProduct','cat_id','_id');
+    }
+
+    public function parent()
+    {
+        return $this->hasOne('App\MongoCategory','_id','parent_id')->select('category_name','url');
+    }
+
+    public function child()
+    {
+        return $this->hasMany('App\MongoCategory','parent_id','_id');
+    }
+
+    public function parentCategory()
+    {
+        return $this->belongsTo(ParentCategory::class, 'parent_id', 'id');
+    }
 }

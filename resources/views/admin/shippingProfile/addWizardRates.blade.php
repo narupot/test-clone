@@ -305,7 +305,6 @@
                             });
                         }
                         if(attribute=='state'){
-                            console.log(obj.optionList);
                             $.each(obj.optionList, function(index, value){
                                 htmlContent += "<option value='"+value.id+"'>"+value.city_name.city_district_name
 +"</option>";
@@ -461,7 +460,6 @@
                     next_num = a[m + 1];
                     if (typeof current_num === "number" && typeof next_num === "number") {    
                         // found unordered/same elements.
-                        console.log(current_num, next_num);                    
                         if (current_num >= next_num)erIndexArrs.push(m+1);
                     }
                     m += 1;

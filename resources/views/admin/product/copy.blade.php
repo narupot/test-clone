@@ -261,7 +261,6 @@
                 collapsible : !1,  
                 selectionModel: { type: 'row', mode: 'single' },
                 rowSelect: function (evt, ui) {
-                    //console.log('rowSelect', ui);
                     var str = JSON.stringify(ui, function(key, value){                    
                         if( key.indexOf("pq_") !== 0){
                             return value;

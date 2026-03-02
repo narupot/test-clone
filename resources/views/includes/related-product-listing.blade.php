@@ -1,10 +1,22 @@
+<style>
+.product-container{
+    background-color: white;
+    padding: 5px;
+    margin: 5px;
+}
+.product-grid-view{
+    display: none;
+    opacity: 1 !important;
+}
+
+</style>
 <div class="product-grid-view grid-bdr"> <!-- slick-slider-dir -->
-    <ul class="row" slick-slider-dir>
-        <li class="<%list_class%>"  data-ng-repeat="item in product_Items">
-            <div class="product-container">
+    <div class=" slick-slider-dir">
+        <div class="p-1" data-ng-repeat="item in product_Items">
+
+            {{-- <div class="product-container">
                 <div class="prod-img">
                     <a href="<%item.url%>">
-                        <!-- <img ng-src="<%loader.img_load%>"  data-original="<%item.thumbnail_image%>" jq-lazy> -->
                         <img ng-src="<%item.thumbnail_image%>"  data-original="<%item.thumbnail_image%>" jq-lazy>
                     </a>
                     @if(Auth::check())
@@ -15,63 +27,50 @@
                             <a href="javascript:void(0)" class="active"><i class="fas fa-heart"></i></a>
                         </div>
                     @endif
-                </div>                                
+                </div>
                 <div class="product-info">
                     @if(Auth::check())
                         <span class="chat-wrap" ng-if="item.show_price.toString()=='1'">
                             <a href="javascript:void(0)"><i class="fas fa-comments"></i></a>
-                        </span>                                   
-                    @else 
+                        </span>
+                    @else
                         <span class="chat-wrap" ng-if="item.show_price.toString()=='1'">
                             <a href="javascript:void(0);" data-toggle="modal" data-target="#loginModal" class="btn-default chat"><i class="fas fa-comments"></i></a>
-                        </span>                                    
-                    @endif 
+                        </span>
+                    @endif
                     <h3 class="product-name" ng-bind="item.category.category_name"></h3>
                     <div class="review-star">
                       <div class="grey-stars"></div>
                       <div class="filled-stars" style="width: <% item.avg_star*20%>%"></div>
+                    </div>
+                    <div class="shop-name">
+                            <a ng-href="<%item.shop.shop_url%>" ng-bind="item.shop.shop_name"></a>
+                    </div>
+                    <span>ราคาปัจจุบัน</span>
+                    <div class="price-wrap" ng-if="item.show_price == 1">
+                            <div class="price"><span style="color: red;"><%item.unit_price%></span> @lang('common.baht')/<%item.package_name%></div>
+                    </div>
+                    <div class="price-wrap" ng-if="item.show_price == 0">
+                            @lang('product.ask_product_price_to_seller')
+                    </div>
+                    <div class="prod-standard">
+                            <span class="la">
+                                <img ng-src="{{Config::get('constants.standard_badge_url')}}<%item.badge.icon%>" />
+                            </span>
                    </div>
-                   <div class="shop-name">
-                        <a ng-href="<%item.shop.shop_url%>" ng-bind="item.shop.shop_name"></a>
-                   </div>
-                   <span>ราคาปัจจุบัน</span>
-                   <div class="price-wrap" ng-if="item.show_price == 1">
-                        <div class="price"><%item.unit_price%> @lang('common.baht')/<%item.package_name%></div>
-                   </div>
-                   <div class="price-wrap" ng-if="item.show_price == 0">
-                        @lang('product.ask_product_price_to_seller')
-                   </div>
-                   <div class="prod-standard">
-                        <!-- <span>@lang('product.product_standard')</span> -->
-                        <span class="la">
-                            <img ng-src="{{Config::get('constants.standard_badge_url')}}<%item.badge.icon%>" />
-                        </span>
-                        <!-- <span class="size">@lang('product.badge_size') : <%item.badge.size%></span> -->
-                        <!-- <span class="quality">@lang('product.badge_quality') : <%item.badge.grade%></span> -->
-                   </div>
-                   @if(Auth::check())
-                       <!-- <div class="add-shippinglist" ng-if="((item.show_price.toString()=='1' && item.stock == 1) || (item.show_price.toString()=='1' && item.stock == 0 && item.quantity>=1))">
-                            <a href="javascript:void(0)" data-url="<%item.shopping_url%>" ng-click="addToShoppinglistHandler($event, item)" ><i class="fas fa-pencil-alt"></i>  + @lang('product.add_to_shopping_list')</a>
-                       </div> -->
+
+                    @if(Auth::check())
                        <div class="action-btn" ng-if="((item.show_price.toString()=='1' && item.stock == 1) || (item.show_price.toString()=='1' && item.stock == 0 && item.quantity>=1))">
                             <a class="btn-default bargain" ng-if="((item.show_price.toString()=='1' && item.stock == 1) || (item.show_price.toString()=='1' && item.stock == 0 && item.quantity>=1))"  href="<%item.bargain_url%>" rel="<%item._id%>">@lang('product.bargain')</a>
                             <a href="javascript:void(0)" data-url="<%item.url%>" class="btn-blue" ng-click="addToCartHandler($event,'addtocart', item)" ng-disabled="loader.disableBtn">@lang('product.add_to_cart')</a>
-                            {{-- <a href="javascript:void(0)" data-url="<%item.url%>" class="btn" ng-click="addToCartHandler($event,'buynow', item)" ng-disabled="loader.disableBtn">@lang('product.buy_now')</a> --}}
                        </div>
                         <span class="action-btn" ng-if="item.show_price.toString()=='0'">
                             <a href="javascript:void(0)" class="btn-grey">@lang('product.quote')</a>
                         </span> 
                     @else
-                       <!--  <div class="add-shippinglist" ng-if="((item.show_price.toString()=='1' && item.stock == 1) || (item.show_price.toString()=='1' && item.stock == 0 && item.quantity>=1))">
-                            <a href="#" data-toggle="modal" data-target="#loginModal" class="addshop-link">
-                                <i class="fas fa-pencil-alt"></i> 
-                                <span>+ @lang('product.add_to_shopping_list')</span>
-                            </a>                            
-                        </div> -->
                         <div class="action-btn" ng-if="((item.show_price.toString()=='1' && item.stock == 1) || (item.show_price.toString()=='1' && item.stock == 0 && item.quantity>=1))">
                             <a href="javascript:void(0);" data-toggle="modal" data-target="#loginModal" class="btn-default bargain">@lang('product.bargain')</a>
                             <a href="javascript:void(0);" data-toggle="modal" data-target="#loginModal" class="btn-blue">@lang('product.add_to_cart')</a>
-                            {{-- <a href="javascript:void(0);" data-toggle="modal" data-target="#loginModal" class="btn">@lang('product.buy_now')</a> --}}
                         </div>
                         <span class="action-btn" ng-if="item.show_price.toString()=='0'">
                             <a href="javascript:void(0)" data-toggle="modal" data-target="#loginModal" class="btn-default chat">@lang('product.quote')</a>
@@ -79,10 +78,87 @@
                     @endif
                     <!-- product sold out -->
                 </div>
-            </div>
-        </li>
-    </ul>
+            </div> --}}
+            <a href="<%item.url%>">
+                <div class="product-item-info">
+                    <div class="prod-img">
+                        <div class="prod-img-display" style="background: url(<%item.thumbnail_image%>) center center / cover no-repeat; "></div>
+                        {{-- <img ng-src="<%item.thumbnail_image%>"  data-original="<%item.thumbnail_image%>" jq-lazy> --}}
+
+                    </div>
+                    <div class="prod-desc">
+                        <img ng-src="{{Config::get('constants.standard_badge_url')}}<%item.badge.icon%>" />
+                    </div>
+                    
+                    <div class="product-info">
+                                                                                
+                        <div class="d-block link-product-name" ng-bind="item.category.category_name">
+                        </div>
+                        <div class="d-block shop-name">
+                            <a ng-href="<%item.shop.shop_url%>" ng-bind="item.shop.shop_name"></a>
+                        </div>
+                        <div class="price-wrap">
+                            <div class="price-label mb-1">
+                                <%item.unit_price | number:2%> @lang('common.baht')<%item.package_name?' /'+item.package_name:''%>
+                            </div>
+                            <div class="price-label mb-1"> ราคาปัจจุบัน </div>
+
+                            <div class="normal-price text-white h5 px-3 py-1 bg-danger rounded mb-2 d-flex align-items-center justify-content-between">
+                                <strong>฿<%item.unit_price | number:2%></strong>
+                                <i class="fa-solid fa-cart-shopping float-right"></i>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
 </div>
+
+
+
+<script>
+    $(document).ready(function(){
+        initProductSlider(resizeSquareImages);
+        $('.product-grid-view').fadeIn();
+    });
+    function initProductSlider(callback) {
+        if (!$('.slick-slider-dir').hasClass('slick-initialized')) {
+            $('.slick-slider-dir').slick({
+                variableWidth: false,
+                slidesToShow: 6,
+                slidesToScroll: 6,
+                centerMode: false,
+                infinite: false,
+                adaptiveHeight: true,
+                responsive: [
+                    {
+                        breakpoint: 1024,
+                        settings: {
+                            slidesToShow: 4,
+                            slidesToScroll: 4
+                        }
+                    },
+                    {
+                        breakpoint: 768,
+                        settings: {
+                            slidesToShow: 2,
+                            slidesToScroll: 2
+                        }
+                    }
+                ]
+            });
+            
+            resizeSquareImages();
+            // MagicScroll.refresh()
+            if (callback) callback();
+
+        }
+        
+    }
+</script>
+
 <!-- add to cart popup for listing -->
 <div class="modal fade" tabindex="-1" id="add_to_cart_modal" role="dialog" aria-labelledby="addToCartModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm" role="document" add-modal-dir>

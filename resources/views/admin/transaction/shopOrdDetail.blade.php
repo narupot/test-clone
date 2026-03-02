@@ -49,7 +49,7 @@
                                <div class="box-status border-none">
                                   <h3 class="status-heading">@lang('checkout.total')</h3>
                                   <div class="order-status-content">
-                                     <h3><strong>@lang('common.thb') {{ numberFormat($order_shop->total_final_price) }}</strong></h3>
+                                     <h3><strong>@lang('common.thb') {{ number_format($order_shop->total_final_price, 2, '.', ',') }}</strong></h3>
                                   </div>
                                </div>
                             </div>
@@ -125,6 +125,7 @@
                                         <li>@lang('checkout.payment_method')</li>
                                         <li>@lang('common.status')</li>
 										<li>@lang('checkout.details')</li>
+                                        <li>Admin</li>
 										<li>@lang('common.action')</li>
                                     </ul>
                                 </div>
@@ -134,8 +135,9 @@
                                             $detail_json = jsonDecodeArr($val->order_detail_json);
                                             $shop_url = action('ShopController@index',$detail_json['shop_url'] ??'');
                                             $prd_url = action('ProductDetailController@display',[$detail_json['cat_url']??'',$val->sku]);
+                                            $chk_class_cancel = in_array($val->status, [4,9,10,11,12]) ? "strike-text" : "";
                                         @endphp
-                                        <ul>
+                                        <ul class="{{$chk_class_cancel}}">
                                             <li class="product">
                                                 <div class="flexwrap-box">
                                                 <a href="{{ $prd_url }}">
@@ -156,54 +158,91 @@
                                                 </div>
                                                 </a>
                                             </li>                                      
-                                            <li>{{numberFormat($val->last_price) }} @lang('common.baht') /{{ $detail_json['package'][session('default_lang')] ?? $val->package_name }}
+                                            <li>@if ($val->status==4)<del> {{number_format($val->last_price, 2, '.', ',') }} @lang('common.baht') /{{ $detail_json['package'][session('default_lang')] ?? $val->package_name }} </del> @else {{number_format($val->last_price, 2, '.', ',') }} @lang('common.baht') /{{ $detail_json['package'][session('default_lang')] ?? $val->package_name }} @endif
                                                              
                                             </li>
                                             <li class="add-rem-qty">
                                                 {{ $val->quantity }} {{ $detail_json['package'][session('default_lang')] ?? $val->package_name }}
-                                                <br/>
-                                            <span class="red">    
-                                            {{convertString($val->total_weight) }} {{$val->base_unit}} / 
+                                                <div class="order-status-content m-0 px-0" id="update_item_quantity{{$val->id}}" style="display:none;">
+                                                <input type="text" id="txt_item_qty{{$val->id}}" name="item_quantity" value="{{ $val->quantity }}" oninput="
+    this.value = this.value
+      .replace(/[^0-9.]/g, '')       // อนุญาตเฉพาะตัวเลขกับจุด
+      .replace(/(\..*)\./g, '$1');   // กันไม่ให้ใส่จุดซ้ำ
+    if (this.value.startsWith('.')) {
+      this.value = '0' + this.value; // เติม 0 นำหน้าเมื่อเริ่มต้นด้วยจุด
+    }
+  ">
+                                                <a href="javascript:void(0);" id="button_update_item_quantity{{$val->id}}" data-val="{{$val->id}}" class="button_update_item_quantity btn btn-primary">@lang('common.update')</a>
+                                                <a href="javascript:void(0);" onclick="$('#update_item_quantity{{$val->id}}').hide();$('#change_update_item_quantity{{$val->id}}').show();" class="btn btn-primary">ยกเลิก</a>
+                                                </div>                                             
+                                            
+                                            <br>
+                                            <span class="red"> 
+                                                {{convertString($val->total_weight) }} {{$val->base_unit}} / 
                                                         {{$val->package_name}}
                                              </span>           
                                             </li>
 
                                             <li>
-                                                {{numberFormat($val->total_price) }} @lang('common.baht')
+                                                {{number_format($val->total_price, 2, '.', ',') }} @lang('common.baht')
                                             </li>   
 
                                             <!-- <li>{{ $val->payment_type=='credit'? numberFormat($val->total_price):'' }} @lang('common.baht')</li> -->    
 
-                                            <li>{!! $detail_json['payment_method'][session('default_lang')] ?? str_replace('_',' ',strtoupper($val->payment_slug)) !!}</li>   
-                                            <li class="red" id="item_status_{{ $val->id }}">{{ $val->getOrderStatus->status??'' }}</li>
+                                            <li>
+                                                {!! CustomHelpers::formatPaymentMethodName($val->payment_slug, $detail_json['payment_method'] ?? null) !!}
+                                            </li>   
+                                            <li class="red" id="item_status_{{ $val->id }}">
+                                                {{ $val->getOrderStatus->status??'' }}
+                                            </li>
 											
 											@php 
 												$str_description = $val->description;
 												$str_description = strip_tags($str_description);
 												$str_description = mb_substr($str_description, 0, 30);
+                                                
+                                                
 											@endphp
 											<li>{!!$str_description!!}</li>
 											
-                                            @if(!$order_shop->end_shopping_date || $order_shop->order_status ==3 || $order_shop->order_status ==4)
+                                            @foreach($transaction as $key => $value)
+                                                @php
+                                                    $userUpdatedShop =$value->updated_by;
+                                                    
+                                                @endphp
+                                            @endforeach
+                                            
+                                                <li>{!!$userUpdatedShop!!}</li>
+                                                @php
+                                                    $current_date = new DateTime();
+                                                    $pickup_time = new DateTime($order_shop->pickup_time);
+                                                    $pickup_time->setTime(18, 0);
+                                                    $pickup_time_plus_2 = $pickup_time->modify('+2 days');
+                                                @endphp
+                                            @if(!$order_shop->end_shopping_date || ($order_shop->order_status ==3 && $current_date > $pickup_time_plus_2) || $order_shop->order_status ==4 || $val->status ==11)
                                             <li></li>
                                             @else
                                                 
-                                                <li>@if($val->status!=4) <a href="javascript:;" data-type='cancel' data-val="{{ $val->id }}" class="ord_item_change">@lang('common.cancel')</a> @endif | <a href="javascript:;" data-type='receive' data-val="{{ $val->id }}" class="ord_item_change">@lang('admin_order.center_received')</a></li> 
+                                            <li>@if($val->status!=4) 
+                                                <a href="javascript:;" data-type='cancel' data-val="{{ $val->id }}" class="ord_item_change">@lang('common.cancel')</a>| 
+                                                <a href="javascript:void(0);" onclick="$('#update_item_quantity{{$val->id}}').show();$(this).hide();" id="change_update_item_quantity{{$val->id}}">แก้ไขจำนวนสินค้า</a>
+                                                @endif
+                                            </li>
                                             @endif
                                         </ul>
-                                    @endforeach                     
+                                    @endforeach
                                     
                                 </div>
                             </div>
                             <div class="table-footer">
                                 <div class="footer-row row m-0">
                                     <span class="col-6">@lang('checkout.total')</span>
-                                    <span class="col-6">{{numberFormat($order_shop->total_core_cost)}} @lang('common.baht')</span>
+                                    <span class="col-6">{{number_format($order_shop->total_core_cost, 2, '.', ',')}} @lang('common.baht')</span>
                                 </div>
                                 
                                 <div class="footer-row total row m-0">
                                     <span class="col-6">@lang('checkout.grand_total')</span>
-                                    <strong class="col-6">{{numberFormat($order_shop->total_final_price)}} @lang('common.baht')</strong>
+                                    <strong class="col-6">{{number_format($order_shop->total_final_price, 2, '.', ',')}} @lang('common.baht')</strong>
                                 </div>
                             </div>
                         </div>
@@ -255,6 +294,8 @@
     var lang_ord_complete = "@lang('admin_order.are_you_sure_want_to_complete_this_order')";
     var lang_cancel = "@lang('admin_order.are_you_sure_want_to_cancel_this_order')";
     var lang_receive = "@lang('admin_order.are_you_sure_want_to_receive_this_items')";
+    var lang_update_item_quantity = "@lang('ยืนยันแก้ไขจำนวนสินค้า')";
+    var update_item_qty_error="@lang('มีข้อผิดพลาด ไม่สามารถแก้ไขจำนวนสินค้าได้')";
     var change_url = "{{ action('Admin\Transaction\OrderController@ordChangeItemStatus') }}";
     var ord_status_url = "{{ action('Admin\Transaction\ShopOrderController@changeShopOrderStatus') }}";
     var order_shop_id = "{{ $order_shop->id }}";
@@ -280,10 +321,51 @@
                     return false;
 
                 }else if(result.status=='success'){
-                    swal('success', result.msg, "success");       
+                    swal('success', result.msg, "success");
                 }
         });
+    });    
+ 
+    $(document).ready(function() {
+        $('body').on('click', '.button_update_item_quantity', function() {
+            var order_detail_id = $(this).data('val');  // Use 'this' to refer to the clicked element
+            var change_item_quantity = $('#txt_item_qty' + order_detail_id).val(); 
+            var item_quantity_val = document.querySelector('.add-rem-qty').innerHTML;
+            var parts = item_quantity_val.split('<div');  // แยกก่อน <div
+            var firstPart = parts[0].trim(); // ส่วนแรกคือข้อความที่ต้องการ
+            var qty = firstPart.replace(/<[^>]*>/g, '').trim(); // ลบแท็ก HTML ออก
+            var unit_item_quantity = qty.split(' ')[1];
+
+            swal({
+                text: lang_update_item_quantity + 'เป็น ' + change_item_quantity + ' ' + unit_item_quantity,
+                type: 'warning',
+                showCancelButton: true,
+            }).then(function() {
+                if(order_detail_id==''){
+                    swal('','Order detail id cannot be null','error');
+                }
+              //  else if(!Number.isInteger(Number(change_item_quantity))) {
+              //      swal('','จำนวนสินค้าต้องเป็นจำนวนเต็ม สติ สติ','error');
+              //  }
+                else{
+                    var ajax_url = "{{action('Admin\Transaction\OrderController@ordChangeItemQuantity')}}";
+                    var data = {'order_detail_id':order_detail_id, 'change_item_qty':change_item_quantity};
+        
+                    // showHideLoaderAdmin('showLoader');
+                    callAjax(ajax_url, 'post', data, function(result) {
+                    // howHideLoaderAdmin('hideLoader');
+                    swal('', result.msg, result.status).then(function() {
+                        location.reload();
+                        });                    
+                    });
+                }
+            }).catch(function() {
+                location.reload();
+            });
+
+        });
     });
+
 </script>
 <script src="{{ Config('constants.admin_js_url') }}order/order.js"></script>
 @stop

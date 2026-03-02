@@ -11,11 +11,14 @@ use App\ShopAssignCategory;
 use App\Currency;
 use App\Badge;
 use App\MongoProduct;
-
+use App\Package;
+use App\PackageDesc;
+use App\UnitDesc;
 use Config;
 use Auth;
 use Lang;
 use DB;
+use Carbon\Carbon;
 
 class ProductController extends MarketPlace
 {   
@@ -29,6 +32,208 @@ class ProductController extends MarketPlace
        $fielddata = $this->searchData();
        return view('seller.product_list', ['fielddata'=>$fielddata]);
     } 
+
+    
+     // อ๊อฟเพิ่ม function ค้นหา
+    public function Searchcategorydesc(Request $request){        
+        $categoryname= $request->search;
+        if(!empty($categoryname)){
+
+             $query = DB::table('product as p')                  
+                            ->leftjoin("category as c","p.cat_id","=","c.id")       
+                            ->leftjoin("category_desc as cd","c.id","=","cd.cat_id")                
+                            ->where("cd.category_name","LIKE","%{$categoryname}%")
+                            ->where("p.shop_id","=", session('user_shop_id'))
+                            ->select("cd.category_name")
+                            ->distinct()
+                            ->get();
+            //$query = "SELECT * FROM users WHERE name like'%".$search."%'";
+            foreach($query as $resultquery){
+                $response[] = array("value"=>$resultquery->category_name,"label"=>$resultquery->category_name);
+            }
+
+            
+            echo json_encode($response,JSON_UNESCAPED_UNICODE);
+        }
+        //exit;
+    }
+
+    // อ๊อฟเพิ่ม function weightperpackage
+    public function WeightPerPackage(Request $request){
+        $packageid = $request->packageid;
+        $packagedesc = Packagedesc::where("package_id",$packageid)->select("package_name")->first();
+        echo "กิโลกรัม/".$packagedesc->package_name;
+    }
+
+    // อ๊อฟเพิ่ม function ค้นหาในร้านค้าตัวเอง
+    public function getProductlistSearch(Request $request) {
+        
+        $perpage = !empty($request->per_page) ? $request->per_page : getPagination('limit');
+        $searchproductname = $request->searchproductname;
+        
+        //isset($request->searchproductname ) ? $searchproductname = $request->searchproductname : $searchproductname = "";
+        //$filter['perpage'] = $perpage;
+        
+        /*$filter = []; 
+        if($request->sub_action_type=='filter'){
+              
+            if(!empty($request->status)){
+                $status = $request->status;
+                if(isset($status) && $status == '1'){
+                    $filter['status'] = '1';
+                }else{
+                    $filter['status'] = '0';  
+                }
+            }
+           
+            if(!empty($request->category_name)){
+                $category_name = $request->category_name;
+                if(isset($category_name)){
+                    $filter['cat_id'] = $category_name;
+                }
+            }
+
+            if(!empty($request->badge_name)){
+                $badge_name = $request->badge_name;
+                if(isset($badge_name)){
+                    $filter['badge_id'] = $badge_name;
+                }
+            }
+
+
+            if(!empty($request->unit_price)){
+                $unit_price = $request->unit_price;
+                if(isset($unit_price)){
+                    $filter['unit_price'] = $unit_price;
+                }
+            }
+
+
+            if(!empty($request->unit_name)){
+                $unit_name = $request->unit_name;
+                if(isset($unit_name)){
+                    $filter['unit_id'] = $unit_name;
+                }
+            }
+        }else{
+            $filter = [];
+        }*/
+
+        $default_lang = session('default_lang');
+        $shop_id = session('user_shop_id');
+        $default_lang = 0;
+        $prefix =  DB::getTablePrefix(); 
+        
+        $sql = DB::table(with(new \App\Product)->getTable().' as p')
+                ->join(with(new \App\CategoryDesc)->getTable().' as cd', 
+                            [
+                              ['p.cat_id', '=', 'cd.cat_id'], 
+                              ['cd.lang_id', '=', DB::raw($default_lang)]
+                            ]
+                )
+                ->leftjoin(with(new \App\PackageDesc)->getTable().' as pd', 
+                            [
+                              ['p.package_id', '=', 'pd.package_id'], 
+                              ['pd.lang_id', '=', DB::raw($default_lang)]
+                            ]
+                )
+                ->leftjoin(with(new \App\Badge)->getTable().' as b', 'p.badge_id', '=', 'b.id')->join(with(new \App\Category)->getTable().' as c', 'p.cat_id', '=', 'c.id')
+                ->leftjoin(with(new \App\UnitDesc())->getTable().' as ud', 
+                            [
+                              ['p.base_unit_id', '=', 'ud.unit_id'], 
+                              ['ud.lang_id', '=', DB::raw($default_lang)]
+                            ]
+                )
+                ->where("cd.category_name","LIKE","%".$searchproductname."%");
+        
+        $sql = $sql->select('p.id', 'cd.category_name', 'c.url as caturl' ,'b.icon', 'p.show_price', 'p.unit_price', 'p.sku','p.stock', 'p.quantity'
+        , 'pd.package_name', 'p.thumbnail_image','p.status', 'p.created_at', 'p.updated_at', 'p.created_from', 'ud.unit_name', 'p.unit_convert_price');
+
+       /* if(isset($filter['status'])){
+            $sql->where('p.status', $filter['status']);    
+        }
+
+        if(isset($filter['cat_id'])){
+            $sql->where('p.cat_id', $filter['cat_id']);    
+        }
+
+        if(isset($filter['badge_id'])){
+            $sql->where('p.badge_id', $filter['badge_id']);    
+        }
+
+        if(isset($filter['unit_price'])){
+            $sql->where('p.unit_price', $filter['unit_price']);    
+        }
+
+        if(isset($filter['unit_id'])){
+            $sql->where('p.unit_id', $filter['unit_id']);    
+        }*/
+        
+        $sql = $sql->where('shop_id',  $shop_id)->orderBy('p.id', 'desc');
+
+        $products_data = $sql->paginate($perpage);  
+        
+        //dd($products_data);      
+
+        foreach ($products_data as $key => $value) {
+            $created_at = getDateFormat($value->created_at, '1');
+            $updated_at = getDateFormat($value->updated_at, '1');
+            $status = $value->status?'Active':'Inactive';
+            $badgeimage = getBadgeImageUrl($value->icon);
+
+            // อ๊อฟเพิ่ม 
+            // Start 
+            $qty = $value->quantity;
+            // End
+            $productimg = '';
+            $productimg = $value->thumbnail_image ? getProductImageUrl($value->thumbnail_image, 'original') : null;
+            $detail_url = action('Seller\ProductController@edit', $value->id);
+            $delete_url = action('Seller\ProductController@deleteProduct',$value->id);
+            $copy_url = action('Seller\ProductController@copy',$value->id);
+            $view_url = action('ProductDetailController@display',[$value->caturl, $value->sku]);
+            
+            $stock_memo_url = action('Seller\StockMemoController@edit',$value->id);
+
+            $tracking_no = '';
+            $tracking_arr = [];
+            
+            $products_data[$key]->status = $status;
+            $products_data[$key]->badgeimage = $badgeimage;
+            $products_data[$key]->productimg = $productimg;
+             
+            $products_data[$key]->created_at = $created_at;
+            $products_data[$key]->updated_at = $updated_at;
+            $products_data[$key]->detail_url = $detail_url;
+            $products_data[$key]->delete_url = $delete_url;
+            $products_data[$key]->copy_url = $copy_url;
+            $products_data[$key]->view_url = $view_url;
+            $products_data[$key]->stock_memo_url = $stock_memo_url;
+            $products_data[$key]->qty=$qty;
+
+            if($value->show_price == '0'){
+                $products_data[$key]->unit_price = Lang::get('product.not_show'); 
+            }
+
+            if($value->stock == '1'){
+                //$products_data[$key]->quantity = Lang::get('product.in_stock'); 
+                $products_data[$key]->quantity = "ไม่จำกัดจำนวนสินค้า"; 
+
+            }else{
+
+                if ($value->quantity == 0 ) {
+                     $products_data[$key]->quantity = "สินค้าหมด (Sold Out)";
+                } else {
+                     $products_data[$key]->quantity = number_format($value->quantity);
+                }
+
+            }
+
+        }
+        return $products_data;
+
+
+    }
+
     
     public function getProductlist(Request $request) {
         
@@ -98,9 +303,16 @@ class ProductController extends MarketPlace
                               ['pd.lang_id', '=', DB::raw($default_lang)]
                             ]
                 )
-                ->leftjoin(with(new \App\Badge)->getTable().' as b', 'p.badge_id', '=', 'b.id')->join(with(new \App\Category)->getTable().' as c', 'p.cat_id', '=', 'c.id');  
+                ->leftjoin(with(new \App\Badge)->getTable().' as b', 'p.badge_id', '=', 'b.id')->join(with(new \App\Category)->getTable().' as c', 'p.cat_id', '=', 'c.id')
+                 ->leftjoin(with(new \App\UnitDesc())->getTable().' as ud', 
+                            [
+                              ['p.base_unit_id', '=', 'ud.unit_id'], 
+                              ['ud.lang_id', '=', DB::raw($default_lang)]
+                            ]
+                );
         
-        $sql = $sql->select('p.id', 'cd.category_name', 'c.url as caturl' ,'b.icon', 'p.show_price', 'p.unit_price', 'p.sku','p.stock', 'p.quantity', 'pd.package_name', 'p.thumbnail_image','p.status', 'p.created_at', 'p.updated_at', 'p.created_from');
+        $sql = $sql->select('p.id', 'cd.category_name', 'c.url as caturl' ,'b.icon', 'p.show_price', 'p.unit_price', 'p.sku','p.stock', 'p.quantity', 'pd.package_name'
+        , 'p.thumbnail_image','p.status', 'p.created_at', 'p.updated_at', 'p.created_from', 'ud.unit_name', 'p.unit_convert_price');
 
        /* if(isset($filter['status'])){
             $sql->where('p.status', $filter['status']);    
@@ -122,7 +334,9 @@ class ProductController extends MarketPlace
             $sql->where('p.unit_id', $filter['unit_id']);    
         }*/
         
-        $sql = $sql->where('shop_id',  $shop_id)->orderBy('p.id', 'desc');
+        $sql = $sql->where('shop_id',  $shop_id)
+        ->where('p.deleted_by', '==', '0')
+        ->orderBy('p.id', 'desc');
 
         $products_data = $sql->paginate($perpage);  
         
@@ -133,8 +347,14 @@ class ProductController extends MarketPlace
             $updated_at = getDateFormat($value->updated_at, '1');
             $status = $value->status?'Active':'Inactive';
             $badgeimage = getBadgeImageUrl($value->icon);
+
+            // อ๊อฟเพิ่ม 
+            // Start 
+            $qty = $value->quantity;
+            // End
+
             $productimg = '';
-            $productimg = getProductImageUrlRunTime($value->thumbnail_image, 'thumb_59x50');  
+            $productimg = $value->thumbnail_image ? getProductImageUrl($value->thumbnail_image, 'original') : null;
             $detail_url = action('Seller\ProductController@edit', $value->id);
             $delete_url = action('Seller\ProductController@deleteProduct',$value->id);
             $copy_url = action('Seller\ProductController@copy',$value->id);
@@ -156,15 +376,22 @@ class ProductController extends MarketPlace
             $products_data[$key]->copy_url = $copy_url;
             $products_data[$key]->view_url = $view_url;
             $products_data[$key]->stock_memo_url = $stock_memo_url;
+            
+            $products_data[$key]->qty=$qty;
 
             if($value->show_price == '0'){
                 $products_data[$key]->unit_price = Lang::get('product.not_show'); 
             }
 
             if($value->stock == '1'){
-                $products_data[$key]->quantity = Lang::get('product.in_stock'); 
+                //$products_data[$key]->quantity = Lang::get('product.in_stock'); 
+                $products_data[$key]->quantity = "ไม่จำกัดจำนวนสินค้า"; 
             }else{
-                $products_data[$key]->quantity = Lang::get('product.out_stock');
+                if ($value->quantity == 0 ) {
+                     $products_data[$key]->quantity = "สินค้าหมด (Sold Out)";
+                } else {
+                     $products_data[$key]->quantity = number_format($value->quantity);
+                }
             }
 
         }
@@ -257,17 +484,17 @@ class ProductController extends MarketPlace
             $badge = Badge::where('grade', $request->grade)->where('size', $request->size)->first();
             if(!empty($badge)){
                 $input['product_badge'] =  $badge->id;
-                $request->product_badge = $badge->id;
+                $request->merge(['product_badge' => $badge->id]);
             }
         }
 
         $validate = $this->validateProductForm($input);
 
-        if ($validate->passes(
-        )) {
+        if ($validate->passes()) {
             $data_arr['shop_id'] = $shop_id;
             $data_arr['created_by'] = Auth::id();
             $data_arr['created_from'] = 'seller';
+
             $this->saveProduct($request, $data_arr);
             
             $msg_text = Lang::get('product.product_added_successfully');
@@ -335,6 +562,7 @@ class ProductController extends MarketPlace
             }
         }
         $validate = $this->validateProductForm($input, $id);
+        // return json_encode($validate->errors());
         if ($validate->passes()) {
             $data_arr['shop_id'] = $shop_id;
             $data_arr['updated_by'] = Auth::id();
@@ -357,24 +585,67 @@ class ProductController extends MarketPlace
         //dd($request->all());
     } 
 
-    public function deleteProduct($id) {
-        $shop_id = session('user_shop_id');
-        $result = \App\Product::where('id', $id)->where('shop_id', $shop_id)->first(); 
+    // public function deleteProduct($id) {
+    //     $shop_id = session('user_shop_id');
+    //     $result = \App\Product::where('id', $id)->where('shop_id', $shop_id)->first(); 
+    //     if (!$result) {
+    //         abort(404);
+    //     }
+    //     try{
+    //        $result->delete();
+    //        \App\MongoProduct::deleteData($id);
+    //        $msg_text = Lang::get('product.product_delete_successfully');
+    //        return json_encode(array('status'=>'success', 'message'=>$msg_text, 'url'=>action('Seller\ProductController@index'))); 
+    //     }catch(QueryException $e) {
+    //        $msg_text = Lang::get('product.something_went_wrong');
+    //        return json_encode(array('status'=>'validate_error','message'=>$msg_text));
+    //     }
+
+         
+    // } 
+
+
+
+    public function deleteProduct($id)
+    {
+
+        // $user_id = session('user_id');
+        $user_id = Auth::id();
+        $result = \App\Product::where('id', $id)
+            ->first();
+
         if (!$result) {
             abort(404);
         }
-        try{
-           $result->delete();
-           \App\MongoProduct::deleteData($id);
-           $msg_text = Lang::get('product.product_delete_successfully');
-           return json_encode(array('status'=>'success', 'message'=>$msg_text, 'url'=>action('Seller\ProductController@index'))); 
-        }catch(QueryException $e) {
-           $msg_text = Lang::get('product.something_went_wrong');
-           return json_encode(array('status'=>'validate_error','message'=>$msg_text));
-        }
 
-         
-    } 
+        try {
+            // Soft delete ด้วยการตั้งค่า deleted_at / deleted_by
+            $result->status = '0';
+            $result->deleted_at = Carbon::now();
+            $result->deleted_by = $user_id;
+            $result->save();
+\Log::info('Soft delete product ID: '.$id.' by user ID: '.$user_id);
+            // ลบข้อมูลใน Mongo ถ้ามี
+            // \App\MongoProduct::deleteData($id);
+
+            $msg_text = Lang::get('product.product_delete_successfully');
+            return response()->json([
+                'status'  => 'success',
+                'message' => $msg_text,
+                'url'     => action('Seller\ProductController@index')
+            ]);
+
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Debug ชั่วคราวดู error จริง
+            // dd($e->getMessage());
+            $msg_text = Lang::get('product.something_went_wrong');
+            return response()->json([
+                'status'  => 'validate_error',
+                'message' => $msg_text
+            ]);
+        }
+    }
+
 
     public function copy($id) {
         $shop_id = session('user_shop_id');
@@ -455,36 +726,87 @@ class ProductController extends MarketPlace
         }
     }
 
+        public function parentBaseUnit($parent_cat_id = null)
+        {
+            if (!empty($parent_cat_id)) {
+                $default_lang = 0;
+
+                $sql = DB::table(with(new \App\ParentCatBaseUnit)->getTable().' as pbu')
+                    ->join(with(new \App\Unit)->getTable().' as u', 'u.id', '=', 'pbu.base_unit_id')
+                    ->join(with(new \App\UnitDesc)->getTable().' as ud', [
+                        ['u.id', '=', 'ud.unit_id'],
+                        ['ud.lang_id', '=', DB::raw($default_lang)]
+                    ])
+                    ->select('u.id', 'ud.unit_name')
+                    ->where('u.status', '1')
+                    ->where('pbu.parent_cat_id', $parent_cat_id)
+                    ->get();
+
+                return $sql;
+            }
+            return collect();
+        }
+
     public function sellerProduct(){
         $fielddata = $this->searchData();
         return view('seller.seller_product', ['fielddata'=>$fielddata, 'activetab'=>'seller_product_panel']);
     } 
 
 
-    public function updateStatus($id=null, $status='0'){
+    // public function updateStatus($id=null, $status='0'){
+    //     $user_id = Auth::id();
+    //     $shop_id = session('user_shop_id');
+    //     $prodata = \App\Product::where('id', $id)->where('shop_id',$shop_id)->first();
+    //     if(!empty($prodata)){
+    //         $prodata->status = $status;
+    //         //อ๊อฟ
+    //         //$prodata->stock = $status;
+    //         $prodata->save();
+    //         $id = $prodata->id;
+           
+    //         MongoProduct::updateStatus($id, $status);
+    //         //อ๊อฟ
+    //         //MongoProduct::updateStock($id, $status);
+
+    //         if(!empty($id)){
+    //             $msg_text = Lang::get('product.product_status_has_been_updated_successfully');
+    //             return json_encode(array('status'=>'success', 'message'=>$msg_text, 'url'=>'#'));   
+    //         }else{
+    //            $msg_text = Lang::get('product.something_went_wrong');
+    //            return json_encode(array('status'=>'validate_error','message'=>$msg_text));
+    //         }
+    //     }else{
+    //         $msg_text = Lang::get('product.something_went_wrong');
+    //         return json_encode(array('status'=>'validate_error','message'=>$msg_text));
+    //     }
+    
+    // }
+
+    public function updateStatus($id, $status) {
+   
         $user_id = Auth::id();
         $shop_id = session('user_shop_id');
-        $prodata = \App\Product::where('id', $id)->where('shop_id',$shop_id)->first();
-        if(!empty($prodata)){
-            $prodata->status = $status;
-            $prodata->stock = $status;
-            $prodata->save();
-            $id = $prodata->id;
+        $prodata = \App\Product::where('id', $id)->first();
            
-            MongoProduct::updateStatus($id, $status);
-            MongoProduct::updateStock($id, $status);
-            if(!empty($id)){
-                $msg_text = Lang::get('product.product_status_has_been_updated_successfully');
-                return json_encode(array('status'=>'success', 'message'=>$msg_text, 'url'=>'#'));   
-            }else{
-               $msg_text = Lang::get('product.something_went_wrong');
-               return json_encode(array('status'=>'validate_error','message'=>$msg_text));
-            }
-        }else{
+        if ($prodata) {
+            $prodata->status = (string)$status;
+            $prodata->save();
+           
+            MongoProduct::updateStatus($prodata->id, $status); 
+            
+            $ui_status = ($status == '1') ? 'Active' : 'Inactive';
+            $msg_text = Lang::get('product.product_status_has_been_updated_successfully');
+          
+            return response()->json([
+                'status' => 'success', 
+                'message' => $msg_text,
+                'new_status' => $ui_status
+            ]);
+
+        } else {
             $msg_text = Lang::get('product.something_went_wrong');
-            return json_encode(array('status'=>'validate_error','message'=>$msg_text));
+            return response()->json(['status' => 'validate_error', 'message' => $msg_text]);
         }
-    
     }
 
 }

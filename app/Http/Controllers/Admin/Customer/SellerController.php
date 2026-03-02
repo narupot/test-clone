@@ -24,6 +24,9 @@ use DB;
 use Session;
 use Config;
 use PDF;
+use App\Category;
+use App\ProductGroup;
+use App\Markets;
 
 class SellerController extends MarketPlace
 { 
@@ -343,7 +346,8 @@ class SellerController extends MarketPlace
                         $shop_images = !empty($shop_details->shop_image)?explode(',', $shop_details->shop_image):[];
                         $seller_data = Seller::where('user_id',$user->id)->first();
 
-                        $prd_categories = \App\Category::getMainCategory();
+                        // $prd_categories = \App\Category::getMainCategory();
+                        $prd_categories = [];
 
                         $categoryId = ShopAssignCategory::where('shop_id',$shop_details->id)->pluck('category_id')->toArray();
 
@@ -410,12 +414,124 @@ class SellerController extends MarketPlace
                     $fav_products = $fav_products_res['data'];
                 }
 
+
+                $productGroups = ProductGroup::all();
                 //dd($category_data);
                 //Sdd($fav_products);
-                return view('admin.customer.viewUser', ['user'=>$user,'shop_details'=>$shop_details,'map_images'=>$map_images,'shop_images'=>$shop_images,'seller_data'=>$seller_data,'prd_categories'=>$prd_categories,'categoryId'=>$categoryId,'category_data'=>$category_data,'tblShopDesc'=>$tblShopDesc,'favoriteShopList'=>$favoriteShopList,'fav_products'=>$fav_products]);
+                
+                return view('admin.customer.viewUser', 
+                ['user'=>$user,
+                'shop_details'=>$shop_details,
+                'map_images'=>$map_images,
+                'shop_images'=>$shop_images,
+                'seller_data'=>$seller_data,
+                'prd_categories'=>$prd_categories,
+                'categoryId'=>$categoryId,
+                'category_data'=>$category_data,
+                'tblShopDesc'=>$tblShopDesc,
+                'favoriteShopList'=>$favoriteShopList,
+                'fav_products'=>$fav_products,
+                'productGroups'=>$productGroups
+                ]);
             }
-        }   
+        }
     }
+
+    public function searchProducts(Request $request)
+    {
+       
+        $query = Category::with([
+            'categoryDesc' => function($q){ $q->where('lang_id',0); },
+            'parentCategory.group',
+            'parentCategory.subgroup'
+        ])
+        ->where('is_deleted', '0')
+        ->where('parent_id', '!=', 0);
+
+
+        // Filter group/subgroup
+        if ($request->filled('group_id')) {
+            $query->whereHas('parentCategory', function($q) use ($request){
+                $q->where('group_id', $request->group_id);
+            });
+        }
+ 
+        if ($request->filled('subgroup_id')) {
+            $query->whereHas('parentCategory', function($q) use ($request){
+                $q->where('subgroup_id', $request->subgroup_id);
+            });
+        }
+
+        // Filter catalog/product type (ใช้ id ของ category)
+        if ($request->filled('catalog_id')) {
+            $query->where('parent_id', $request->catalog_id);
+        }
+
+        if ($request->filled('product_type_id')) {
+            $query->where('id', $request->product_type_id);
+        }
+
+        // Filter search text
+        if ($request->filled('search_text')) {
+            $search = $request->search_text;
+            $query->whereHas('categoryDesc', function($q) use ($search){
+                $q->where('category_name', 'like', "%$search%");
+            });
+        }
+
+        $categories = $query->limit(50)->get();
+
+       $result = $categories->map(function($cat){
+            return [
+                'id' => $cat->id,
+                'category_name'   => optional($cat->categoryDesc()->first())->category_name ?? '',
+                'url'             => $cat->url,
+                'product_catalog' => optional($cat->parentCategory)->category_name ?? '',
+                'product_group'   => optional(optional($cat->parentCategory)->group)->name ?? '',
+                'product_subgroup'=> optional(optional($cat->parentCategory)->subgroup)->subgroup_name ?? '',
+            ];
+        });
+
+        return response()->json($result);
+    }
+
+    public function getAssignedProducts(Request $request)
+    {
+        $shopId = $request->shop_id;
+        
+        $assignedCategoriesQuery = ShopAssignCategory::where('shop_id', $shopId)
+            ->with([
+                'getCategory.categoryDesc',
+                'getCategory.parentCategory',
+                'getCategory.parentCategory.group',
+                'getCategory.parentCategory.subgroup'
+            ]);
+
+
+
+        $assignedCategories = $assignedCategoriesQuery->get();
+
+
+
+        $result = $assignedCategories->map(function($sac) {
+            $category = $sac->getCategory;
+            
+            if (!$category) {
+                return null;
+            }
+
+            return [
+            'id' => $category->id,
+            'category_name' => optional(optional($category->categoryDesc))->category_name ?? '',
+            'product_catalog' => optional($category->parentCategory)->category_name ?? '',
+            'product_group' => optional(optional($category->parentCategory)->group)->name ?? '',
+            'product_subgroup' => optional(optional($category->parentCategory)->subgroup)->subgroup_name ?? '',
+        ];
+        })->filter()->values();
+
+        return response()->json($result);
+    }
+
 
     public function getProductList($fav_prd_req_array){
         $shop_id = $fav_prd_req_array->shop_id;
@@ -494,7 +610,7 @@ class SellerController extends MarketPlace
 
         if(isset($input['email'])){
             $error_msg['email.required'] = Lang::get('customer.please_enter_email');
-            $error_msg['email.unique'] = Lang::get('customer.email_already_exist'); 
+            $error_msg['email.unique'] = Lang::get('customer.email_already_exist');
         }
 
         if(isset($input['ph_number'])){
@@ -573,4 +689,165 @@ class SellerController extends MarketPlace
         } 
     }
 
+    public function markupProductPrice(){
+        $markets_data=\App\Markets::where('status',1)->get();
+        $shops='';
+        //return view('admin.customer.viewUser', ['user'=>$user,'shop_details'=>$shop_details,'map_images'=>$map_images,'shop_images'=>$shop_images,'seller_data'=>$seller_data,'prd_categories'=>$prd_categories,'categoryId'=>$categoryId,'category_data'=>$category_data,'tblShopDesc'=>$tblShopDesc,'favoriteShopList'=>$favoriteShopList,'fav_products'=>$fav_products]);
+        return view('admin.customer.markupProductPrice',['markets_data'=>$markets_data]);
+    }    
+
+    public function getMarkupPriceByMC(Request $request)
+    {
+        $marketCode = $request->input('market');
+        
+        // Validate input
+        if (empty($marketCode)) {
+            return response()->json([]);
+        }
+        
+        try {
+            // Query to get shops with their markup prices for the selected market
+            $query = \DB::table(with(new \App\Shop)->getTable().' as s')
+                ->join(with(new \App\ShopDesc)->getTable().' as sd','s.id','=','sd.shop_id')
+                ->join(with(new Markets)->getTable().' as m', 's.market_code','=','m.market_code')
+                ->where('s.status','1')
+                ->where('s.market_code',$marketCode)
+                ->select(['m.market_name','m.market_code','s.id','sd.shop_name','s.panel_no','s.old_markup_price',                
+                DB::raw('CASE WHEN `smm_m`.percent_markup_product_price IS NULL THEN `smm_s`.percent_markup_product_price ELSE `smm_s`.percent_markup_product_price END AS percent_markup_product_price'),
+                DB::raw('CASE WHEN `smm_m`.effective_date IS NULL THEN `smm_s`.effective_date ELSE `smm_s`.effective_date  END AS effective_date'),
+                DB::raw('CASE WHEN `smm_m`.updated_by IS NULL THEN `smm_s`.markedup_by ELSE `smm_s`.markedup_by END AS updated_by'),
+                DB::raw('CASE WHEN `smm_m`.updated_date IS NULL THEN `smm_s`.markedup_at ELSE `smm_s`.markedup_at END AS updated_date')
+        ]);      
+                //->get();
+                // Log the SQL query with bindings
+                $sql = $query->toSql();
+                $bindings = $query->getBindings();
+                \Log::info('SQL Query: ' . $sql);
+                \Log::info('Bindings: ', $bindings);
+             
+                $shops = $query->get();
+            return response()->json($shops);
+            
+        } catch (\Exception $e) {
+            // Log error if needed
+            \Log::error('Error fetching markup prices: ' . $e->getMessage());
+            return response()->json([]);
+        }
+    }
+
+    public function getShopData(Request $request) {
+        $query = $request->input('q');
+        $marketCode = $request->input('market');
+    
+        $stores = \DB::table(with(new \App\Shop)->getTable().' as s')
+            ->join(with(new \App\ShopDesc)->getTable().' as sd', 's.id', '=', 'sd.shop_id')
+            ->where('sd.shop_name', 'like', '%' . $query . '%');
+    
+        if ($marketCode) {
+            $stores->whereRaw('SUBSTR(`smm_s`.panel_no, 1, 2) = ?', [$marketCode]);
+        }
+    
+        // Log the SQL query with bindings
+        //\Log::info('SQL Query: ' . $stores->toSql());
+        //\Log::info('Bindings: ' . json_encode($stores->getBindings()));
+    
+        $results = $stores->limit(20)->get(['s.id', 'sd.shop_name']);
+    
+        return response()->json($results);
+    }
+    
+    /** */
+    public function saveMarkupPrice(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+            'market_code' => 'required|string',
+            'shop_id' => 'nullable|integer', // เปลี่ยนเป็น nullable
+            'markup_percent' => 'required|numeric|min:0|max:100', // ตรวจสอบค่าระหว่าง 0-100%
+            'effective_date' => 'required|date'
+            ]);
+
+            
+            // แปลงรูปแบบวันที่เพื่อบันทึกลงฐานข้อมูล
+            $effectiveDate = date('Y-m-d', strtotime(str_replace('/', '-', $request->effective_date)));
+            $shopId = $request->shop_id;
+            
+            if ($request->has('shop_id') && $request->shop_id) {
+            // กรณีมี shop_id - อัพเดทเฉพาะร้านค้า
+                $existingMarkup = \App\Shop::where('id', $request->shop_id)
+                ->where('market_code', $request->market_code)
+                ->first();
+                
+                if ($existingMarkup) {
+                // อัพเดทข้อมูลเดิม
+                    //$existingMarkup->update([
+                    $current_markup = $existingMarkup->percent_markup_product_price;
+                    $existingMarkup->old_markup_price = $existingMarkup->percent_markup_product_price;
+                    $existingMarkup->percent_markup_product_price = $request->markup_percent;
+                    $existingMarkup->effective_date = $effectiveDate;
+                    $existingMarkup->markedup_by = Auth::guard('admin_user')->user()->nick_name;
+                    $existingMarkup->markedup_at = date('Y-m-d H:i:s');
+                    //]);        
+                    $existingMarkup->save();       
+                }
+                   
+                
+            
+            } else {
+                
+            // กรณีไม่มี shop_id - อัพเดททั้งหมดในตลาด
+                $affectedRows = \App\Shop::where('market_code', $request->market_code)->get();
+                //->whereNull('id')  อัพเดทเฉพาะรายการที่ไม่มี shop_id (ระดับตลาด)
+                //->update([
+                    foreach ($affectedRows as $shop) {
+                        $shop->old_markup_price = $shop->percent_markup_product_price;
+                        $shop->percent_markup_product_price = $request->markup_percent;
+                        $shop->effective_date = $effectiveDate;
+                        $shop->markedup_by = Auth::guard('admin_user')->user()->nick_name;
+                        $shop->markedup_at = date('Y-m-d H:i:s');
+                        $shop->save();
+                    }
+                
+                
+                    
+                if(empty($shopId)){
+                    //$updateMarket= \App\Markets::where('market_code',$request->market_code)->first();
+                    
+                    //if($updateMarket){
+                        /*
+                    $updateMarket->percent_markup_product_price = $request->markup_percent;
+                    $updateMarket->effective_date = $effectiveDate;
+                    $updateMarket->updated_by = Auth::guard('admin_user')->user()->nick_name;
+                    $updateMarket->updated_date = date('Y-m-d H:i:s');
+                    //]);
+                    $updateMarket->save();
+                    */
+                    \App\Markets::where('market_code', $request->market_code)->update([
+                        'percent_markup_product_price' => $request->markup_percent,
+                        'effective_date' => $effectiveDate,
+                        'updated_by' => Auth::guard('admin_user')->user()->nick_name,
+                        'updated_date' => date('Y-m-d H:i:s')
+                    ]);
+                    
+                    //}
+                    
+                }
+                
+            }
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'บันทึกข้อมูลสำเร็จ'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+            'success' => false,
+            'message' => 'เกิดข้อผิดพลาด: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+    
 }
+
+

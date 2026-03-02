@@ -26,7 +26,7 @@
 <!-- page contents start -->
 
 <h1 class="page-title">@lang('order.order_waiting_for_delivery')</h1>
-<div class="order-history-buyer">
+<div class="order-history-buyer mb-4">
     <div class="table-responsive">
         <table class="table order-history-buyer" id="order_history_buyer">
             <thead>

@@ -90,7 +90,6 @@ var tableConfig = (fieldSetJson.tableConfig!==undefined) ? fieldSetJson.tableCon
 
 					key.fieldName = _from.replace(/\s/g, '')+ '_from'; 
 					key.fieldNameTo = _to.replace(/\s/g, '') + '_to';
-					// console.log(key);
 					// key = key.fieldName.replace(/\s/g, '') + '_to';
 					//$rootScope.filedSetModel.push({from : null,to : null});
 					// $rootScope.filedSetModel.push({
@@ -112,7 +111,6 @@ var tableConfig = (fieldSetJson.tableConfig!==undefined) ? fieldSetJson.tableCon
 				if ((key.selectionType == 'single' || key.selectionType == 'multiple') && key.optionValType == 'url') {
 					var tempUrl = key.optionValUrl;
 					var defaultModel = key.defaultVal;
-					//console.log('MMMMMM')
 					salesfactoryData.getData(tempUrl, '').then(function(response) {
 						$rootScope.optionJsonArr[val] = response;
 						//set default model for select type single and value type url
@@ -120,7 +118,6 @@ var tableConfig = (fieldSetJson.tableConfig!==undefined) ? fieldSetJson.tableCon
 							angular.forEach($rootScope.optionJsonArr[val], function(keyJ, valJ) {
 								if ((angular.isString(defaultModel) && defaultModel !== '') && keyJ.value.toLowerCase() === defaultModel.toLowerCase()) {
 									//$rootScope.filedSetModel[val] = keyJ;
-									console.log(val);
 								} else if ((angular.isNumber(defaultModel) && defaultModel !== '') && keyJ.value === defaultModel) {
 									//$rootScope.filedSetModel[val] = keyJ;
 								}

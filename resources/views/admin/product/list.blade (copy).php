@@ -399,7 +399,6 @@
 
             //load. 
             // $gridObj.one("before", function (evt, ui) {
-            //     console.log('-----------on load---------', $gridObj);
             //     // grid.getColumn({ dataIndx: "ShipRegion" }).filter.options 
             //     //     = grid.getData({ dataIndx: ["ShipCountry", "ShipRegion"] });
 

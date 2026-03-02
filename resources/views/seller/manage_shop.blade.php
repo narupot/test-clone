@@ -150,7 +150,7 @@ var CROPPER_SETTING = {!! json_encode($cropper_setting) !!};
                                 <div class="file-wrapper">
                                     <div class="custom-attach-file">
                                         <span id="map_img"><input type="file" class="location_image" name="location_image[]" accept="image/*" multiple="multiple"></span>                        
-                                        <button class="btn-blue custom-img-button">@lang('common.attach')</button>
+                                        <button class="btn- btn custom-img-button">@lang('common.attach')</button>
                                     </div>
                                     
                                 </div>
@@ -247,7 +247,7 @@ var CROPPER_SETTING = {!! json_encode($cropper_setting) !!};
                                                 <div class="file-wrapper mb-2" style="display: inline-flex; vertical-align: top;">
                                                     <div class="custom-attach-file">
                                                         <span id="shop_img_span"><input type="file" class="shop_image" name="shop_image[]" accept="image/*" multiple="multiple"></span>                        
-                                                        <button class="btn-blue custom-img-button">@lang('common.attach')</button>
+                                                        <button class="btn- btn custom-img-button">@lang('common.attach')</button>
                                                     </div>
                                                 </div>
 

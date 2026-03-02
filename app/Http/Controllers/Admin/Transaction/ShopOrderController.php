@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Http\Controllers\Admin\Transaction;
 
@@ -18,6 +18,7 @@ use Lang;
 use Config;
 use Excel;
 use PDF;
+use Illuminate\Database\QueryException;
 class ShopOrderController extends MarketPlace
 {
     public function __construct(){
@@ -37,15 +38,69 @@ class ShopOrderController extends MarketPlace
             }
 
             return view('admin.transaction.listShopOrder', ['filter'=>$filter,'ord_status'=>json_encode($status_arr)]);
-        }      
+        }
+    }
+
+    public function viewSearchOrder(Request $request){
+
+        $search    = $request->input('search_order');
+        if($search){
+            $order = Order::query()
+            ->when($search,function($q) use ($search) {
+                    $q->where('formatted_id',$search);
+            })
+            ->first();
+            if($order){
+                return redirect()->action('Admin\Transaction\OrderController@orderDetail',['oid'=>$order->formatted_id]);
+            }
+        }else{
+            $order=[];
+        }
+        
+        return view('admin.transaction.searchOrder',['order'=>$order]);
     }
 
     public function listOrderData(Request $request){
+        // สร้าง request fingerprint เพื่อป้องกันการเรียกซ้ำ
+        $request_fingerprint = md5(serialize([
+            'pq_curpage' => $request->pq_curpage,
+            'pq_rpp' => $request->pq_rpp,
+            'pq_sort' => $request->pq_sort,
+            'pq_filter' => $request->pq_filter,
+            'user_id' => Auth::guard('admin_user')->id(),
+            'timestamp' => floor(time() / 5) // 5 วินาที window
+        ]));
+        
+        // ตรวจสอบว่า request นี้ถูกเรียกไปแล้วหรือไม่
+        $session_key = 'last_request_' . $request_fingerprint;
+        if (session()->has($session_key)) {
+            $last_call_time = session($session_key);
+            if (time() - $last_call_time < 5) { // 5 วินาที
+                \Log::info('Duplicate request blocked', [
+                    'fingerprint' => $request_fingerprint,
+                    'time_diff' => time() - $last_call_time
+                ]);
+                return response()->json(['status' => 'duplicate_request'], 429);
+            }
+        }
+        
+        // บันทึกเวลาการเรียก request นี้
+        session([$session_key => time()]);
+        
+        // เพิ่ม debug log
+        \Log::info('listOrderData called', [
+            'timestamp' => now(),
+            'request_id' => uniqid(),
+            'fingerprint' => $request_fingerprint,
+            'pq_curpage' => $request->pq_curpage,
+            'pq_rpp' => $request->pq_rpp,
+            'user_agent' => $request->header('User-Agent')
+        ]);
+        
         $perpage = !empty($request->pq_rpp) ? $request->pq_rpp : getPagination('limit');
-        $request->page = $current_page = !empty($request->pq_curpage)?$request->pq_curpage:0;
-
+        $current_page = $request->pq_curpage ?? 0;
+        $request->merge(['page' => $current_page]);
         $start_index = ($current_page - 1) * $perpage;
-        //dd($perpage,$request->page);
         
         $order_by = 'sord.id';
         $order_by_val = 'desc';
@@ -59,30 +114,24 @@ class ShopOrderController extends MarketPlace
         }
 
         try{
-            
             $query = \DB::table(with(new OrderShop)->getTable().' as sord')
                   ->join(with(new Order)->getTable().' as ord', 'sord.order_id', '=', 'ord.id')
-                  ->join(with(new \App\Shop)->getTable().' as shop', 'sord.shop_id', '=', 'shop.id')
-                  ->join(with(new \App\ShopDesc)->getTable().' as shopdesc', 'shop.id', '=', 'shopdesc.shop_id')
-                  ->join(with(new \App\User)->getTable().' as seller', 'shop.user_id', '=', 'seller.id')
-                  ->join(with(new \App\OrderStatusDesc)->getTable().' as osd', 'sord.order_status','=', 'osd.order_status_id')
-                  ->select('seller.display_name as seller_name','seller.id as seller_id','sord.shop_formatted_id','ord.formatted_id','sord.total_final_price','sord.end_shopping_date','ord.pickup_time','osd.status','sord.order_status','sord.admin_remark','sord.payment_status','shopdesc.shop_name');
-            
+                  ->select('sord.id', 'sord.shop_id', 'sord.order_id', 'sord.shop_formatted_id', 'sord.total_final_price', 'sord.end_shopping_date', 'sord.order_status', 'sord.admin_remark', 'sord.payment_status', 'ord.formatted_id', 'ord.pickup_time', 'sord.commission_rate', 'sord.commission_fee', 'sord.total_smm_pay');
+
             if(isset($request->pq_filter)){
                 $filter_req = json_decode($request->pq_filter,true);
                 if(!empty($filter_req['data'])){
                     $filter_arr = $filter_req['data'];
                     foreach ($filter_arr as $fkey => $fvalue) {
-
                         $searchval = $fvalue['value'];
                         switch ($fvalue['dataIndx']) {
                             case 'formatted_id':$query->where('ord.formatted_id','like', '%'.$searchval.'%'); break;
                             case 'shop_formatted_id':$query->where('sord.shop_formatted_id','like', '%'.$searchval.'%'); break;
-                            case 'seller_id':$query->where('seller.id','=',$searchval); break;
-                            case 'shop_name':$query->where('shopdesc.shop_name','like', '%'.$searchval.'%'); break;
                             case 'admin_remark':$query->where('sord.admin_remark','like', '%'.$searchval.'%'); break;
-                            case 'seller_name':$query->where('seller.display_name','like', '%'.$searchval.'%'); break;
                             case 'total_final_price':$query->where('sord.total_final_price','=', $searchval); break;
+                            case 'commission_rate':$query->where('sord.commission_rate','=', $searchval); break;
+                            case 'commission_fee':$query->where('sord.commission_fee','=', $searchval); break;
+                            case 'total_smm_pay':$query->where('sord.total_smm_pay','=', $searchval); break;
                             case 'order_status':$query->whereIn('sord.order_status',$searchval); break;
                             case 'end_shopping_date_time':
                                 $from_date = $fvalue['value']??'';
@@ -90,7 +139,6 @@ class ShopOrderController extends MarketPlace
                                 createDateFilter($query,'sord.end_shopping_date',$from_date,$to_date);
                             break;
                             case 'time':
-                               
                                 $query->where(function ($query) use ($searchval) {
                                     $count= 0;
                                     foreach ($searchval as $searchdata) {
@@ -99,55 +147,159 @@ class ShopOrderController extends MarketPlace
                                             $query = $query->where('pickup_time','like', '%'.$searchdata.'%');
                                         }else{
                                             $query = $query->orwhere('pickup_time','like', '%'.$searchdata.'%');
-
-                                        }    
+                                        }
                                     }
-									
-								});
+                                });
                                 break;
-							case 'pickup_time':
+                            case 'pickup_time':
                                 $from_date = $fvalue['value']??'';
                                 $to_date = $fvalue['value2']??'';
-                                createDateFilter($query,'ord.pickup_time',$from_date,$to_date);	
+                                createDateFilter($query,'ord.pickup_time',$from_date,$to_date);
                             break;
-
+                            case 'seller_id':
+                                $seller_id_filter = $searchval;
+                                break;
+                            case 'shop_name':
+                                $shop_name_filter = $searchval;
+                                break;
+                            case 'seller_name':
+                                $seller_name_filter = $searchval;
+                                break;
                         }
-                        
                     }
                 }
             }
+
+            if(isset($seller_id_filter) || isset($shop_name_filter) || isset($seller_name_filter)) {
+                $shop_query = \DB::table(with(new \App\Shop)->getTable().' as shop')
+                    ->join(with(new \App\User)->getTable().' as seller', 'shop.user_id', '=', 'seller.id')
+                    ->leftJoin(with(new \App\ShopDesc)->getTable().' as shopdesc', 'shop.id', '=', 'shopdesc.shop_id')
+                    ->select('shop.id');
+
+                if(isset($seller_id_filter)) {
+                    $shop_query->where('seller.id', '=', $seller_id_filter);
+                }
+                if(isset($shop_name_filter)) {
+                    $shop_query->where('shopdesc.shop_name', 'like', '%'.$shop_name_filter.'%');
+                }
+                if(isset($seller_name_filter)) {
+                    $shop_query->where('seller.display_name', 'like', '%'.$seller_name_filter.'%');
+                }
+
+                $shop_ids = $shop_query->pluck('id');
+                $query->whereIn('sord.shop_id', $shop_ids);
+            }
+
             $response = $query->orderBy($order_by,$order_by_val)->paginate($perpage,['*'],'page',$current_page);
             $totrec = $response->total();
-            //dd($response);
+
+
+
             if($start_index >= $totrec) {
                 $current_page = ceil($totrec/$perpage);
-                
+                // เพิ่ม log เพื่อตรวจสอบการเรียกซ้ำ
+                \Log::info('Pagination adjustment', [
+                    'original_page' => $request->pq_curpage,
+                    'adjusted_page' => $current_page,
+                    'total_records' => $totrec,
+                    'per_page' => $perpage
+                ]);
                 $response = $query->orderBy($order_by,$order_by_val)->paginate($perpage,['*'],'page',$current_page);
             }
 
-            foreach ($response as $key => $value) {
-                $response[$key]->end_shopping_date_time = $value->end_shopping_date;
-                $response[$key]->end_shopping_date = $value->end_shopping_date?date('Y-m-d',strtotime($value->end_shopping_date)):null;
-                $response[$key]->time = $value->pickup_time?date('H:i:s',strtotime($value->pickup_time)):null;
-                $response[$key]->total_final_price = numberFormat($value->total_final_price);
-                $response[$key]->status = $value->status??'';
-                $response[$key]->detail_url = action('Admin\Transaction\ShopOrderController@orderDetail',$value->shop_formatted_id);
-                $response[$key]->payment_status = ($value->payment_status == 1)?'c-tot':'';
+            if($response->count() > 0) {
+                $shop_ids = $response->pluck('shop_id')->unique();
+                $order_status_ids = $response->pluck('order_status')->unique();
+
+                $shops = \DB::table(with(new \App\Shop)->getTable().' as shop')
+                    ->join(with(new \App\User)->getTable().' as seller', 'shop.user_id', '=', 'seller.id')
+                    ->leftJoin(with(new \App\ShopDesc)->getTable().' as shopdesc', 'shop.id', '=', 'shopdesc.shop_id')
+                    ->whereIn('shop.id', $shop_ids)
+                    ->select('shop.id', 'seller.display_name as seller_name', 'seller.id as seller_id', 'shopdesc.shop_name')
+                    ->get()
+                    ->keyBy('id');
+
+                $order_statuses = \DB::table(with(new \App\OrderStatusDesc)->getTable())
+                    ->whereIn('order_status_id', $order_status_ids)
+                    ->where('lang_id', session('default_lang'))
+                    ->select('order_status_id', 'status')
+                    ->get()
+                    ->keyBy('order_status_id');
+
+                foreach ($response as $key => $value) {
+                    $shop_data = $shops->get($value->shop_id);
+                    $status_data = $order_statuses->get($value->order_status);
+
+                    $response[$key]->seller_name = $shop_data->seller_name ?? '';
+                    $response[$key]->seller_id = $shop_data->seller_id ?? '';
+                    $response[$key]->shop_name = $shop_data->shop_name ?? '';
+                    $response[$key]->commission_rate = number_format((float)$value->commission_rate, 2, '.', ',');
+                    $response[$key]->commission_fee = number_format((float)$value->commission_fee, 2, '.', ',');
+                    $response[$key]->total_smm_pay = number_format((float)$value->total_smm_pay, 2, '.', ',');
+                    $response[$key]->status = $status_data->status ?? '';
+
+                    $response[$key]->end_shopping_date_time = $value->end_shopping_date;
+                    $response[$key]->end_shopping_date = $value->end_shopping_date?date('Y-m-d',strtotime($value->end_shopping_date)):null;
+                    $response[$key]->time = $value->pickup_time?date('H:i:s',strtotime($value->pickup_time)):null;
+                    $response[$key]->total_final_price = number_format((float)$value->total_final_price, 2, '.', ',');
+                    $response[$key]->detail_url = action('Admin\Transaction\ShopOrderController@orderDetail',$value->shop_formatted_id);
+                    $response[$key]->payment_status = ($value->payment_status == 1)?'c-tot':'';
+                }
             }
 
-            /***save filter****/
             $this->setFilter('shop_order',$request);
-
             
         }catch(QueryException $e){
             $response = ['status'=>'fail','msg'=>$e->getMessage()];
         }
-        
 
         return $response;
     }
 
     public function orderDetail(Request $request) {
+
+        $formatted_id = $request->oid; 
+        $order_shop = OrderShop::where('shop_formatted_id',$formatted_id)->with(['getOrderStatus'])->first();
+       
+        if(empty($order_shop)){
+          return redirect()->action('Admin\Transaction\ShopOrderController@index');
+        }
+        $order_detail = OrderDetail::getShopOrderDetail('',$order_shop->id);
+        $order_shop->details = $order_detail;
+        $transaction = \App\OrderTransaction::where('order_shop_id',$order_shop->id)->get();
+        if(count($transaction) < 2){
+            $transaction = \App\OrderTransaction::where('order_id',$order_shop->order_id)->where('order_shop_id',0)->orderBy('id')->get();
+        }
+		$order_shop->pickup_time = null;
+		if($order_shop->order_id>0)
+		{
+			$order_info = Order::where('id',$order_shop->order_id)->first();
+			if($order_info)
+			{
+				$order_shop->pickup_time=$order_info->pickup_time;
+			}
+		}
+		/* Start:: If Product Detail Not Available in Order Details */
+		if($order_shop->details)
+		{
+			if(!empty($order_shop->details))
+			{
+				foreach($order_shop->details as $key => $val)
+				{
+					if($val->description=='' || $val->description==null)
+					{
+						$productDetail = \App\Product::getProductDetailAll($val->sku);
+						$order_shop->details[$key]->description=isset($productDetail->productDesc)?$productDetail->productDesc->description:"";
+					}
+				}
+			}
+		}
+        $shop_json = json_decode($order_shop->shop_json,true);
+		/* Start:: If Product Detail Not Available in Order Details */
+        return view('admin.transaction.shopOrdDetail',['order_shop'=>$order_shop,'transaction'=>$transaction,'main_order_info'=>$order_info,'shop_json'=>$shop_json]);
+    } 
+    
+    public function orderDetailTest(Request $request) {
 
         $formatted_id = $request->oid; 
         $order_shop = OrderShop::where('shop_formatted_id',$formatted_id)->with(['getOrderStatus'])->first();
@@ -187,9 +339,9 @@ class ShopOrderController extends MarketPlace
 		}
         $shop_json = json_decode($order_shop->shop_json,true);
 		/* Start:: If Product Detail Not Available in Order Details */
-        return view('admin.transaction.shopOrdDetail',['order_shop'=>$order_shop,'transaction'=>$transaction,'main_order_info'=>$order_info,'shop_json'=>$shop_json]);
-    }       
-
+        return view('admin.transaction.shopOrdDetailTest',['order_shop'=>$order_shop,'transaction'=>$transaction,'main_order_info'=>$order_info,'shop_json'=>$shop_json]);
+    } 
+    
     public function changeShopOrderStatus(Request $request){
 
         $order_shop_id = $request->order_shop_id ?? 0;
@@ -231,7 +383,7 @@ class ShopOrderController extends MarketPlace
                 if($value->order_status == 3 || $value->order_status == 4){
                     $shop_status_arr[] = $value->order_status;
                 }else{
-                   $update_main_ord = 1; 
+                   $update_main_ord = 1;
                    /**no need to update because some order processing**/
                 }
                 
@@ -288,8 +440,6 @@ class ShopOrderController extends MarketPlace
         $request->page = $current_page = !empty($request->pq_curpage)?$request->pq_curpage:0;
 
         $start_index = ($current_page - 1) * $perpage;
-        //dd($perpage,$request->page);
-        
         $order_by = 'sord.id';
         $order_by_val = 'desc';
         if(isset($request->pq_sort)){
@@ -467,7 +617,7 @@ class ShopOrderController extends MarketPlace
     public function generateOrderPdf(Request $request) {
 
         $formatted_id = explode(',',$request->order_list); 
-        $total_order = OrderShop::whereIn('shop_formatted_id',$formatted_id)->with(['getOrderStatus'])->get();
+        $total_order = OrderShop::whereIn('shop_formatted_id',$formatted_id)->with(['getOrderStatus'])->orderby('id')->get();
         
         if(empty($total_order)){
           abort(404);

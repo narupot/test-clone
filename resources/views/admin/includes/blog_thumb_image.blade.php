@@ -105,7 +105,7 @@
                </div>
                <div class="clearfix nopadding custome-background">
                   <div class="col-md-12 footer-btn">
-                     <button type="button" class="btn-md btn-blue btn avatar-save float-right">Done</button>
+                     <button type="button" class="btn-md btn- btn avatar-save float-right">Done</button>
                   </div>
                </div>
             </div>

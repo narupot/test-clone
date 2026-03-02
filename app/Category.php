@@ -11,13 +11,15 @@ class Category extends Model
     
     protected $guarded = [];
 
+    protected $fillable = [ 'parent_id', 'status'];
+
     public function category(){
          return $this->hasMany('App\Category', 'parent_id', 'id')->select('id', 'url', 'parent_id','total_products');
     } 
     
     public function categorydesc(){
 
-      return $this->hasOne('App\CategoryDesc', 'cat_id', 'id')->select('id','category_name','cat_id'); 
+      return $this->hasOne('App\CategoryDesc', 'cat_id', 'id')->select('id','category_name','cat_id', 'meta_title', 'meta_keyword', 'meta_description', 'cat_description');
     }
 
     public function getCatDesc(){
@@ -41,15 +43,6 @@ class Category extends Model
       return Self::where(['parent_id' => '0', 'status' => '1'])->get();
     }
     
-    // public function getMainParentId($parent_id){        
-    //   $sqlMenu = $this->parent()->where('parent_id',$parent_id)->get();        
-    //   if ($sqlMenu->parent_id == 0) {            
-    //     return $sqlMenu->parent_id;        
-    //   } else {            
-    //     return $this->getMainParentId($sqlMenu->parentId);        
-    //   }   
-    // }
-
     public function getcategoryDetail(){
 
        return $this->hasOne('App\CategoryDesc','cat_id','id')
@@ -85,5 +78,15 @@ class Category extends Model
 
 	public static function getParentName($cat_id){
         return self::where('id',$cat_id)->with('getCatDesc')->first(); 
+    }
+
+    public function productTypeTags()
+    {
+        return $this->hasMany(ProductTypeTag::class, 'product_type_id', 'id');
+    }
+
+    public function parentCategory()
+    {
+        return $this->belongsTo(ParentCategory::class, 'parent_id', 'id');
     }
 }

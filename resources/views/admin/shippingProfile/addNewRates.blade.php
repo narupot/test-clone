@@ -293,7 +293,6 @@
                             });
                         }
                         if(attribute=='state'){
-                            console.log(obj.optionList);
                             $.each(obj.optionList, function(index, value){
                                 htmlContent += "<option value='"+value.id+"'>"+value.city_name.city_district_name
 +"</option>";

@@ -24,9 +24,9 @@
         <p>@lang('order.main_order_no'). {{$mainOrderData->formatted_id}}</p>
     </div>
     <div class="track-status">
-        <button class="btn-blue">@lang('shop.status') : <span id="shop_status_{{ $orderShopData->id }}">{{($orderShopData->getOrderStatus->status) ? $orderShopData->getOrderStatus->status : "NA" }}</span></button>&nbsp;
+        <button class="btn- btn">@lang('shop.status') : <span id="shop_status_{{ $orderShopData->id }}">{{($orderShopData->getOrderStatus->status) ? $orderShopData->getOrderStatus->status : "NA" }}</span></button>&nbsp;
         @if($orderShopData->shipping_method ==1 && $orderShopData->order_status !=3 && $orderShopData->seller_status == 'ready')
-            <button class="btn-blue">@lang('order.ready_to_receive')</button>         
+            <button class="btn- btn">@lang('order.ready_to_receive')</button>         
         @endif                                  
         <span class="ship-track-time">{{getDateFormat($orderShopData->updated_at,7)}}</span>
     </div>

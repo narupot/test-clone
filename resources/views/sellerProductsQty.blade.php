@@ -67,7 +67,8 @@
                 <div class="col-sm-5">
                     <label>@lang('product.price')<i class="red">*</i></label>
                     <div class="input-sign">
-                        <input type="text" name="unit_price" data-type="price" placeholder="Unit Price" value="{{$productDetail->unit_price}}" class="">
+                        <input type="text" name="unit_price" data-type="price" placeholder="Unit Price" value="{{$productDetail->unit_price}}" class=""
+                        onkeydown="if(event.key === 'Enter'){ event.preventDefault(); $('.saveProductPrice').trigger('click'); }">
                         <span class="curr-label">@lang('common.baht')</span>
                     </div>
                     <p id="error_unit_price" class="error"></p>

@@ -715,20 +715,59 @@ class CleanDatabaseController extends MarketPlace
 
         //others directories that need to clean
         //File::cleanDirectory($media_manager_path);
-        File::cleanDirectory($cart_option_path);
-        File::cleanDirectory($color_path);
-        File::cleanDirectory($csv_path);
+        try {
+            File::cleanDirectory($cart_option_path);
+        } catch (Exception $e) {
+            // Log error but continue
+        }
+        
+        try {
+            File::cleanDirectory($color_path);
+        } catch (Exception $e) {
+            // Log error but continue
+        }
+        
+        try {
+            File::cleanDirectory($csv_path);
+        } catch (Exception $e) {
+            // Log error but continue
+        }
 
         //others directories that need to delete
         $this->removeMediaFromDir($customer_path);
         
         //clean server chache
         $storage_path = storage_path();
-        File::cleanDirectory($storage_path.'/app/public');
-        File::cleanDirectory($storage_path.'/framework/cache');
-        File::cleanDirectory($storage_path.'/framework/sessions');
-        File::cleanDirectory($storage_path.'/framework/views');
-        File::cleanDirectory($storage_path.'/logs');
+        
+        try {
+            File::cleanDirectory($storage_path.'/app/public');
+        } catch (Exception $e) {
+            // Log error but continue
+        }
+        
+        try {
+            File::cleanDirectory($storage_path.'/framework/cache');
+        } catch (Exception $e) {
+            // Log error but continue
+        }
+        
+        try {
+            File::cleanDirectory($storage_path.'/framework/sessions');
+        } catch (Exception $e) {
+            // Log error but continue
+        }
+        
+        try {
+            File::cleanDirectory($storage_path.'/framework/views');
+        } catch (Exception $e) {
+            // Log error but continue
+        }
+        
+        try {
+            File::cleanDirectory($storage_path.'/logs');
+        } catch (Exception $e) {
+            // Log error but continue
+        }
          
         dd("DB Cleaned Successfully");
     }

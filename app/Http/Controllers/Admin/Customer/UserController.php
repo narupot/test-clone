@@ -9,15 +9,18 @@ use Illuminate\Support\Facades\Input;
 use App\User;
 use App\Shop;
 use App\ShopDesc;
+use App\ProductGroup;
 use App\Seller;
 use App\ShopAssignCategory;
 use App\MongoShop;
+use App\BankInfo;
 use Auth;
 use Lang;
 use DB;
 use Session;
 use Config;
 use PDF;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends MarketPlace
 { 
@@ -30,6 +33,7 @@ class UserController extends MarketPlace
     }
 
     public function index(){
+
         $permission = $this->checkUrlPermission('list_customer');
         if($permission === true) {
             
@@ -134,6 +138,7 @@ class UserController extends MarketPlace
         $permission = $this->checkUrlPermission('list_customer');
         
         $tblShopDesc =  with(new ShopDesc)->getTable();
+
         if($permission === true) {
 
             $user = User::where('id', $id)->first();
@@ -203,11 +208,15 @@ class UserController extends MarketPlace
                     $wishlistData = isset($wishlistDataArray['detail']['data'])?$wishlistDataArray['detail']['data']:[];
                 }
 
+                $productGroups = ProductGroup::all();
+
                 //dd($wishlistDataArray['detail']['data']);
-                return view('admin.customer.viewUser', ['user'=>$user,'shop_details'=>$shop_details,'map_images'=>$map_images,'shop_images'=>$shop_images,'seller_data'=>$seller_data,'prd_categories'=>$prd_categories,'categoryId'=>$categoryId,'category_data'=>$category_data,'tblShopDesc'=>$tblShopDesc,'favoriteShopList'=>$shop_res,'fav_products'=>$wishlistData]);
+                return view('admin.customer.viewUser', ['user'=>$user,'shop_details'=>$shop_details,'map_images'=>$map_images,'shop_images'=>$shop_images,'seller_data'=>$seller_data,'prd_categories'=>$prd_categories,'categoryId'=>$categoryId,'category_data'=>$category_data,'tblShopDesc'=>$tblShopDesc,'favoriteShopList'=>$shop_res,'fav_products'=>$wishlistData,'productGroups'=>$productGroups ]);
+            
             }
         }   
     }
+
 
     public function getProductByWishlist($id){
         //$request->request->add(['blade'=>'wishlist']);
@@ -333,52 +342,198 @@ class UserController extends MarketPlace
     ** when admin assign master product(category) to seller.
     ** only this master product seller can sell.
     ****/
-    public function assignCategorySeller(Request $request){
-        
-        $input = $request->all();
-        $rules['prd_cat_id'] = 'Required|Array|min:1';
-        $error_msg['prd_cat_id.required'] = Lang::get('admin_customer.please_select_category');
+    // public function assignCategorySeller(Request $request){
+       
+    //     $input = $request->all();
+    //     $rules['prd_cat_id'] = 'Required|Array|min:1';
+    //     $error_msg['prd_cat_id.required'] = Lang::get('admin_customer.please_select_category');
 
-        $validate = Validator::make($input, $rules, $error_msg);
+    //     $validate = Validator::make($input, $rules, $error_msg);
 
-        $shop_id = $request->shop_id;
+    //     $shop_id = $request->shop_id;
 
-        if ($validate->passes()) {
-            try{
-                $cat_id_arr = $request->prd_cat_id;
+    //     if ($validate->passes()) {
+    //         try{
+    //             $cat_id_arr = $request->prd_cat_id;
 
-                $assign_cat_id = ShopAssignCategory::where('shop_id',$shop_id)->pluck('category_id')->toArray();
-                $diff_id_arr = array_diff($assign_cat_id,$cat_id_arr);
-                foreach ($cat_id_arr as $key => $value) {
-                    $check_cat = ShopAssignCategory::where(['shop_id'=>$shop_id,'category_id'=>$value])->count();
-                    if($check_cat < 1){
-                        $cat_obj = new ShopAssignCategory;
-                        $cat_obj->shop_id = $shop_id;
-                        $cat_obj->category_id = $value;
-                        $cat_obj->created_by = Auth::guard('admin_user')->user()->id;
-                        $cat_obj->save();
-                    }
-                }
-                if(count($diff_id_arr)){
-                    ShopAssignCategory::whereIn('category_id',$diff_id_arr)->where('shop_id',$shop_id)->delete();
-                }
+    //             $assign_cat_id = ShopAssignCategory::where('shop_id',$shop_id)->pluck('category_id')->toArray();
+    //             $diff_id_arr = array_diff($assign_cat_id,$cat_id_arr);
+    //             foreach ($cat_id_arr as $key => $value) {
+    //                 $check_cat = ShopAssignCategory::where(['shop_id'=>$shop_id,'category_id'=>$value])->count();
+    //                 if($check_cat < 1){
+    //                     $cat_obj = new ShopAssignCategory;
+    //                     $cat_obj->shop_id = $shop_id;
+    //                     $cat_obj->category_id = $value;
+    //                     $cat_obj->created_by = Auth::guard('admin_user')->user()->id;
+    //                     $cat_obj->save();
+    //                 }
+    //             }
+    //             if(count($diff_id_arr)){
+    //                 ShopAssignCategory::whereIn('category_id',$diff_id_arr)->where('shop_id',$shop_id)->delete();
+    //             }
 
-                /***update shop data into mongo******/
-                $shop_data = \App\Shop::where('id',$shop_id)->with('allDesc')->with('shopUser')->first();
-                $check_cat = \App\ShopAssignCategory::where(['shop_id'=>$shop_id])->pluck('category_id')->toArray();
+    //             /***update shop data into mongo******/
+    //             $shop_data = \App\Shop::where('id',$shop_id)->with('allDesc')->with('shopUser')->first();
+    //             $check_cat = \App\ShopAssignCategory::where(['shop_id'=>$shop_id])->pluck('category_id')->toArray();
 
-                $shop_data->shop_category = $check_cat;
-                $update_data = \App\MongoShop::updateData($shop_data);
+    //             $shop_data->shop_category = $check_cat;
+    //             $update_data = \App\MongoShop::updateData($shop_data);
 
-                $response = ['status'=>'success'];
-            }catch(QueryException $e){
-                $response = ['status'=>'fail','msg'=>$e->getMessage()];
-            }
+    //             $response = ['status'=>'success'];
+    //         }catch(QueryException $e){
+    //             $response = ['status'=>'fail','msg'=>$e->getMessage()];
+    //         }
             
-        }else{
-            $response = ['status'=>'fail','msg'=>$validate->errors(),'error'=>'validation'];
+    //     }else{
+    //         $response = ['status'=>'fail','msg'=>$validate->errors(),'error'=>'validation'];
+    //     }
+    //     return $response;
+    // }
+
+    // public function assignCategorySeller(Request $request)
+    // {
+    //     // return $request->all();
+    //     $rules = [
+    //         'shop_id' => 'required|numeric',
+    //         'selected_products.*' => 'nullable|numeric',
+    //     ];
+
+    //     $error_msg = [
+    //         'shop_id.required' => Lang::get('admin_customer.shop_id_is_required'),
+    //         'shop_id.numeric' => Lang::get('admin_customer.shop_id_must_be_numeric'),
+    //         'selected_products.array' => Lang::get('admin_customer.please_select_category'),
+    //         'selected_products.*.numeric' => Lang::get('admin_customer.shop_id_must_be_numeric'),
+    //     ];
+
+    //     $validator = Validator::make($request->all(), $rules, $error_msg);
+
+    //     if ($validator->fails()) {
+    //         return response()->json(['status' => 'fail', 'msg' => $validator->errors(), 'error' => 'validation'], 422);
+    //     }
+        
+    //     $shopId = $request->shop_id;
+    //     $selectedProducts = $request->selected_products ?? [];
+    //     $adminUserId = Auth::guard('admin_user')->user()->id;
+
+
+    //     try {
+    //         DB::transaction(function () use ($shopId, $selectedProducts, $adminUserId) {
+
+    //             ShopAssignCategory::where('shop_id', $shopId)->delete();
+
+
+    //             if (!empty($selectedProducts)) {
+                    
+    //                 $insertData = collect($selectedProducts)->map(function ($categoryId) use ($shopId, $adminUserId) {
+    //                     return [
+    //                         'shop_id' => $shopId,
+    //                         'category_id' => $categoryId,
+    //                         'created_by' => $adminUserId,
+    //                         'created_at' => now(),
+    //                         'updated_at' => now(),
+    //                     ];
+    //                 });
+    //                 ShopAssignCategory::insert($insertData->toArray());
+                   
+    //             } else {
+    //                 Log::info('transaction: ไม่มี selectedProducts');
+    //             }
+
+    //             $shopData = Shop::with('allDesc', 'shopUser')->find($shopId);
+    //             if ($shopData) {
+    //                 $shopData->shop_category = $selectedProducts;
+    //                 MongoShop::updateData($shopData);
+    //             } else {
+    //                 Log::warning('transaction: ไม่พบ shopData', ['shop_id' => $shopId]);
+    //             }
+    //         });
+
+    //         Log::info('assignCategorySeller: transaction commit สำเร็จ');
+           
+    //         return redirect()->back()->withInput($request->all())->with('succMsg', __('admin_common.records_updated_successfully'));
+    //     } catch (\Exception $e) {
+    //         return redirect()->back()->with('error', 'เกิดข้อผิดพลาด: ' . $e->getMessage());
+    //     } catch (\Exception $e) {
+    //         Log::error('assignCategorySeller: Exception', ['error' => $e->getMessage()]);
+    //         return redirect()->back()->with('error', 'เกิดข้อผิดพลาด: ' . $e->getMessage());
+    //     }
+    // }
+
+     public function assignCategorySeller(Request $request)
+    {
+      Log::info('selected_products count', [
+            'count' => count($request->selected_products ?? []),
+        ]);
+        $rules = [
+            'shop_id' => 'required|numeric',
+            'selected_products.*' => 'nullable|numeric',
+        ];
+
+        $error_msg = [
+            'shop_id.required' => Lang::get('admin_customer.shop_id_is_required'),
+            'shop_id.numeric' => Lang::get('admin_customer.shop_id_must_be_numeric'),
+            'selected_products.array' => Lang::get('admin_customer.please_select_category'),
+            'selected_products.*.numeric' => Lang::get('admin_customer.shop_id_must_be_numeric'),
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $error_msg);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'fail', 'msg' => $validator->errors(), 'error' => 'validation'], 422);
         }
-        return $response;
+
+        $shopId = $request->shop_id;
+        $selectedProducts = $request->selected_products ?? [];
+        $adminUserId = Auth::guard('admin_user')->user()->id;
+
+        try {
+            DB::transaction(function () use ($shopId, $selectedProducts, $adminUserId) {
+
+                // ลบข้อมูลเก่าก่อน
+                ShopAssignCategory::where('shop_id', $shopId)->delete();
+
+                if (!empty($selectedProducts)) {
+
+                    // เตรียมข้อมูลทั้งหมด
+                    $insertData = collect($selectedProducts)->map(function ($categoryId) use ($shopId, $adminUserId) {
+                        return [
+                            'shop_id'     => $shopId,
+                            'category_id' => $categoryId,
+                            'created_by'  => $adminUserId,
+                            'created_at'  => now(),
+                            'updated_at'  => now(),
+                        ];
+                    })->toArray();
+
+                    // 🔹 แบ่งชุดย่อย (batch) ละ 500 แถว (สามารถปรับได้ตามต้องการ)
+                    $chunks = array_chunk($insertData, 500);
+
+                    foreach ($chunks as $index => $chunk) {
+                        ShopAssignCategory::insert($chunk);
+                        Log::info("insert batch success", ['batch' => $index + 1, 'count' => count($chunk)]);
+                    }
+
+                } else {
+                    Log::info('transaction: ไม่มี selectedProducts');
+                }
+
+                // อัปเดตข้อมูลลง MongoDB
+                $shopData = Shop::with('allDesc', 'shopUser')->find($shopId);
+                if ($shopData) {
+                    $shopData->shop_category = $selectedProducts;
+                    MongoShop::updateData($shopData);
+                } else {
+                    Log::warning('transaction: ไม่พบ shopData', ['shop_id' => $shopId]);
+                }
+            });
+
+            Log::info('assignCategorySeller: transaction commit สำเร็จ');
+
+            return redirect()->back()->withInput($request->all())->with('succMsg', __('admin_common.records_updated_successfully'));
+        } catch (\Exception $e) {
+            Log::error('assignCategorySeller: Exception', ['error' => $e->getMessage()]);
+            return redirect()->back()->with('error', 'เกิดข้อผิดพลาด: ' . $e->getMessage());
+        }
     }
 
     /***when admin update seller information***/
@@ -386,6 +541,7 @@ class UserController extends MarketPlace
         $input = $request->all();
         $user_id = Auth::id();
         $shop_id = $request->shop_id;
+        $bank_code = $request->bank_code;
         $tblShop = with(new Shop)->getTable();
         $tblShopDesc = with(new ShopDesc)->getTable();
         $rules['shop_url'] = uniqueIgnoreRule($tblShop,'shop_url',$shop_id,'id');
@@ -396,6 +552,15 @@ class UserController extends MarketPlace
         $error_msg['shop_url.unique'] = Lang::get('shop.store_url_already_exist');
         $error_msg['shop_name.unique'] = Lang::get('shop.store_name_already_exist');
         $error_msg['seller_unique_id.required'] = Lang::get('customer.vendor_code_required');
+        // เพิ่มเติมข้อมูลธนาคาร
+        $rules['bank_code'] = 'required|string';
+        $rules['bank_account_code'] = 'required|digits_between:6,20';
+        $rules['bank_account_name'] = 'required|string|max:255';
+        $error_msg['bank_code.required'] = Lang::get('shop.bank_is_required');
+        $error_msg['bank_account_code.required'] = Lang::get('shop.account_no_is_required');
+        $error_msg['bank_account_code.digits_between'] = Lang::get('shop.account_no_is_invalid');
+        $error_msg['bank_account_name.required'] = Lang::get('shop.account_name_is_required');
+    
         unset($input['shop_name']);
         unset($input['_token']);
 
@@ -403,6 +568,7 @@ class UserController extends MarketPlace
             $input['shop_name'] = $request->shop_name[session('default_lang')];
         }
         
+        $bank_name = \App\BankInfo::where('bank_code', $bank_code)->value('bank_name');
 
         $validate = Validator::make($input, $rules, $error_msg);
         if ($validate->passes()) {
@@ -417,8 +583,7 @@ class UserController extends MarketPlace
                 }
 
                 $shop_info->panel_no = $request->panel_no;
-                /*$shop_info->market = $request->market;*/
-                $shop_info->seller_description = $request->seller_description;
+                $shop_info->market = $request->market;
                 $shop_info->shop_status = $shop_status;
                 $shop_info->status = ($shop_status=='open')?'1':'0';
                 $shop_info->bargaining = $bargaining;
@@ -431,6 +596,16 @@ class UserController extends MarketPlace
                 $shop_info->line_link = $request->line_link;
                 $shop_info->seller_unique_id = $request->seller_unique_id;
                 $shop_info->seller_description = $request->seller_description;
+                $shop_info->commission_rate = $request->commission_rate;
+                $shop_info->comm_effective_date = $request->comm_effective_date;
+                $shop_info->block_until = ($shop_status=='open') ? '' : $request->block_until;
+                // เพิ่มเติมข้อมูลบัญชีธนาคาร
+                $shop_info->bank_code = $request->bank_code;
+                $shop_info->bank_name = $bank_name;
+                $shop_info->bank_branch_code = $request->bank_branch_code;
+                $shop_info->bank_account_code = $request->bank_account_code;
+                $shop_info->bank_account_name = $request->bank_account_name;
+
                 /**uploading map images***/
                 if(isset($request->location_image) && count($request->location_image)){
                     $uploadDetails['path'] = Config::get('constants.shop_original_path');
@@ -544,6 +719,7 @@ class UserController extends MarketPlace
             $errors =  $validate->errors(); 
             $response = ['status'=>'fail','msg'=>$errors,'error'=>'validation'];
         }
+
         return $response;
     }
 
@@ -662,7 +838,7 @@ class UserController extends MarketPlace
                    $userdata->status = $status;
                    $userdata->save();
 
-                   $status_val = ($status)?'active':'inactive';
+                    $status_val = ($status)?'active':'inactive';
                     $action_type = "updated";             
                     $username = $userdata->email.' '.$userdata->ph_number;
                     $logdetails = "Admin has ".$action_type." customer ".$username." $this->module_name to ".$status_val;

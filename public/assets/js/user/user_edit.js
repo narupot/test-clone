@@ -67,39 +67,87 @@ $(document).on('click',".removeMap, .removeShopImg",function(){
 });
 
 /***submit shop info data******/
+// jQuery('#btn_shop_info').click(function(evt){
+//     evt.preventDefault();
+//     var formAction = $(this).closest('form').attr('action');
+//     var formId = $(this).closest('form').attr('id');
+//     var _this = $(formId);
+//     var form_data = new FormData($("#"+formId)[0]);
+
+//     $('.error').text('');
+//     _this.prop('disabled',false);
+//     callAjaxFormRequest(formAction,'post',form_data,function(result){
+
+//             if(result.status=='fail'){
+//                 if(result.error == 'validation'){
+//                     var str_e = '';
+//                     $.each(result.msg, function(key,val){
+
+//                         $('#'+formId+' p[id=e_'+key+']').text(val);
+//                         str_e += '<p class="error">'+val+'</p>';
+//                     });
+//                     showSweetAlertError(str_e);
+//                 }else{
+//                     showSweetAlertError(result.msg);
+//                 }   
+//                 _this.prop('disabled',false);
+//                 return false;
+
+//             }else if(result.status=='success'){
+//                 Swal.fire(lang_success, result.msg, "success").then(function(){
+//                     location.reload();
+//                 });       
+//             }
+//     });
+// });
+
+
+// Submit shop info
+
 jQuery('#btn_shop_info').click(function(evt){
     evt.preventDefault();
-    var formAction = $(this).closest('form').attr('action');
-    var formId = $(this).closest('form').attr('id');
-    var _this = $(formId);
-    var form_data = new FormData($("#"+formId)[0]);
 
-    $('.error').text('');
-    _this.prop('disabled',false);
-    callAjaxFormRequest(formAction,'post',form_data,function(result){
+    var form = $(this).closest('form');
+    var formId = form.attr('id');
+    var btn = $(this);
+    var formAction = form.attr('action');
+    var form_data = new FormData(form[0]);
 
-            if(result.status=='fail'){
-                if(result.error == 'validation'){
-                    var str_e = '';
-                    $.each(result.msg, function(key,val){
+    // Clear errors only in this form
+    form.find('.error').text('');
 
-                        $('#'+formId+' p[id=e_'+key+']').text(val);
-                        str_e += '<p class="error">'+val+'</p>';
-                    });
-                    showSweetAlertError(str_e);
-                }else{
-                    showSweetAlertError(result.msg);
-                }   
-                _this.prop('disabled',false);
-                return false;
+    // Disable button
+    btn.prop('disabled', false);
 
-            }else if(result.status=='success'){
-                swal(lang_success, result.msg, "success").then(function(){
-                    location.reload();
-                });       
+    callAjaxFormRequest(formAction, 'post', form_data, function(result){
+        
+        if(result.status === 'fail'){
+            if(result.error === 'validation'){
+                var str_e = '';
+                $.each(result.msg, function(key,val){
+                    form.find('p[id=e_' + key + ']').text(val);
+                    str_e += '<p class="error">' + val + '</p>';
+                });
+                // showSweetAlertError(str_e);
+            } else {
+                showSweetAlertError(result.msg);
             }
+
+            btn.prop('disabled',false);
+            return false;
+            
+        } else if(result.status === 'success'){
+            Swal.fire({
+                icon: 'success',
+                title: lang_success,
+                text: result.msg
+            }).then(function(){
+                location.reload();
+            });
+        }
     });
 });
+
 
 /*  assign category to seller */
 $(document).on('click',"#assign_cat_seller",function(evt){ 

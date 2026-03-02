@@ -281,7 +281,6 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-	//console.log("fdfdfdfdf");
 	$('.view_templete').on('click', function(e){
 	  e.preventDefault();
 	  $('#preview-modal').modal('show').find('.modal-content').load($(this).attr('data-attr'));

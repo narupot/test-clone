@@ -186,17 +186,14 @@
                     if(totalPages ){
                         //In current page is one
                         if(currentPage==1 && currentPage<totalPages){
-                            //console.log('in first')
                             scope.directionLinksNext = true;
                             scope.directionLinksPrev = false;
                         }else if(currentPage!==1 && currentPage<totalPages){
                             scope.directionLinksNext = true;
                             scope.directionLinksPrev = true;
-                            //console.log('in second');
                         }else if(currentPage!==1 && currentPage === totalPages){
                            scope.directionLinksNext = false;
                            scope.directionLinksPrev = true; 
-                           //console.log('in last')
                         }
                         
                     }

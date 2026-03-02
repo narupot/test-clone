@@ -50,7 +50,20 @@
                 <tr>
                     <td>{{ ++$key }}</td>
                     <td>{{ $pay_opt['name'] }}</td>
-                    <td><img src="{{ Config::get('constants.payment_option_url').$pay_opt['image'] }}"></td>
+                    <td>
+                        @php
+                            $payment_images = getMultiplePayImgUrls($pay_opt['image']);
+                        @endphp
+                        @if(count($payment_images) == 1)
+                            <img src="{{ $payment_images[0] }}" style="max-width: 50px; max-height: 50px;">
+                        @else
+                            <div class="d-flex" style="gap: 5px;">
+                                @foreach($payment_images as $img_url)
+                                    <img src="{{ $img_url }}" style="max-width: 40px; max-height: 40px; object-fit: contain;">
+                                @endforeach
+                            </div>
+                        @endif
+                    </td>
                     <td>
                         @if($pay_opt['payment_type'] == '1')
                             Online

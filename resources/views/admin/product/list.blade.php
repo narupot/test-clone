@@ -17,6 +17,9 @@
     <div class="content">
         <div class="header-title">
             <h1 class="title">@lang('admin_product.product_list')</h1>
+            <a href="{{ route('admin.product.create') }}" class="btn btn-success">
+                + สร้างสินค้าใหม่
+            </a>
         </div>
              
         <!-- Main content -->         
@@ -26,7 +29,7 @@
                     {!!getBreadcrumbAdmin('product', 'product', 'list')!!}
                 </ul>
             </div>
-           <div id="jq_grid_table" class="table table-bordered">                 
+           <div id="jq_grid_table" class="table table-bordered">
                 
 
             </div>
@@ -64,6 +67,7 @@
         *@desc : Table column configrations
             Array of column 
         */
+
         let columnModel = [  
             /* check for row selection ***/
             {   title: "", 
@@ -90,7 +94,7 @@
                         front_btn = '<a href="'+front_url+'/'+ui.rowData.caturl+'/'+ui.rowData.sku+'" class="btn-primary" target="_blank">@lang("admin_common.view")</a>';
                     }
                     return {
-                        text:'<a href="'+edit_url+'/'+ui.cellData+'" class="btn btn-dark mb-1">@lang("admin_common.edit")</a> <a href="'+copy_url+'/'+ui.cellData+'" class="btn btn-light mb-1">@lang("admin_common.copy")</a> <a href="'+delete_url+'/'+ui.cellData+'" class="btn btn-danger mb-1" onclick="return confirm(\'@lang("admin_common.do_you_wanto_delete_this_data")\')">@lang("admin_common.delete")</a> '+front_btn,    
+                        text:'<a href="'+edit_url+'/'+ui.cellData+'" class="btn btn-dark mb-1">@lang("admin_common.edit")</a>  <a href="'+delete_url+'/'+ui.cellData+'" class="btn btn-danger mb-1" onclick="return confirm(\'@lang("admin_common.do_you_wanto_delete_this_data")\')">@lang("admin_common.delete")</a> '+front_btn,    
                     };                
                 },
                 sortable : !1,
@@ -121,11 +125,11 @@
                     listeners: ['change'],
                 },
             },          
-            {   title: "@lang('admin_product.category_name')", 
+            {   title: "@lang('admin_product.product_name')", 
                 dataIndx:'category_name', 
                 minWidth: 140,
                 filter : {
-                    attr : "@lang('admin_product.category_name')",                        
+                    attr : "@lang('admin_product.product_name')",                        
                     crules: [
                         {
                             condition: getFilter('category_name', 'condition') ||  'contain',
@@ -136,19 +140,114 @@
                     listeners: ['change'],
                 },
             },
-            {   title: "@lang('admin_product.badge_name')", 
-                dataIndx:'badge_name', 
+            // start add column หน้ารายละเอียดสินค้า by games
+            { 
+                 title: "@lang('admin_product.grade')",  // เกรด
+                dataIndx:'grade_name', 
+                minWidth: 130,
+                filter : {
+                    attr : "@lang('admin_common.enter_name')",                        
+                    crules: [
+                        {
+                            condition: getFilter('grade_name', 'condition') ||  'contain',
+                            value : getFilter('grade_name', 'value')  || "",
+                        }
+                    ],
+                    type: 'textbox', 
+                    listeners: ['change'],
+                },
+            },
+            {  title: "@lang('admin_product.badge_size')",  // ขนาด
+                dataIndx:'size_name', 
+                minWidth: 130,
+                filter : {
+                    attr : "@lang('admin_common.enter_name')",                        
+                    crules: [
+                        {
+                            condition: getFilter('size_name', 'condition') ||  'contain',
+                            value : getFilter('size_name', 'value')  || "",
+                        }
+                    ],
+                    type: 'textbox', 
+                    listeners: ['change'],
+                },
+            },
+            {  title: "@lang('admin_product.description')",  // รายละเอียดสินค้า
+                dataIndx:'description', 
                 minWidth: 140,
                 filter : {
                     attr : "@lang('admin_common.enter_name')",                        
                     crules: [
                         {
-                            condition: getFilter('badge_name', 'condition') ||  'contain',
-                            value : getFilter('badge_name', 'value')  || "",
+                            condition: getFilter('description', 'condition') ||  'contain',
+                            value : getFilter('description', 'value')  || "",
                         }
                     ],
                     type: 'textbox', 
                     listeners: ['change'],
+                },
+            },
+            {   title: "@lang('admin_product.weight_per_unit')", // จำนวนในบรรจุภัณฑ์
+                    dataIndx:'weight_per_unit', 
+                    minWidth: 140,
+            },
+             {   title: "@lang('admin_product.unit_name')",   // หน่วยในบรรจุภัณฑ์
+                dataIndx:'unit_name', 
+                minWidth: 140,
+                filter : {
+                    attr : "@lang('admin_common.enter_name')",                        
+                    crules: [
+                        {
+                            condition: getFilter('unit_name', 'condition') ||  'contain',
+                            value : getFilter('unit_name', 'value')  || "",
+                        }
+                    ],
+                    type: 'textbox', 
+                    listeners: ['change'],
+                },
+            },
+
+            {   title: "@lang('admin_product.package_name')",  // บรรจุภัณฑ์
+                dataIndx:'package_name', 
+                minWidth: 140,
+                filter : {
+                    attr : "@lang('admin_common.enter_name')",                        
+                    crules: [
+                        {
+                            condition: getFilter('package_name', 'condition') ||  'contain',
+                            value : getFilter('package_name', 'value')  || "",
+                        }
+                    ],
+                    type: 'textbox', 
+                    listeners: ['change'],
+                },
+            },
+
+            {   title: "@lang('admin_product.unit_price')", // ราคาต่อหน่วย
+                    dataIndx:'price_per_weight', 
+                    minWidth: 140,
+            },
+
+            {   title: "@lang('admin_product.package_price')", // ราคาต่อบรรจุภัณฑ์
+                    dataIndx:'unit_price', 
+                    minWidth: 140,
+            },
+            
+            // end add package_name column by games & unit_name
+            {   title: "@lang('admin_product.shop_name')", 
+                dataIndx:'shop_name',
+                minWidth: 140,
+                filter : {
+                    attr : "@lang('admin_common.enter_shop_name')",                        
+                    crules: [
+                        {
+                            condition: getFilter('shop_name', 'condition') ||  'contain',
+                            value : getFilter('shop_name', 'value')  || "",
+                        }
+                    ],
+                    type: 'textbox', 
+                    listeners: ['change'],
+                    // conditionList: ['begin', 'contain', 'notbegin', 'notcontain'], 
                 },
             },
             {   title: "@lang('admin_customer.name')", 
@@ -166,48 +265,96 @@
                     listeners: ['change'],
                 },
             },
-            {   title: "@lang('admin_product.shop_name')", 
-                dataIndx:'shop_name',
-                minWidth: 140,
-                filter : {
-                    attr : "@lang('admin_common.enter_shop_name')",                        
-                    crules: [
-                        {
-                            condition: getFilter('shop_name', 'condition') ||  'contain',
-                            value : getFilter('shop_name', 'value')  || "",
-                        }
-                    ],
-                    type: 'textbox', 
-                    listeners: ['change'],
-                    // conditionList: ['begin', 'contain', 'notbegin', 'notcontain'], 
-                },
-            },
+            // {   title: "@lang('admin_product.show_price')", 
+            //     dataIndx:'show_price', 
+            //     minWidth: 140, 
+            //     render : function(ui){
+            //         return {
+            //             text : (ui.cellData.toString() == "1") ? "{{Lang::get('common.yes')}}" : "{{Lang::get('common.no')}}",
+            //         }
+            //     },
+            //     filter : {
+            //         attr: "placeholder='@lang('admin_common.please_select')'",
+            //         crules: [
+            //             {
+            //                 condition: getFilter('show_price', 'condition') || 'range',
+            //                 value : getFilter('show_price', 'value') || "",
+            //             }
+            //         ],                    
+            //         options: [ 
+            //             {"1": "{{Lang::get('common.yes')}}"}, 
+            //             {"0": "{{Lang::get('common.no')}}"},
+            //         ],                                           
+            //     },
+            // },
             {   title: "@lang('admin_product.show_price')", 
-                dataIndx:'show_price', 
+                dataIndx:'bargaining', 
                 minWidth: 140, 
                 render : function(ui){
                     return {
-                        text : (ui.cellData.toString() == "1") ? "{{Lang::get('common.yes')}}" : "{{Lang::get('common.no')}}",
+                        text : (ui.cellData.toString() == "yes") ? "{{Lang::get('common.yes')}}" : "{{Lang::get('common.no')}}",
                     }
                 },
                 filter : {
                     attr: "placeholder='@lang('admin_common.please_select')'",
                     crules: [
                         {
-                            condition: getFilter('show_price', 'condition') || 'range',
-                            value : getFilter('show_price', 'value') || "",
+                            condition: getFilter('bargaining', 'condition') || 'range',
+                            value : getFilter('bargaining', 'value') || "",
                         }
                     ],                    
                     options: [ 
-                        {"1": "{{Lang::get('common.yes')}}"}, 
-                        {"0": "{{Lang::get('common.no')}}"},
+                        {"yes": "{{Lang::get('common.yes')}}"}, 
+                        {"no": "{{Lang::get('common.no')}}"},
                     ],                                           
                 },
             },
-            {   title: "@lang('admin_product.unit_price')", 
-                    dataIndx:'unit_price', 
-                    minWidth: 140,
+            // start add column หน้ารายละเอียดสินค้า by games
+            {   title: "@lang('admin_product.stock_status')", 
+                dataIndx:'stock', 
+                minWidth: 140, 
+                render : function(ui){
+                    return {
+                        text : (ui.cellData.toString() == "1") ? "{{Lang::get('common.stock_active')}}" : "{{Lang::get('common.stock_inactive')}}",
+                    }
+                },
+                filter : {
+                    attr: "placeholder='@lang('admin_common.please_select')'",
+                    crules: [
+                        {
+                            condition: getFilter('stock', 'condition') || 'range',
+                            value : getFilter('stock', 'value') || "",
+                        }
+                    ],                    
+                    options: [ 
+                        {"1": "{{Lang::get('common.stock_active')}}"}, 
+                        {"0": "{{Lang::get('common.stock_inactive')}}"},
+                    ],                                           
+                },
             },
+            {   title: "@lang('admin_product.order_qty_limit')", 
+                dataIndx:'order_qty_limit', 
+                minWidth: 140, 
+                render : function(ui){
+                    return {
+                        text : (ui.cellData.toString() == "1") ? "{{Lang::get('common.limit_active')}}" : "{{Lang::get('common.limit_inactive')}}",
+                    }
+                },
+                filter : {
+                    attr: "placeholder='@lang('admin_common.please_select')'",
+                    crules: [
+                        {
+                            condition: getFilter('order_qty_limit', 'condition') || 'range',
+                            value : getFilter('order_qty_limit', 'value') || "",
+                        }
+                    ],                    
+                    options: [ 
+                        {"1": "{{Lang::get('common.limit_active')}}"}, 
+                        {"0": "{{Lang::get('common.limit_inactive')}}"},
+                    ],                                           
+                },
+            },
+            // end add column หน้ารายละเอียดสินค้า by games
             {   title: "@lang('admin_common.status')", 
                 dataIndx:'status', 
                 minWidth: 140, 

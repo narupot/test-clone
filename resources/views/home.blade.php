@@ -456,7 +456,7 @@
 <script src="{{ Config('constants.js_url') }}chosen.jquery.min.js"></script>
 <script src="{{ Config('constants.js_url') }}chosenImage.jquery.js"></script>
 
-{!! CustomHelpers::combineCssJs(['js/flickity.pkgd.min', 'js/jquery.touchSwipe.min', 'js/TweenMax.min', 'js/slider3d'],'js') !!}
+{!! CustomHelpers::combineCssJs(['js/flickity.pkgd.min', 'js/jquery.touchSwipe.min', 'js/TweenMax.min'],'js') !!}
 
 <!--  <script>
     jQuery('.banner').slick({

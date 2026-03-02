@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
+use Illuminate\Support\Facades\Auth;
+
 class OrderTransaction extends Model
 {
     protected $table = 'order_transaction';
@@ -14,7 +16,7 @@ class OrderTransaction extends Model
             if($transaction_arr['updated_by'] == 'logistic' || $transaction_arr['updated_by'] == 'cron'){
                 $updated_by_id = 0;
             }else{
-                $updated_by_id = $transaction_arr['updated_by']=='admin'?\Auth::guard('admin_user')->user()->id:\Auth::id();
+                $updated_by_id = $transaction_arr['updated_by']=='admin'?Auth::guard('admin_user')->user()->id:Auth::id();
             }
             
         }else{
@@ -35,6 +37,7 @@ class OrderTransaction extends Model
         $obj->updated_by        = $transaction_arr['updated_by'];
         $obj->updated_by_id     = $updated_by_id;
         $obj->created_at        = date('Y-m-d H:i:s');
+        $obj->payment_method    = $transaction_arr['payment_method'] ?? '';
         $obj->save();
     }
 }

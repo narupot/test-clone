@@ -1,4 +1,20 @@
 <?php
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\CategoryManagement\CategoryController;
+use App\Http\Controllers\Admin\Groups\ProductSubGroupController;
+use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\Admin\Groups\GroupsController;
+use App\Http\Controllers\Admin\Customer\SellerController;
+use App\Http\Controllers\Admin\Product\ProductController;
+
+/* start Add code by games export shipping address */
+use App\Http\Controllers\Admin\Transaction\ExportShippingController;
+/* end Add code by games export shipping address */
+
+/* start Add code by games wms bcp */
+use App\Http\Controllers\Admin\Transaction\WmsBcpController;
+/* end Add code by games wms bcp */
+
 
     Route::get('bannerconfig','HomeController@bannerSide');
     Route::get('testfire','SendGoogleDocController@sendGoogleDoc');
@@ -10,7 +26,9 @@
     Route::post('country-detail', 'AjaxController@getCountryDetail');
     Route::post('state-city-option', 'AjaxController@getStateCityDD');
     Route::post('state-city-dd', 'AjaxController@getStateCityDropDown');
- 
+
+    Route::get('weightperpackage','AjaxController@WeightPerPackage')->name('ajaxController.weightperpackage');
+
 
     //Routing for Module Management
     Route::get('api/getInstallApi/{type?}/{module?}','Admin\Module\ModuleController@getInstallApi');
@@ -18,6 +36,34 @@
     Route::post('synchronizeBroadcasts', 'SyncController@synchronizeBroadcasts');
     
     Route::group(array('prefix' => 'admin','middleware' => 'escape-back-history'), function () {
+
+        Route::get('campaign/mega-campaign', 'Admin\Campaign\CampaignController@indexMegaCampaign')->name('admin.campaign.megaCampaign.list');
+        Route::get('campaign/mega-campaign/create', 'Admin\Campaign\CampaignController@createMegaCampaign')->name('admin.campaign.megaCampaign.create');
+        Route::post('campaign/mega-campaign', 'Admin\Campaign\CampaignController@storeMegaCampaign')->name('admin.campaign.megaCampaign.store');
+        Route::get('campaign/mega-campaign/{campaign}/edit', 'Admin\Campaign\CampaignController@editMegaCampaign')->name('admin.campaign.megaCampaign.edit');
+        Route::put('campaign/mega-campaign/{campaign}', 'Admin\Campaign\CampaignController@updateMegaCampaign')->name('admin.campaign.megaCampaign.update');
+        Route::delete('campaign/mega-campaign/{campaign}', 'Admin\Campaign\CampaignController@destroyMegaCampaign')->name('admin.campaign.megaCampaign.destroy');
+
+        Route::get('campaign/sub-campaign', 'Admin\Campaign\CampaignController@indexSubCampaign')->name('admin.campaign.subCampaign.list');
+        Route::get('campaign/mega-campaign/{megaCampaignId}/sub-campaign', 'Admin\Campaign\CampaignController@createSubCampaign')->name('admin.campaign.subCampaign.create');
+        Route::post('campaign/mega-campaign/{megaCampaignId}/sub-campaign', 'Admin\Campaign\CampaignController@storeSubCampaign')->name('admin.campaign.subCampaign.store');
+        Route::get('campaign/sub-campaign/{campaign}', 'Admin\Campaign\CampaignController@editSubCampaign')->name('admin.campaign.subCampaign.edit');
+        Route::put('campaign/sub-campaign/{campaign}', 'Admin\Campaign\CampaignController@updateSubCampaign')->name('admin.campaign.subCampaign.update');
+        Route::delete('campaign/sub-campaign/{campaign}', 'Admin\Campaign\CampaignController@destroySubCampaign')->name('admin.campaign.subCampaign.destroy');
+        // Route::resource('campaign', 'Admin\Campaign\CampaignController');
+        
+        Route::get('discount-code/export-csv/{criteriaId}', 'Admin\DiscountCode\DiscountCodeController@downloadCSV')->name('admin.discount_code.exportCsv');
+        Route::get('discount-code/report', 'Admin\DiscountCode\DiscountCodeController@report')->name('admin.discount_code.report');
+        Route::put('discount-code/update-status', 'Admin\DiscountCode\DiscountCodeController@updateStatus')->name('admin.discount_code.update-status');
+        Route::post('discount-code/check-usable', 'Admin\DiscountCode\DiscountCodeController@calulateDiscount')->name('admin.discount_code.check-usable');
+        Route::post('discount-code/calulate-discount', 'Admin\DiscountCode\DiscountCodeController@calulateDiscount')->name('admin.discount_code.calulate-discount');
+        Route::get('discount-code/fortest', 'Admin\DiscountCode\DiscountCodeController@fortest');
+        Route::post('discount-code/testCheckUsable', 'Admin\DiscountCode\DiscountCodeController@testCheckUsable');
+        Route::get('discount-code/fortest', 'Admin\DiscountCode\DiscountCodeController@fortest');
+        Route::resource('discount-code', 'Admin\DiscountCode\DiscountCodeController')->parameters(['discount-code' => 'discount_code_criteria']);
+
+        // Route::post('discount-code/fill-code/{id}', 'Admin\DiscountCode\DiscountCodeController@fillCode');
+
         Route::get('sync-mongo', 'Admin\SyncMongoController@index');
         Route::get('adminAutoSearch', 'Admin\Search\AdminSearchController@adminAutoSearch');
         Route::get('adminSearch', 'Admin\Search\AdminSearchController@index');
@@ -176,8 +222,15 @@
             Route::get('/', 'Admin\Transaction\OrderController@index');
             Route::get('listOrderData', 'Admin\Transaction\OrderController@listOrderData');
             Route::get('/{oid}/detail', 'Admin\Transaction\OrderController@orderDetail');
+            /* TongJ Test */
+            Route::get('/{oid}/detailTest', 'Admin\Transaction\OrderController@orderDetailTest');
+            Route::post('update-Pickup-Time', 'Admin\Transaction\OrderController@updatePickupTime');
+            Route::post('get-Shipping-Address', 'Admin\Transaction\OrderController@getShippingAddress');
+            Route::post('Save-Shipping-Address', 'Admin\Transaction\OrderController@changeShippingAddress');
+            /* End TongJ Test */
             Route::post('resend-order-logistic', 'Admin\Transaction\OrderController@resendLogistic');
             Route::post('ordChangeItemStatus', 'Admin\Transaction\OrderController@ordChangeItemStatus');
+            Route::post('changeItemQuantity', 'Admin\Transaction\OrderController@ordChangeItemQuantity');
             Route::post('updateRemark', 'Admin\Transaction\OrderController@updateRemark');
             Route::post('update-order-status', 'Admin\Transaction\OrderController@updateOrderStatus');
             Route::get('export-order-log', 'Admin\Transaction\ExportOrderController@index');
@@ -186,6 +239,15 @@
             Route::post('change-status', 'Admin\Transaction\ExportOrderController@changeStatus');
             Route::get('orderdetailexport/{oid}', 'Admin\Transaction\OrderController@orderDetailExport');
             Route::get('orderlistexport', 'Admin\Transaction\OrderController@generateOrderPdf');
+            Route::get('search-order', 'Admin\Transaction\ShopOrderController@viewSearchOrder');
+            // Start Add code by games resend order to WMS
+            Route::post('resend-order-logistic-wms', 'Admin\Transaction\OrderController@resendWMS');
+            // End Add code by games resend order to WMS
+
+            // เมนูพิมพ์ใบเสร็จค่าขนส่ง
+            Route::get('print-shipping-receipt', 'Admin\Transaction\OrderController@printShippingReceipt')->name('admin.order.printShippingReceipt');
+            // Export PDF ใบเสร็จค่าขนส่งทั้งหมดในวันนั้น
+            Route::get('shipping-receipt-bulk', 'Admin\Transaction\OrderController@shippingReceiptBulkPdf')->name('admin.order.shipping-receipt-bulk');
         });
 
         Route::get('generate-txt', 'Admin\Transaction\ExportOrderController@generateTxt');
@@ -198,11 +260,23 @@
         Route::get('listSellerOrderData', 'Admin\Transaction\ShopOrderController@listSellerOrderData');
         Route::get('get-generated-log', 'Admin\Transaction\ShopOrderController@getGeneratedLog');
 
+        /* start Add code by games export shipping address */
+        Route::get('export-shipping-address', [ExportShippingController::class, 'index']);
+        Route::get('export-shipping-address/listshippingaddress', [ExportShippingController::class, 'listdata']);
+        Route::get('export-shipping-address/export_excel', [ExportShippingController::class, 'export'])->name('eexport.excel');
+        /* end Add code by games export shipping address */
+
+        /* start Add code by games wms bcp */
+        Route::get('wms-bcp', [WmsBcpController::class, 'index']);
+        Route::get('wms-bcp/export_excel', [WmsBcpController::class, 'export'])->name('export.excel');
+        /* end Add code by games wms bcp */
+    
         Route::group(array('prefix' => 'shop-order'), function() {
             Route::get('/', 'Admin\Transaction\ShopOrderController@index');
             Route::get('listOrderData', 'Admin\Transaction\ShopOrderController@listOrderData');
             Route::get('/{oid}/detail', 'Admin\Transaction\ShopOrderController@orderDetail');
-            Route::post('ordChangeItemStatus', 'Admin\Transaction\ShopOrderController@changeShopOrderStatus');
+            Route::get('/{oid}/detail-Test', 'Admin\Transaction\ShopOrderController@orderDetailTest');
+            Route::post('ordChangeItemStatus', 'Admin\Transaction\ShopOrderController@changeShopOrderStatus');            
             Route::post('updateRemark', 'Admin\Transaction\ShopOrderController@updateRemark');
             Route::get('orderdetailexport/{oid}', 'Admin\Transaction\ShopOrderController@orderDetailExport');
             Route::get('orderlistexport', 'Admin\Transaction\ShopOrderController@generateOrderPdf');
@@ -213,8 +287,6 @@
         Route::post('froalaNewFolder','FroalaEditorController@froalaNewFolder');
         Route::post('froaladeletefolder','FroalaEditorController@froalaDeleteFolder');
        
-
-        /*******notification template configuration*********/
         /*******notification template configuration*********/
         Route::get('mastertempate/{id}/delete', 'Admin\Notification\MailTemplateController@deleteTemplete');
         Route::post('mastertempate/update', 'Admin\Notification\MailTemplateController@masterTemplateUpdate');
@@ -273,7 +345,7 @@
         Route::resource('seoglobals', 'Admin\SEO\SeoGlobalController');
 
         Route::group(array('prefix' => 'product'), function() {
-            Route::get('create', 'Admin\Product\ProductController@create');
+            Route::get('create', 'Admin\Product\ProductController@create')->name('admin.product.create');
             Route::post('store', 'Admin\Product\ProductController@store');
             Route::get('sellerdata', 'Admin\Product\ProductController@SellerData');
             Route::get('getsellercat', 'Admin\Product\ProductController@getSellerCategory');
@@ -296,6 +368,9 @@
             Route::get('destroy/{id?}', 'Admin\Review\ReviewController@destroy');
             Route::get('reported-reviews','Admin\Review\ReviewController@showReportedProductReview');
  			Route::get('get-all-reviews','Admin\Review\ReviewController@getProductReviews');
+
+            Route::get('/parent-cat-data/{id}', [ProductController::class, 'getParentCatData'])->name('parent.cat.data');
+
             
         });  
 
@@ -452,13 +527,40 @@
         Route::get('category-management/checkUnique', 'Admin\CategoryManagement\CategoryController@checkUnique');
         Route::get('category-management-list', 'Admin\CategoryManagement\CategoryController@categorieslist');
         Route::get('category-management-edit','Admin\CategoryManagement\CategoryController@categoryedit');
-        Route::get('category-management/deletecat/{id?}', 'Admin\CategoryManagement\CategoryController@deletecat');
+        Route::get('category-management/deletecat/{id?}', 'Admin\CategoryManagement\CategoryController@deletecat')->name('admin.category.parent-category-delete');
         Route::post('category-management/assign-seller', 'Admin\CategoryManagement\CategoryController@assignSeller');
         Route::post('category-management/assign-unit', 'Admin\CategoryManagement\CategoryController@assignUnit');
         Route::get('category-management/sublist', 'Admin\CategoryManagement\CategoryController@subcategorylist');
         Route::resource('category-management', 'Admin\CategoryManagement\CategoryController');
         Route::get('categoryListData', 'Admin\CategoryManagement\CategoryController@categoryListData');
-		Route::get('delete/{id?}', 'Admin\CategoryManagement\CategoryController@deletecategory'); 
+        Route::get('categoryTypeListData', 'Admin\CategoryManagement\CategoryController@categoryTypeListData');
+		Route::get('delete/{id?}', 'Admin\CategoryManagement\CategoryController@deletecategory');
+
+        Route::post('category-management/store-category', [CategoryController::class, 'store'])->name('category.storeCategory');
+        Route::post('category-management/update-category/{id}', [CategoryController::class, 'updateCategory'])->name('category-management.updateCategory');
+
+        // Route::get('/admin/category-management/edit-parent/{id}', [CategoryController::class, 'editParent'])->name('admin.category-management.edit-parent');
+        Route::post('category/store-parent', [CategoryController::class, 'storeParentCategory'])->name('category.storeParent');
+        Route::get('category/{id}/edit', [CategoryController::class, 'ParentCategoryEdit'])->name('admin.category.parent-category-edit');
+        Route::put('category-management/{id}/update', [CategoryController::class, 'updateParentCategory'])->name('admin.category.update');
+
+        // routes/web.php
+        Route::get('category-management/get-subgroups/{groupId}', function ($groupId) {
+            $subgroups = \App\ProductSubGroup::where('pro_group_id', $groupId)
+                ->orderBy('subgroup_name', 'asc')
+                ->get(['id', 'subgroup_name']);
+            return response()->json($subgroups);
+        });
+
+        Route::get('category-management/get-catalogs/{groupId}', function ($groupId) {
+            $catalogs = \App\ParentCategory::where('subgroup_id', $groupId)
+                ->orderBy('category_name', 'asc')
+                ->get(['id', 'category_name']);
+            return response()->json($catalogs);
+        });
+
+        Route::get('category-management/get-parent-category-name/{subgroupId}', 'Admin\CategoryManagement\CategoryController@getParentCategoryName');
+        Route::get('category-management/assign-tag', 'Admin\CategoryManagement\CategoryController@assignTag');
         // Billing Address for buy plugin | End
 
         /**All buyer and seller (Customers) in admin *******/
@@ -482,13 +584,81 @@
         Route::get('add_seller','Admin\Customer\SellerController@addSeller');
         Route::resource('seller','Admin\Customer\SellerController');
         Route::get('list/seller','Admin\Customer\SellerController@sellerData');
+
+        Route::post('search-products', [SellerController::class, 'searchProducts']);
+        Route::get('get-assigned-products', [SellerController::class, 'getAssignedProducts']);
+
+
+        Route::get('commission-list','Admin\Customer\SellerController@commissionList');
+
+        Route::group(['prefix' => 'transaction-fee', 'middleware' => []], function () {
+            Route::get('/', 'Admin\TransactionFee\TransactionFeeConfigController@index')->name('admin.transaction-fee.index');
+            Route::post('/bulk-update', 'Admin\TransactionFee\TransactionFeeConfigController@bulkUpdate')->name('admin.transaction-fee.bulk-update');
+        });
+
+        
+        Route::group(array('prefix' => 'product-groups'), function() {
+            // Route::get('{id}', function () {
+            //     abort(404);
+            // });
+            Route::get('create', 'Admin\Groups\GroupsController@create')->name('admin.product-groups.create');
+            Route::post('store', 'Admin\Groups\GroupsController@store')->name('admin.product-groups.destroy');
+            Route::get('edit/{id}', 'Admin\Groups\GroupsController@edit')->name('admin.product-groups.edit');
+            Route::put('update/{id}', 'Admin\Groups\GroupsController@update')->name('update');
+            Route::get('list-json', 'Admin\Groups\GroupsController@listJson')->name('listJson');
+            Route::post('change-status/{id}', 'Admin\Groups\GroupsController@changeStatus')->name('changeStatus');
+            Route::post('update-sort-order/{id}', 'Admin\Groups\GroupsController@updateSortOrder')->name('updateSortOrder');
+            Route::delete('{id}', 'Admin\Groups\GroupsController@destroy')->name('destroy');
+            Route::get('/', 'Admin\Groups\GroupsController@index');
+            Route::post('update-sort-order-bulk', [GroupsController::class, 'updateSortOrderBulk']);
+
+        });
+
+        // กลุ่มสำหรับ Product SubGroups
+
+        Route::group(array('prefix' => 'product-sub-groups'), function() {
+            Route::get('/', 'Admin\Groups\SubGroupsController@index')->name('index');
+            Route::get('create', 'Admin\Groups\SubGroupsController@create')->name('admin.product-sub-groups.create');
+            Route::post('store', 'Admin\Groups\SubGroupsController@store')->name('admin.product-sub-groups.store');
+            Route::get('edit/{id}', 'Admin\Groups\SubGroupsController@edit')->name('admin.product-sub-groups.edit');
+            Route::put('update/{id}', 'Admin\Groups\SubGroupsController@update')->name('admin.product-sub-groups.update');
+            Route::get('list-json', 'Admin\Groups\SubGroupsController@listJson')->name('admin.product-sub-groups.listJson');
+            Route::post('change-status/{id}', 'Admin\Groups\SubGroupsController@changeStatus')->name('admin.product-sub-groups.changeStatus');
+            Route::post('update-sort-order/{id}', 'Admin\Groups\SubGroupsController@updateSortOrder')->name('admin.product-sub-groups.updateSortOrder');
+            Route::delete('{id}', 'Admin\Groups\SubGroupsController@destroy')->name('admin.product-sub-groups.destroy');
+            Route::delete('tree_view', 'Admin\Groups\SubGroupsController@treeView')->name('admin.product-sub-groups.tree_view');
+            Route::get('by-group/{groupId}', 'Admin\Groups\SubGroupsController@getByGroup')->name('admin.product-sub-groups.by-group');
+            Route::post('update-order', 'Admin\Groups\SubGroupsController@updateOrder')->name('admin.product-sub-groups.updateOrder');
+
+
+        });
+        // Route::group(array('prefix' => 'product-sub-groups', 'namespace' => 'Admin\Groups'), function() {
+        //     Route::get('/', 'SubGroupsController@index')->name('index');
+        //     Route::get('create', 'SubGroupsController@create')->name('create');
+        //     Route::post('store', 'SubGroupsController@store')->name('store');
+        //     Route::get('edit/{id}', 'SubGroupsController@edit')->name('edit');
+        //     Route::put('update/{id}', 'SubGroupsController@update')->name('update');
+        //     Route::get('list-json', 'SubGroupsController@listJson')->name('listJson'); // Assuming this method exists
+        //     Route::post('change-status/{id}', 'SubGroupsController@changeStatus')->name('changeStatus');
+        //     Route::post('update-sort-order/{id}', 'SubGroupsController@updateSortOrder')->name('updateSortOrder');
+        //     Route::delete('{id}', 'SubGroupsController@destroy')->name('destroy'); // Add destroy if needed
+        // });
+            
+
     });
     /**admin route end*******/
+
+
     Route::get('track-order/{order_id?}','Checkout\TrackOrderController@trackOrderDetail');
    
     Route::any('payment-gateway/kbank/v1/odd/register/tracking', 'Checkout\PaymentGatewayController@oddRegisterTracking');
     Route::any('payment-gateway/kbank/v1/odd/checkout/tracking', 'Checkout\PaymentGatewayController@oddPaymentTracking');
     Route::group(['prefix' => 'user','middleware' => 'escape-back-history'], function () {
+        
+        Route::post('discount-code/check-usable', 'DiscountCodeController@calulateDiscount')->name('discount_code.check-usable');
+        Route::post('discount-code/calulate-discount', 'DiscountCodeController@calulateDiscount')->name('discount_code.calulate-discount');
+        
+
         Route::post('address/default', 'User\UserController@setDefaultAddress');
         Route::post('address/sequence', 'User\UserController@updateSequence');
         Route::post('address/delete', 'User\UserController@delete');
@@ -530,6 +700,8 @@
             Route::get('shop-ord-detail/{order_id}', 'User\OrderController@shopOrderDetails');
             Route::get('{order_id}/payment', 'User\OrderController@orderPayment');
 
+            Route::post('{order_id}/reOrderToCart', 'User\OrderController@reOrderToCart')->name('user.order.reOrderToCart');
+
         });
         // Route::get('shopping_list','User\ShoppinglistController@index');
         // Route::post('add_to_shopping_list','User\ShoppinglistController@AddToShoppingList');
@@ -540,6 +712,7 @@
     });
 
     Route::group(['prefix' => 'buyer','middleware' => 'escape-back-history'], function () {
+
         Route::get('bargain/{sortby?}','User\BargainController@index');
         Route::get('getbargainlist','User\BargainController@getBargainList');
         Route::post('bargainPriceFromBuyer/{id?}','User\BargainController@bargainPriceFromBuyer');
@@ -566,6 +739,8 @@
         Route::post('editQty','User\ShoppinglistController@editQty');
         Route::post('saveItemQty','User\ShoppinglistController@saveItemQty');
         Route::post('getCategorySellers','User\ShoppinglistController@getCategorySellers');
+
+
     });
     
     Route::get('home', 'HomeController@index');
@@ -623,6 +798,13 @@
             Route::post('updateShopStatus','Seller\ShopController@updateShopStatus');
             //product section start
             Route::resource('product', 'Seller\ProductController');
+            
+            // Aof เพิ่มค้นหาในสินค้าในร้านค้า
+            // Start
+            Route::get('getProductlistSearch','Seller\ProductController@getProductlistSearch');  
+            Route::get('searchcategorydesc','Seller\ProductController@Searchcategorydesc'); 
+            // End
+
             Route::get('getproductlist','Seller\ProductController@getProductlist');  
             Route::get('deleteproduct/{id?}','Seller\ProductController@deleteProduct');
             Route::get('copy/{id?}','Seller\ProductController@copy');
@@ -708,7 +890,7 @@
         Route::get('/{shop}/{cat_url?}','ShopController@index');
         
         Route::post('/manageFavoriteShop','ShopController@manageFavoriteShop');
-        Route::get('/','ShopController@shopList');
+        Route::get('/','ShopController@shopList')->name('shop.index');;
         Route::post('/credit-request','ShopController@sendCreditRequest');
         Route::post('/checkLogin','ShopController@checkLogin');
         
@@ -724,6 +906,8 @@
     Route::post('getproductsShopByCategory', 'ProductsController@getProductsShopByCategory');
     Route::post('getshopByCategory', 'ProductsController@getShopByCategory');
 
+    /*search product by Tag*/
+    Route::get('search-by-tag', [ProductsController::class, 'searchProductsByTag']);
 
     /*search product by search*/
     Route::get('search', 'ProductsController@search');
@@ -734,14 +918,16 @@
     Route::get('productsrenderhtml', 'ProductsController@productsRenderhtml');
     Route::get('autosearch', 'ProductsController@autosearch');
 
-
+    Route::get('view-all-products', 'ProductsController@viewAllProductsBySlider');
+    Route::get('search-tags', [ProductsController::class, 'searchTags']);
+    
     /*add to wishlist*/
     Route::get('addIntoWishlist', 'ProductsController@addIntoWishlist');
     Route::get('removeFromWishlist', 'ProductsController@removeFromWishlist');
     
     Route::group(['prefix' => 'product'], function () {
 
-        Route::get('/{cat_url?}/{sku?}', 'ProductDetailController@display');
+        Route::get('/{cat_url?}/{sku?}', 'ProductDetailController@display')->name('product.detail');
         Route::post('checkProductBeforeCart', 'ProductDetailController@checkProductBeforeCart');
         Route::post('addProductToCart', 'ProductDetailController@addProductToCart');
         Route::post('productPriceByQuantity', 'ProductDetailController@productPriceByQuantity');
@@ -752,11 +938,15 @@
     Route::get('get-buyer-order-history','ProductDetailController@getBuyerOrderHistory');
     
     Route::group(['prefix' => 'checkout'], function () {
+        Route::get('order-confirmation/download', 'Checkout\OrderConfirmationController@downloadOrderConfirmation');
+
         Route::resource('/', 'Checkout\CartController');
         Route::get('buy-now-end-shopping', 'Checkout\CartController@index')->name('buy-now-end-shopping')->middleware('escape-back-history');
+        
         /*Route::get('buy-now', 'Checkout\CartController@index')->name('buy-now'); 
         Route::get('end-shopping', 'Checkout\CartController@index')->name('end-shopping');*/ 
         Route::post('removeCart', 'Checkout\CartController@removeCart');
+        Route::post('removeMultiCart', 'Checkout\CartController@removeMultiCart')->name('checkout.removeMultiCart');
         Route::post('removeOrder', 'Checkout\CartController@removeOrder');
         Route::post('updateCart', 'Checkout\CartController@updateCart');
         Route::post('updateCartPrice', 'Checkout\CartController@updateCartPrice');
@@ -772,10 +962,10 @@
         Route::post('saveAddress', 'Checkout\CartController@saveAddress');
         Route::post('changeShipAddress', 'Checkout\CartController@changeShipAddress');
         Route::post('changeBillAddress', 'Checkout\CartController@changeBillAddress');
-        Route::get('pickupTime', 'Checkout\CartController@pickupTime');  
+        Route::get('pickupTime', 'Checkout\CartController@pickupTime');
 
-        /****kbank payment gateway url*******/     
-        Route::get('kbank/{order_id?}', 'Checkout\CartController@kbankPayment'); 
+        /****kbank payment gateway url*******/
+        Route::get('kbank/{order_id?}', 'Checkout\CartController@kbankPayment');
         Route::get('check/{order_id}','Checkout\PaymentGatewayController@Check');
         //Route::get('tracking','Checkout\PaymentGatewayController@ReturnTransaction');
         Route::post('tracking','Checkout\PaymentGatewayController@ReturnTransaction');
@@ -788,6 +978,22 @@
         Route::post('payplus/submit/{order_id?}','Checkout\CartController@createPayPlusOrder');
         Route::get('payplusresp','Checkout\OrderController@getPayplusResp');
         Route::post('submit-pay', 'Checkout\CartController@submitPayment');
+        Route::post('calculate-payment-method', 'Checkout\CartController@calculatePaymentMethod');
+
+        /****beam payment gateway url*******/
+        Route::get('beam/{order_id?}', 'Checkout\CartController@beamPayment');
+        Route::post('beam/submit/{order_id?}','Checkout\CartController@createBeamOrder');
+        Route::get('beam/status/{order_id?}', 'Checkout\CartController@checkBeamPaymentStatus');
+        Route::get('beam/status-api/{order_id?}', 'Checkout\CartController@checkBeamPaymentStatusFromAPI');
+        Route::get('beam/verify/{order_id?}', 'Checkout\CartController@verifyBeamPayment');
+        Route::get('check-payment-status/{order_id?}', 'Checkout\CartController@checkPaymentStatus');
+        Route::post('payment/callback', 'Checkout\BeamWebhookController@handle');
+
+        Route::post('validateProductCartItem','Checkout\CartController@validateProductCartItem')->name('checkout.validateProductCartItem');
+        Route::post('selectedCartItem','Checkout\CartController@selectedCartItem')->name('checkout.selectedCartItem');
+        Route::post('selectedMultiCartItem','Checkout\CartController@selectedMultiCartItem')->name('checkout.selectedMultiCartItem');
+        Route::post('calculateSelectedCartItem','Checkout\CartController@calculateSelectedCartItem')->name('checkout.calculateSelectedCartItem');
+
     });
     /**/
     Route::group(['prefix' => 'popup'], function () {
@@ -795,9 +1001,11 @@
         Route::get('getbargain/{id?}', 'PopUpController@getBargainPopUp');
         Route::get('checkbargain/{id?}/{qty?}', 'PopUpController@getCheckBargainPopUp');
         Route::get('getsellerproductpopUp/{id?}', 'PopUpController@getSellerProductPopUp');
+        Route::get('getsellerproductuniteditpopUp/{id?}', 'PopUpController@getSellerProductUnitEditPopUp');
         Route::post('saveprice', 'PopUpController@savePrice');
+        Route::post('saveunitprice', 'PopUpController@saveUnitPrice');
 
-    });    
+    });
     
     /********social login url******/
     Route::get('auth/{provider}', 'Auth\LoginController@redirectToProvider');
@@ -816,3 +1024,14 @@ Route::get('seller-item-scv', 'SyncController@itemcsv');
 Route::get('seller-customer-scv', 'SyncController@customercsv');
 Route::get('seller-data', 'SyncController@sellerdata');
 Route::get('new-seller-data', 'SyncController@newsellerdata');
+Route::get('tongJTest', function(){
+    return view('welcome');
+});
+
+
+Route::get('/DeepLink', 'DeeplinkController@handleDeeplink');
+// Route::get('/product/{category}/{id}','DeeplinkController@handleProductDeeplink');
+
+
+
+

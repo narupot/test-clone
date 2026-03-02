@@ -444,7 +444,10 @@ function getBreadcrumbAdmin($section='', $module='', $page_type='',$web_type='ad
 
                 if($module == 'category' && $page_type == 'list') {
                     $brc_str .= '<li>'.Lang::get('admin_category.cat_title').'</li>';
-                } else {
+                } else if($module == 'category' && $page_type == 'create') {
+                    $brc_str .= '<li><a href="'.action('Admin\CategoryManagement\CategoryController@index').'">'.Lang::get('admin_category.category').'</a></li>';
+                    $brc_str .= '<li>'.Lang::get('admin_category.product_master').'</a></li>';
+                }else {
                     $brc_str .= '<li><a href="'.action('Admin\Category\CategoryController@index').'">'.Lang::get('admin_category.cat_title').'</a></li>';
                 }
                 break;

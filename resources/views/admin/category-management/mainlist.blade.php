@@ -19,7 +19,7 @@
         <div class="header-title">
             <h1 class="title">@lang('category.list')</h1>
             <div class="float-right">
-                <a class="btn btn-primary" href="{{ action('Admin\CategoryManagement\CategoryController@create') }}"> @lang('common.create_new')</a> 
+                <a class="btn btn-success" href="{{ action('Admin\CategoryManagement\CategoryController@create') }}"> @lang('common.create_new')</a> 
             </div>
         </div>
         @if(Session::has('succMsg'))    

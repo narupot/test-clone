@@ -22,6 +22,7 @@ use Config;
 use App\Logactivity;
 use App\Product;
 use Lang;
+use Exception;
 
 class MarketPlace extends Controller {
     
@@ -169,7 +170,6 @@ class MarketPlace extends Controller {
                 }
                 else {
                     //Image::make($files['file']->getRealPath())->resize($files['width'], $files['height'])->save($files['path']); // resize and upload image
-
                     Image::make($files['file']->getRealPath())->fit($files['width'], $files['height'], function ($constraint) {
                         $constraint->aspectRatio();
                         $constraint->upsize();
@@ -562,7 +562,7 @@ class MarketPlace extends Controller {
         $required_file_array=[];
         if(count($subdirectories)){
             foreach ($subdirectories as $skey => $svalue) {
-                if($svalue{0} !== '.'){
+                if($svalue[0] !== '.'){
                     foreach($product_images  as $pimage){
                         $path = $product_path.'/'.$svalue;
                         $file_path = $path.'/'.$pimage;
@@ -1124,47 +1124,106 @@ class MarketPlace extends Controller {
 
     public function validateProductForm($input, $id=null) {
         
-        $rules['shop_id'] = 'Required';
-        $rules['product_cat'] = 'Required';
-        $rules['product_badge'] = 'Required';
+        $rules['shop_id'] = 'required';
+        $rules['product_cat'] = 'required';
+        $rules['product_badge'] = 'required';
         if(empty($id)){
             $rules['product_image'] = arrayRule();
         } 
         
-        $rules['show_price'] = 'Required';
+        $rules['show_price'] = 'required';
         if(isset($input['show_price']) && $input['show_price'] == '1') {
-            $rules['unit_price'] = numberRule();
+            $rules['unit_price'] = 'required|numeric|min:0.01';
         }
 
         /*if(empty($id)){
            $rules['quantity'] = numberRule();
         } */
 
-        if(!isset($input['order_qty_limit'])) {
-            $rules['min_order_qty'] = numberRule();
-        }
+        // if(!isset($input['order_qty_limit'])) {
+            $rules['min_order_qty'] = 'required|numeric|min:1';
+        // }
+
         if(isset($input['is_tier_price']) && $input['is_tier_price'] == '1') {
-            $rules['tier_price'] = 'Required';
+            $rules['tier_price'] = 'required';
         }        
-        $rules['unit'] = 'Required';
-        $rules['baseunit'] = 'Required';
-        
-        $rules['weight_per_unit'] = numberRule();
-        $rules['description'] = descriptionRule();
-        
-        $error_msg['shop_id.required'] = Lang::get('product.please_select_shop');
-        $error_msg['product_cat.required'] = Lang::get('product.please_select_product');
-        $error_msg['product_badge.required'] = Lang::get('product.please_select_product_badge');
-        $error_msg['product_image.required'] = Lang::get('product.please_select_product_image');
-        $error_msg['show_price.required'] = Lang::get('product.please_select_product_price');
-        $error_msg['unit_price.required'] = Lang::get('customer.please_enter_unit_price_product');
-        //$error_msg['quantity.required'] = Lang::get('product.please_enter_product_stock');
-        $error_msg['min_order_qty.required'] = Lang::get('product.please_enter_min_order_qty');
-        $error_msg['tier_price.required'] = Lang::get('product.please_enter_tier_price_properly');
-        $error_msg['unit.required'] = Lang::get('product.please_select_unit');
-        $error_msg['baseunit.required'] = Lang::get('product.please_select_base_unit');
-        $error_msg['weight_per_unit.required'] = Lang::get('product.please_enter_weight_per_unit');
-        $error_msg['description.required'] = Lang::get('product.please_enter_product_description');
+        $rules['unit'] = 'required';
+        $rules['baseunit'] = 'required';
+        $rules['shop_id'] = 'required';
+        $rules['weight_per_unit'] = 'required|numeric|min:0.01';
+        $rules['unit_perprice'] = 'required|numeric|min:0.01';
+
+        // อ๊อฟ
+        $rules['weightperpackage'] = 'required|numeric|min:0.01';
+        $rules['description'] = 'required|min:3';
+
+        if($input['optionstock']==0){
+            $rules['numstock'] = 'required|max:100000|numeric|min:1';
+        }
+
+        // $error_msg['shop_id.required'] = Lang::get('product.please_select_shop');
+        // $error_msg['product_cat.required'] = Lang::get('product.please_select_product');
+        // $error_msg['product_badge.required'] = Lang::get('product.please_select_product_badge');
+        // $error_msg['product_image.required'] = Lang::get('product.please_select_product_image');
+        // $error_msg['show_price.required'] = Lang::get('product.please_select_product_price');
+        // $error_msg['unit_price.required'] = Lang::get('customer.please_enter_unit_price_product');
+        // //$error_msg['quantity.required'] = Lang::get('product.please_enter_product_stock');
+        // $error_msg['min_order_qty.required'] = Lang::get('product.please_enter_min_order_qty');
+        // $error_msg['tier_price.required'] = Lang::get('product.please_enter_tier_price_properly');
+        // $error_msg['unit.required'] = Lang::get('product.please_select_unit');
+        // $error_msg['baseunit.required'] = Lang::get('product.please_select_base_unit');
+        // $error_msg['weight_per_unit.required'] = Lang::get('product.please_enter_weight_per_unit');
+        // $error_msg['description.required'] = Lang::get('product.please_enter_product_description');
+        // $error_msg['unit_price.min'] = 'ราคาต่อหน่วยต้องไม่น้อยกว่า 1';
+        // $error_msg['unit_perprice.min'] = 'ราคาต่อหน่วยต้องไม่น้อยกว่า 1';
+        // $error_msg['unit_perprice.required'] = 'กรุณากรอกข้อมูลน้ำหนักต่อหน่วย';
+        // $error_msg['min_order_qty.min'] = 'จำนวนสั่งซื้อขั้นต่ำต้องไม่น้อยกว่า 1';
+
+        // // อ๊อฟ
+        // $error_msg['weightperpackage.required'] = Lang::get('product.please_enter_product_weightperpackage');   
+$error_msg = [
+
+    // General required fields
+    'shop_id.required' => Lang::get('product.please_select_shop'),
+    'product_cat.required' => Lang::get('product.please_select_product'),
+    'product_badge.required' => Lang::get('product.please_select_product_badge'),
+    'product_image.required' => Lang::get('product.please_select_product_image'),
+
+    'show_price.required' => Lang::get('product.please_select_product_price'),
+
+    'unit_price.required' => Lang::get('customer.please_enter_unit_price_product'),
+    'unit_price.numeric' => 'ราคาต่อหน่วยต้องเป็นตัวเลข',
+    'unit_price.min' => 'ราคาต่อหน่วยต้องไม่น้อยกว่า 0.01',
+
+    'min_order_qty.required' => Lang::get('product.please_enter_min_order_qty'),
+    'min_order_qty.numeric' => 'จำนวนสั่งซื้อขั้นต่ำต้องเป็นตัวเลข',
+    'min_order_qty.min' => 'จำนวนสั่งซื้อขั้นต่ำต้องไม่น้อยกว่า 1',
+
+    'tier_price.required' => Lang::get('product.please_enter_tier_price_properly'),
+
+    'unit.required' => Lang::get('product.please_select_unit'),
+    'baseunit.required' => Lang::get('product.please_select_base_unit'),
+
+    'weight_per_unit.required' => Lang::get('product.please_enter_weight_per_unit'),
+    'weight_per_unit.numeric' => 'น้ำหนักต่อหน่วยต้องเป็นตัวเลข',
+    'weight_per_unit.min' => 'น้ำหนักต่อหน่วยต้องไม่น้อยกว่า 0.01',
+
+    'unit_perprice.required' => 'กรุณากรอกข้อมูลน้ำหนักต่อหน่วย',
+    'unit_perprice.numeric' => 'น้ำหนักต่อหน่วยต้องเป็นตัวเลข',
+    'unit_perprice.min' => 'น้ำหนักต่อหน่วยต้องไม่น้อยกว่า 0.01',
+
+    'weightperpackage.required' => Lang::get('product.please_enter_product_weightperpackage'),
+    'weightperpackage.numeric' => 'น้ำหนักรวมต่อแพ็คเกจต้องเป็นตัวเลข',
+    'weightperpackage.min' => 'น้ำหนักรวมต่อแพ็คเกจต้องไม่น้อยกว่า 0.01',
+
+    'description.required' => Lang::get('product.please_enter_product_description'),
+    'description.min' => 'คำอธิบายสินค้าต้องมีอย่างน้อย 3 ตัวอักษร',
+
+    'numstock.required' => 'กรุณากรอกจำนวนสินค้าในสต๊อก',
+    'numstock.numeric' => 'จำนวนสินค้าในสต๊อกต้องเป็นตัวเลข',
+    'numstock.min' => 'จำนวนสินค้าในสต๊อกต้องไม่น้อยกว่า 1',
+    'numstock.max' => 'จำนวนสินค้าในสต๊อกต้องไม่เกิน 100,000',
+];
 
         $validate = Validator::make($input, $rules, $error_msg);
         return $validate;         
@@ -1175,23 +1234,23 @@ class MarketPlace extends Controller {
 
         $show_price = $stock = $order_qty_limit = $is_tier_price = '0';
         $unit_price = $min_order_qty = 0;
-
+        
         if(isset($request->show_price) && $request->show_price == '1'){
             $show_price = '1';
 
             $unit_price = str_replace(',','',$request->unit_price);
             $unit_price = floatval($unit_price);
+            
             //dd($unit_price);
         }
 
-
-
-        if(isset($request->order_qty_limit) && $request->order_qty_limit == '1') {
+        /*if(isset($request->order_qty_limit) && $request->order_qty_limit == '1') {
             $order_qty_limit = '1';
         }
         else {
             $min_order_qty = $request->min_order_qty;
-        }
+        }*/
+
 
         if(isset($request->is_tier_price) && $request->is_tier_price == '1') {
             $is_tier_price = '1';
@@ -1207,23 +1266,29 @@ class MarketPlace extends Controller {
         if(empty($id)){
             $product->sku = $this->autoGenerateSku();
         }
+        
 
         $product->cat_id = $request->product_cat;
         $product->badge_id = $request->product_badge;
         $product->show_price = $show_price;
         $product->unit_price = $unit_price;
         $product->order_qty_limit = $order_qty_limit;
-        $product->min_order_qty = $min_order_qty;
+        $product->min_order_qty = $request->min_order_qty;
         $product->is_tier_price = $is_tier_price;
         $product->package_id = $request->unit;
         $product->base_unit_id = $request->baseunit;
         $product->weight_per_unit = $request->weight_per_unit;
-        $product->status = $request->stock;
+        $product->status = $request->product_status;
         $product->unit_convert_price = $request->unit_perprice;
+
+        //อ๊อฟ
+        $product->weight_per_package = $request->weightperpackage;
+
         /*change due to unlimited*/
-        $product->stock = $request->stock;
-        $request->quantity = $request->stock == '1'?1000000:0;
-        $product->quantity = $request->quantity;
+        $product->stock = $request->optionstock;    
+        $request->quantity = $request->optionstock == '1'? 9999999:0;
+        $product->quantity = $request->input("numstock");
+ 
 
         if(isset($data_arr['created_by'])){
            $product->created_by = $data_arr['created_by'];
@@ -1241,8 +1306,7 @@ class MarketPlace extends Controller {
            $product->updated_from = $data_arr['updated_from'];
         }
        
-        $product->save();
-    
+        $product->save();    
         $product_id = $product->id;
 
         if(empty($id)) {
@@ -1283,9 +1347,7 @@ class MarketPlace extends Controller {
             }
         }
 
-
-
-        if(!empty($request->product_image)) {
+       if(!empty($request->product_image)) {
             $image_arr = [];
             foreach ($request->product_image as $key => $image){
                 $upload_arr['file'] = $image;
@@ -1312,8 +1374,6 @@ class MarketPlace extends Controller {
             if(count($tier_price_deleted)){
                 \App\ProductTierPrice::whereNotIn('id', $tier_price_deleted)->where(['product_id'=>$product_id])->delete(); 
             }
-            
-
 
             foreach ($request->tier_price['min_qty'] as $key => $value) {
                 $tier_price_arr = [];
@@ -1331,15 +1391,10 @@ class MarketPlace extends Controller {
                         \App\ProductTierPrice::updateOrCreate(['id'=>$key, 'product_id'=>$product_id],  $tier_price_arr);
                     }
 
-
                     //$tier_price_arr[] = ['product_id'=>$product_id, 'start_qty'=>$start_qty, 'end_qty'=>$end_qty, 'unit_price'=>$unit_price];
-                    
-                    //print_r(['product_id'=>$product_id, 'start_qty'=>$start_qty, 'end_qty'=>$end_qty, 'unit_price'=>$unit_price]);
-                   
-                    
+                    //print_r(['product_id'=>$product_id, 'start_qty'=>$start_qty, 'end_qty'=>$end_qty, 'unit_price'=>$unit_price]);               
 
                 }
-
 
             }
             $tier_price_arres = \App\ProductTierPrice::select('start_qty','end_qty','unit_price')->where('product_id', $product_id)->get()->toArray();
@@ -1353,6 +1408,8 @@ class MarketPlace extends Controller {
         }
         
         \App\MongoProduct::updateData($product);
+
+       // \App\Console\Commands\UploadFiles::handle();
 
         return $product_id;
     }         

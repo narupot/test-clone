@@ -9,8 +9,17 @@
     </style>
 
 @endsection
-
+@php
+    isset($_GET['searchproductname'] ) ? $searchproductname = $_GET['searchproductname'] : $searchproductname = "";
+@endphp
 @section('header_script')
+
+        var error_msg ={
+            txt_delete_confirm : "@lang('common.are_you_sure_to_delete_this_record')",
+            yes_delete_it : "@lang('common.yes_delete_it')",
+            txt_no : "@lang('common.no')",
+        };
+
 
         var lang_json = {"ok":"@lang('common.ok')", "success":"@lang('common.success')"};      
         var fieldSetJson  = {!! $fielddata !!};
@@ -19,7 +28,13 @@
         var showSearchSection = true;
         var showHeadrePagination = true;
         var getAllDataFromServerOnce = true;
-        var dataJsonUrl = "{{ action('Seller\ProductController@getProductlist') }}";
+     
+        @if ($searchproductname != null )
+            var dataJsonUrl = "{{ action('Seller\ProductController@getProductlistSearch') }}?searchproductname=<?=$searchproductname?>";
+        @else
+            var dataJsonUrl = "{{ action('Seller\ProductController@getProductlist') }}";
+        @endif
+
         var text_ok_btn = "@lang('common.ok_btn')";
 
         var getSellerProductUrl = "{{ action('PopUpController@getSellerProductPopUp')}}";
@@ -101,22 +116,36 @@
             width : 130,
            // cellClass : _getInfo('product_standard','align'),
 
-          },{ 
+          },
+          { 
             field : 'quantity',
-            displayName : '@lang('product.stock')',
+            displayName : 'Stock คงเหลือ',
+            cellTemplate: '<span class="action-btn-wrap" ng-if="row.entity.stock == 1"  > ไม่จำกัดจำนวนสินค้า  </span>  <span class="action-btn-wrap" ng-if="row.entity.stock == 0 "  >  <%row.entity.quantity%>  </span> ' ,
             cellTooltip: true,
             enableSorting : false, //_getInfo('paid','sortable'),
             width : _getInfo('quantity','width'),
             width : 170,
             cellClass : _getInfo('quantity','align'),
-          },{ 
+          },
+         ,{ 
             field : 'unit_price',
             displayName : '@lang('product.unit_price')',
-            cellTemplate: '<span class="action-btn-wrap justify-content-between"><span class="count-price"><%row.entity.unit_price%></span><a ng-if="row.entity.unit_price !=\'Not show\'?true:false" href="{{ action('PopUpController@getSellerProductPopUp')}}/<%row.entity.id%>" rel="<%row.entity.id%>" class="btn-grey changePriceModel" data-toggle="modal">@lang('product.change_prize')</a></span>',
+           // cellTemplate: '<span class="action-btn-wrap justify-content-between"><span class="count-price"><%row.entity.unit_price%></span></span>',
             //cellTooltip: true,
             enableSorting : false, //_getInfo('paid','sortable'),
             //width : _getInfo('unit_price','width'),
-            minWidth: 145,
+            minWidth: 100,
+            //cellClass: 'text-c',
+            //headerCellClass: 'text-c'
+            cellClass : _getInfo('unit_price','center'),
+          },{ 
+            field : 'unit_price',
+            displayName : ' ',
+            cellTemplate: '<a ng-if="row.entity.unit_price !=\'Not show\'?true:false" href="{{ action('PopUpController@getSellerProductPopUp')}}/<%row.entity.id%>" rel="<%row.entity.id%>" class="btn-grey changePriceModel" data-toggle="modal">@lang('product.change_prize')</a></span>',
+            //cellTooltip: true,
+            enableSorting : false, //_getInfo('paid','sortable'),
+            //width : _getInfo('unit_price','width'),
+            minWidth: 90,            
             //cellClass : _getInfo('unit_price','align'),
           }
           ,{ 
@@ -125,7 +154,7 @@
             cellTooltip: true,
             enableSorting : false, //_getInfo('paid','sortable'),
             //width : _getInfo('package_name','width'),
-            minWidth: 170,
+            minWidth: 100,
             cellClass : _getInfo('package_name','align'),
           }
           ,{ 
@@ -135,7 +164,7 @@
             cellTooltip: true,
             enableSorting : false, //_getInfo('paid','sortable'),
             //width : _getInfo('status','width'),
-            minWidth: 100,
+            minWidth: 150,
             cellClass : _getInfo('status','align'),
           }
 
@@ -146,12 +175,48 @@
           columsSetting = columsSetting.concat([{  
             field : 'action',
             displayName : '@lang('common.action')',
-            cellTemplate: '<span class="action-btn-wrap"><a href="<%row.entity.detail_url%>" class="btn-grey ">@lang('product.edit')</a><a href="<%row.entity.stock_memo_url%>" class="btn d-none">@lang('product.adjust_stock')</a></span>',
-            minWidth: 200,
+            cellTemplate: '<span class="action-btn-wrap"><a href="<%row.entity.detail_url%>" class="btn-grey ">@lang('product.edit')</a><a href="<%row.entity.stock_memo_url%>" class="btn d-none">@lang('product.adjust_stock')</a>  <a href="<%row.entity.view_url%>" class="btn-grey">@lang('product.view')</a> <a href="javascript:void(0)"  rel="<%row.entity.delete_url%>" class="btn btn-danger red  action-del">@lang('product.delete')<i class="fas fa-times"></i></a> </span>',
+            minWidth: 310,
             enableSorting : false,
             cellClass:_getInfo('action','align'),
           }
         ]);       
+
+        $(function() { 
+            $( "#searchproductname" ).autocomplete({
+                source: function( request, response ) {
+                    
+                    $.ajax({
+                        url: "{{url('/seller/searchcategorydesc')}}",
+                        type: 'get',
+                        dataType: "json",
+                        data: {
+                            search: request.term
+                        },
+                        success: function( data ) {
+                            response( data );
+                        }
+                    });
+                },
+                select: function (event, ui) {
+                    $('#searchproductname').val(ui.item.label); // display the selected text
+                
+                    return false;
+                },
+                focus: function(event, ui){
+                    $( "#searchproductname" ).val( ui.item.label );
+                
+                    return false;
+                },
+            });
+        });
+
+        function split( val ) {
+                    return val.split( /,\s*/ );
+        }
+        function extractLast( term ) {
+                    return split( term ).pop();
+        }
       
 @endsection
 
@@ -162,15 +227,24 @@
             @include('includes.seller_panel_top_menu')
              <div class="tab-content">
                 <div class="tab-pane active" id="tab-seler1">  
-                   
-                    <div class="form-group mt-3 text-right">
-                         <a class="btn" href="{{action('Seller\ProductController@create')}}">@lang('product.create_new_product')</a>
-                    </div>
 
-                    <div class="product-detail" ng-controller="gridtableCtrl">    @include('includes.gridtable')                           
-                    </div> 
+                    <form name="formseachkeyword" method="get"  id="seachkeyword"  action="{{url('/seller/seller-product')}}">
+                         <div class="row mt-3">
+                            <div class="col-sm-6"> 
+                                <input type="search" name="searchproductname"  value="<?=$searchproductname?>"  id="searchproductname"  placeholder="กรอกชื่อสินค้า..."  />
+                                <button type="submit" class="btn btn-blue" > <i class="fa-solid fa-magnifying-glass"></i>  ค้นหา </button>
 
-
+                            
+                            </div>
+                            <div class="col-sm-6 text-right">                         
+                                <a class="btn" href="{{action('Seller\ProductController@create')}}">@lang('product.create_new_product')</a>                        
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="product-detail" ng-controller="gridtableCtrl">    
+                            @include('includes.gridtable')                           
+                        </div> 
+                    </form>
                     <!--div class="prod-review-tbl bdr-table">
                             <div class="table">
                                 <div class="table-header">

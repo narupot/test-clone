@@ -154,7 +154,7 @@ function($scope, getJsonData,$window,$timeout,$rootScope) {
     getJsonData.getDataFromServer(addIntoWishlist,'GET', obj).then((response)=>{
             $scope.product_Items[$index].wish = product_id;
 
-            console.log($index);           
+            // console.log($index);           
            //$scope.product_Items[$index].total_likes_fun++;
            
           
@@ -167,7 +167,7 @@ function($scope, getJsonData,$window,$timeout,$rootScope) {
     var obj = {"product_id" : product_id};
     getJsonData.getDataFromServer(removeFromWishlist, 'GET', obj).then((response)=>{
            $scope.product_Items[$index].wish = null;
-           console.log($index); 
+          //  console.log($index); 
            //$scope.product_Items[$index].total_likes_fun--;
            
     });

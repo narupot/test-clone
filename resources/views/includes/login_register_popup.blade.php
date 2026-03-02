@@ -22,12 +22,15 @@
                 </div>
 
                 <div class="form-group">
-                    <a href="javascript:;" data-toggle="modal" data-target="#forgotModal" data-dismiss="modal" class="forget-link">@lang('auth.forget_password')</a>
+                    <p>
+                        <a href="javascript:;" data-toggle="modal" data-target="#forgotModal" data-dismiss="modal" class="forget-link">@lang('auth.forget_password')</a>
+                    <br>
+                        <a href="{{ action('Auth\RegisterController@index') }}" class="forget-link">@lang('auth.signup')</a>
+                    </p>
                 </div>
                 
                 <div class="form-group">
-                    <button type="button" class="btn btn_login">@lang('auth.signin')</button>
-                    <a href="{{ action('Auth\RegisterController@index') }}" class="btn-blue float-right">@lang('auth.signup')</a>
+                    <button type="button" class="btn btn_login float-right">@lang('auth.signin')</button>
                 </div>
                 @if(!empty(getConfigValue('FACEBOOK_CLIENT_ID')) && !empty(getConfigValue('FACEBOOK_CLIENT_SECRET')))
                 <div class="form-group">

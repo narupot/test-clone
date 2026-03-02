@@ -33,7 +33,7 @@
 			link : selectBoxDirLinkFun
 		}
 		function selectBoxDirLinkFun(scope, element, attrs) {
-			console.log($rootScope.optionJsonArr);
+			// console.log($rootScope.optionJsonArr);
 		}
 	}).directive('dirHeaderPagination', function() {
 		/*******This directive used for header pagination dir-header-pagination ********/
@@ -66,10 +66,6 @@
 			link: function (scope, iElement, iAttrs) {
 				iElement.datepicker();
 				iElement.on('change',function(){
-					//console.log(">>>>>>");
-					//console.log(iAttrs);
-					//console.log(iElement);
-					//console.log(scope);
 				});				
 			}
 		};

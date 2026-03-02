@@ -118,4 +118,10 @@ class MongoShop extends Molequent
         $cache_key = 'shop_closed_ids';
         cache_deleteKey($cache_key);
     }
+
+    
+    public function product()
+    {
+        return $this->hasMany('App\MongoProduct','shop_id','_id');
+    }
 }

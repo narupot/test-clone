@@ -24,7 +24,6 @@ class AdminHomeController extends MarketPlace
         $language = ($langcount > 0) ? true : false;
         $allsection = $this->allconfig();
 
-       
         return view('admin.admin-home',['totalcomplete','persection','allsection','ordAmtTot']);
     }   
 
@@ -118,4 +117,5 @@ class AdminHomeController extends MarketPlace
         }*/
         
     }
+
 }

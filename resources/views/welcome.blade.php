@@ -9,6 +9,7 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+        {!! CustomHelpers::combineCssJs(['css/myaccount'],'css') !!}    
 
         <!-- Styles -->
         <style>
@@ -63,9 +64,31 @@
                 margin-bottom: 30px;
             }
         </style>
+        
+        <script src="https://code.jquery.com/jquery-3.x.x.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#change_pickup_btn').click(function () {
+                    $('#change_pickup_time').show();
+                    $(this).hide();
+                });
+            }); 
+        </script>
     </head>
     <body>
-    
+
+        <div id="myTest">Test 888</div>
+        @php 
+        $tot_cart_prd_noti = getCartProduct();
+        $tot_pending_order = getPendingOrderNoti();
+        
+        $cur_hr = date('H');
+        
+        $ndate = now()->format('Y-m-d H:i');
+        $expdate = explode('-', $ndate);
+        @endphp
+        
+        
         <div class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">
@@ -74,10 +97,22 @@
                 </div>
             @endif
 
+            
             <div class="content">
                 <div class="title m-b-md">
                     Laravel
+                    <br>
+                    {{ $tot_cart_prd_noti['cart_prd'] }}
+                    <br>{{ $tot_pending_order['pendingOrder'] }}
+                    <br>@if($cur_hr<19 || $cur_hr>=20)
+                            <div>Love Love</div>
+                        @endif                        
+                    <br>{{ explode(' ', $ndate)[0] }}
+                    <br>{{ $ndate }}
                 </div>
+
+                
+                
 
                 <div class="links">
                     <a href="https://laravel.com/docs">Documentation</a>
@@ -88,5 +123,21 @@
                 </div>
             </div>
         </div>
+
+        <form method="post" id="remark-form" action="{{action('Admin\Transaction\OrderController@updateRemark')}}">
+            <input type="hidden" name="order_id" value="106514">
+            <div class="row">
+                <div class="col-sm-6 form-group">
+                    <label>remark</label>
+                    <textarea name="remark" required="required" id="txt_remark" placeholder="Remark text ..."></textarea>
+                    <div class="mt-2">
+                        <button type="button" class="btn btn-primary" id="btn-remark">save</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        
+       
     </body>
+   
 </html>

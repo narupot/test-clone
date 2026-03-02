@@ -15,7 +15,32 @@ use Auth;
 use Form;
 use Session;
 use Lang;
+use Illuminate\Support\Str;
+
+use Carbon\Carbon;
+use App\Order;
+
 class CustomHelpers {
+    
+    public static function generateRandomString($length = 8) {
+        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $characterLength = strlen($characters);
+        $code = '';
+        for ($j = 0; $j < $length; $j++) {
+            $code .= $characters[rand(0, $characterLength - 1)];
+        }
+        return $code;
+    }
+
+    public static function getEnumValues(string $table, string $column): array
+    {
+        $type = DB::selectOne("SHOW COLUMNS FROM {$table} WHERE Field = '{$column}'")->Type;
+        preg_match('/^enum\((.*)\)$/', $type, $matches);
+        return isset($matches[1])
+            ? array_map(fn($v) => trim($v, "'"), explode(',', $matches[1]))
+            : [];
+    }
+
 
     public static function getUserMenu() {
 
@@ -169,6 +194,357 @@ class CustomHelpers {
             }
         }
         return $menuHtml;
+    }
+
+public static function getSimummuangMegaMenu($menu_id = null)
+    {
+        $html = '';
+        
+        $cache_key = 'mega_menu_v18_final_fix_' . session('default_lang');
+        
+        if (\Config::get('constants.enable_cache') && function_exists('cache_hasKey') && cache_hasKey($cache_key)) {
+            return cache_getData($cache_key);
+        }
+
+        $productGroups = \App\ProductGroup::where('status', 1)
+                            ->orderBy('sorting_no', 'asc')
+                            ->with(['subgroups' => function($q) {
+                                $q->where('status', 1)->orderBy('sorting_no', 'asc');
+                            }, 'subgroups.categories']) 
+                            ->get();
+
+        if ($productGroups->count() > 0) {
+            $html .= '<div class="mega-panel" id="megaPanel">';
+
+            // --- 1. Mobile Header ---
+            $html .= '
+            <div class="mobile-top-bar">
+                <div class="mobile-header-row" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                    <div style="display:flex; align-items:center;">
+                        <span id="megaMenuBackBtn" style="display:none; cursor:pointer; font-size:20px; margin-right:15px; color:#333; padding: 5px;">
+                            <i class="fas fa-chevron-left"></i>
+                        </span>
+                        <span class="menu-title" id="megaMenuTitle" style="font-weight:bold; font-size:18px; color:#333;">หมวดหมู่สินค้า</span>
+                    </div>
+                    <span class="close-btn" id="closeMegaMobile" style="font-size:28px; cursor:pointer; line-height:1; color:#999; padding: 5px;">&times;</span>
+                </div>
+            </div>';
+
+            // --- 2. Left Menu ---
+            $html .= '<ul class="left-menu" id="leftMenu">';
+            $first = true;
+            foreach ($productGroups as $group) {
+                $activeClass = $first ? 'active' : '';
+                $targetId = 'group-' . $group->id;
+                
+                $html .= '<li class="'.$activeClass.' mobile-drill-item" data-target="'.$targetId.'" data-title="'.$group->name.'">';
+                $html .= '<span class="menu-text">' . $group->name . '</span>';
+                $html .= '<span class="menu-badge"><i class="fas fa-chevron-right ml-1" style="font-size:12px; color:#ccc;"></i></span>';
+                $html .= '</li>';
+                $first = false;
+            }
+            $html .= '</ul>';
+
+            $html .= '<div class="right-content-wrapper" id="rightContentWrapper">';
+            $first = true;
+            foreach ($productGroups as $group) {
+                $activeClass = $first ? 'active' : '';
+                $targetId = 'group-' . $group->id;
+                
+                $html .= '<div class="right-panel '.$activeClass.' layout-text-banner" id="'.$targetId.'">';
+                $html .= '<div class="text-layout-wrap">';
+                $html .= '<div class="text-area w-100" style="padding-right:0;">'; 
+                
+                $html .= '<div class="link-list-container">';
+                
+                if ($group->subgroups->count() > 0) {
+                    foreach ($group->subgroups as $subgroup) {
+                        
+                        $level3Html = ''; 
+
+                        if(!empty($subgroup->categories) && $subgroup->categories->count() > 0){
+                            foreach($subgroup->categories as $cat){
+
+                                $hasProduct = \DB::table('product as p')
+                                            ->join('category as c', 'p.cat_id', '=', 'c.id')
+                                            ->where('c.parent_id', $cat->id) 
+                                            ->where('p.status', 1)
+                                            ->exists();
+
+                                if ($hasProduct) {
+                                    $paramValue = !empty($cat->url) ? $cat->url : $cat->id;
+                                    $catUrl = action('ProductsController@search') . "?productCate=" . $paramValue;
+                                    
+                                    $level3Html .= '<a href="'.$catUrl.'" class="sub-link">' . $cat->category_name .'</a>';
+                                }
+                            }
+                        }
+
+                        if (!empty($level3Html)) {
+                            $html .= '<div class="menu-group">';
+                        
+                            $subgroupSlug = str_replace(' ', '_', trim($subgroup->subgroup_name));
+                            $subUrl = action('ProductsController@search') . "?productType=" . $subgroupSlug;
+                            $html .= '<a href="'.$subUrl.'" class="group-header">' . $subgroup->subgroup_name . '</a>';
+                            
+                            $html .= $level3Html;
+                            
+                            $html .= '</div>'; 
+                        }
+                    }
+                } else {
+                    $html .= '<p class="text-muted">ไม่พบข้อมูลหมวดหมู่ย่อย</p>';
+                }
+
+                $html .= '</div></div>'; 
+                $html .= '</div>'; 
+                $html .= '</div>'; 
+                $first = false;
+            }
+            $html .= '</div>'; 
+
+            // --- 4. Mobile Footer ---
+            $html .= '
+            <div class="mobile-footer" id="mobileMegaFooter">
+                <ul class="service-menu">
+
+                    <li><a href="'.action('Checkout\TrackOrderController@trackOrderDetail').'"><i class="fas fa-box"></i> ติดตามสถานะสินค้า</a></li>
+                </ul>
+            </div>';
+
+            $html .= '</div>'; // End Wrapper
+
+            if (function_exists('cache_putData')) {
+                cache_putData($cache_key, $html);
+            }
+        }
+        return $html;
+    }
+
+    
+
+    public static function getExtraMenuFromDB($menu_id = null)
+    {
+        $menuHtml = '';
+
+        if (empty($menu_id)) return '';
+        $cache_key = 'extra_menu_db_' . $menu_id . '_' . session('default_lang');
+        if (cache_hasKey($cache_key) && \Config::get('constants.enable_cache')) {
+            return cache_getData($cache_key);
+        }
+        $result = \App\MegaMenu::where('id', $menu_id)->where('status', '1')->first();
+
+        if (!empty($result)) {
+            $menuHtml .= '<ul class="extra-nav pl-2">';
+
+            foreach ($result->getMenuItems as $key => $item) {
+                $url = Self::getMenuUrl2($item); 
+                
+                $iconHtml = '';
+                if (!empty($item->atr_menu_icon)) {
+                    if (strpos($item->atr_menu_icon, 'fa-') !== false || strpos($item->atr_menu_icon, 'fas') !== false) {
+                        $iconHtml = '<i class="' . $item->atr_menu_icon . '"></i> ';
+                    } else {
+                        $iconHtml = '<img src="' . asset($item->atr_menu_icon) . '" style="width:20px; height:auto; margin-right:5px;"> ';
+                    }
+                }
+
+                $title = $item->getMenuItemDesc->title;
+                $activeClass = '';
+                if (stripos($title, 'promotion') !== false || stripos($title, 'โปรโมชั่น') !== false) {
+                    $activeClass = 'menu-highlight';
+                }
+
+                $subMenuHtml = Self::getExtraSubMenuFromDB($item->id);
+                $hasChild = !empty($subMenuHtml);
+
+                $menuHtml .= '<li class="extra-nav-item">';
+                $menuHtml .= '<a href="' . $url . '" class="extra-nav-link ' . $activeClass . '">';
+                $menuHtml .= $iconHtml . $title;
+                
+                if ($hasChild) {
+                    $menuHtml .= ' <i class="fas fa-chevron-down" style="font-size:10px; margin-left:5px; opacity:0.5;"></i>';
+                }
+                $menuHtml .= '</a>';
+                if ($hasChild) {
+                    $menuHtml .= $subMenuHtml;
+                }
+
+                $menuHtml .= '</li>';
+            }
+
+            $menuHtml .= '</ul>';
+
+            if (function_exists('cache_putData')) {
+                cache_putData($cache_key, $menuHtml);
+            }
+        }
+
+        return $menuHtml;
+    }
+
+    public static function getExtraSubMenuFromDB($parent_id)
+    {
+        $subMenuHtml = '';
+        $results = \App\MenuItems::where('parent_id', $parent_id)->orderBy('menu_order', 'asc')->get();
+
+        if (!empty($results) && count($results) > 0) {
+            $subMenuHtml .= '<div class="extra-dropdown">';
+            foreach ($results as $item) {
+                $url = Self::getMenuUrl2($item);
+                $title = $item->getMenuItemDesc->title;
+                
+                $subMenuHtml .= '<a href="' . $url . '" class="extra-sub-item">' . $title . '</a>';
+            }
+            $subMenuHtml .= '</div>';
+        }
+
+        return $subMenuHtml;
+    }
+
+    private static function generateRightPanelContent($items, $layoutType)
+    {
+        $html = '';
+
+        if ($layoutType == 'layout-grid-icon') {
+            // --- แบบที่ 1: Grid Icons (รูปภาพ + ชื่อ) ---
+            $html .= '<div class="category-grid">';
+            foreach ($items as $subItem) {
+                $url = Self::getMenuUrl2($subItem);
+                $title = $subItem->getMenuItemDesc->title ?? '';
+                // สมมติว่าใช้ atr_menu_icon เก็บ URL รูปภาพ หรือ Class Icon
+                // ถ้าเก็บเป็น Path รูปภาพ: <img src="'.$subItem->atr_menu_icon.'">
+                // ถ้าเก็บเป็น Class Icon: <i class="'.$subItem->atr_menu_icon.'"></i>
+                
+                // ตัวอย่างนี้สมมติว่า atr_menu_icon เก็บ URL รูปภาพ
+                $iconHtml = !empty($subItem->atr_menu_icon) 
+                            ? '<img src="'.asset($subItem->atr_menu_icon).'">' 
+                            : '<img src="https://via.placeholder.com/40">'; 
+
+                $html .= '<div class="category-item" onclick="window.location.href=\''.$url.'\'">';
+                $html .= $iconHtml;
+                $html .= '<span>' . $title . '</span>';
+                $html .= '</div>';
+            }
+            $html .= '</div>';
+
+        } else {
+            // --- แบบที่ 2: Text List + Banner ---
+            $html .= '<div class="layout-text-banner-inner" style="display:flex; width:100%;">';
+            
+            // ส่วน Text Column
+            $html .= '<div class="text-area" style="flex:1;">';
+            $html .= '<div class="link-list-container">';
+            
+            // ในแบบ Text เราอาจจะมองว่า SubItem คือ Group Header
+            // และต้องไปดึงลูกของ SubItem อีกที (Level 3) ถ้ามี
+            // แต่ถ้า DB มีแค่ 2 ชั้น เราจะแสดงรายการเลย
+            foreach ($items as $subItem) {
+                 $url = Self::getMenuUrl2($subItem);
+                 $title = $subItem->getMenuItemDesc->title ?? '';
+                 // แสดงเป็น Link ธรรมดา
+                 $html .= '<a href="'.$url.'" class="sub-link">'.$title.'</a>';
+            }
+            
+            $html .= '</div></div>'; // จบ Text Area
+
+            // ส่วน Promo Column (Hardcode ไว้ก่อน หรือดึงจาก DB field พิเศษถ้ามี)
+            $html .= '<div class="promo-column">';
+            $html .= '<div class="promo-box">';
+            $html .= '<div class="promo-img" style="height:100px; background:#eee;"></div>';
+            $html .= '<div class="promo-btn">ดูสินค้า</div>';
+            $html .= '</div>';
+            $html .= '</div>'; // จบ Promo Column
+
+            $html .= '</div>';
+        }
+
+        return $html;
+    }
+
+    public static function getSetMenu2($menu_id = null, $class=''){
+        $menuHtml = '';
+        $menuHtmlMobile = '';
+        if(!empty($menu_id)){
+
+            $cache_key = 'desktopmega_menu_'.$menu_id.'_'.session('default_lang');
+            if (cache_hasKey($cache_key) && \Config::get('constants.enable_cache')) {
+                $menuHtml = cache_getData($cache_key);
+            }
+
+            if(!$menuHtml){
+                $result = \App\MegaMenu::where('id', $menu_id)->where('status', '1')->first();
+                if(!empty($result) ){
+                    $menuHtml .= '<ul id="menu'.$result->menu_design_id.'" class="  '.$class.'">';
+                    foreach($result->getMenuItems as $key=>$item){
+                        $url = Self::getMenuUrl2($item);
+                        $iconleft = $iconright = '';
+                        if($item->icon_show == 'after_text'){
+                          if(!empty($item->atr_menu_icon)) $iconright = '<span class="arrow ricon"><i class="'.$item->atr_menu_icon.'"></i></span>';
+                        }else{
+                          if(!empty($item->atr_menu_icon)) $iconleft = '<span class="arrow licon"><i class="'.$item->atr_menu_icon.'"></i></span>';  
+                        }
+
+                        $menuHtml .= '<li class="nav-item"><span>'.$iconleft.'<a class="nav-link" href="'.$url.'">'.$item->getMenuItemDesc->title.'</a>'.$iconright.'</span>';
+                        $menuHtml .= Self::getSetSubMenu2($item->id);
+                        $menuHtml .= '</li>';
+
+                    }
+                    $menuHtml .='</ul>'; 
+                    cache_putData($cache_key,$menuHtml); 
+                }   
+            }
+        }
+        return $menuHtml;
+    }
+    public static function getSetSubMenu2($id){
+        
+        $menuHtml = '';
+        $results = \App\MenuItems::where('parent_id', $id)->orderBy('menu_order','asc')->get();
+        if(!empty($results) && count($results)>0){
+            $menuHtml .= '<ul>';
+            foreach($results as $key=>$item){
+                $iconleft = $iconright = '';
+                if($item->icon_show == 'after_text'){
+                  if(!empty($item->atr_menu_icon)) $iconright = '<span class="arrow ricon"><i class="'.$item->atr_menu_icon.'"></i></span>';
+                }else{
+                  if(!empty($item->atr_menu_icon)) $iconleft = '<span class="arrow licon"><i class="'.$item->atr_menu_icon.'"></i></span>';  
+                }
+                $url = Self::getMenuUrl2($item);
+
+                $menuHtml .= '<li><span><a href="'.$url.'">'.$iconleft.$item->getMenuItemDesc->title.'</a>'.$iconright.'</span>';
+                $menuHtml .= Self::getSetSubMenu2($item->id);     
+                $menuHtml .= '</li>';
+            }
+            $menuHtml .='</ul>';
+        }
+        return $menuHtml;
+    }
+    public static function getMenuUrl2($item=null){
+        $url = 'javascript:void(0)';
+        if(!empty($item)){
+            if($item->menu_type == 'Category'){
+                // $catslug = \App\Category::where('id', $item->assoc_item_id)->value('url');
+                //$url = action('ProductsController@category', $catslug);
+                $cate = \App\Category::where('id', $item->assoc_item_id)->first();
+                if(!empty($cate)){
+
+                    $catslug = $cate->url;
+                    if($cate->parent_id == 0){
+                        $url = action('ProductsController@search')."?productCate=".$catslug;
+                    }else{
+                        $url = action('ProductsController@search')."?productType=".$catslug;
+                    }
+                }
+            }elseif($item->menu_type == 'Pages'){
+                $pageslug = \App\StaticPage::where('id', $item->assoc_item_id)->value('url');
+                $url = action('StaticPageController@pagedata', $pageslug);
+            }else{
+                if(isset($item->getMenuItemDesc->url) && !empty($item->getMenuItemDesc->url)) $url = $item->getMenuItemDesc->url;  
+            }
+            
+        } 
+        return $url; 
     }
 
 
@@ -1142,46 +1518,130 @@ class CustomHelpers {
     }
 
 
-    public static function getCatUnitOption($cat_id = null, $selectedval=null) {
-        $out_str = '';
-        if(!empty($cat_id)){
-            $default_lang = session('default_lang');
-            $sql = DB::table(with(new \App\CategoryUnit)->getTable().' as cu')
-                ->join(with(new \App\Unit)->getTable().' as u','u.id', '=', 'cu.unit_id')
-                ->join(with(new \App\UnitDesc)->getTable().' as ud', 
-                            [ ['u.id', '=', 'ud.unit_id'],
-                              ['ud.lang_id', '=', DB::raw($default_lang)]
-                            ]
-                );
+    // public static function getCatUnitOption($cat_id = null, $selectedval=null) {
+    //     $out_str = '';
+    //     if(!empty($cat_id)){
+    //         $default_lang = session('default_lang');
+    //         $sql = DB::table(with(new \App\CategoryUnit)->getTable().' as cu')
+    //             ->join(with(new \App\Unit)->getTable().' as u','u.id', '=', 'cu.unit_id')
+    //             ->join(with(new \App\UnitDesc)->getTable().' as ud', 
+    //                         [ ['u.id', '=', 'ud.unit_id'],
+    //                           ['ud.lang_id', '=', DB::raw($default_lang)]
+    //                         ]
+    //             );
 
-            $results =  $sql->select('u.id','ud.unit_name')->where('u.status','1')->where('cu.cat_id', $cat_id)->get(); 
-            foreach ($results as $key => $value) {
-                $selected = '';
-                if($value->id == $selectedval){
-                   $selected = 'selected="selected"';
-                }
-                $out_str .= '<option value="'.$value->id.'" '.$selected.'>'.$value->unit_name.'</option>';
-            }
+    //         $results =  $sql->select('u.id','ud.unit_name')->where('u.status','1')->where('cu.cat_id', $cat_id)->get(); 
+    //         foreach ($results as $key => $value) {
+    //             $selected = '';
+    //             if($value->id == $selectedval){
+    //                $selected = 'selected="selected"';
+    //             }
+    //             $out_str .= '<option value="'.$value->id.'" '.$selected.'>'.$value->unit_name.'</option>';
+    //         }
            
             
+    //     }
+    //     return $out_str;
+    // }
+
+    public static function getParentCatBaseUnitOption($parent_cat_id = null, $selectedval = null) {
+        $out_str = '';
+
+        if (!empty($parent_cat_id)) {
+            $default_lang = session('default_lang');
+            $category = DB::table(with(new \App\Category)->getTable().' as c')
+            ->select('c.parent_id')
+            ->where('c.id', $parent_cat_id)
+            ->first();
+
+            if (!$category || !$category->parent_id) {
+            $out_str .= '<option value="" >ไม่มีข้อมูล</option>';
+            }
+
+            $parentId = $category->parent_id;
+
+            $sql = DB::table(with(new \App\ParentCatBaseUnit)->getTable().' as pcb')
+                ->join(with(new \App\Unit)->getTable().' as u', 'u.id', '=', 'pcb.base_unit_id')
+                ->join(with(new \App\UnitDesc)->getTable().' as ud', [
+                    ['u.id', '=', 'ud.unit_id'],
+                    ['ud.lang_id', '=', DB::raw($default_lang)]
+                ]);
+
+            $results = $sql->select('u.id', 'ud.unit_name')
+                ->where('u.status', '1')
+                ->where('pcb.parent_cat_id', $parentId)
+                ->get();
+
+            foreach ($results as $value) {
+                $selected = ($value->id == $selectedval) ? 'selected="selected"' : '';
+                $out_str .= '<option value="' . $value->id . '" ' . $selected . '>' . $value->unit_name . '</option>';
+            }
         }
+
         return $out_str;
     }
 
-    public static function getPackagesOptain($selectedval = null) {
+
+    // public static function getPackagesOptain($selectedval = null) {
+    //     $package_str = '';
+    //     $packages = \App\Package::getPackages();
+    //     if($packages) {
+    //         foreach ($packages as $key => $value) {
+    //             $selected = '';
+    //             if($value->id == $selectedval){
+    //                $selected = 'selected="selected"';
+    //             }
+    //             $package_str .= '<option value="'.$value->id.'" '.$selected.'>'.$value->packagedesc->package_name.'</option>';
+    //         }
+    //     }
+    //     return $package_str;
+    // }
+
+    public static function getPackagesOptain($selectedval = null, $parent_cat_id = null) {
         $package_str = '';
-        $packages = \App\Package::getPackages();
-        if($packages) {
-            foreach ($packages as $key => $value) {
-                $selected = '';
-                if($value->id == $selectedval){
-                   $selected = 'selected="selected"';
-                }
-                $package_str .= '<option value="'.$value->id.'" '.$selected.'>'.$value->packagedesc->package_name.'</option>';
-            }
+
+        // ดึง parent_id จาก Category
+        $category = DB::table(with(new \App\Category)->getTable().' as c')
+            ->select('c.parent_id')
+            ->where('c.id', $parent_cat_id)
+            ->first();
+
+        if (!$category || !$category->parent_id) {
+            // ถ้าไม่เจอ category หรือไม่มี parent_id
+            return '<option value="">ไม่มีข้อมูล</option>';
         }
+
+        $parentId = $category->parent_id;
+
+        // Query Packages
+        $packages = DB::table('parent_cat_package as pcp')
+            ->join('package as p', 'p.id', '=', 'pcp.package_id')
+            ->select(
+                'pcp.id as parent_package_id',
+                'pcp.parent_cat_id',
+                'pcp.package_id',
+                'pcp.status as pcp_status',
+                'p.title as package_title',
+                'p.status as package_status'
+            )
+            ->where('pcp.status', '1')
+            ->where('p.status', '1')
+            ->where('pcp.parent_cat_id', $parentId)
+            ->get();
+
+        if ($packages->count() > 0) {
+            foreach ($packages as $value) {
+                $selected = ($value->package_id == $selectedval) ? 'selected="selected"' : '';
+                $package_str .= '<option value="'.$value->package_id.'" '.$selected.'>'.$value->package_title.'</option>';
+            }
+        } else {
+            $package_str .= '<option value="">ไม่มีข้อมูล</option>';
+        }
+
         return $package_str;
-    }
+}
+
+
 
     public static function getBadgeSize($key=null){
 
@@ -1232,6 +1692,7 @@ class CustomHelpers {
     public static function buyerShipBillTo($orderJson,$add_type, $return_type='N'){
         $orderInfoJson = jsonDecodeArr($orderJson);
         $html='';
+      
         if(!empty($orderInfoJson[$add_type]['title'])) {
             $html .= '<p>'.str_replace("​","",$orderInfoJson[$add_type]['title']).'</p>';
         }
@@ -1245,9 +1706,48 @@ class CustomHelpers {
         }
         if(!empty($orderInfoJson[$add_type]['district'])) {
             $html .= $orderInfoJson[$add_type]['district'].', ';
-        }        
+        }
         $html .= $orderInfoJson[$add_type]['provice'].', '.$orderInfoJson[$add_type]['zip_code'].'</p><p><a href="tel:0'.$orderInfoJson[$add_type]['ph_number'].'">'.$orderInfoJson[$add_type]['ph_number'].'</a></p>';
 
+        if($return_type == 'Y'){
+          return $html;
+        }else{
+          echo $html;
+        }
+    }
+
+
+    public static function buyerShipBillingTo($orderJson,$add_type, $return_type='N'){
+        $orderInfoJson = jsonDecodeArr($orderJson);
+        $html='';
+        if(!empty($orderInfoJson[$add_type]['company_name'])) {
+            if(!empty($orderInfoJson[$add_type]['branch'])) {
+                $html .= '<p>'.str_replace("​", "", $orderInfoJson[$add_type]['company_name']) . " สาขา " . $orderInfoJson[$add_type]['branch'] . '</p>';
+            }else{
+                $html .= '<p>'.str_replace("​", "", $orderInfoJson[$add_type]['company_name']). '</p>';
+            }
+            $html .= '<p>'.str_replace("​","",$orderInfoJson[$add_type]['company_address']).'</p><p>';
+            if(!empty($orderInfoJson[$add_type]['tax_id'])) {
+                $html .= '<p> TAX ID: '. $orderInfoJson[$add_type]['tax_id'].'</p>';
+            }
+        }else{
+            $html .= '<p>'. $orderInfoJson[$add_type]['first_name'].' '.$orderInfoJson[$add_type]['last_name'].'</p>';
+            $html .= '<p>'.str_replace("​","",$orderInfoJson[$add_type]['address']).'</p><p>';
+            if(!empty($orderInfoJson[$add_type]['road'])) {
+                $html .= $orderInfoJson[$add_type]['road'].', ';
+            }
+            if(!empty($orderInfoJson[$add_type]['sub_district'])) {
+                $html .= $orderInfoJson[$add_type]['sub_district'].', ';
+            }
+            if(!empty($orderInfoJson[$add_type]['district'])) {
+                $html .= $orderInfoJson[$add_type]['district'].', ';
+            }
+            $html .= $orderInfoJson[$add_type]['provice'].', '.$orderInfoJson[$add_type]['zip_code'].'</p><p><a href="tel:0'.$orderInfoJson[$add_type]['ph_number'].'">'.$orderInfoJson[$add_type]['ph_number'].'</a></p>';
+            
+        }
+
+        
+        
         if($return_type == 'Y'){
           return $html;
         }else{
@@ -1293,7 +1793,7 @@ class CustomHelpers {
             if(is_array($value)){
                 $shop_address = $shop_address;
             }else{
-               $shop_address = [$shop_address]; 
+               $shop_address = [$shop_address];
             }
             break;
         }
@@ -1301,7 +1801,7 @@ class CustomHelpers {
         if($shop_address){
             foreach ($shop_address as $key => $val) {
                 $ph_number = $val['ph_number']??'';
-                $shopname = $val['shop_name'][session('default_lang')]??'';                
+                $shopname = $val['shop_name'][session('default_lang')]??'';
                 $html .= '<p><span class="label">'.Lang::get("checkout.shop_name").' : </span>'.$shopname.'</p><address><span class="label">'.Lang::get("checkout.panel_no").' : </span> '.$val['panel_no'].' '.$val['market'].'<br><span class="label">'.Lang::get("checkout.contact").' : </span> '.$ph_number.'</address>';
             }
         }
@@ -1619,6 +2119,95 @@ class CustomHelpers {
             $option_str .= '<option value="" selected="selected">'.$zip_code.'</option>';
         }        
         return $option_str;
-    }  
+    }
+
+    /**
+     * Get Beam payment method name based on order's payment option
+     */
+    public static function getBeamPaymentMethodName($orderInfo) {
+        if (!$orderInfo || !$orderInfo->payment_option_id) {
+            return 'Beam';
+        }
+        
+        $paymentOption = \App\PaymentOption::find($orderInfo->payment_option_id);
+        
+        if ($paymentOption && $paymentOption->slug) {
+            switch ($paymentOption->slug) {
+                case 'beam-qr':
+                case 'beam-qrthb':
+                    return 'QR Code';
+                case 'beam-credit':
+                case 'beam-creditcard':
+                    return 'Credit Card';
+                case 'beam-banking':
+                case 'beam-internetbanking':
+                    return 'Mobile Banking';
+                case 'beam-ewallet':
+                    return 'e-Wallet';
+                case 'beam':
+                default:
+                    return 'Beam Payment';
+            }
+        }
+        
+        return 'Beam';
+    }
+
+    /**
+     * Format payment method display name based on payment slug
+     * Handles Beam payment types and other payment methods
+     */
+    public static function formatPaymentMethodName($paymentSlug, $paymentMethodJson = null, $langCode = null)
+    {
+       
+        $lowerPaymentSlug = strtolower($paymentSlug);
+        switch ($lowerPaymentSlug) {
+            case 'direct_transfer':
+                $name = 'โอนตรง';
+                break;
+            case 'kbank':
+                $name = 'QR พร้อมเพย์';
+                break;
+            case 'payplus':
+                $name = 'KBank/PayPlus';
+                break;
+            case 'credit_acc1':
+                $name = 'ลูกค้าเครดิต 1 วัน';
+                break;
+            case 'credit_acc7':
+                $name = 'ลูกค้าเครดิต 7 วัน';
+                break;
+            case 'beam-qr':
+                $name = 'โอนตรง';
+                break;
+            case 'beam-credit':
+                $name = 'บัตรเครดิต';
+                break;
+            case 'beam-banking':
+                $name = 'Mobile Banking';
+                break;
+            case 'beam-ewallet':
+                $name = 'E-Wallet';
+                break;
+            default:
+                $name = str_replace('_', ' ', $paymentSlug);
+                break;
+        }
+
+        return $name ?: strtoupper($paymentSlug);
+    }
+
+
+    public static function getshippingAddressCount(){
+
+     $today = Carbon::today('Asia/Bangkok');
+
+    $count = \App\ExportShippingAddress::where('status', '1')
+        ->whereDate('created_at', $today)
+        ->count();
+
+        return $count;
+
+    }
 
 }

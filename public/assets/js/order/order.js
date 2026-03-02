@@ -6,8 +6,12 @@ $('.ord_status_change').click(function(e){
     var type = _this.data('type');
     if(type == 'cancel'){
         var lang_msg = lang_ord_cancel;
-    }else{
+    }else if(type == 'receive'){
         var lang_msg = lang_ord_complete;
+    }else if(type == 'updateQuantity'){
+        var lang_msg = lang_update_item_quantity;
+    }else{
+        lang_msg = '';
     }
 
     swal({
@@ -66,6 +70,7 @@ $('.ord_item_change').click(function(e){
                     $('#shop_status').text(result.shop_status);
                     swal(lang_success,result.msg, "success"); 
                     _this.hide();
+                    location.reload();
                 }else{
                    showSweetAlertError(result.msg);
                 }

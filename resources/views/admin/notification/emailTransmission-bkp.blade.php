@@ -228,10 +228,6 @@
             var attribute = $(this).attr('id');
             var parent_val = $("#driver").val();
             var provider = $("#provider").val();
-            // console.log(value);
-            // console.log(attribute);
-            // console.log(parent_val);
-            // console.log(provider);
             setServerEmailData(value,attribute,parent_val,provider);
         });
 

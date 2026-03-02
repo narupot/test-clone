@@ -136,7 +136,6 @@ var tableConfig = (fieldSetJson.tableConfig!== undefined) ? fieldSetJson.tableCo
 		$rootScope.optionHtml = [];
 		$rootScope.filedSetModel = {};
 		$rootScope.drodownValList = {};
-	  	//console.log($rootScope);
 		/****** This function used for get data from server and initialized model value for filter section *********/
 		
 		$rootScope.filedsSet = fieldSetJson.fieldSets;
@@ -167,7 +166,6 @@ var tableConfig = (fieldSetJson.tableConfig!== undefined) ? fieldSetJson.tableCo
 						// $rootScope.filedsSet[val].push({
 						// "optionArr" : response
 						// });
-						//console.log($rootScope.filedsSet[val]);
 						/******* set default model for select type single and value type url********/
 						if (key.selectionType === 'single' && defaultModel !== '') {
 							angular.forEach($rootScope.optionJsonArr[val], function(keyJ, valJ) {

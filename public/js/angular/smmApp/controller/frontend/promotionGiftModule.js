@@ -77,7 +77,7 @@
         
         rvCtrl.changeContent = function(index, attrId, mainPrdId, prdDetail, pIndex, atr_id, prdData){ 
             _enbdsbLodBtn('enable',true);
-            console.log(prdData); 
+            // console.log(prdData); 
             // return;           
             var prd_type = prdData.productInfo[0].product_type;
 
@@ -208,7 +208,7 @@
             $event.stopPropagation();  
 
             cartValidationCheck(prdData).then(function(resolved){
-                console.log(prdData); 
+                // console.log(prdData); 
             	//sucess csae
             	_enbdsbLodBtn('enable',true);
             	var dataObj=[];
@@ -220,7 +220,7 @@
             		"action_from" : "action_from_promotion",
             	});
 
-                console.log(dataObj);
+                // console.log(dataObj);
 
             	//check quantity in stocke
             	salesfactoryData.getData(checkProductBeforeCart, "POST", dataObj)
@@ -294,7 +294,7 @@
                   //console.log(cartUrl);
                   window.parent.location.href=cartUrl;
                 }else if(response.data.success === "success" && !_.isUndefined(strflag) && strflag==="buynow"){
-                    console.log(cartUrl);
+                    // console.log(cartUrl);
                     window.parent.location.href=cartUrl;
                 }
 

@@ -5,31 +5,41 @@ function validateForm(formId,rules,messages){
         messages: messages,
         submitHandler : function(from, evt){               
             var formData = new FormData($('#'+formId)[0]);
+            $('button[type="submit"]').prop('disabled',true);
             callAjaxFormRequest(formAction,'post',formData,function(response){
                 $('p[class="error"]').html('');
-                    if(response.status=='fail'){
-                        if(response.validation){
-                            $.each(response.message, function(key,val){
-                              $('p[id='+key+']').text(val);
-                            });
-                        }else{
-                            alert(response.message);
-                        }
-                        
-                        return false;
+                if(response.status=='fail'){
+                    if(response.validation){
+                        $.each(response.message, function(key,val){
+                            $('p[id='+key+']').text(val);
+                        });
+                    }else{
+                        alert(response.message);
                     }
-                    if(response.status=='update'){
-                        toastr.options.positionClass = 'toast-top-right';
-                        _toastrMessage('success', records_updated_successfully);
-                    }
-                    if(response && response.status === 'success')
-                        {
-                            toastr.options.positionClass = 'toast-top-right';
-                            _toastrMessage('success', records_updated_successfully);
-                            setTimeout(function() {
-                                window.location.href = response.url;
-                            }, 1000);
-                        }
+                    
+                    return false;
+                }
+                if(response.status=='update'){
+                    toastr.options.positionClass = 'toast-top-right';
+                    _toastrMessage('success', records_updated_successfully);
+                }
+                if(response && response.status === 'success')
+                {
+                    toastr.options.positionClass = 'toast-top-right';
+                    _toastrMessage('success', records_updated_successfully);
+                    setTimeout(function() {
+                        window.location.href = response.url;
+                    }, 1000);
+                }
+                if(response.status=='error'){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'เกิดข้อผิดพลาด',
+                        text: response.message,
+                        confirmButtonColor: '#d33',
+                    });
+                    $('button[type="submit"]').prop('disabled',false);
+                }
             });
             
         },
@@ -51,8 +61,10 @@ function callAjaxFormRequest(url,type,data,callback){
             showHideLoader('showLoader');
         },
         success:function(result){  
-            showHideLoader('hideLoader');
             callback(result);
+        },
+        complete: function () {
+            showHideLoader('hideLoader');
         }
     });
 }
@@ -141,19 +153,43 @@ function updateIsdCode() {
         $('.isd_code').val('+'+isd_code);
     }
 }
-function showSweetAlertError(msg){
-    swal({
-        type: 'error', 
-        text: msg,
-        confirmButtonColor: '#d33',
-        confirmButtonText: lang_ok
-    });
-}
+// function showSweetAlertError(msg){
+//     Swal.fire({
+//         type: 'error', 
+//         text: msg,
+//         confirmButtonColor: '#d33',
+//         confirmButtonText: lang_ok
+//     });
+// }
 
+function showSweetAlertError(msg, callback) {
+    var cleanMsg = msg.replace(/<[^>]*>?/gm, '');
+    var swalObject = (typeof Swal !== 'undefined') ? Swal : (typeof swal !== 'undefined' ? swal : null);
+
+    if (swalObject) {
+        var swalMethod = (typeof swalObject.fire === 'function') ? swalObject.fire.bind(swalObject) : swalObject;
+
+        swalMethod({
+            icon: 'error',
+            title: 'แจ้งเตือน',
+            html: msg,
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'ตกลง',
+            allowOutsideClick: false
+        }).then((result) => {
+            if (typeof callback === 'function') {
+                callback();
+            }
+        });
+    } else {
+        alert(cleanMsg);
+        if (typeof callback === 'function') callback();
+    }
+}
 // Below function is used to allow user to enter numeric value only
 function isNumericKey(evt) {
 
-    var charCode = (evt.which) ? evt.which : event.keyCode;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
     
     if (charCode!=46) {
         
@@ -169,7 +205,7 @@ function isNumericKey(evt) {
 // Below function is used to allow user to enter number only
 function isNumberKey(evt) {
 
-    var charCode = (evt.which) ? evt.which : event.keyCode;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
 
     if (charCode != 8 && charCode != 0 && (charCode < 48 || charCode > 57)) {
 
@@ -184,9 +220,9 @@ function isNumberKey(evt) {
 function showHideLoader(strFlag) {
     
     if(strFlag === "showLoader") {
-        jQuery("#showHideLoader").show();
+        jQuery("#showHideLoader").removeClass('d-none').fadeIn();
     } else if(strFlag === "hideLoader") {
-        jQuery("#showHideLoader").hide();
+        jQuery("#showHideLoader").addClass('d-none').fadeOut();
     }
 };
 
@@ -194,9 +230,9 @@ function showHideLoader(strFlag) {
 function showHideLoaderAdmin(strFlag) {
     
     if(strFlag === "showLoader") {
-        $("#showHideLoader").removeClass('d-none');
+        $("#showHideLoader").removeClass('d-none').fadeIn();;
     } else if(strFlag === "hideLoader") {
-        $("#showHideLoader").addClass('d-none');
+        $("#showHideLoader").addClass('d-none').fadeOut();
     }
 };
 //View uploead image method Start

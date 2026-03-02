@@ -1,11 +1,27 @@
 <?php
 ## Function to set file permissions to 0644 and folder permissions to 0755
 function AllDirChmod( $dir = "./", $dirModes = 0755, $fileModes = 0644 ){
-   $d = new RecursiveDirectoryIterator( $dir );
-   foreach( new RecursiveIteratorIterator( $d, 1 ) as $path ){
-      if( $path->isDir() ) chmod( $path, $dirModes );
-      else if( is_file( $path ) ) chmod( $path, $fileModes );
-  }
+   $start_time = time();
+   $max_execution_time = 30; // จำกัดเวลาไว้ที่ 30 วินาที
+   $file_count = 0;
+   
+   try {
+       $d = new RecursiveDirectoryIterator( $dir );
+       foreach( new RecursiveIteratorIterator( $d, 1 ) as $path ){
+           // ตรวจสอบ timeout ทุก 100 ไฟล์
+           if (($file_count % 100) == 0 && (time() - $start_time) > $max_execution_time) {
+               echo "Timeout reached, stopping permission changes<br/>";
+               break;
+           }
+           
+           if( $path->isDir() ) chmod( $path, $dirModes );
+           else if( is_file( $path ) ) chmod( $path, $fileModes );
+           
+           $file_count++;
+       }
+   } catch (Exception $e) {
+       echo "Error during permission changes: " . $e->getMessage() . "<br/>";
+   }
 }
 ## Function to clean out the contents of specified directory
 function cleandir($dir) {

@@ -118,7 +118,6 @@
 
             	if (event.lengthComputable){ 
             		queuedFiles.customData.percent = Math.round((event.loaded / requestLength) * 100) +"%";
-            		console.log(queuedFiles.customData.percent) 
             	}
             }.bind(this);
                        
@@ -533,7 +532,6 @@
 		//change id to product id for add to cart
 		this.changeTabularCartData = function(data){
 			var result=angular.copy(data);
-			console.log(data);
 			angular.forEach(result, function(elem){
 				elem.productId = elem.id;
 				elem.quantity = elem.quantity;

@@ -206,6 +206,22 @@ class ShopController extends MarketPlace
         $shop_id = session('user_shop_id');
         try {
             $shop_info = Shop::find($shop_id);
+           
+            if(!empty($shop_info->block_until) && isset($request->type) && $request->type == 'shop_status'){
+           
+                try{
+
+                    $blockUntil = \Carbon\Carbon::parse($shop_info->block_until)->endOfDay();
+                    $now = \Carbon\Carbon::now();
+                    if ($now->lt($blockUntil)){
+                        $msg = 'ร้านค้าของคุณถูกระงับการขายถึงวันที่ ' . $blockUntil->format('d/m/Y');
+                        $response = ['status'=>'fail','msg'=>$msg];
+                        return $response;
+                    }
+                }catch(Exception $e){
+                    
+                }
+            }
             if(isset($request->type) && $request->type == 'shop_status'){
                 if($shop_info->shop_status == 'open'){
                     $value = 'close';
