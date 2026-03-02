@@ -1,0 +1,40 @@
+<?php
+
+return [
+
+'select_package'=>'Select Package',
+'select_standard'=>'Select Standard',
+'specific_product_level_2'=>'Specific Product Level 2',
+'master_product_level_1'=>'Master Product Level 1',
+'create_slider'=>'Create Slider',
+'product'=>'Product',
+'two_row_product_and_banner'=>'Two row product and banner',
+'two_row_banner_and_product'=>'Two row banner and product',
+'one_row_product_and_banner'=>'One row product and banner',
+'one_row_banner_and_product'=>'One row banner and product',
+'only_product'=>'Only Product',
+'design'=>'Design',
+'show_slider'=>'Show Slider',
+'hide_slider'=>'Hide Slider',
+'container_width'=>'Container Width',
+'container_setting'=>'Container Setting',
+'number_of_product_per_slider'=>'Number of product per slider',
+'limit_of_slider_amount'=>'Limit of slider amount',
+'bottom'=>'Bottom',
+'top'=>'Top',
+'container_space'=>'Container space',
+'px'=>'px',
+'left_and_right'=>'Left and Right',
+'thumbnail_space'=>'Thumbnail space',
+'condition'=>'Condition',
+'name'=>'Name',
+'created_date'=>'Create Date',
+'last_updated'=>'Last Updated',
+'price'=>'Price',
+'asc'=>'Ascending',
+'desc'=>'Descending',
+'sort_by_value'=>'Sort by value',
+'sort_by'=>'Sort by',
+
+
+];

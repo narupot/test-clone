@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WMS Pickup API Test</title>
+    <style>
+        body { font-family: Arial; max-width: 1000px; margin: 20px; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; }
+        textarea { width: 100%; height: 150px; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; }
+        .response { background: #f0f0f0; padding: 15px; margin-top: 10px; }
+        pre { background: #222; color: #0f0; padding: 10px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>WMS Pickup API Test</h1>
+    
+    <div class="section">
+        <h2>1. Update Truck Plan</h2>
+        <textarea id="pickupData">{
+  "Pickuptime": "2025-10-20 04:00",
+  "TruckPlan": [
+    { "MainOrder": "SMM260108225455", "Location": "A0-1" },
+    { "MainOrder": "SMM260108225456", "Location": "A1-1" }
+  ]
+}</textarea>
+        <br><br>
+        <button onclick="testUpdateTruckPlan()">Send Request</button>
+        <div id="response1" class="response" style="display:none;">
+            <h4>Response:</h4>
+            <pre id="respText1"></pre>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>2. Get All Logs</h2>
+        <label>Status Filter: <input type="text" id="statusFilter" placeholder="success/partial/failed"></label>
+        <label>Per Page: <input type="number" id="perPage" value="20"></label>
+        <br><br>
+        <button onclick="testGetLogs()">Get Logs</button>
+        <div id="response2" class="response" style="display:none;">
+            <h4>Response:</h4>
+            <pre id="respText2"></pre>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>3. Get Log Detail</h2>
+        <label>Log ID: <input type="number" id="logId" placeholder="1" value="1"></label>
+        <br><br>
+        <button onclick="testGetLogDetail()">Get Detail</button>
+        <div id="response3" class="response" style="display:none;">
+            <h4>Response:</h4>
+            <pre id="respText3"></pre>
+        </div>
+    </div>
+
+    <script src="/js/wms-api.js"></script>
+    <script>
+        function testUpdateTruckPlan() {
+            const data = JSON.parse(document.getElementById('pickupData').value);
+            fetch('/api/wms/truck-plan', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(r => r.json())
+            .then(d => {
+                document.getElementById('response1').style.display = 'block';
+                document.getElementById('respText1').textContent = JSON.stringify(d, null, 2);
+            })
+            .catch(e => alert('Error: ' + e));
+        }
+
+        function testGetLogs() {
+            const status = document.getElementById('statusFilter').value;
+            const perPage = document.getElementById('perPage').value;
+            let url = '/api/wms/logs?per_page=' + perPage;
+            if (status) url += '&status=' + status;
+            
+            fetch(url)
+                .then(r => r.json())
+                .then(d => {
+                    document.getElementById('response2').style.display = 'block';
+                    document.getElementById('respText2').textContent = JSON.stringify(d, null, 2);
+                });
+        }
+
+        function testGetLogDetail() {
+            const logId = document.getElementById('logId').value;
+            fetch('/api/wms/logs/' + logId)
+                .then(r => r.json())
+                .then(d => {
+                    document.getElementById('response3').style.display = 'block';
+                    document.getElementById('respText3').textContent = JSON.stringify(d, null, 2);
+                });
+        }
+    </script>
+</body>
+</html>

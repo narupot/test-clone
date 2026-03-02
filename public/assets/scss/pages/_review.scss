@@ -1,0 +1,43 @@
+
+/*  For Review Pages */
+
+.review-title {
+	margin-bottom: 15px;
+}
+
+.review-star {
+    margin: 0px;
+    line-height: 22px;
+    transition: all 0.5s ease-in-out 0s;
+    position: relative;
+    font-family: 'Font Awesome 5 Pro';
+    display: inline-flex;
+
+    i {
+        color: $black;
+        margin-right: 5px;
+    }
+    .grey-stars, .filled-stars {
+    	&:before {
+    		content: "\F005\F005\F005\F005\F005";
+		    font-family: 'Font Awesome 5 Pro';
+		    font-size: 1rem;
+		    letter: 3px;
+		    line-height: 18px;
+		    font-weight: bold;
+    	}
+    }
+    .grey-stars {
+	    height: 100%; position: relative;
+	    color: $black;
+	}
+	.filled-stars {
+	    position: absolute;
+	    left: 0;
+	    top: 0;
+	    height: 100%;
+	    overflow: hidden;	     
+	}
+}
+
+

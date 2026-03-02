@@ -1,0 +1,206 @@
+<div class="sgpopup" data-popup="popup-2">
+    <div class="popup-inner">
+        <div class="popup-header">
+            <i class="fas fa-pencil-ruler"></i> Properties
+            <a class="popup-close fas fa-times" data-popup-close="popup-2" href="#" id="close_text_design_popup"></a>
+        </div>
+        <div class="form-rows">
+            <div class="bdr-alignmentBox clearfix">
+                <ul class="nav nav-tabs mt-2 mb-2">
+                  <li class="nav-item" ng-repeat="item in setting.design_prop" ng-click="$ctrl.enableTab($event, item, setting.design_prop)">
+                     <a class="nav-link" data-toggle="tab" href="#<%item.prop_name%>" ng-class="{'active show' : item.status == 'active'}">
+                       <i class="<%item.class_name%>"></i>
+                     </a>
+                  </li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane" ng-class="{'active show' : item.status == 'active'}" id="<%item.prop_name%>" ng-repeat="item in setting.design_prop">
+                     <div class="listing-drop">
+                        <ul>
+                           <li ng-repeat="ps in item.props_type_input">
+                              <h2>
+                                 <a href="javascript:void(0)"><%ps.show_name%> 
+                                    <span class="arrowtgl"><i class="fas fa-chevron-down"></i>
+                                    </span>
+                                 </a> 
+                              </h2>
+                              <!-- font propperty-->
+                              <div class="row" ng-if="ps.html_type === 'input_text_select_color'">
+                                 <div class="col-sm-6 form-group" ng-repeat="prop in ps.font_props">
+                                    <label><%prop.show_name%></label>
+                                    <!-- font family container -->
+                                    <select ng-if="prop.type === 'font_family'" ng-options="opt.value as opt.name for opt in prop.value" ng-model="prop.prop_value" ng-change="$ctrl.fontAction.font(prop, item)"></select>
+                                    <!-- font color picker -->
+                                    <div class="input-group cpicker colorpicker-component" ng-if="prop.type=== 'font_color'" ng-model="prop.prop_value" colorpicker>
+                                       <input type="text" class="form-control" placeholder="#4304ff" ng-model="prop.prop_value" readonly="true">
+                                       <div class="input-group-append">
+                                          <span class="input-group-text">
+                                            <span class="input-group-addon" ng-style="{background:prop.prop_value}">
+                                              <i></i>
+                                            </span>
+                                          </span>
+                                       </div>
+                                    </div>
+                                    <!-- input box for font size | line height  |  font_weight-->
+                                    <div ng-if="prop.type === 'font_size' || prop.type === 'line_height' || prop.type === 'font_weight'">
+                                       <input type="text" placeholder="0px" ng-model="prop.prop_value" ng-change="$ctrl.fontAction.sliderChange(prop, item)" onkeypress="return isNumberKey(event)"/>
+                                       <ui-slider-dir ng-model="prop.prop_value"  max="100" min="0" on-changed="$ctrl.fontAction.sliderChange(prop, item)"></ui-slider-dir>
+                                    </div>
+                                    <!-- button for bold italic underline -->
+                                    <div class="form-group" ng-if="prop.type === 'bold_italic_underline'">
+                                        <label>&nbsp;</label>
+                                        <div class="biu">
+                                           <button type="button" class="btn btns-default mr-1" value="B"
+                                           ng-repeat="p in prop.value" ng-click="$ctrl.fontAction.textFormating(p, item)"><span class="<%p.class_name%>"><%p.show_name%></span></button>
+                                        </div>
+                                    </div>
+                                 </div>                         
+                              </div>
+                              <!-- button icon property-->
+                              <div class="button-icon-section row" ng-if="ps.html_type === 'button_icon'">
+                                  <div class="col-sm-12 form-group" ng-if="ps.icon_with_text">
+                                      <label class="radio-wrap-admin mr-2">
+                                      <input type="radio" name="<%ps.prop_name%>" class="radiomark" value="none" ng-model="ps.type_model" ng-change="$ctrl.iconAction.selectionChange(ps)" />
+                                      <span class="radiomark"> None</span>                         
+                                      </label>
+                                      <label class="radio-wrap-admin mr-2">
+                                      <input type="radio" name="<%ps.prop_name%>" class="radiomark" value="before_text" ng-model="ps.type_model" ng-change="$ctrl.iconAction.selectionChange(ps)" />
+                                      <span class="radiomark"> Before text</span>                         
+                                      </label>
+                                      <label class="radio-wrap-admin">
+                                      <input type="radio" name="<%ps.prop_name%>" class="radiomark" value="after_text" ng-model="ps.type_model" ng-change="$ctrl.iconAction.selectionChange(ps)" />
+                                      <span class="radiomark"> After text</span>                         
+                                      </label>
+                                  </div>
+                                  <div class="icon-property col-sm-12" ng-if="ps.type_model!='none'">
+                                      <div class="row" ng-repeat="prop in ps.icon_pops">
+                                        <div class="col form-group">
+                                            <label class="mb-2"><%prop.show_name%></label>
+                                            <!-- icon class picker -->
+                                            <div class="input-group mb-3 fontpicker fontpicker-component d-table" ng-if="prop.type=== 'icon_class_name'">
+                                               <input type="text" class="form-control icp icp-auto action-swesome d-table-cell" value="fas fa-archive" ng-model="prop.prop_value" icon-picker>
+                                               <div class="input-group-append d-table-cell">
+                                                  <span class="input-group-text input-group-addon"></span>
+                                               </div>
+                                            </div>
+                                            <!-- icon color picker -->
+                                            <div class="input-group cpicker colorpicker-component" ng-if="prop.type=== 'icon_color'" ng-model="prop.prop_value" colorpicker>
+                                             <input type="text" class="form-control" placeholder="#4304ff" ng-model="prop.prop_value" readonly="true">
+                                             <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                  <span class="input-group-addon" ng-style="{background:prop.prop_value}">
+                                                    <i></i>
+                                                  </span>
+                                                </span>
+                                             </div>
+                                            </div>
+                                            <!-- icon position  icon_position --> 
+                                            <div ng-if="prop.type === 'icon_position'">
+                                               <input type="text" placeholder="0px" ng-model="prop.prop_value" ng-change="$ctrl.iconAction.selectionChange(ps)" onkeypress="return isNumberKey(event)"/>
+                                               <ui-slider-dir ng-model="prop.prop_value"  max="100" min="0" on-changed="$ctrl.iconAction.selectionChange(ps)"></ui-slider-dir>
+                                            </div>
+                                        </div>
+                                      </div>
+                                  </div>
+                              </div>
+                              <!-- background property -->
+                              <div class="" ng-if="ps.html_type === 'input_color'">
+                                 <div class="bgtype">
+                                    <label><%ps.props_type_input[0].show_name%></label>  
+                                    <!-- color tab -->
+                                    <div class="boxTabtogglebg">
+                                       <ul class="nav nav-tabs mt-2 mb-2">
+                                          <li class="nav-item" ng-repeat="c_prop in ps.props_type_input[0].back_props" ng-class="{'active show' : c_prop.status == 'active'}" ng-click="backAction.enableBackColorTab($event, c_prop)">
+                                             <a class="nav-link" data-toggle="tab" href="#<%c_prop.name%>-<%item.prop_name%>"  ng-class="{'active show' : c_prop.status == 'active'}"><%c_prop.show_name%></a>
+                                          </li>
+                                       </ul>
+                                       <!-- tab content -->
+                                       <div class="tab-content">
+                                          <div class="tab-pane fade" id="<%c_prop.name%>-<%item.prop_name%>" ng-repeat="c_prop in ps.props_type_input[0].back_props" ng-class="{'active show' : c_prop.status == 'active'}">
+                                             <!-- for gradient color -->
+                                             <div class="row" ng-if="c_prop.html_type === 'multi_color'">
+                                                <div class="col-sm-6 form-group" ng-repeat="cp in c_prop.value">
+                                                   <label><%cp.show_name%></label>
+                                                   <div class="input-group cpicker colorpicker-component colorpicker-element" ng-model="cp.prop_value" colorpicker="rgba">
+                                                      <input type="text" class="form-control" placeholder="#4304ff" ng-model="cp.prop_value" readonly="true">
+                                                      <div class="input-group-append">
+                                                         <span class="input-group-text">
+                                                         <span class="input-group-addon" ng-style="{background : cp.prop_value}"><i></i></span>
+                                                         </span>
+                                                      </div>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                             <!-- for single color -->
+                                             <div class="row" ng-if="c_prop.html_type === 'single_color'">
+                                                <div class="col-sm-6 form-group">
+                                                   <label><%c_prop.show_name%></label>
+                                                   <div class="input-group cpicker colorpicker-component colorpicker-element" ng-model="c_prop.prop_value" colorpicker="rgba">
+                                                      <input type="text" class="form-control" placeholder="#4304ff" ng-model="c_prop.prop_value" readonly="true">
+                                                      <div class="input-group-append">
+                                                         <span class="input-group-text">
+                                                         <span class="input-group-addon" ng-style="{'background' : c_prop.prop_value}"><i></i></span>
+                                                         </span>
+                                                      </div>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                              <!-- border property-->
+                              <div class="row" ng-if="ps.html_type === 'input_text_select_color_border' && ps.props_type_input.length">
+                                 <div class="col-sm-12">  
+                                    <div class="form-check pl-0">
+                                       <label class="check-wrap-admin radio-cart">
+                                       <input type="checkbox" name="<%ps.name%><%$index%>" ng-model="ps.enable_border" ng-change="$ctrl.borderAction.enableDisableBorder(ps, item)">
+                                          <span class="checkmark"> Enable Border </span>
+                                       </label>
+                                    </div> 
+                                    <div class="bdr-alignmentBox clearfix" ng-if="ps.enable_border">
+                                       <ul class="nav nav-tabs mt-2 mb-2">
+                                          <li class="<%prop.class_name%>" ng-repeat="prop in ps.props_type_input" ng-click="$ctrl.borderAction.enableTab($event, prop, ps.props_type_input)">
+                                             <a class="nav-link" data-toggle="tab" href="#<%prop.prop_name%>" ng-class="{'active show' : prop.status == 'active'}"><i class="fas fa-align-right"></i></a> 
+                                          </li>
+                                       </ul>
+                                        <div class="tab-content">
+                                           <div class="tab-pane fade" id="<%prop.prop_name%>" ng-repeat="prop in ps.props_type_input" ng-class="{'active show' : prop.status == 'active'}">
+                                              <div class="form-rows">
+                                                 <div class="row">
+                                                     <div class="col-sm-6 form-group" ng-repeat="cp in prop.border_props">
+                                                         <label><%cp.show_name%></label>
+                                                         <select ng-if="cp.type === 'border_type'" ng-options="opt.value as opt.name for opt in cp.prop_value" ng-model="cp.type_model" ng-change="$ctrl.borderAction.styleChange(cp, item)">
+                                                         </select>
+                                                         <div class="input-group cpicker colorpicker-component" ng-if="cp.type === 'border_color'" colorpicker ng-model="cp.prop_value">
+                                                             <input type="text" class="form-control" placeholder="#4304ff" ng-model="cp.prop_value" ng-change="$ctrl.borderAction.colorChange(cp, item)">
+                                                            <div class="input-group-append">
+                                                               <span class="input-group-text">
+                                                                 <span class="input-group-addon" style="background:<%cp.prop_value%>">
+                                                                   <i></i>
+                                                                 </span>
+                                                               </span>
+                                                            </div>
+                                                         </div>
+                                                         <div class="width-radius-slider" ng-if="cp.type === 'border_width' || cp.type === 'border_radius'">
+                                                            <input type="text" placeholder="5px" ng-model="cp.prop_value" ng-change="$ctrl.borderAction.widthRadiusChange(cp, item)" onkeypress="return isNumberKey(event)">
+                                                            <ui-slider-dir ng-model="cp.prop_value"  max="100" min="0" on-changed="$ctrl.borderAction.widthRadiusChange(cp, item)"></ui-slider-dir>  
+                                                         </div>                                    
+                                                     </div>
+                                                 </div>
+                                              </div>
+                                           </div>
+                                        </div>
+                                    </div>
+                                 </div>                                  
+                              </div>
+                           </li>                           
+                        </ul>
+                     </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+	<title>Smmarket</title>
+	<link rel="stylesheet" type="text/css" href="css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="css/global.css">
+	<link rel="stylesheet" type="text/css" href="css/style-front.css">
+	<link rel="stylesheet" type="text/css" href="css/myaccount.css">	
+	<link rel="stylesheet" type="text/css" href="css/flickity.css">			
+</head>
+<body>
+
+<div class="wrapper">
+
+	<header id="header">
+		<div class="container">
+			<div class="header-inner">
+				<div class="logo">
+					<a href="#" title="Smmarket"><img src="images/logo.png" width="85" alt=""></a>
+				</div>
+				<div class="header-content">
+					<div class="login-link">
+						<a href="index.html" class="go-home">Back to homepage</a>
+						<ul>
+							<li><a href="#"> <i class="fas fa-sign-in-alt"></i> Sign out</a></li>
+							<li><a href="#"> <i class="fas fa-comments"></i> Chat</a></li>
+						</ul>
+					</div>
+					<div class="search-cart-wrap">
+						<div class="head-col buyer-seller-col">
+							<div class="btn-buyer-header">
+								<a href="#" class="btn"><i class="far fa-home"></i> For Seller <i class="badge">3</i></a>
+								<a href="#" class="btn-grey"><i class="fas fa-user"></i> For Buyer <i class="badge">3</i></a>
+							</div>
+						</div>
+						<div class="head-col search-form">
+							&nbsp;
+						</div>
+
+						<div class="head-col buyer-col">
+							<div class="seller-pannel">
+								<h3 class="sell-name">lorem ipsum <a class="btn-grey"><i class="fas fa-apple-alt"></i></a></h3>
+							</div>							
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+	</header>
+	
+	<!-- Content Start -->
+	<div class="content-wrap">
+
+		<div class="seller-header clearfix">
+			<div class="container">
+				<ul class="seller-menu seller-carousel">
+					<li>
+						<a href="#" class="active sel-paneltxt">
+							<span class="menu-txt">Seller Panel</span>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<i class="fas fa-history"></i> Order History
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<i class="fas fa-plus"></i> Manage Product
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<i class="fas fa-users"></i> Customer
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<i class="fas fa-credit-card"></i> Credit
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<i class="fas fa-star"></i> Rating
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<i class="far fa-home"></i> Manage Store
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<i class="far fa-chart-bar"></i> Report
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<i class="fas fa-dollar-sign"></i> Bills
+						</a>
+					</li>
+
+				</ul>
+			
+			</div>
+		</div>
+
+
+		<div class="container">			
+			<div class="row">
+				<div class="col-sm-12">	
+
+						<div class="end-shopping-wrap form-group">
+							<div class="row">
+								<div class="col-sm-8">
+									<div class="product-purchase">Purchased products <span>5</span> Item | <span>12</span> List of Shopping List</div>
+									<div class="product-amount"> Paid <span>2000</span> Baht | Qty <span>10</span> Products </div>
+								</div>
+
+								<div class="col-sm-4 text-right">									
+										<button class="btn-blue2">End Shopping</button>									
+								</div>								
+							</div>
+						</div>
+
+						<div class="seller-panneltab form-group">
+							<ul class="nav" id="seller-Tab">
+								<li>
+									<a data-toggle="tab" href="#tab-seler1"> 
+										<span class="icon-list"><i class="fas fa-lemon"></i></span>
+										<span class="tab-name">Product List</span>
+										<span class="info-list">4</span>
+									</a>
+								</li>
+								<li>
+									<a data-toggle="tab" href="#tab-seler2"> 
+										<span class="icon-list"><i class="far fa-usd-circle"></i></span>
+										<span class="tab-name">Product Bargain</span>
+										<span class="info-list">4</span>
+									</a>
+								</li>
+								<li>
+									<a data-toggle="tab" href="#tab-seler5" class="active"> 
+										<span class="icon-list"><i class="fas fa-shopping-basket"></i></span>
+										<span class="tab-name">Shopping Cart</span>										
+										<span class="info-list">4</span>
+									</a>
+								</li>
+								
+								<li>
+									<a data-toggle="tab" href="#tab-seler4"> 
+										<span class="icon-list"><i class="fas fa-clipboard-list"></i></span>
+										<span class="tab-name">Stock Memo</span>											
+										<span class="info-list">3</span>
+									</a>
+								</li>								
+							</ul>
+						</div>							
+
+
+
+						<div class="tab-content">
+							<div class="tab-pane" id="tab-seler1">	
+								<div class="form-group mt-3 text-right">
+									<button type="submit" class="btn">Create New Product</button>
+								</div>															
+								<div class="prod-review-tbl bdr-table">
+										<div class="table">
+											<div class="table-header">
+												<ul>
+													<li>Product</li>
+													<li>Standard</li>
+													<li>Left in stock</li>								
+													<li>Price(Baht)/Unit</li>
+													<li>Unit</li>
+													<li>Weight/unit</li>
+													<li>Status</li>
+													<li>&nbsp;</li>													
+												</ul>
+											</div>
+											<div class="table-content">
+												<ul>
+													<li>
+														<div class="product">
+															<span class="prod-img">
+																<img src="images/banner/prod-item9.jpg" width="59" height="50" alt="">
+																<span class="prod-cam"><i class="fas fa-camera"></i></span>
+															</span>
+															<span class="prod-name d-block mb-2">Product Name</span>
+														</div>
+													</li>
+													<li><span class="xsa">XSA</span></li>
+													<li>100</li>
+													<li class="prize">
+														<span class="count-price">100</span>													
+														<button class="btn-grey" type="submit" data-toggle="modal" data-target="#changePriceModel">change prize</button> 
+													</li>
+													<li>Bag</li>
+													<li>1 Kg</li>
+													<li>
+														<div class="on-offbtn">
+											                <div class="onoffswitch myonoffswitch2">
+											                  <input type="checkbox" name="onoffswitch" class="myonoffswitch-checkbox2">
+											                       <label class="myonoffswitch-label2" for="myonoffswitch">      
+											                         <div class="onofftravelbox2 clearfix">     
+											                          <span class="myonoffswitch-inner2">Close</span>     
+											                          <span class="myonoffswitch-switch2">Open</span>     
+											                         </div>     
+											                         <span class="myonoffswitch-circle2"></span>     
+											                       </label>                  
+											               </div>
+											            </div>
+													</li>
+													<li><a href="#" class="link"><i class="fas fa-edit"></i> Edit</a></li>
+												</ul>
+
+												<ul>
+													<li>
+														<div class="product">
+															<span class="prod-img">
+																<img src="images/banner/prod-item9.jpg" width="59" height="50" alt="">
+																<span class="prod-cam"><i class="fas fa-camera"></i></span>
+															</span>
+															<span class="prod-name">Product Name</span>
+														</div>
+													</li>
+													<li><span class="mb">MB</span></li>
+													<li>100</li>
+													<li class="prize">
+														<span class="count-price no-price">No price</span> 
+														<button type="submit" class="btn-grey">change prize</button> 
+													</li>
+													<li>Bag</li>
+													<li>1 Kg</li>
+													<li>
+														<div class="on-offbtn">
+											                <div class="onoffswitch myonoffswitch2">
+											                 <input type="checkbox" name="onoffswitch" class="myonoffswitch-checkbox2">
+											                       <label class="myonoffswitch-label2" for="myonoffswitch">      
+											                         <div class="onofftravelbox2 clearfix">     
+											                          <span class="myonoffswitch-inner2">Close</span>     
+											                          <span class="myonoffswitch-switch2">Open</span>     
+											                         </div>     
+											                         <span class="myonoffswitch-circle2"></span>     
+											                       </label>                  
+											               </div>
+											            </div>
+													</li>
+													<li><a href="#" class="link"><i class="fas fa-edit"></i> Edit</a></li>
+												</ul>
+
+												<ul>
+													<li>
+														<div class="product">
+															<span class="prod-img">
+																<img src="images/banner/prod-item9.jpg" width="59" height="50" alt="">
+																<span class="prod-cam"><i class="fas fa-camera"></i></span>
+															</span>
+															<span class="prod-name">Product Name</span>
+														</div>
+													</li>
+													<li><span class="ma">MA</span></li>
+													<li>100</li>
+													<li class="prize">
+														<span class="count-price">100</span> 
+														<button type="submit" class="btn-grey">change prize</button> 
+													</li>
+													<li>Bag</li>
+													<li>1 Kg</li>
+													<li>
+														<div class="on-offbtn">
+											                <div class="onoffswitch myonoffswitch2">
+											                  <input type="checkbox" name="onoffswitch" class="myonoffswitch-checkbox2">
+											                       <label class="myonoffswitch-label2" for="myonoffswitch">      
+											                         <div class="onofftravelbox2 clearfix">     
+											                          <span class="myonoffswitch-inner2">Close</span>     
+											                          <span class="myonoffswitch-switch2">Open</span>     
+											                         </div>     
+											                         <span class="myonoffswitch-circle2"></span>     
+											                       </label>                  
+											               </div>
+											            </div>
+													</li>
+													<li><a href="#" class="link"><i class="fas fa-edit"></i> Edit</a></li>
+												</ul>
+
+												<ul>
+													<li>
+														<div class="product">
+															<span class="prod-img">
+																<img src="images/banner/prod-item9.jpg" width="59" height="50" alt="">
+																<span class="prod-cam"><i class="fas fa-camera"></i></span>
+															</span>
+															<span class="prod-name">Product Name</span>
+														</div>
+													</li>
+													<li><span class="la">LA</span></li>
+													<li>100</li>
+													<li class="prize">
+														<span class="count-price no-price">No price</span> 
+														<button type="submit" class="btn-grey">change prize</button> 
+													</li>
+													<li>Bag</li>
+													<li>1 Kg</li>
+													<li>
+														<div class="on-offbtn">
+											                <div class="onoffswitch myonoffswitch2">
+											                  <input type="checkbox" name="onoffswitch" class="myonoffswitch-checkbox2">
+											                       <label class="myonoffswitch-label2" for="myonoffswitch">      
+											                         <div class="onofftravelbox2 clearfix">     
+											                          <span class="myonoffswitch-inner2">Close</span>     
+											                          <span class="myonoffswitch-switch2">Open</span>     
+											                         </div>     
+											                         <span class="myonoffswitch-circle2"></span>     
+											                       </label>                  
+											               </div>
+											            </div>
+													</li>
+													<li><a href="#" class="link"><i class="fas fa-edit"></i> Edit</a></li>
+												</ul>
+
+												<ul>
+													<li>
+														<div class="product">
+															<span class="prod-img">
+																<img src="images/banner/prod-item9.jpg" width="59" height="50" alt="">
+																<span class="prod-cam"><i class="fas fa-camera"></i></span>
+															</span>
+															<span class="prod-name">Product Name</span>
+														</div>
+													</li>
+													<li><span class="xsb">XSB</span></li>
+													<li>100</li>
+													<li class="prize">
+														<span class="count-price">100</span> 
+														<button class="btn-grey" type="submit" data-toggle="modal" data-target="#changePriceModel">change prize</button>
+													</li>
+													<li>Bag</li>
+													<li>1 Kg</li>
+													<li>
+														<div class="on-offbtn">
+											                <div class="onoffswitch myonoffswitch2">
+											                  <input type="checkbox" name="onoffswitch" class="myonoffswitch-checkbox2" checked="checked">
+											                       <label class="myonoffswitch-label2" for="myonoffswitch">      
+											                         <div class="onofftravelbox2 clearfix">     
+											                          <span class="myonoffswitch-inner2">Close</span>     
+											                          <span class="myonoffswitch-switch2">Open</span>     
+											                         </div>     
+											                         <span class="myonoffswitch-circle2"></span>     
+											                       </label>                  
+											               </div>
+											            </div>
+													</li>
+													<li><a href="#" class="link"><i class="fas fa-edit"></i> Edit</a></li>
+												</ul>
+											</div>
+										</div>
+								</div>
+							</div>
+							<div class="tab-pane" id="tab-seler2">
+								<h2>Product Bargain</h2>
+							</div>
+							<div class="tab-pane" id="tab-seler3">								
+								<div class="delivery-filter form-group">											
+									<div class="row">
+										<div class="col-sm-4">
+											<label>Status</label>
+											<select class="js-select2" multiple="multiple">
+												<option value="O1" data-badge="">Ready</option>
+												<option value="O2" data-badge="">Prepare</option>
+												<option value="O3" data-badge="">Waiting</option>
+											</select>										
+										</div>
+										<div class="col-sm-4">
+											<label>Shipping Method</label>
+											<select class="js-select2" multiple="multiple">
+												<option value="O1" data-badge="">Pick up at store</option>
+												<option value="O2" data-badge="">Pick up at center</option>
+												<option value="O3" data-badge="">Delivered by company</option>
+											</select>
+										</div>
+										<div class="col-sm-4 sort-byfltr">
+											<label>Sort by</label>											
+											<select class="js-select2" multiple="multiple">
+												<option value="O1" data-badge="">Order</option>
+												<option value="O2" data-badge="">Time to Receive</option>
+											</select>
+											<span class="iconsort">
+												<a href="#">
+													<i class="fas fa-sort-amount-up"></i>
+												</a>
+											</span>
+										</div>										
+									</div>
+								</div>
+								<div class="form-group text-right">
+									<div class="abt-order-status">
+										<span>All pending delivery</span>
+										<span><span class="skyblue pr-1">10</span> Orders</span>
+										<button type="button" class="btn-dark-grey">Export CSV</button>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="delivery-list">
+										<ul>
+											<li>
+												<div class="deliv-header">
+													<div class="orderId">
+														<label class="chk-wrap">
+															<input type="checkbox">
+															<span class="chk-mark">Order No. <span class="skyblue">082889388366</span></span>
+														</label>
+														
+													</div>	
+													<div class="odr-grandTotal">
+														<span>Grand Total</span>
+														<span>40,000.00 Baht</span>
+														<span class="show-hide"><a href="javascript:void(0)" class="skyblue">Hide</a></span>
+													</div>
+												</div>
+
+												<div class="deliv-content">
+													<div class="row">
+														<div class="col-sm-3">
+															<div class="user-status">
+																<div class="user-img form-group">
+																	<img src="images/banner/prod-item9.jpg" width="59" height="50" alt="">
+																</div>
+																<div class="user-body form-group">
+																	<div class="user-row">
+																		<span>Buyer:</span> Thorntadh Marneenate
+																	</div>
+																	<div class="user-row">
+																		<span>Tel:</span> 094-696-2642
+																	</div>
+																</div>
+
+																<div class="user-shipmethod form-group">
+																	Shipping Method : <span>Pick up at store</span>
+																</div>
+
+																<div class="recieve-time form-group">
+																	Time to receive 11:20 น.
+																</div>
+
+																<div class="form-group">
+																	<label>Status</label>
+																	<div class="box-grey">
+																		<div class="form-group">
+																			<label class="radio-wrap">
+																				<input type="radio" name="radio">
+																				<span class="radio-mark">Prepare</span>
+																			</label>
+																		</div>
+																		<div class="form-group">
+																			<label class="radio-wrap">
+																				<input type="radio" name="radio">
+																				<span class="radio-mark">Ready</span>
+																			</label>
+																		</div>
+																		<div class="form-group">
+																			<label class="radio-wrap">
+																				<input type="radio" name="radio">
+																				<span class="radio-mark">Sent</span>
+																			</label>
+																		</div>
+																	</div>
+
+																</div>
+
+															</div>
+														</div>
+
+														<div class="col-sm-9">
+															<div class="table-wrapper">
+																<h2>Table will come here. ..............</h2>
+
+
+															</div>
+														</div>
+													</div>
+												</div>
+
+											</li>
+
+											<li>
+												<div class="deliv-header">
+													<div class="orderId">
+														<label class="chk-wrap">
+															<input type="checkbox">
+															<span class="chk-mark">Order No. <span class="skyblue">082889388366</span></span>
+														</label>
+														
+													</div>	
+													<div class="odr-grandTotal">
+														<span>Grand Total</span>
+														<span>40,000.00 Baht</span>
+														<span class="show-hide"><a href="javascript:void(0)" class="skyblue">Hide</a></span>
+													</div>
+												</div>
+
+												<div class="deliv-content">
+													<div class="row">
+														<div class="col-sm-3">
+															<div class="user-status">
+																<div class="user-img form-group">
+																	<img src="images/banner/prod-item9.jpg" width="59" height="50" alt="">
+																</div>
+																<div class="user-body form-group">
+																	<div class="user-row">
+																		<span>Buyer:</span> Thorntadh Marneenate
+																	</div>
+																	<div class="user-row">
+																		<span>Tel:</span> 094-696-2642
+																	</div>
+																</div>
+
+																<div class="user-shipmethod form-group">
+																	Shipping Method : <span>Pick up at store</span>
+																</div>
+
+																<div class="recieve-time form-group">
+																	Time to receive 11:20 น.
+																</div>
+
+																<div class="form-group">
+																	<label>Status</label>
+																	<div class="box-grey">
+																		<div class="form-group">
+																			<label class="radio-wrap">
+																				<input type="radio" name="radio">
+																				<span class="radio-mark">Prepare</span>
+																			</label>
+																		</div>
+																		<div class="form-group">
+																			<label class="radio-wrap">
+																				<input type="radio" name="radio">
+																				<span class="radio-mark">Ready</span>
+																			</label>
+																		</div>
+																		<div class="form-group">
+																			<label class="radio-wrap">
+																				<input type="radio" name="radio">
+																				<span class="radio-mark">Sent</span>
+																			</label>
+																		</div>
+																	</div>
+
+																</div>
+
+															</div>
+														</div>
+
+														<div class="col-sm-9">
+															<div class="table-wrapper">
+																<h2>Table will come here. ..............</h2>
+															</div>
+														</div>
+													</div>
+												</div>
+
+											</li>
+
+											<li>
+												<div class="deliv-header">
+													<div class="orderId">
+														<label class="chk-wrap">
+															<input type="checkbox">
+															<span class="chk-mark">Order No. <span class="skyblue">082889388366</span></span>
+														</label>
+														
+													</div>	
+													<div class="odr-grandTotal">
+														<span>Grand Total</span>
+														<span>40,000.00 Baht</span>
+														<span class="show-hide"><a href="javascript:void(0)" class="skyblue">Hide</a></span>
+													</div>
+												</div>
+
+												<div class="deliv-content">
+													<div class="row">
+														<div class="col-sm-3">
+															<div class="user-status">
+																<div class="user-img form-group">
+																	<img src="images/banner/prod-item9.jpg" width="59" height="50" alt="">
+																</div>
+																<div class="user-body form-group">
+																	<div class="user-row">
+																		<span>Buyer:</span> Thorntadh Marneenate
+																	</div>
+																	<div class="user-row">
+																		<span>Tel:</span> 094-696-2642
+																	</div>
+																</div>
+
+																<div class="user-shipmethod form-group">
+																	Shipping Method : <span>Pick up at store</span>
+																</div>
+
+																<div class="recieve-time form-group">
+																	Time to receive 11:20 น.
+																</div>
+
+																<div class="form-group">
+																	<label>Status</label>
+																	<div class="box-grey">
+																		<div class="form-group">
+																			<label class="radio-wrap">
+																				<input type="radio" name="radio">
+																				<span class="radio-mark">Prepare</span>
+																			</label>
+																		</div>
+																		<div class="form-group">
+																			<label class="radio-wrap">
+																				<input type="radio" name="radio">
+																				<span class="radio-mark">Ready</span>
+																			</label>
+																		</div>
+																		<div class="form-group">
+																			<label class="radio-wrap">
+																				<input type="radio" name="radio">
+																				<span class="radio-mark">Sent</span>
+																			</label>
+																		</div>
+																	</div>
+
+																</div>
+
+															</div>
+														</div>
+
+														<div class="col-sm-9">
+															<div class="table-wrapper">
+																<h2>Table will come here. ..............</h2>
+															</div>
+														</div>
+													</div>
+												</div>
+
+											</li>
+
+											<li>
+												<div class="deliv-header">
+													<div class="orderId">
+														<label class="chk-wrap">
+															<input type="checkbox">
+															<span class="chk-mark">Order No. <span class="skyblue">082889388366</span></span>
+														</label>
+														
+													</div>	
+													<div class="odr-grandTotal">
+														<span>Grand Total</span>
+														<span>40,000.00 Baht</span>
+														<span class="show-hide"><a href="javascript:void(0)" class="skyblue">Hide</a></span>
+													</div>
+												</div>
+
+												<div class="deliv-content">
+													<div class="row">
+														<div class="col-sm-3">
+															<div class="user-status">
+																<div class="user-img form-group">
+																	<img src="images/banner/prod-item9.jpg" width="59" height="50" alt="">
+																</div>
+																<div class="user-body form-group">
+																	<div class="user-row">
+																		<span>Buyer:</span> Thorntadh Marneenate
+																	</div>
+																	<div class="user-row">
+																		<span>Tel:</span> 094-696-2642
+																	</div>
+																</div>
+
+																<div class="user-shipmethod form-group">
+																	Shipping Method : <span>Pick up at store</span>
+																</div>
+
+																<div class="recieve-time form-group">
+																	Time to receive 11:20 น.
+																</div>
+
+																<div class="form-group">
+																	<label>Status</label>
+																	<div class="box-grey">
+																		<div class="form-group">
+																			<label class="radio-wrap">
+																				<input type="radio" name="radio">
+																				<span class="radio-mark">Prepare</span>
+																			</label>
+																		</div>
+																		<div class="form-group">
+																			<label class="radio-wrap">
+																				<input type="radio" name="radio">
+																				<span class="radio-mark">Ready</span>
+																			</label>
+																		</div>
+																		<div class="form-group">
+																			<label class="radio-wrap">
+																				<input type="radio" name="radio">
+																				<span class="radio-mark">Sent</span>
+																			</label>
+																		</div>
+																	</div>
+
+																</div>
+
+															</div>
+														</div>
+
+														<div class="col-sm-9">
+															<div class="table-wrapper">
+																<h2>Table will come here. ..............</h2>
+															</div>
+														</div>
+													</div>
+												</div>
+
+											</li>
+
+										</ul>
+									</div>
+								</div>
+
+							</div>
+							<div class="tab-pane" id="tab-seler4">																
+								
+								<div class="form-group text-right">
+									<button class="btn-grey">Back</button>
+								</div>
+
+								<div class="form-group">
+									<ul class="unit-box">
+										<li class="unit-product">											
+												<span class="prod-img"> 
+													<img src="images/banner/prod-item9.jpg" width="170" height="126" alt=""> 
+												</span>
+												<span class="unit-product-info">
+													<h2>Product Name</h2>
+													<span class="Standard">Standard <span class="mr">MR</span></span>
+													<div class="rating">
+														<div class="starrating">
+												            <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 star"></label>
+												            <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 star"></label>
+												            <input type="radio" id="star3" name="rating" value="3" checked="" /><label for="star3" title="3 star"></label>
+												            <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 star"></label>
+												            <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star"></label>
+												        </div>
+													</div>
+												</span>
+										</li>
+
+										<li class="unit-soldImport bdr">
+											<h2>Import</h2>
+											<div class="input-sign">
+												<span class="sec-label"><i class="fas fa-plus"></i></span>
+												<input type="text">
+												<span class="txt-unit">Unit</span>												
+												<button class="btn">Save</button>
+											</div>
+										</li>
+
+										<li class="unit-soldImport">
+											<h2>Sold (offine)</h2>
+											<div class="input-sign">
+												<span class="sec-label"><i class="fas fa-minus"></i></span>
+												<input type="text">
+												<span class="txt-unit">Unit</span>												
+												<button class="btn">Save</button>
+											</div>
+										</li>
+										
+									</ul>
+								</div>
+
+								<div class="form-group">
+									<div class="table-wrapper">
+										<h3>Stock History</h3>
+										<div class="prod-review-tbl bdr-table">
+										<div class="table">
+											<div class="table-header">
+												<ul>
+													<li>Date</li>
+													<li>Time</li>
+													<li>ยกมา (Unit)</li>								
+													<li>Import</li>													
+													<li>Sold</li>													
+													<li>Balance</li>													
+												</ul>
+											</div>
+											<div class="table-content">
+												<ul>
+													<li class="text-center">11/11/2018</li>
+													<li class="text-center">11:20</li>
+													<li class="text-center">150 Bags</li>													
+													<li class="text-center">-</li>
+													<li class="text-center green">-100 Bags</li>
+													<li class="text-center">150 Bags</li>											
+												</ul>
+												<ul>
+													<li class="text-center">9/11/2018</li>
+													<li class="text-center">11:20</li>
+													<li class="text-center">150 Bags</li>													
+													<li class="text-center blue">+100 Bags</li>
+													<li class="text-center">-</li>
+													<li class="text-center">150 Bags</li>											
+												</ul>
+												<ul>
+													<li class="text-center">11/11/2018</li>
+													<li class="text-center">11:20</li>
+													<li class="text-center">150 Bags</li>													
+													<li class="text-center">-</li>
+													<li class="text-center green">-100 Bags</li>
+													<li class="text-center">150 Bags</li>											
+												</ul>
+												<ul>
+													<li class="text-center">9/11/2018</li>
+													<li class="text-center">11:20</li>
+													<li class="text-center">150 Bags</li>													
+													<li class="text-center blue">+100 Bags</li>
+													<li class="text-center">-</li>
+													<li class="text-center">150 Bags</li>											
+												</ul>
+												<ul>
+													<li class="text-center">11/11/2018</li>
+													<li class="text-center">11:20</li>
+													<li class="text-center">150 Bags</li>													
+													<li class="text-center">-</li>
+													<li class="text-center green">-100 Bags</li>
+													<li class="text-center">150 Bags</li>										
+												</ul>
+											</div>
+										</div>
+								</div>
+
+
+
+									</div>
+								</div>
+							</div>
+
+							<div class="tab-pane active" id="tab-seler5">								
+									<div class="row form-group">
+										<div class="col-sm-8 checkwrap-sel-all">
+											<label class="chk-wrap">
+												<input type="checkbox">
+												<span class="chk-mark">Select All</span>
+											</label>										
+										</div>
+										<div class="col-sm-4 text-right">									
+												<button class="btn">Buy Now</button>									
+										</div>								
+									</div>								
+									<div class="table-responsive checkout-order-table tblseller-pannel">
+										<div class="table">
+											<div class="table-header">
+												<ul>													
+													<li class="item-product">
+													<span class="sel-pay-item">Click to select 
+Payment item</span>
+													Product</li>													
+													<li>Shop</li>
+													<li>Unit Price</li>
+													<li>Qty</li>
+													<li>Price</li>													
+													<li></li>
+												</ul>
+											</div>
+											<div class="table-content">						
+												<ul>													
+													<li class="product">
+														<div class="dbox-flex">
+															<div class="dbox-flex">
+																<span class="chk-img">
+																	<label class="chk-wrap">
+																		<input type="checkbox">
+																		<span class="chk-mark"></span>
+																	</label>
+																</span>
+																<span class="prod-img mb-0"><img src="images/banner/prod-item9.jpg" width="134" height="100" alt=""></span>
+															</div>
+															<div>
+																<span class="prod-name d-block mb-2">Product Name</span>
+																<div class="sb">SB</div>
+															</div>
+														</div>
+													</li>																				
+													<li>
+														<a href="#" class="link-skyblue">Shop Name</a>
+													</li>
+													<li>20 Baht/Bags</li>
+													<li>50 Bags</li>
+													<li>3,000 Baht
+													<div class="bargained-price grey">Price has already bargained</div>
+													</li>													
+													<li>															
+														<div class="del-action"><a href="#">Delete <i class="fas fa-times"></i></a></div>
+														<div class="bargain-action">
+															<button class="btn-grey" type="submit" data-toggle="modal" data-target="#changePriceModel2">Bargain</button>
+															<button class="btn-blue2">Pay Credit Term</button>
+														</div>
+													</li>
+												</ul>
+
+												<ul>													
+													<li class="product">
+														<div class="dbox-flex">
+															<div class="dbox-flex">
+																<span class="chk-img">
+																	<label class="chk-wrap">
+																		<input type="checkbox">
+																		<span class="chk-mark"></span>
+																	</label>
+																</span>
+																<span class="prod-img mb-0"><img src="images/banner/prod-item9.jpg" width="134" height="100" alt=""></span>
+															</div>
+															<div>
+																<span class="prod-name d-block mb-2">Product Name</span>
+																<div class="sb">SB</div>
+															</div>
+														</div>
+													</li>							
+													
+													<li>
+														<a href="#" class="link-skyblue">Shop Name</a>
+													</li>
+													<li>20 Baht/Bags</li>
+													<li>
+														<span class="spiner">
+										                    <span class="decrease fas fa-minus">  </span>
+										                    <input type="number" class="spinNum" value="50" min="0" max="100">
+										                    <span class="increase fas fa-plus">  </span>
+										                </span>
+										                <span class="qty-label">/Bags</span>
+													</li>
+													<li>3,000 Baht
+													<div class="bargained-price red">Price up : Shop changed 
+													price <span class="dated">11/12/2018 11:30</span></div>
+													</li>													
+													<li>															
+														<div class="del-action"><a href="#">Delete <i class="fas fa-times"></i></a></div>
+														<div class="bargain-action">
+															<button class="btn-grey" type="submit" data-toggle="modal" data-target="#changePriceModel2">Bargain</button>
+															<button class="btn-blue2">Pay Credit Term</button>
+														</div>
+													</li>
+												</ul>
+
+												<ul>													
+													<li class="product">
+														<div class="dbox-flex">
+															<div class="dbox-flex">
+																<span class="chk-img">
+																	<label class="chk-wrap">
+																		<input type="checkbox">
+																		<span class="chk-mark"></span>
+																	</label>
+																</span>
+																<span class="prod-img mb-0"><img src="images/banner/prod-item9.jpg" width="134" height="100" alt=""></span>
+															</div>
+															<div>
+																<span class="prod-name d-block mb-2">Product Name</span>
+																<div class="sb">SB</div>
+															</div>
+														</div>
+													</li>																				
+													<li>
+														<a href="#" class="link-skyblue">Shop Name</a>
+													</li>
+													<li>20 Baht/Bags</li>
+													<li>
+														<span class="spiner">
+										                    <span class="decrease fas fa-minus">  </span>
+										                    <input type="number" class="spinNum" value="50" min="0" max="100">
+										                    <span class="increase fas fa-plus">  </span>
+										                </span>
+										                <span class="qty-label">/Bags</span>
+													</li>
+													<li>3,000 Baht 
+														<div class="bargained-price green">Price Down : Shop changed 
+														price <span class="dated">11/12/2018 11:30</span> </div>
+													</li>													
+													<li>															
+														<div class="del-action"><a href="#">Delete <i class="fas fa-times"></i></a></div>
+														<div class="bargain-action">
+															<button class="btn-grey" type="submit" data-toggle="modal" data-target="#changePriceModel2">Bargain</button>
+															<button class="btn-blue2">Pay Credit Term</button>
+														</div>
+													</li>
+												</ul>
+
+												
+												
+											</div>
+										</div>
+
+										
+
+										<div class="checkout-table-footer clearfix">
+											<div class="col-sm-3 float-left">
+												<h2>Credit Balance</h2>
+												<ul class="balance-info">
+													<li><span class="skyblue">Shop Name 1</span> 20,000 / 50, 000</li>
+													<li><span class="skyblue">Shop Name 2</span> 20,000 / 50, 000</li>
+													<li><span class="skyblue">Shop Name 3</span> 20,000 / 50, 000</li>
+												</ul>
+												
+											</div>
+											<div class="col-sm-4 float-right">
+												<div class="row">
+													<span class="col-6">Total Products</span>
+													<span class="col-6">100 Unit</span>
+												</div>																						
+												<div class="bg-grey">
+													<div class="row">
+														<span class="col-6">Grand total </span>
+														<span class="col-6">5,000.00 Baht</span>
+													</div>
+												</div>	
+												
+												<div class="dbox-flex text-right">
+													<button class="btn-blue2 mr-3">Pay Credit Term</button>
+													<button class="btn">Buy Now</button>
+												</div>
+										
+											</div>
+										</div>
+									</div>
+								
+
+								
+
+							</div>
+						</div>
+
+						
+				</div>
+			</div>	
+		</div>				
+	</div>
+
+
+<!-- Change price popup -->
+	<div class="modal" id="changePriceModel">
+		<div class="modal-dialog modal-sm modal-dialog-centered">
+			<div class="modal-content">
+				<!-- Modal Header -->
+				<div class="modal-header border-bottom-0">
+					<!-- <h3>Now you give credit for</h3> -->
+					<span class="close fas fa-times" data-dismiss="modal"></span>
+				</div>
+				<!-- Modal body -->
+				<div class="modal-body">									
+					<div class="productPopup">
+						<span class="prod-img">
+							<img src="images/product/product.jpg" width="169" height="126" alt="">
+						</span>
+						<div class="product-info">
+							<h2 class="prod-name">Product Name</h2>
+							<div class="sc">SC</div>
+						</div>
+					</div>
+					<div class="prod-orderDetail-box form-group">						
+						<div class="form-group">
+							<label>Price :</label>
+							<span class="spiner">
+			                    <span class="decrease fas fa-minus">  </span>
+			                    <input type="number" class="spinNum" value="50" min="0" max="100">
+			                    <span class="increase fas fa-plus">  </span>
+			                </span>
+			                <span class="qty-label">/ Bag</span>
+						</div>						
+					</div>									
+					<div class="form-group btn-group text-center">						
+						<button type="button" class="btn">Save</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="modal" id="changePriceModel2">
+		<div class="modal-dialog modal-sm modal-dialog-centered">
+			<div class="modal-content">
+				<!-- Modal Header -->
+				<div class="modal-header border-bottom-0">					
+					<span class="close fas fa-times" data-dismiss="modal"></span>
+				</div>
+				<!-- Modal body -->
+				<div class="modal-body">	
+													
+					<div class="product-information col-sm-12">
+						<div class="row">
+							<div class="col-sm-12">
+								<h2 class="skyblue">Shop Name</h2>
+								<div class="productPopup">						
+								<span class="prod-img">
+									<img src="images/product/product.jpg" width="169" height="126" alt="">
+								</span>
+
+								<div class="product-info">
+								<span class="prod-name">Product Name </span> <span class="la">LA</span>
+								<div class="grade">
+									<span> Size : L </span>   <span> Standard : A  </span>
+								</div>
+								<div class="product-review">							
+							        <div class="starrating">
+							            <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 star"></label>
+							            <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 star"></label>
+							            <input type="radio" id="star3" name="rating" value="3" checked="checked"/><label for="star3" title="3 star"></label>
+							            <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 star"></label>
+							            <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star"></label>
+							        </div>
+
+								</div>
+								<div class="price-box">
+									<span class="price">40.00 Baht/Bag</span>
+									<span class="remark">Remark : 1 Bag = 10 Kg</span>
+								</div>
+								<div class="price-list">
+									<table>
+										<tbody>
+											<tr>
+												<td>5 - 10 Bag</td>
+												<td>40.00 Baht/Bag</td>
+											</tr>
+											<tr>
+												<td>11 - 15 Bag</td>
+												<td>38.00 Baht/Bag</td>
+											</tr>
+											<tr>
+												<td>16 - 20 Bag</td>
+												<td>35.00 Baht/Bag</td>
+											</tr>
+											<tr>
+												<td>21 Bag up</td>
+												<td>30.00 Baht/Bag</td>
+											</tr>
+										</tbody>
+									</table>
+									<div class="min-order">Minimum Order 5 Bag</div>
+									<div class="stock"><span>Stock</span>: 100 Bag</div>
+								</div>
+
+								</div>
+								</div>
+								
+								
+							</div>
+							
+						</div>
+
+					</div>	
+					
+					<div class="need-bargain">					
+						<a href="#" class="btn">You need to bargaining ?</a>					
+					</div>
+					<div class="prod-orderDetail-box popup-bargain form-group">	
+
+						<div class="form-group">							
+							<label>Qty :</label>
+							<span class="spiner">
+			                    <span class="decrease fas fa-minus">  </span>
+			                    <input type="number" class="spinNum" value="50" min="0" max="100">
+			                    <span class="increase fas fa-plus">  </span>
+			                </span>
+			                <span class="qty-label">/ Bag</span> 
+			                <span class="qty-label">Minimum 10 Bags</span>
+						</div>	
+						<div class="form-group bargain-unit">
+							<label>The price you want to offer to the seller :</label>
+							<div class="tier-col unit-price">																	
+									<div class="input-sign">
+										<input type="text" placeholder="Unit Price">
+										<span class="curr-label">Baht</span>										
+									</div>
+							</div>
+							<span class="qty-label">/ Bag</span> 
+						<!-- 	<div class="col-sm-6">							
+							<label>The price you want to offer to the seller :</label>
+							<input type="text">
+							</div>
+			                <span class="qty-label">/ Bag</span> -->
+						</div>					
+					</div>									
+					<div class="form-group btn-group text-center">						
+						<button type="button" class="btn">Bargain</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+	<!-- Footer start here -->
+	<footer id="footer">
+		<div class="container">			
+			<div class="row">
+				<div class="col-sm-3 footer-list">
+					<h3 class="footer-subtitle">Site Map</h3>
+					<ul>
+						<li>
+							<a href="#" title="About us">About us</a>
+						</li>
+						<li>
+							<a href="#" title="Category">Category</a>
+						</li>
+						<li>
+							<a href="#" title="Shopping list">Shopping list</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-sm-3 footer-list">
+					<h3 class="footer-subtitle">Help seller</h3>
+					<ul>
+						<li>
+							<a href="#" title="Register">Register</a>
+						</li>
+						<li>
+							<a href="#" title="How to Create new product">How to Create new product</a>
+						</li>
+						<li>
+							<a href="#" title="Manual">Manual</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-sm-3 footer-list">
+					<h3 class="footer-subtitle">Site Map</h3>
+					<ul>
+						<li>
+							<a href="#" title="How to pay">How to pay</a>
+						</li>
+						<li>
+							<a href="#" title="How to buy">How to buy</a>
+						</li>
+						<li>
+							<a href="#" title="How to ship">How to ship</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-sm-3 footer-list">
+					<h3 class="footer-subtitle">Contact us</h3>
+					<address>
+						355/115-116 ม.15 ถนนพหลโยธิน ต.คูคต อ.ลำลูกกา จ.ปทุมธานี 12130 โทร. 02-995-0610-3
+					</address>
+				</div>
+			</div>
+			<div class="copyright">
+				copyright © Donmuangpattana Co., Ltd. All rights reserved.
+			</div>
+			
+		</div>
+	</footer>
+	
+
+
+</div>
+
+<script src="js/jquery.min.js"></script>  
+<script src="js/bootstrap.bundle.js"></script>
+<script src="js/bootstrap.min.js"></script> 
+<script src="js/sgCustom.js"></script>
+<script type="text/javascript">    
+$(function ($) {
+    $('.increase').on('click',function(){
+        var $qty=$('.spinNum');       
+        var currentVal = parseInt($qty.val());
+        if (!isNaN(currentVal)) {
+            $qty.val(currentVal + 1);
+        }
+    });
+    $('.decrease').on('click',function(){
+        var $qty=$('.spinNum');
+        var currentVal = parseInt($qty.val());
+        if (!isNaN(currentVal) && currentVal > 0) {
+            $qty.val(currentVal - 1);
+        }
+    });
+});
+
+</script>
+
+<script src="js/flickity.pkgd.min.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function(){	
+	 if (jQuery(window).width() < 992) {
+		jQuery('.seller-carousel').flickity({			  
+		  freeScroll: true,
+		  wrapAround: true,
+		  cellAlign: 'left',	  
+		  pageDots: false
+		});
+	}
+});
+</script>
+<script src='js/jquery.touchSwipe.min.js'></script>
+<script src='js/TweenMax.min.js'></script>
+
+
+
+
+<script type="text/javascript">
+	function sortTable() {
+  var table, rows, switching, i, x, y, shouldSwitch;
+  table = document.getElementById("tblseller-pannel");
+  switching = true;
+  /* Make a loop that will continue until
+  no switching has been done: */
+  while (switching) {
+    // Start by saying: no switching is done:
+    switching = false;
+    rows = table.rows;
+    /* Loop through all table rows (except the
+    first, which contains table headers): */
+    for (i = 1; i < (rows.length - 1); i++) {
+      // Start by saying there should be no switching:
+      shouldSwitch = false;
+      /* Get the two elements you want to compare,
+      one from current row and one from the next: */
+      x = rows[i].getElementsByTagName("TD")[0];
+      y = rows[i + 1].getElementsByTagName("TD")[0];
+      // Check if the two rows should switch place:
+      if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+        // If so, mark as a switch and break the loop:
+        shouldSwitch = true;
+        break;
+      }
+    }
+    if (shouldSwitch) {
+      /* If a switch has been marked, make the switch
+      and mark that a switch has been done: */
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+    }
+  }
+}
+</script>
+
+</body>
+</html>

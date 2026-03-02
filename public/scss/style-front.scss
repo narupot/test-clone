@@ -1,0 +1,40 @@
+
+@import "helpers/variable";
+@import "helpers/funmixhelp";
+
+@import "pages/home";
+@import "pages/product-list";
+@import "pages/product";
+
+@import "pages/shop";
+@import "pages/track";
+@import "pages/checkout";
+
+
+
+
+
+.table {
+	.product {
+		.dbox-flex {
+			.prod-name {
+				max-width: 125px;
+				white-space: nowrap; text-overflow: 
+				ellipsis; overflow: hidden;
+			}
+		}
+		.prod-img {
+			margin-bottom: 0;
+		}
+	}		
+}
+
+
+.modal-header {
+	> h2, h3 {
+		white-space: nowrap; text-overflow: 
+		ellipsis; overflow: hidden;
+		margin-bottom: 0;
+	}
+}
+

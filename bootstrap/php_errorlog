@@ -1,0 +1,4 @@
+[17-Apr-2017 01:05:54 CST6CDT] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/samlorgo/public_html/marketplace/prod/life-compass-shopping/bootstrap/app.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/samlorgo/public_html/marketplace/prod/life-compass-shopping/bootstrap/app.php on line 14

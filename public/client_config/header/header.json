@@ -1,0 +1,28 @@
+{
+  "header": [
+    {
+      "name": "Verions : V. 1.0.0",
+      "url": "https://gizmandev.sepplatform.com/en",
+      "icon-class": "fab fa-servicestack",
+      "class": ""
+    },
+    {
+      "name": "Bug Report / แจ้งปัญหาใช้งาน",
+      "url": "https://gizmandev.sepplatform.com/en",
+      "icon-class": "fal fa-bug",
+      "class": ""
+    },
+    {
+      "name": "Manual / คู่มือ",
+      "url": "https://www.sepplatform.com/manual/v100-admin/AdminHeader1.html",
+      "icon-class": "far fa-file-alt",
+      "class": ""
+    },
+    {
+      "name": "Contact Us / ติดต่อเรา",
+      "url": "https://gizmandev.sepplatform.com/en",
+      "icon-class": "fal fa-headset",
+      "class": ""
+    }
+  ]
+}

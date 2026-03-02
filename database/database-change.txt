@@ -1,0 +1,17 @@
+INSERT INTO `smm_menus` (`id`, `slug`, `url`, `status`, `parent_id`, `menu_type`, `icon_class`, `order_by`) VALUES (NULL, 'web_status_button', '#', '1', '0', '2', '', '0.00'), (NULL, 'mobile_status_button', '#', '1', '0', '2', '', '0.00');
+
+INSERT INTO `smm_menus_desc` (`id`, `menu_id`, `lang_id`, `menu_name`) VALUES (NULL, '327', '0', 'Web Status Button'), (NULL, '327', '1', 'Web Status Button'), (NULL, '328', '0', 'Mobile Status Button'), (NULL, '328', '1', 'Mobile Status Button');
+
+ALTER TABLE `smm_unit` CHANGE `unit_weight` `unit_weight` FLOAT NOT NULL DEFAULT '0';
+
+15-03-2024 change
+-----------------------
+ALTER TABLE `smm_static_page` ADD `header_footer` ENUM('0','1') NOT NULL DEFAULT '1' AFTER `status`;
+
+03-04-2024 change
+-----------------------
+ALTER TABLE `smm_static_page` CHANGE `header_footer` `header_footer` ENUM('0','1','2','3') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1' COMMENT '\'0\'=>both hide,\'1\'=>both show,\'2\'=>only destop,\'3\'=>only app';
+
+08-05-2024
+-------------------
+ALTER TABLE `smm_shipping_profile_rates` ADD `created_by` INT NOT NULL AFTER `updated_at`, ADD `updated_by` INT NOT NULL AFTER `created_by`; 

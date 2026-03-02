@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+		<title>Page Title</title>
+		<link rel="stylesheet" type="text/css" href="css/font-awesome.css">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="css/global.css">
+		<link rel="stylesheet" type="text/css" href="css/flatpickr.min.css">
+		<link rel="stylesheet" type="text/css" href="css/select2.min.css">	
+
+		<style type="text/css">
+			.sort-scroll-sorting{
+			    background-color: rgba(255, 255, 255, 0.80);
+			}
+			.sort-scroll-element:nth-of-type(1) .sort-scroll-button-up, .sort-scroll-element:nth-last-of-type(1) .sort-scroll-button-down {
+			    pointer-events: none;
+			    cursor: default;
+			    color: #ddd;
+			}
+			.box-bargaining {
+				border:solid 1px #ddd;
+				padding: 15px;
+				margin-bottom: 15px;
+				position: relative;
+			}
+			.wrap-arrow {
+			    position: absolute;
+			    right: 0;
+			    top: 0;
+			}
+
+		</style>
+	</head>
+	<body>
+		<div class="wrapper">
+		<header>&nbsp;</header>
+
+
+		<div class="container">
+
+			
+				<div class="list-product">
+
+					<div class="sort-scroll-container" data-animation-duration="1000" data-css-easing="ease-in-out" data-keep-still=true data-fixed-elements-selector=".navigation">
+					    <div class="sort-scroll-element box-bargaining">
+					        content1
+					        <div class="wrap-arrow">
+						        <button class="sort-scroll-button-up">up</button>
+						        <button class="sort-scroll-button-down">down</button>
+					        </div>
+					    </div>
+					    <div class="sort-scroll-element box-bargaining">
+					        content2
+					       <div class="wrap-arrow">
+						        <button class="sort-scroll-button-up">up</button>
+						        <button class="sort-scroll-button-down">down</button>
+					        </div>
+					    </div>
+					    <div class="sort-scroll-element box-bargaining">
+					        content3
+					        <div class="wrap-arrow">
+						        <button class="sort-scroll-button-up">up</button>
+						        <button class="sort-scroll-button-down">down</button>
+					        </div>
+					    </div>					 
+					    <div class="sort-scroll-element box-bargaining">
+					        content5
+					        <div class="wrap-arrow">
+						        <button class="sort-scroll-button-up">up</button>
+						        <button class="sort-scroll-button-down">down</button>
+					        </div>
+					    </div>
+					    <div class="sort-scroll-element box-bargaining">
+					        content6
+					        <div class="wrap-arrow">
+						        <button class="sort-scroll-button-up">up</button>
+						        <button class="sort-scroll-button-down">down</button>
+					        </div>
+					    </div>					    
+					</div>
+				</div>
+					
+		</div>
+	
+	
+
+
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.bundle.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/bootstrap-select.js"></script>
+	<script src="js/select2.min.js"></script>	
+	<script src="js/flatpickr.min.js"></script>
+	<script>
+		$(".date-select").flatpickr();
+	</script>
+	<script src="js/sgCustom.js"></script>
+	
+
+	<script type="text/javascript" src="https://cdn.rawgit.com/jadus/jquery-sortScroll/v1.3.0/jquery.sortScroll.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$(".my-container-class").sortScroll({
+			    animationDuration: 1000,// duration of the animation in ms
+			    cssEasing: "ease-in-out",// easing type for the animation
+			    keepStill: true,// if false the page doesn't scroll to follow the element
+			    fixedElementsSelector: ""// a jQuery selector so that the plugin knows your fixed elements (like the fixed nav on the left)
+			});
+		});
+	</script>
+
+	
+</body>
+</html>

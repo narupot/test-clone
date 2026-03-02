@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+	<title>Smmarket</title>
+	<link rel="stylesheet" type="text/css" href="css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="css/global.css">
+	<link rel="stylesheet" type="text/css" href="css/style-front.css">
+	<link rel="stylesheet" type="text/css" href="css/myaccount.css">
+	<link rel="stylesheet" type="text/css" href="css/flickity.css">
+</head>
+<body>
+
+<div class="wrapper">
+
+	<header id="header">
+		<div class="container">
+			<div class="header-inner">
+				<div class="logo">
+					<a href="#" title="Smmarket"><img src="images/logo.png" width="85" alt=""></a>
+				</div>
+				<div class="header-content">
+					<div class="login-link">
+						<a href="index.html" class="go-home">Back to homepage</a>
+						<ul>
+							<li><a href="#"> <i class="fas fa-sign-in-alt"></i> Sign out</a></li>
+							<li><a href="#"> <i class="fas fa-comments"></i> Chat</a></li>
+						</ul>
+					</div>
+					<div class="search-cart-wrap">
+						<div class="head-col buyer-seller-col">
+							<div class="btn-buyer-header">
+								<a href="#" class="btn"><i class="far fa-home"></i> For Seller <i class="badge">3</i></a>
+								<a href="#" class="btn-grey"><i class="fas fa-user"></i> For Buyer <i class="badge">3</i></a>
+							</div>
+						</div>
+						<div class="head-col search-form">
+							&nbsp;
+						</div>
+
+						<div class="head-col buyer-col">
+							<div class="seller-pannel">
+								<h3 class="sell-name">lorem ipsum <a class="btn-grey"><i class="fas fa-apple-alt"></i></a></h3>
+							</div>							
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+	</header>
+	
+	<!-- Content Start -->
+	<div class="content-wrap">
+
+		<div class="seller-header clearfix">
+			<div class="container">
+				<ul class="seller-menu seller-carousel">
+					<li>
+						<a href="#" class="sel-paneltxt">
+							<span class="menu-txt">Seller Panel</span>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<i class="fas fa-history"></i> Order History
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<i class="fas fa-plus"></i> Manage Product
+						</a>
+					</li>
+					<li>
+						<a href="#" class="active">
+							<i class="fas fa-users"></i> Customer
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<i class="fas fa-credit-card"></i> Credit
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<i class="fas fa-star"></i> Rating
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<i class="far fa-home"></i> Manage Store
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<i class="far fa-chart-bar"></i> Report
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<i class="fas fa-dollar-sign"></i> Bills
+						</a>
+					</li>
+
+				</ul>
+			
+			</div>
+		</div>
+
+
+		<div class="container">
+			
+			<div class="row">
+				<div class="col-sm-12">
+					<h1 class="page-title title-border">Manage Credit </h1>
+					<div class="row">
+						<div class="col-sm-12">
+
+							<ul class="nav tab-grey-list pl-3" id="product-rating-tab">
+							    <li>					     
+							        <a class="pdr-tablist active" data-toggle="tab" href="#overdueCredit">
+										Overdue Credit
+								    </a>
+							    </li>
+							    <li>
+							        <a class="pdr-tablist" data-toggle="tab" href="#creditList">
+								    	Credit List
+								    </a>
+							    </li>
+							    <li>
+							        <a class="pdr-tablist cr-countable" data-toggle="tab" href="#creditRequest">
+								    	Credit request <span class="cr-count">4</span>
+								    </a>
+							    </li>	
+							    <li class="ml-auto" style="margin-top: -2px">
+							    	<div class="blockk-search">
+							    		<form action="" method="">
+								    		<input type="search" name="" placeholder="ค้นหาสินค้า">
+								    		<button type="submit" class="btn-default"><i class="fas fa-search"></i></button>
+							    		</form>
+							    	</div>
+							    </li>							    
+							</ul>																						
+							<div class="tab-content">
+								<div class="tab-pane active" id="overdueCredit">
+									<div class="prod-review-tbl">
+										<div class="table">
+											<div class="table-header">
+												<ul>
+													<li>Customer Name</li>
+													<li>Use the last credit</li>
+													<li>Status</li>								
+													<li>Payment period</li>													
+													<li>Action</li>								
+												</ul>
+											</div>
+											<div class="table-content text-center">
+												<ul>
+													<li class="product text-left">
+														<span class="circle-img">
+															<img src="images/user/user.jpg" width="50" alt="">
+														</span>
+														<span class="prod-name">ธรณ์ธัช มณีเนตร</span>
+													</li>
+													<li class="last-credit">														
+														<span>10,000.00 Bath</span>
+														<div class="use-lastcredit">Use the last credit 10/09/2018 11.00</div>
+													</li>
+													<li><span class="red">Unpaid</span></li>
+													<li>12/12/2018 12.00</li>												
+													<li class="view-action">
+													   <a href="#" class="link">View Details</a>
+													 </li>
+												</ul>
+												<ul>
+													<li class="product text-left">
+														<span class="circle-img">
+															<img src="images/user/user.jpg" width="50" alt="">
+														</span>
+														<span class="prod-name">ธรณ์ธัช มณีเนตร</span>
+													</li>
+													<li class="last-credit">														
+														<span>10,000.00 Bath</span>
+														<div class="use-lastcredit">Use the last credit 10/09/2018 11.00</div>
+													</li>
+													<li><span class="red">Unpaid</span></li>
+													<li>12/12/2018 12.00</li>													
+													<li class="view-action">
+													   <a href="#" class="link">View Details</a>
+													 </li>
+												</ul>
+												<ul>
+													<li class="product text-left">
+														<span class="circle-img">
+															<img src="images/user/user.jpg" width="50" alt="">
+														</span>
+														<span class="prod-name">ธรณ์ธัช มณีเนตร</span>
+													</li>
+													<li class="last-credit">														
+														<span>10,000.00 Bath</span>
+														<div class="use-lastcredit">Use the last credit 10/09/2018 11.00</div>
+													</li>
+													<li><span class="red">Unpaid</span></li>
+													<li>12/12/2018 12.00</li>													
+													<li class="view-action">
+													   <a href="#" class="link">View Details</a>
+													 </li>
+												</ul>
+												<ul>
+													<li class="product text-left">
+														<span class="circle-img">
+															<img src="images/user/user.jpg" width="50" alt="">
+														</span>
+														<span class="prod-name">ธรณ์ธัช มณีเนตร</span>
+													</li>
+													<li class="last-credit">														
+														<span>10,000.00 Bath</span>
+														<div class="use-lastcredit">Use the last credit 10/09/2018 11.00</div>
+													</li>
+													<li><span class="red">Unpaid</span></li>
+													<li>12/12/2018 12.00</li>																									
+													<li class="view-action">
+													   <a href="#" class="link">View Details</a>
+													 </li>
+												</ul>
+												<ul>
+													<li class="product text-left">
+														<span class="circle-img">
+															<img src="images/user/user.jpg" width="50" alt="">
+														</span>
+														<span class="prod-name">ธรณ์ธัช มณีเนตร</span>
+													</li>
+													<li class="last-credit">														
+														<span>10,000.00 Bath</span>
+														<div class="use-lastcredit">Use the last credit 10/09/2018 11.00</div>
+													</li>
+													<li><span class="red">Unpaid</span></li>
+													<li>12/12/2018 12.00</li>													
+													<li class="view-action">
+													   <a href="#" class="link">View Details</a>
+													 </li>
+												</ul>						
+											
+											</div>
+										</div>
+									</div>	
+								</div>
+								
+								<div class="tab-pane" id="creditList">
+									<div class="prod-review-tbl">
+										<div class="table">
+											<div class="table-header">
+												<ul>
+													<li>Customer Name</li>
+													<li>Credit limit</li>
+													<li>Credit Balance</li>								
+													<li>Use the last credit</li>													
+													<li>Payment period</li>
+													<li>&nbsp;</li>													
+												</ul>
+											</div>
+											<div class="table-content text-center">
+												<ul>
+													<li class="product">
+														<span class="circle-img">
+															<img src="images/user/user.jpg" width="50" alt="">
+														</span>
+														<span class="prod-name">ธรณ์ธัช มณีเนตร</span>
+													</li>
+													<li class="last-credit">														
+														<span>10,000.00 Bath</span>
+														<div class="use-lastcredit">Use the last credit 10/09/2018 11.00</div>
+													</li>
+													<li><span class="col-green">10,000.00 Bath</span></li>
+													<li class="last-credit">														
+														<span>10,000.00 Bath</span>
+														<div class="use-lastcredit">Use the last credit 10/09/2018 11.00</div>
+													</li>
+													<li> 15 days</li>
+													<li class="view-action">
+														<div class="d-flex align-items-center">
+														   <a href="#" class="link">View Details</a>
+														   <button class="btn">Reject</button>
+													   </div>
+													 </li>
+												</ul>
+
+												<ul>
+													<li class="product">
+														<span class="circle-img">
+															<img src="images/user/user.jpg" width="50" alt="">
+														</span>
+														<span class="prod-name">ธรณ์ธัช มณีเนตร</span>
+													</li>
+													<li class="last-credit">														
+														<span>10,000.00 Bath</span>
+														<div class="use-lastcredit">Use the last credit 10/09/2018 11.00</div>
+													</li>
+													<li><span class="col-green">10,000.00 Bath</span></li>
+													<li class="last-credit">														
+														<span>10,000.00 Bath</span>
+														<div class="use-lastcredit">Use the last credit 10/09/2018 11.00</div>
+													</li>
+													<li> 15 days</li>
+													<li class="view-action">
+														<div class="d-flex align-items-center">
+														   <a href="#" class="link">View Details</a>
+														   <button class="btn">Reject</button>
+													   </div>
+													 </li>
+												</ul>
+
+												<ul>
+													<li class="product">
+														<span class="circle-img">
+															<img src="images/user/user.jpg" width="50" alt="">
+														</span>
+														<span class="prod-name">ธรณ์ธัช มณีเนตร</span>
+													</li>
+													<li class="last-credit">														
+														<span>10,000.00 Bath</span>
+														<div class="use-lastcredit">Use the last credit 10/09/2018 11.00</div>
+													</li>
+													<li><span class="col-green">10,000.00 Bath</span></li>
+													<li class="last-credit">														
+														<span>10,000.00 Bath</span>
+														<div class="use-lastcredit">Use the last credit 10/09/2018 11.00</div>
+													</li>
+													<li> 15 days</li>
+													<li class="view-action">
+														<div class="d-flex align-items-center">
+														   <a href="#" class="link">View Details</a>
+														   <button class="btn">Reject</button>
+													   </div>
+													 </li>
+												</ul>
+												<ul>
+													<li class="product">
+														<span class="circle-img">
+															<img src="images/user/user.jpg" width="50" alt="">
+														</span>
+														<span class="prod-name">ธรณ์ธัช มณีเนตร</span>
+													</li>
+													<li class="last-credit">														
+														<span>10,000.00 Bath</span>
+														<div class="use-lastcredit">Use the last credit 10/09/2018 11.00</div>
+													</li>
+													<li><span class="col-green">10,000.00 Bath</span></li>
+													<li class="last-credit">														
+														<span>10,000.00 Bath</span>
+														<div class="use-lastcredit">Use the last credit 10/09/2018 11.00</div>
+													</li>
+													<li> 15 days</li>
+													<li class="view-action">
+														<div class="d-flex align-items-center">
+														   <a href="#" class="link">View Details</a>
+														   <button class="btn">Reject</button>
+													   </div>
+													 </li>
+												</ul>
+												<ul>
+													<li class="product">
+														<span class="circle-img">
+															<img src="images/user/user.jpg" width="50" alt="">
+														</span>
+														<span class="prod-name">ธรณ์ธัช มณีเนตร</span>
+													</li>
+													<li class="last-credit">														
+														<span>10,000.00 Bath</span>
+														<div class="use-lastcredit">Use the last credit 10/09/2018 11.00</div>
+													</li>
+													<li><span class="col-green">10,000.00 Bath</span></li>
+													<li class="last-credit">														
+														<span>10,000.00 Bath</span>
+														<div class="use-lastcredit">Use the last credit 10/09/2018 11.00</div>
+													</li>
+													<li> 15 days</li>
+													<li class="view-action">
+														<div class="d-flex align-items-center">
+														   <a href="#" class="link">View Details</a>
+														   <button class="btn">Reject</button>
+													   </div>
+													 </li>
+												</ul>
+											
+																		
+											
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="tab-pane" id="creditRequest">
+									<div class="prod-review-tbl">
+										<div class="table">
+											<div class="table-header">
+												<ul>
+													<li>Customer Name</li>
+													<li>Designated Name</li>																					
+													<li>Email</li>													
+													<li>Tel</li>
+													<li>Date Request</li>
+													<li>&nbsp;</li>													
+												</ul>
+											</div>
+											<div class="table-content">
+												<ul>
+													<li class="product">
+														<span class="circle-img">
+															<img src="images/user/user.jpg" width="50" alt="">
+														</span>
+														<span class="prod-name">ธรณ์ธัช มณีเนตร</span>
+													</li>
+													<li>														
+														<div class="designation">
+															<span>ตูน</span>
+															<a href="#" class="link">Edit</a>
+														</div>
+													</li>													
+													<li>Thorntadh@gmail.com</li>
+													<li>0895995998</li>
+													<li>12/12/2018</li>
+													<li class="view-action">
+														<div class="action-wrap">
+														   	<a href="#" class="link-skyblue">View history</a>
+														   	<button class="btn-blue">Give</button>
+														   	<button class="btn">Reject</button>
+													   	</div>
+													 </li>
+												</ul>
+
+												<ul>
+													<li class="product">
+														<span class="circle-img">
+															<img src="images/user/user.jpg" width="50" alt="">
+														</span>
+														<span class="prod-name">ธรณ์ธัช มณีเนตร</span>
+													</li>
+													<li>														
+														<div class="designation">
+															<span>ตูน</span>
+															<a href="#" class="link">Edit</a>
+														</div>
+													</li>													
+													<li>Thorntadh@gmail.com</li>
+													<li>0895995998</li>
+													<li>12/12/2018</li>
+													<li class="view-action">
+														<div class="action-wrap">
+														   	<a href="#" class="link-skyblue">View history</a>
+														   	<button class="btn-blue">Give</button>
+														   	<button class="btn">Reject</button>
+													   	</div>
+													 </li>
+												</ul>
+												<ul>
+													<li class="product">
+														<span class="circle-img">
+															<img src="images/user/user.jpg" width="50" alt="">
+														</span>
+														<span class="prod-name">ธรณ์ธัช มณีเนตร</span>
+													</li>
+													<li>														
+														<div class="designation">
+															<span>ตูน</span>
+															<a href="#" class="link">Edit</a>
+														</div>
+													</li>													
+													<li>Thorntadh@gmail.com</li>
+													<li>0895995998</li>
+													<li>12/12/2018</li>
+													<li class="view-action">
+														<div class="action-wrap">
+														   	<a href="#" class="link-skyblue">View history</a>
+														   	<button class="btn-blue">Give</button>
+														   	<button class="btn">Reject</button>
+													   	</div>
+													 </li>
+												</ul>
+												<ul>
+													<li class="product">
+														<span class="circle-img">
+															<img src="images/user/user.jpg" width="50" alt="">
+														</span>
+														<span class="prod-name">ธรณ์ธัช มณีเนตร</span>
+													</li>
+													<li>														
+														<div class="designation">
+															<span>ตูน</span>
+															<a href="#" class="link">Edit</a>
+														</div>
+													</li>													
+													<li>Thorntadh@gmail.com</li>
+													<li>0895995998</li>
+													<li>12/12/2018</li>
+													<li class="view-action">
+														<div class="action-wrap">
+														   	<a href="#" class="link-skyblue">View history</a>
+														   	<button class="btn-blue">Give</button>
+														   	<button class="btn">Reject</button>
+													   	</div>
+													 </li>
+												</ul>
+												<ul>
+													<li class="product">
+														<span class="circle-img">
+															<img src="images/user/user.jpg" width="50" alt="">
+														</span>
+														<span class="prod-name">ธรณ์ธัช มณีเนตร</span>
+													</li>
+													<li>														
+														<div class="designation">															
+															<a href="#" class="link">Create name for buyer</a>
+														</div>
+													</li>													
+													<li>Thorntadh@gmail.com</li>
+													<li>0895995998</li>
+													<li>12/12/2018</li>
+													<li class="view-action">
+														<div class="action-wrap">
+														   	<a href="#" class="link-skyblue">View history</a>
+														   	<button class="btn-blue">Give</button>
+														   	<button class="btn">Reject</button>
+													   	</div>
+													 </li>
+												</ul>
+																		
+											
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- pagination -->
+				<ul class="pagination">
+				   <li class="page-item">
+				      <a class="page-link" href="javascript:void()">
+				      <i class="fas fa-angle-double-left"></i>                          
+				      </a>
+				   </li>
+				   <li class="page-item">
+				      <a class="page-link" href="javascript:void()">
+				      <i class="fas fa-angle-left"></i>
+				      </a>
+				   </li>
+				   <li class="page-item"><a class="page-link" href="javascript:void()">1</a></li>
+				   <li class="page-item"><a class="page-link" href="javascript:void()">2</a></li>
+				   <li class="page-item"><a class="page-link" href="javascript:void()">3</a></li>
+				   <li class="page-item"><a class="page-link" href="javascript:void()">4</a></li>
+				   <li class="page-item"><a class="page-link" href="javascript:void()"><i class="fas fa-ellipsis-h"></i></a></li>
+				   <li class="page-item"><a class="page-link" href="javascript:void()">13</a></li>
+				   <li class="page-item">
+				      <a class="page-link" href="javascript:void()" aria-label="Next">
+				      <i class="fas fa-chevron-right"></i>
+				      </a>
+				   </li>
+				   <li class="page-item">
+				      <a class="page-link" href="javascript:void()">
+				      <i class="fas fa-angle-double-right"></i>                                                      
+				      </a>
+				   </li>
+				</ul>
+
+							</div>
+						</div>
+					</div>
+				</div>
+		</div>	
+			
+
+		
+			
+
+
+		</div>	
+	</div>
+
+	<!-- customer popup -->
+
+	<div class="modal" id="customerModal">
+		<div class="modal-dialog modal-sm modal-dialog-centered">
+			<div class="modal-content">
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<!-- <h3>Now you give credit for</h3> -->
+					<span class="close fas fa-times" data-dismiss="modal"></span>
+				</div>
+				<!-- Modal body -->
+				<div class="modal-body">
+					<p class="text-center">You have already received payment from the customer.
+Do you want to attach proof of payment in the database?</p>					
+					<div class="form-group btn-group text-center">
+						<button type="button" class="btn-grey" data-dismiss="modal">Attach file</button>
+						<button type="button" class="btn">No</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Footer start here -->
+	<footer id="footer">
+		<div class="container">			
+			<div class="row">
+				<div class="col-sm-3 footer-list">
+					<h3 class="footer-subtitle">Site Map</h3>
+					<ul>
+						<li>
+							<a href="#" title="About us">About us</a>
+						</li>
+						<li>
+							<a href="#" title="Category">Category</a>
+						</li>
+						<li>
+							<a href="#" title="Shopping list">Shopping list</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-sm-3 footer-list">
+					<h3 class="footer-subtitle">Help seller</h3>
+					<ul>
+						<li>
+							<a href="#" title="Register">Register</a>
+						</li>
+						<li>
+							<a href="#" title="How to Create new product">How to Create new product</a>
+						</li>
+						<li>
+							<a href="#" title="Manual">Manual</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-sm-3 footer-list">
+					<h3 class="footer-subtitle">Site Map</h3>
+					<ul>
+						<li>
+							<a href="#" title="How to pay">How to pay</a>
+						</li>
+						<li>
+							<a href="#" title="How to buy">How to buy</a>
+						</li>
+						<li>
+							<a href="#" title="How to ship">How to ship</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-sm-3 footer-list">
+					<h3 class="footer-subtitle">Contact us</h3>
+					<address>
+						355/115-116 ม.15 ถนนพหลโยธิน ต.คูคต อ.ลำลูกกา จ.ปทุมธานี 12130 โทร. 02-995-0610-3
+					</address>
+				</div>
+			</div>
+			<div class="copyright">
+				copyright © Donmuangpattana Co., Ltd. All rights reserved.
+			</div>
+			
+		</div>
+	</footer>
+	
+
+
+</div>
+
+<script src="js/jquery.min.js"></script>  
+<script src="js/bootstrap.bundle.js"></script>
+<script src="js/bootstrap.min.js"></script> 
+<script src="js/sgCustom.js"></script>
+
+<script src="js/flickity.pkgd.min.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function(){	
+	 if (jQuery(window).width() < 992) {
+		jQuery('.seller-carousel').flickity({			  
+		  freeScroll: true,
+		  wrapAround: true,
+		  cellAlign: 'left',	  
+		  pageDots: false
+		});
+	}
+});
+</script>
+<script src='js/jquery.touchSwipe.min.js'></script>
+<script src='js/TweenMax.min.js'></script>
+
+</body>
+</html>

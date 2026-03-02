@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+	<title>Smmarket</title>
+	<link rel="stylesheet" type="text/css" href="css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="css/global.css">
+	<link rel="stylesheet" type="text/css" href="css/style-front.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-select.css">
+</head>
+<body>
+
+<div class="wrapper">
+
+	<header id="header">
+
+		<div class="container">
+			<div class="header-inner">
+				<div class="logo">
+					<a href="#" title="Smmarket"><img src="images/logo.png" width="85" alt=""></a>
+				</div>
+				<div class="header-content">
+					<div class="login-link">
+						<ul>
+							<li class="user dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									<img src="images/login/user.jpg" alt=""> Thanut Benjapat</a>
+								<div class="dropdown-menu">
+    								<a class="dropdown-item" href="#"><i class="fas fa-user"></i> My Account</a>
+								    <a class="dropdown-item" href="#"><i class="fas fa-credit-card"></i> My Credit</a>
+								    <a class="dropdown-item" href="#"><i class="fas fa-truck"></i> Product Tracking</a>
+								</div>
+							</li>
+							<li><a href="#"> <i class="fas fa-sign-in-alt"></i> Sign out</a></li>
+							<li><a href="#"> <i class="fas fa-comments"></i> Chat</a></li>
+						</ul>
+					</div>
+					<div class="search-cart-wrap">
+						<div class="head-col buyer-seller-col">
+							<div class="btn-buyer-header">
+								<a href="#" class="btn"><i class="far fa-home"></i> For Seller <i class="badge">3</i></a>
+								<a href="#" class="btn-grey"><i class="fas fa-user"></i> For Buyer <i class="badge">3</i></a>
+							</div>
+						</div>
+						<div class="head-col search-form">
+							<form action="" method="">
+								<div class="search-group">
+									<input type="text" placeholder="Search">
+									<button type="submit" class="btn-default"><i class="fas fa-search"></i></button>
+								</div>
+							</form>
+						</div>
+
+						<div class="head-col buyer-col">
+							<div class="buyer-pannel">
+								<a href="#" class="btn-grey dropdown-toggle" data-flip="false" data-toggle="dropdown"> <i class="fas fa-shopping-basket"></i> Buyer Panel</a>
+								<div class="dropdown-menu dropdown-menu-right">
+    								<a class="dropdown-item" href="#"><i class="fas fa-pen-square"></i> +Create Shopping list </a>
+								    <a class="dropdown-item" href="#"><i class="fas fa-credit-card"></i> Product bargaining <i class="badge">3</i></a>
+								    <a class="dropdown-item" href="#"><i class="fas fa-shopping-basket"></i> Product wait for payment <i class="badge">3</i></a>
+								    <a class="dropdown-item" href="#"><i class="fas fa-truck"></i> Product wait for end shopping <i class="badge">3</i></a>
+								</div>
+							</div>							
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+
+		<!-- Menu start -->
+		<div class="menu-wrap">
+			<div class="container">
+				<div class="header-menu">
+					<span class="menu-icon"><i class="fas fa-bars"></i></span>
+					<ul class="main-menu">
+						<li><a href="#" title="Import Fruit">Import Fruit</a></li>
+						<li><a href="#" title="Seasonal Fruit">Seasonal Fruit</a></li>
+						<li><a href="#" title="Normal Fruit">Normal Fruit</a></li>
+						<li><a href="#" title="Import Vegetable">Import Vegetable</a></li>
+						<li><a href="#" title="Local Vegetable">Local Vegetable</a></li>
+						<li><a href="#" title="Vegetable">Vegetable</a></li>
+						<li><a href="#" title="Vegetable">Vegetable</a></li>
+					</ul>
+					<div class="menu-link">
+						<ul>
+							<li>
+								<a href="#">Price Hostory</a>
+							</li>
+							<li>
+								<a href="#">Price Hostory</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Menu start -->
+	</header>
+	
+	<!-- Content Start -->
+	<div class="content-wrap">
+		<div class="container">
+
+			<div class="checkout-wrap">
+				<h1 class="page-title d-flex">End Shopping Step <a href="#" class="btn-grey back" onclick="goBack()">Back</a> </h1>
+				<div class="step-title">
+					<span class="step-num">1</span>
+					<h3>Select Shipping Method</h3>
+				</div>
+				<div class="ship-method">
+
+					<ul class="nav" id="shipTab">
+					    <li>					     
+					        <a class="ship-method-list active" data-toggle="tab" href="#home">
+						    	<input type="radio" name="ship-method" id="ship-center" checked="checked">
+								<i class="fas fa-cubes"></i> <span>Pick up at Center</span>
+						    </a>
+					    </li>
+					    <li>
+					        <a class="ship-method-list" data-toggle="tab" href="#profiles">
+						    	<input type="radio" name="ship-method" id="ship-store">
+								<i class="fas fa-warehouse"></i> <span>Pick up at the store</span>
+						    </a>
+					    </li>
+					    <li>
+					        <a class="ship-method-list" data-toggle="tab" href="#messages">
+						    	<input type="radio" name="ship-method" id="ship-address">
+								<i class="fas fa-truck"></i> <span>Delivery at the address</span>
+						    </a>
+					    </li>
+					</ul>
+					<div class="tab-content">
+					    <div class="tab-pane active" id="home">
+					        <div class="ship-info">
+								<h2>Can pick up the product within 2 hours</h2>
+								<h3>Pick up the product at</h3>
+								<p>Shop Name</p>
+								<address>
+									Address 437 Krungtonbri 6 Klongsan Bangkok 10600 <br/>
+									<a href="tel:094-696-2642">094-696-2642</a>
+								</address>
+							</div>
+					    </div>
+					    <div class="tab-pane" id="profiles">
+					        <div class="ship-info">
+								<h2>Can pick up the product within 2 hours</h2>
+								<h3>Pick up the product at</h3>
+								<p>Shop Name</p>
+								<address>
+									Address 437 Krungtonbri 6 Klongsan Bangkok 10600 <br/>
+									<a href="tel:094-696-2642">094-696-2642</a>
+								</address>
+							</div>
+					    </div>
+					    <div class="tab-pane" id="messages">
+					        <div class="step-title">
+								<span class="step-num">2</span>
+								<h3>Select Address</h3>
+							</div>
+							<div class="row">
+								<div class="col-sm-5 address-border">
+									<div class="form-group">
+										<label>Select Address</label>
+										<div class="block-add-address">
+											<select class="selectpicker">
+												<option>ธรณ์ธัช มณีเนตร 437/2 กรุงธน...</option>
+												<option>ธรณ์ธัช มณีเนตร 437/2 กรุงธนบุรี 6 คลองสาน</option>
+												<option>ชลัช 38 กรุงธนบุรี 6 คลองสาน</option>
+												<option>ชลัช 437/2 กรุงธนบุรี 6 คลองสาน</option>
+											</select>
+											<a href="#addAddress" data-toggle="modal" class="btn-grey">+Add new address</a>
+										</div>
+									</div>
+									<address class="post-address">
+										Thorntadh Marneenate <br>
+										Address 437 Krungtonbri 6 Klongsan <br>
+										Bangkok 10600 <br>
+										<a href="tel:094-696-2642">094-696-2642</a> 
+									</address>						
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label>Select time to Recieved</label>
+										<select class="selectpicker">
+											<option>Select time</option>
+											<option>07:00</option>
+											<option>08:00</option>
+											<option>09:00</option>
+											<option>10:00</option>
+											<option>11:00</option>
+											<option>12:00</option>
+											<option>13:00</option>
+											<option>14:00</option>
+										</select>
+									</div>
+								</div>
+							</div>
+					    </div>
+					</div> 		
+
+				</div>
+						
+				<h2>Ordered Items</h2>
+				<div class="table-responsive checkout-order-table">
+					<div class="table">
+						<div class="table-header">
+							<ul>
+								<li>Seller</li>
+								<li>Product</li>
+								<li>Standard</li>
+								<li>Unit Price</li>
+								<li>Qty</li>
+								<li>Total Price</li>
+								<li>Credit from shop</li>
+								<li>Select Payment Method</li>
+							</ul>
+						</div>
+						<div class="table-content">						
+							<ul>
+								<li class="product-shop">
+									<span class="prod-img"><img src="images/banner/prod-item3.jpg" width="50" height="50" alt=""></span>
+									<span class="shopname"><a href="#">Shop Name</a></span>
+								</li>
+								<li class="product">
+									<span class="prod-img"><img src="images/banner/prod-item9.jpg" width="80" height="80" alt=""></span>
+									<span class="prod-name">Product Name</span>
+								</li>							
+								<li><span class="mr">MR</span></li>
+								<li>20 Baht/Bags</li>
+								<li>50 Bags</li>
+								<li>3,000 Baht</li>
+								<li><span class="credit-shop">20,000 Baht</span></li>
+								<li>iBanking</li>
+							</ul>
+
+							<ul>
+								<li class="product-shop">
+									<span class="prod-img"><img src="images/banner/prod-item4.jpg" width="50" height="50" alt=""></span>
+									<span class="shopname"><a href="#">Shop Name</a></span>
+								</li>
+								<li class="product">
+									<span class="prod-img"><img src="images/banner/prod-item9.jpg" width="80" height="80" alt=""></span>
+									<span class="prod-name">Product Name</span>
+								</li>							
+								<li><span class="mr">MR</span></li>
+								<li>20 Baht/Bags</li>
+								<li>50 Bags</li>
+								<li>3,000 Baht</li>
+								<li><span class="no-credit-shop">No Credit</span></li>
+								<li>iBanking</li>
+							</ul>
+
+							<ul>
+								<li class="product-shop">
+									<span class="prod-img"><img src="images/banner/prod-item3.jpg" width="50" height="50" alt=""></span>
+									<span class="shopname"><a href="#">Shop Name</a></span>
+								</li>
+								<li class="product">
+									<span class="prod-img"><img src="images/banner/prod-item9.jpg" width="80" height="80" alt=""></span>
+									<span class="prod-name">Product Name</span>
+								</li>							
+								<li><span class="mr">MR</span></li>
+								<li>20 Baht/Bags</li>
+								<li>50 Bags</li>
+								<li>3,000 Baht</li>
+								<li><span class="credit-shop">20,000 Baht</span></li>
+								<li>iBanking</li>
+							</ul>
+
+							<ul>
+								<li class="product-shop">
+									<span class="prod-img"><img src="images/banner/prod-item3.jpg" width="50" height="50" alt=""></span>
+									<span class="shopname"><a href="#">Shop Name</a></span>
+								</li>
+								<li class="product">
+									<span class="prod-img"><img src="images/banner/prod-item9.jpg" width="80" height="80" alt=""></span>
+									<span class="prod-name">Product Name</span>
+								</li>							
+								<li><span class="mr">MR</span></li>
+								<li>20 Baht/Bags</li>
+								<li>50 Bags</li>
+								<li>3,000 Baht</li>
+								<li><span class="credit-shop">20,000 Baht</span></li>
+								<li>iBanking</li>
+							</ul>
+							
+						</div>
+					</div>
+
+					<h2>Ordered items you have credit</h2>
+					<div class="table">
+						<div class="table-header">
+							<ul>
+								<li>Seller</li>
+								<li>Product</li>
+								<li>Standard</li>
+								<li>Unit Price</li>
+								<li>Qty</li>
+								<li>Total Price</li>
+								<li>Credit from shop</li>
+								<li>Select Payment Method</li>
+							</ul>
+						</div>
+						<div class="table-content">						
+							<ul>
+								<li class="product-shop">
+									<span class="prod-img"><img src="images/banner/prod-item3.jpg" width="50" height="50" alt=""></span>
+									<span class="shopname"><a href="#">Shop Name</a></span>
+								</li>
+								<li class="product">
+									<span class="prod-img"><img src="images/banner/prod-item9.jpg" width="80" height="80" alt=""></span>
+									<span class="prod-name">Product Name</span>
+								</li>							
+								<li><span class="mr">MR</span></li>
+								<li>20 Baht/Bags</li>
+								<li>50 Bags</li>
+								<li>3,000 Baht</li>
+								<li><span class="credit-shop">20,000 Baht</span></li>
+								<li>Credit</li>
+							</ul>
+							
+						</div>
+					</div>
+
+					<div class="head-rounded">
+						Select Payment Method <i class="red">*</i>
+					</div>
+					<div class="sel-pay-method">
+						<ul>
+							<li>
+								<a href="javascript:void(0)">
+									<label for="bank1">
+										<input type="radio" name="sel-bank" id="bank1">
+										<div class="bank-img-block">
+											<img src="images/bank-img-1.png" alt="">
+										</div>
+										<div class="bank-name">PromptPay</div>
+									</label>
+								</a>
+							</li>
+							<li>
+								<a href="javascript:void(0)">
+									<label for="bank2">
+										<input type="radio" name="sel-bank" id="bank2">
+										<div class="bank-img-block">
+											<img src="images/bank-img-2.png" alt="">
+										</div>
+										<div class="bank-name">PromptPay</div>
+									</label>
+								</a>
+							</li>
+							<li>
+								<a href="javascript:void(0)">
+									<label for="bank3">
+										<input type="radio" name="sel-bank" id="bank3">
+										<div class="bank-img-block">
+											<img src="images/bank-img-3.png" alt="">
+										</div>
+										<div class="bank-name">QR Code</div>
+									</label>
+								</a>
+							</li>
+							<li>
+								<a href="javascript:void(0)">
+									<label for="bank4">
+										<input type="radio" name="sel-bank" id="bank4">
+										<div class="bank-img-block">
+											<img src="images/bank-img-4.png" alt="">
+										</div>
+										<div class="bank-name">K Plus</div>
+									</label>
+								</a>
+							</li>
+							<li>
+								<a href="javascript:void(0)">
+									<label for="bank5">
+										<input type="radio" name="sel-bank" id="bank5">
+										<div class="bank-img-block">
+											<img src="images/bank-img-5.png" alt="">
+										</div>
+										<div class="bank-name">Online Direct Debit (ODD)</div>
+									</label>
+								</a>
+							</li>
+						</ul>
+					</div>
+
+
+
+					<div class="checkout-table-footer clearfix">
+						<div class="col-sm-5 float-right">
+							<div class="row border-bottom">
+								<span class="col-6">Total</span>
+								<span class="col-6">17,000 Baht</span>
+							</div>
+							<div class="row border-bottom">
+								<span class="col-6">Credit balance</span>
+								<span class="col-6">-5,000 Baht</span>
+							</div>
+							<div class="row">
+								<span class="col-8">Total amount that must be paid by cash</span>
+								<span class="col-4">12,000 Baht</span>
+							</div>
+							<div class="bg-grey">
+								<div class="row">
+									<span class="col-6">Total amount </span>
+									<span class="col-6">12,000 Baht</span>
+								</div>
+							</div>
+							<div class="bg-blue">
+								<div class="row">								
+									<a class="col-12" href="#">Confirm order to End Shopping</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>				
+			
+		</div>		
+	</div>
+
+	<!-- Address Modal --> 
+
+	<div class="modal" id="addAddress">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content">
+
+	     	 <!-- Modal Header -->
+	      	<div class="modal-header">
+	      	  <h3 class="modal-title">สร้างที่อยู่ใหม่</h3>
+	      	  <span class="close fas fa-times" data-dismiss="modal"></span>
+	      	</div>
+
+	      	<!-- Modal body -->
+	      	<div class="modal-body">
+		      	<form action="" method="">
+			        <div class="form-group row">
+			        	<div class="col-sm-6">
+			        		<label>Name<i class="red">*</i></label>
+			        		<input type="text">
+			        	</div>
+			        	<div class="col-sm-6">
+			        		<label>นามสกุล<i class="red">*</i></label>
+			        		<input type="text">
+			        	</div>
+			        </div>
+			        <div class="form-group row">
+			        	<div class="col-sm-6">
+			        		<label>Address<i class="red">*</i></label>
+			        		<input type="text">
+			        	</div>
+			        	<div class="col-sm-6">
+			        		<label>ถนน<i class="red">*</i></label>
+			        		<input type="text">
+			        	</div>
+			        </div>
+			        <div class="form-group row">
+			        	<div class="col-sm-6">
+			        		<label>เขต<i class="red">*</i></label>
+			        		<input type="text">
+			        	</div>
+			        	<div class="col-sm-6">
+			        		<label>จังหวัด<i class="red">*</i></label>
+			        		<select>
+			        			<option>Select</option>
+			        		</select>
+			        	</div>
+			        </div>
+			        <div class="form-group row">
+			        	<div class="col-sm-6">
+			        		<label>Pin code<i class="red">*</i></label>
+			        		<input type="text">
+			        	</div>
+			        	<div class="col-sm-6">
+			        		<label>เบอร์โทรศัพท์ติดต่อ<i class="red">*</i></label>
+			        		<input type="text">
+			        	</div>
+			        </div>
+			        <div class="form-group comp-add-label">
+			        	<label class="chk-wrap">
+							<input type="checkbox" id="comp-address">
+							<span class="chk-mark">ต้องการใบกำกับภาษี</span>
+						</label>
+			        </div>
+
+			        <div class="company-detail">
+			        	<div class="form-group row">
+				        	<div class="col-sm-6">
+				        		<label>Company name<i class="red">*</i></label>
+				        		<input type="text">
+				        	</div>
+				        	<div class="col-sm-6">
+				        		<label>Branch<i class="red">*</i></label>
+				        		<input type="text">
+				        	</div>
+				        </div>
+				        <div class="form-group">	        	
+			        		<label>ที่อยู่บริษัท<i class="red">*</i></label>
+			        		<textarea name="" id=""></textarea>	        	
+				        </div>
+				        <div class="form-group">
+				        	<label class="chk-wrap">
+								<input type="checkbox">
+								<span class="chk-mark">เหมือนที่อยู่จัดส่ง</span>
+							</label>
+				        </div>
+				        <div class="form-group">	       
+			        		<label>เลขที่ผู้เสียภาษี</label>
+			        		<input type="text">	        	
+				        </div>
+			        </div>
+			       
+			        <div class="form-group border-top">
+			        	<label class="chk-wrap">
+							<input type="checkbox">
+							<span class="chk-mark">ตั้งค่าเป็นที่อยู่จัดส่งหลัก</span>
+						</label>
+			        </div>
+			        <div class="form-group">
+			        	<label class="chk-wrap">
+							<input type="checkbox">
+							<span class="chk-mark">ตั้งค่าเป็นที่อยู่ในการออกใบเสร็จหลัก</span>
+						</label>
+			        </div>
+			        <div class="form-group text-center">
+			        	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+			        </div>
+		        </form>		   
+		    </div>	     
+
+	    </div>
+	  </div>
+	</div>
+
+	<!-- Footer start here -->
+	<footer id="footer">
+		<div class="container">			
+			<div class="row">
+				<div class="col-sm-3 footer-list">
+					<h3 class="footer-subtitle">Site Map</h3>
+					<ul>
+						<li>
+							<a href="#" title="About us">About us</a>
+						</li>
+						<li>
+							<a href="#" title="Category">Category</a>
+						</li>
+						<li>
+							<a href="#" title="Shopping list">Shopping list</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-sm-3 footer-list">
+					<h3 class="footer-subtitle">Help seller</h3>
+					<ul>
+						<li>
+							<a href="#" title="Register">Register</a>
+						</li>
+						<li>
+							<a href="#" title="How to Create new product">How to Create new product</a>
+						</li>
+						<li>
+							<a href="#" title="Manual">Manual</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-sm-3 footer-list">
+					<h3 class="footer-subtitle">Site Map</h3>
+					<ul>
+						<li>
+							<a href="#" title="How to pay">How to pay</a>
+						</li>
+						<li>
+							<a href="#" title="How to buy">How to buy</a>
+						</li>
+						<li>
+							<a href="#" title="How to ship">How to ship</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-sm-3 footer-list">
+					<h3 class="footer-subtitle">Contact us</h3>
+					<address>
+						355/115-116 ม.15 ถนนพหลโยธิน ต.คูคต อ.ลำลูกกา จ.ปทุมธานี 12130 โทร. 02-995-0610-3
+					</address>
+				</div>
+			</div>
+			<div class="copyright">
+				copyright © Donmuangpattana Co., Ltd. All rights reserved.
+			</div>
+			
+		</div>
+	</footer>
+</div>
+
+<script src="js/jquery.min.js"></script>  
+<script src="js/bootstrap.bundle.js"></script>
+<script src="js/bootstrap.min.js"></script>  
+<script src="js/bootstrap-select.js"></script>
+<script type="text/javascript">
+	jQuery('.selectpicker').selectpicker();
+	jQuery('#shipTab li').click(function (e) {
+		// $(this).closest('ul').find('input[type="radio"]').prop('checked','');
+	    $(this).closest('li').find('input[type="radio"]').prop('checked','checked');		   
+	});
+	jQuery(function () {
+        jQuery("#comp-address").click(function () {
+            if (jQuery(this).is(":checked")) {
+                jQuery(".company-detail").show(100);                
+            } 
+            else {
+                jQuery(".company-detail").hide(100);               
+            }
+        });
+
+
+        //Select Bank
+        jQuery(".sel-pay-method ul li").click(function(){
+			if (jQuery(this).find('input[type="radio"]').is(':checked')) {
+				jQuery('.sel-pay-method ul li').removeClass('active');			
+				jQuery(this).toggleClass('active');			
+			}
+			
+		});
+
+
+    });
+</script> 
+<script src="js/sgCustom.js"></script>
+</body>
+</html>

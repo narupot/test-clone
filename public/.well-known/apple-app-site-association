@@ -1,0 +1,13 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "TAG5WQ8H7L.com.smmfresh.buyer.app",
+        "paths": [
+          "/*"
+        ]
+      }
+    ]
+  }
+}

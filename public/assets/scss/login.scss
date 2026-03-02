@@ -1,0 +1,48 @@
+/*for admin login page 
+
+	1) Import css
+	2) Header css
+	3) Footer css
+=========================*/
+
+@import "../css/fonts.css";
+@import "component/variable";
+@import "component/mixin";
+
+
+body {
+	/*background: $grey-light;*/
+}
+#wrapper {
+	padding:0 15px;
+	#login {
+		background: $white;  width: 100%; max-width: 400px; padding:20px; margin:0 auto;
+		position: absolute; @include border-radius(10px);
+		top: 50%; left:50%; transform: translate(-50%, -50%); -webkit-transform: translate(-50%, -50%);
+		-moz-transform: translate(-50%, -50%);
+	}	
+}
+.admin-logo {
+	text-align: center; margin:10px 0 30px 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+

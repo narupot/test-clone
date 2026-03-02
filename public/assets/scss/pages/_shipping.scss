@@ -1,0 +1,27 @@
+
+/**/
+
+.condition-rulebox {
+	/*border:1px solid $border; padding:15px 15px 10px 15px;*/
+
+	.search-select {
+  		.multiselect {
+  			float: left; height: 150px; width: 42.5%;
+			margin-right: 2%;
+  		}
+  		.search-select-btn {
+  			float: left; width: 45px; margin-right: 2%;
+  			i {
+  				color: $white;
+  			}
+  			button {
+  				padding-left: 14px;
+  			}
+  		}
+	}
+	.flat-row-field {
+		.chosen-container {
+			min-width: 280px;
+		}
+	}
+}

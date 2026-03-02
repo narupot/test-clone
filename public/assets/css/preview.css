@@ -1,0 +1,212 @@
+/*
+	1) Import css
+
+=========================*/
+/*  Variable */
+/*  Font size  */
+/*40px;*/
+/*36px;*/
+/*32px;*/
+/*30px;*/
+/*28px;*/
+/*24px;*/
+/*16px;*/
+/*14px;*/
+/*12px;*/
+/*10px;*/
+/*Border radius*/
+/* Global Section Variables */
+/* Mixin start here  
+=====================================*/
+/*Border Radius*/
+/* Transition */
+/* Padding */
+/* Modal Transition misin */
+/* Button variant */
+/* Button outline variant */
+/* button with custom colors */
+/* button with custom colors */
+/* Button Size variant */
+/* Pagination Mixin */
+.groupmenu {
+  position: relative; }
+  .groupmenu .lavel0 {
+    /*position: relative;*/
+    float: left;
+    vertical-align: top; }
+    .groupmenu .lavel0 > a {
+      display: inline-block;
+      padding: 12px 10px;
+      text-transform: uppercase;
+      font-weight: bold;
+      color: #000; }
+  .groupmenu .category0 {
+    position: relative; }
+  .groupmenu li:hover > ul {
+    display: block;
+    opacity: 1;
+    visibility: inherit;
+    transform: translateY(0px);
+    -webkit-transform: translateY(0px); }
+  .groupmenu .menu-link {
+    display: block; }
+    .groupmenu .menu-link i {
+      float: right;
+      font-size: 0.75rem; }
+
+.groupmenu-drop {
+  position: absolute;
+  left: 4px;
+  top: 40px;
+  background: #fff;
+  padding: 10px 10px;
+  border: 1px solid #bcbcbc;
+  z-index: 99;
+  box-shadow: 0 3px 3px #eee;
+  -webkit-box-shadow: 0 3px 3px #eee;
+  min-width: 99.2%;
+  display: block;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity .4s ease, transform .4s ease, visibility .4s linear 0s;
+  -webkit-transition: opacity .4s ease, transform .4s ease, visibility .4s linear 0s; }
+  .groupmenu-drop .item {
+    min-width: 200px; }
+  .groupmenu-drop a {
+    padding: 5px 0;
+    display: inline-block; }
+  .groupmenu-drop .groupmenu-drop {
+    left: 100%;
+    top: 0px;
+    display: block;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+    -webkit-transform: translateY(20px); }
+
+.groupmenu-wrap {
+  width: 100%;
+  max-width: 1190px; }
+
+.horizontal-preview {
+  position: relative; }
+  .horizontal-preview .menubanner {
+    position: absolute;
+    top: 44px;
+    width: 100%; }
+
+.catmenu-lavel0 {
+  position: relative; }
+  .catmenu-lavel0 li {
+    min-width: 200px;
+    position: relative; }
+
+.preview-modal .modal-dialog {
+  width: 100%;
+  max-width: 1200px; }
+.preview-modal .modal-header {
+  background: #87CEEB;
+  color: #fff; }
+  .preview-modal .modal-header h2 {
+    font-size: 1.5rem;
+    line-height: 1; }
+  .preview-modal .modal-header h2, .preview-modal .modal-header i {
+    color: #fff; }
+.preview-modal .modal-content {
+  max-width: 1200px; }
+
+.modal:before {
+  vertical-align: top; }
+
+/* vertical tab */
+.vertical-tab .nav-tabs li {
+  width: 100%; }
+  .vertical-tab .nav-tabs li a {
+    display: block; }
+.vertical-tab .lang-nav-tabs > li > a {
+  border: 1px solid #bcbcbc !important; }
+.vertical-tab .language-tab {
+  border-left: none;
+  margin-top: 0; }
+.vertical-tab .col-sm-2 {
+  padding-right: 0; }
+.vertical-tab .col-sm-10 {
+  padding-left: 0; }
+
+/* Animation */
+.slideInLeft, .slideInDown, .fadeInDown, .fadeIn, .slideInUp,
+.zoomIn, .lightSpeedIn {
+  animation-duration: 1s;
+  animation-fill-mode: both; }
+
+.slideInLeft {
+  animation-name: slideInLeft; }
+
+.slideInDown {
+  animation-name: slideInDown; }
+
+.slideInUp {
+  animation-name: slideInUp; }
+
+.fadeInDown {
+  animation-name: fadeInDown; }
+
+.fadeIn {
+  animation-name: fadeIn; }
+
+.zoomIn {
+  animation-name: zoomIn; }
+
+.lightSpeedIn {
+  animation-name: lightSpeedIn;
+  animation-timing-function: ease-out; }
+
+@keyframes slideInLeft {
+  from {
+    transform: translate3d(-100%, 0, 0);
+    visibility: visible; }
+  to {
+    transform: translate3d(0, 0, 0); } }
+@keyframes slideInDown {
+  from {
+    transform: translate3d(0, -100%, 0);
+    visibility: visible; }
+  to {
+    transform: translate3d(0, 0, 0); } }
+@keyframes slideInUp {
+  from {
+    transform: translate3d(0, 100%, 0);
+    visibility: visible; }
+  to {
+    transform: translate3d(0, 0, 0); } }
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0); }
+  to {
+    opacity: 1;
+    transform: none; } }
+@keyframes fadeIn {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale3d(0.3, 0.3, 0.3); }
+  50% {
+    opacity: 1; } }
+@keyframes lightSpeedIn {
+  from {
+    transform: translate3d(100%, 0, 0) skewX(-30deg);
+    opacity: 0; }
+  60% {
+    transform: skewX(20deg);
+    opacity: 1; }
+  80% {
+    transform: skewX(-5deg);
+    opacity: 1; }
+  to {
+    transform: none;
+    opacity: 1; } }

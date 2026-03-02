@@ -1,0 +1,154 @@
+
+/*  Dashboard Pages */
+
+.dashboard-page {
+	max-width: 1170px; width: 100%;
+
+	h4 {
+		font-size: $small_title;
+	}
+}
+
+.dash-row {
+	border-top: 1px solid $border;
+	padding-top: 15px; margin-top: 15px; 
+}
+
+.progress-box {
+	max-width: 600px; padding:20px 10px;
+	/*background: $grey-light1;*/ margin-bottom: 10px;
+
+	.progress {
+		height: 32px; border:1px solid $border; 
+		background: rgb(156,164,175);		 
+		background: -webkit-linear-gradient(rgba(156,164,175,1) 0%, rgba(179,185,195,1) 100%);
+		background: -o-linear-gradient(rgba(156,164,175,1) 0%, rgba(179,185,195,1) 100%);
+		background: linear-gradient(rgba(156,164,175,1) 0%, rgba(179,185,195,1) 100%); 
+		border-radius: 25px;
+	}
+	.progress-bar-striped {
+		background:linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,
+			rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+	}
+	.progress-striped .progress-bar,
+	.progress-bar-striped {
+	  background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent) !important;
+	  background-image: -o-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent) !important;
+	  background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent) !important;
+	  -webkit-background-size: 40px 40px;
+	  background-size: 40px 40px;	  
+	}
+	.progress.active .progress-bar,
+	.progress-bar.active {
+	  -webkit-animation: progress-bar-stripes 1.5s linear infinite;
+	  -o-animation: progress-bar-stripes 1.5s linear infinite;
+	  animation: progress-bar-stripes 1.5s linear infinite; 
+	}
+	.progress-bar-success {
+	  background-color: #90d95c !important; 
+	}
+}
+.progress-bar-success {
+	min-height: 30px;
+}
+
+
+@-webkit-keyframes progress-bar-stripes {
+  from {
+    background-position: 40px 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+@-o-keyframes progress-bar-stripes {
+  from {
+    background-position: 40px 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+@keyframes progress-bar-stripes {
+  from {
+    background-position: 40px 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+
+.dashbox {
+	border:1px solid $border; border-radius: 10px;
+	margin-bottom: 20px; margin-top: 5px;
+	.dashHedaer {
+		background: $secondary; padding:10px 15px;
+		border-radius: 10px 10px 0 0;
+	}
+	.dashbox-Content {
+		padding:10px 5px;
+		ul {
+			padding-left: 15px; padding-right: 15px;
+			text-align: center;
+		}
+		li {
+			+ li {
+				border-left: 1px solid $border;
+			}
+			i {
+				display: inline-block; vertical-align: middle;
+			}
+		}
+	}
+	.dashcount {
+		font-size: $small_title; margin-top: 5px;
+	}
+}
+
+
+.follow-box-activate {
+	border:1px solid $border; border-radius: 10px;
+	padding: 15px; margin-bottom: 25px;
+	box-shadow: 0 3px 20px $default; -webkit-box-shadow: 0 3px 20px $default;
+
+	h4 {
+		border-bottom: 1px solid $border; padding-bottom: 5px; margin-bottom: 25px;
+	}
+	ul {
+		list-style: decimal; padding-left: 15px;
+		padding-bottom: 10px;
+		li {
+			margin-bottom: 10px;
+		}
+		a {
+			text-decoration: underline; display: inline-block; vertical-align: middle;
+			margin-right: 5px;
+		}
+	}
+	.btn-delete {
+		height: auto;
+	}
+	.underline {
+		text-decoration: underline;
+	}
+}
+
+.dash-data-head {
+	border-bottom: 1px solid $border; line-height: 24px;
+	padding-bottom: 10px; margin-bottom: 10px;
+	.col-4 {
+		text-align: right; padding-right: 20px;
+	}
+}
+.dashboard-data {
+	padding-bottom: 15px;
+}
+.dash-data-content {
+	
+	.row {
+		margin-bottom: 5px; margin-top: 3px;
+	}
+	.col-4 {
+		text-align: right; padding-right: 20px;
+	}
+}

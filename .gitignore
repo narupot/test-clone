@@ -1,0 +1,63 @@
+
+/o
+
+# ไฟล์และโฟลเดอร์ของ Composer
+/vendor
+/node_modules
+
+# ไฟล์ที่เกี่ยวข้องกับ environment และคีย์ลับ
+.env
+.env.backup
+.env.local
+.env.*.local
+
+# แคชและไฟล์ชั่วคราว
+/storage/*
+/storage/*.key
+/storage/oauth-private.key
+/storage/oauth-public.key
+/storage/*.log
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
+/storage/logs/*
+
+# ข้อมูลฐานข้อมูล SQLite (ถ้ามี)
+database/*.sqlite
+database/*.sqlite-journal
+
+# ไฟล์ของ IDE และเครื่องมือพัฒนา
+.idea
+.vscode
+*.swp
+*.swo
+*.bak
+
+# ไฟล์ที่สร้างขึ้นโดย Laravel
+# /public/storage
+# /public/hot
+# /public/mix-manifest.json
+# /public/build
+
+# # ไฟล์และโฟลเดอร์ที่ไม่ต้องการใน public
+/public/files/*
+# /public/firebase/*
+/public/banner/*
+# /public/koolreport_assets/*
+# /public/combine/*
+# /public/assets/*
+/public/angular-froala/*
+
+# ไฟล์ภาพและ logs อื่นๆ
+/public/media_manager/*
+/public/seller-payment/*
+/public/seller-payment-response/*
+/public/seller_csv/*
+
+# ข้อมูลที่เก็บจากการดีพลอย
+# .phpunit.result.cache
+# homestead.json
+# Homestead.yaml
+# npm-debug.log
+# yarn-error.log

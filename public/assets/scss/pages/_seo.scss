@@ -1,0 +1,26 @@
+
+/*  For Seo Pages */
+
+.seo-form {
+	.form-group {
+		float: none;
+	}
+	.tab-content {
+		max-width: 800px; padding-top: 5px;
+	}
+
+	#analytic {
+		label {
+			line-height: 30px; padding-bottom: 0;
+			input[type="checkbox"] {
+				float: none; display: inline-block; vertical-align: top;
+				margin-top: 0; margin-right: 5px;
+			}
+		}
+	}
+	#social {
+		.form-group {
+			padding-bottom: 10px;
+		}
+	}
+}

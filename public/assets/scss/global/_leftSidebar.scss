@@ -1,0 +1,151 @@
+/*
+
+1) Login page 
+
+===================================*/
+
+@import "pages/role";
+
+/*   For Admin Menu */ 
+
+.admin-sidebar {
+  /*position: absolute;*/ position: fixed; top: 64px; z-index: 700;
+  float: left; height: 100%; height: calc(100% - 64px); background: $black; 
+  margin-bottom: 0; 
+
+  &:before {
+    background: $black; left: 0; top: 0;
+    bottom: 0; z-index: 699; position: fixed;
+    width: 115px; content: " ";
+  }
+  &.fixed {
+    position: fixed;
+  }
+  .sidebar {
+    height: 100%; margin-bottom: 0; 
+  }
+}
+
+
+.admin-menu {
+  background: $black; width: 115px; position: relative; height: 100%; 
+  .adm-submenu {
+    ul {
+      padding-left: 10px; padding-top: 2px; display: none;
+      li {
+        margin-top: 2px;
+        &.active {
+          > a {
+            color: $primary !important;
+          }
+        }
+        > a {
+          color: $black !important;
+          &:hover {
+            color: $primary;
+          }
+        }
+      }
+    }
+    
+    a {
+      font-size: $font-small;
+    }
+    >li > a {
+      position: relative; display: block; width: 100%;
+      white-space: nowrap; text-overflow: ellipsis;
+    }
+  }
+}
+
+.expand {
+  .submenu-wrapper {
+    transform: translateX(0); visibility: visible; z-index: -1;
+    h3 {
+       font-size: $font-normal; margin:0 0 5px 0; display: block;
+       border-bottom: 1px solid $border;padding-bottom: 10px;
+       color: $black;
+    }
+  }
+  .adm-submenu .active ul {
+    display: block; 
+  }
+}
+
+.submenu-wrapper {
+  background: $default; color: $black; height: 100%; overflow-y: auto;
+  position: fixed; left: 115px; top: 64px;
+  transform: translateX(-100%);
+  transition-duration: 0.3s;
+  transition-property: transform, visibility;
+  transition-timing-function: ease-in-out;
+  visibility: hidden;
+  width: 293px; text-align: left;
+  padding: 12px 5px; z-index: -2; 
+  box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.50);
+  -moz-box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.50);
+  -webkit-box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.50)
+}
+
+#navmenu {
+  margin-bottom: 0; text-align: center;
+  z-index: 999; background: $primary; height: 100%;
+
+  .icon {
+    display: block; color: $white;
+    font-size: $small_title; margin-bottom: 3px;
+  }
+  .active a {
+    background: $default; color: $black;
+    .icon {
+      color: $black;
+    }
+  }
+  a {
+    color: $white;   font-size:$font-small;
+    padding: 9px 2px; display: block;
+    &:hover {
+      color:$primary; 
+    }
+  }
+  >li > a {
+    white-space: nowrap; overflow: hidden;
+    text-overflow: ellipsis; position: relative;
+    z-index: 700;
+    &:hover {
+      color:$black; background: $default;
+      .icon {
+        color: $black;
+      }
+    } 
+  }
+  li li li a {
+    font-size: $font-small; padding-top: 0;
+  }
+  
+  .angle-arrow {
+    float: right; font-size: $font-normal;
+    color: $black; top: 6px; position: absolute;
+    right: 0px; padding: 6px 0 0 0px;
+    &.fa-angle-down {
+      &:before {
+        content: "\f107" !important;
+      }
+    }
+  }
+}
+
+.close-menu {
+  text-align: right; font-size: $font-small; float: right; 
+  .fa-times {
+    cursor: pointer;
+    color: $black;
+    font-size: $small_title;
+    transition: all 0.4s ease-in-out 0s;
+    &:hover {
+      color:$primary;
+    }
+  }
+}
+
+

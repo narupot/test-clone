@@ -1,0 +1,293 @@
+
+/**/
+
+.detail-box {
+	border-bottom: 1px solid $border;
+    background: $white;
+    padding: 15px 15px 10px 15px;
+    &:last-child {
+    	border-bottom: none;
+    }
+    .fa-times {
+		float: right;cursor: pointer;
+	    font-size: $font-normal;
+	    transition: all 0.4s ease-in-out 0s;
+	    &:hover {
+	      /*color: $primary-hover;*/
+	    }
+	}
+	&:hover {
+		background: $default;
+		transition: all 0.4s ease-in-out 0s;
+	}
+}
+
+.detail-box-nobg {
+	padding: 2px 15px 15px 15px;
+	border: 1px solid $border;
+}
+
+.sale-order-num {
+	padding:5px 0 0px 0; clear: both; overflow:hidden;
+	h3 {
+		display: inline-block;
+	}
+	.ship-btn-group {
+		float: right; padding-bottom: 5px;  text-align: center;
+		.btn-md {
+			margin-left: 5px;
+		}
+	}
+	.glyphicon-export {
+		color: $white; font-size: $font-normal; margin-right: 5px;
+	}
+	.req-btn-row {
+		margin-bottom: 0; padding-bottom: 0; padding-top: 5px;
+	}
+}
+.cart-bill-info {
+	border-top: 1px solid $border; padding:15px 0 10px 0;
+	line-height: 22px; font-size: $font-small; display: table;
+	width: 100%;
+	h3 {
+		font-size: $font-normal; 
+		margin-bottom: 5px;
+	}
+	.email {
+		display: block;
+	}
+	.name {
+		display: block;
+	}
+	.delivery {
+		.label {
+			width: 25%; padding-top: 5px; float: left;
+			text-align: right; padding-right: 5%;
+		}
+		input,select {
+			float: right; width: 70% !important;
+		}
+		.chosen-container {
+			float: right;
+		}
+		.chosen-choices {
+			height: 70px;
+		}
+	}
+	.ship-delivery {
+		.label {
+			text-align: left; padding-right: 5px; font-size: 100%; 
+			color: $black; line-height: 1.25;
+		}
+		input {			
+			float: left;
+		}
+		.shipdel-info {
+			float: right; width: 65%; margin-top: 8px;
+			&:first-child {
+				margin-top:0;
+			}
+			a {
+				margin:5px 0 0 5px; display: inline-block;
+			}
+			p {
+				clear: both;
+			}	
+		}
+		.shipinfo-deldate {
+			.shipinfo-icon {
+				cursor: pointer; border:1px solid $border;
+				img {
+					display: block; line-height: 1;
+				}
+			}
+			span {
+				display: inline-block; vertical-align: top;
+				line-height: 35px;
+			}
+		}
+		.add-more {
+			text-transform: uppercase; clear: both; margin-top: -4px;
+			a {
+				color: $primary;
+			}
+		}
+	}
+}
+.right-box {
+	border:1px solid $border; background: $white; padding:15px; margin-bottom: 15px;
+	h2.border {
+		border-bottom: 1px solid $border; padding-bottom: 5px; 
+		margin-bottom: 10px;
+	}
+	.btn-manual {
+		margin-bottom: -15px;
+		.btn-md {
+			font-size: $font-small; padding:5px;
+		}
+	}
+}
+.sale-order-num {
+	padding:5px 0 0px 0; clear: both; overflow:hidden;
+	h3 {
+		display: inline-block;
+	}
+	.ship-btn-group {
+		float: right; padding-bottom: 5px;  text-align: center;
+		.btn-md {
+			margin-left: 5px;
+		}
+	}
+	.glyphicon-export {
+		color: $white; font-size: $font-normal; margin-right: 5px;
+	}
+	.req-btn-row {
+		margin-bottom: 0; padding-bottom: 0; padding-top: 5px;
+	}
+}
+.historyBox {
+	span {
+		color: $primary; line-height: 20px; display: block;  font-size: $font-xsmall;
+	}
+	.time {
+		color: $default; font-size: $font-xsmall; margin-left: auto;
+	}
+	.hideHistory {
+		cursor: pointer; display: inline-block;
+	}
+	h2 {
+		margin-bottom: 5px;
+	}
+	.receiveOrd {
+		float: right; background: $primary; color:$white; line-height: 22px;
+		padding:4px 10px; width: 55%; white-space: nowrap;
+		overflow:hidden; text-overflow: ellipsis; text-align: center;
+		&.greyBg {
+			background: $default;
+		}
+	}
+	.ordernum {
+		display: inline-block; padding-top: 5px;
+		a {
+			color: $primary;
+		}
+	}
+	&.shipment {
+		h2 {
+			margin:5px 0 2px 0;	padding-bottom: 5px;
+		}
+		.order-list-row {
+			padding-top: 0;
+		}
+		li {
+			text-align: right; padding:4px 5px;
+			padding-left: 35px; position: relative;
+			.arrow {
+				float: left; margin-left: -25px; display: none;
+			}
+			&.active .arrow {
+				display: block;
+			}
+			&.active , &:hover {
+				background: $primary; color: $white;
+			}
+			&.active .qty, &:hover .qty {
+				color: $white;
+			}
+			span {
+				text-align: left; float: left; width: 60px; text-align: center;
+			}
+			&.header {
+				background: $default; padding:6px 5px;
+				&:hover, &:hover .qty {
+					color:$black;
+				}
+			}
+		}
+	}
+}
+.order-list-row {
+	border-top:1px solid $border; padding-top: 0px;
+	.receiveOrd {
+		float: right; background: $primary; color:$white; line-height: 22px;
+		padding:4px 10px; width: 55%; white-space: nowrap;
+		overflow:hidden; text-overflow: ellipsis; text-align: center;
+		&.greyBg {
+			background: $default;
+		}
+	}
+	.ordernum {
+		display: inline-block; padding-top: 5px;
+		a {
+			color: $primary;
+		}
+	}
+	.ord-txt {
+
+	}
+}
+.order-information {
+	.table {
+		.product {
+			img {
+				max-height: 50px; max-width: 50px;
+				margin-right: 5px;
+			}
+			span {
+				padding-top: 5px;
+			}
+		}
+		.total {
+			font-weight: bold;
+		}
+	}
+}
+
+
+/*  Create Order page */
+
+.border-box {
+	background: $white; border:1px solid $border; margin-bottom: 10px;
+}
+.order-status {
+	padding:10px;
+}
+.order-url {
+	border-bottom: 1px solid $border; padding-bottom: 15px; margin-bottom: 15px;
+	h2 {
+		margin-bottom: 5px;
+	}
+}
+.sidebox {
+	border:1px solid $border; padding:10px 10px; margin-bottom: 15px;
+	background: $white;
+	&.history {
+		border:none; max-height: 400px; overflow-y: auto;
+		.title {
+			margin-bottom: 5px; 
+		}
+	}
+}
+.fa-exclamation-circle:before {
+  content: "\f06a";
+}
+
+.shipment-browse-btn {
+	position: relative;
+	input[type="file"] {
+		position: absolute;
+	    opacity: 0;
+	    height: 100%;
+	    cursor: pointer;
+	    right: 0;
+	    top: 0;
+	}
+	.shipment-img-name {
+		cursor: pointer;
+	    padding-right: 48px;
+	    height: 41px;
+	    display: inline-block;
+	    background: url(../images/browse-btn3.png) right top no-repeat;
+	    line-height: 35px;
+	}
+}

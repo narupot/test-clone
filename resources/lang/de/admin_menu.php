@@ -1,0 +1,42 @@
+<?php
+
+return [
+
+'create_new_menu'=>'Create New Menu',
+'menu_list'=>'Menu List',
+'save'=>'Save',
+'reset'=>'Reset',
+'back'=>'Back',
+'infomation'=>'Infomation',
+'tab_items'=>'Tab Items',
+'links'=>'Link',
+'no_links'=>'No Link',
+'custom_css_class'=>'Custom CSS Class',
+'layout'=>'Layout',
+'column_one'=>'Column One',
+'column_two'=>'Column Two',
+'column_three'=>'Column Three',
+'column_four'=>'Column Four',
+'icon_library'=>'Icon Library',
+'icon_item_use'=>'Icon Item use',
+'menu_icon'=>'Menu Icon',
+'page'=>'Page',
+'category'=>'Category',
+'item_link'=>'Item link',
+'collapse_all'=>'Collapse All',
+'expand_all'=>'Expand All',
+'megamenu_structure'=>'Menu Structure',
+'megamenu_material'=>'Menu Material',
+'menu_name'=>'Menu Name',
+'edit_menu'=>'Edit Menu',
+'page_icon'=>'Icon',
+'page_id'=>'Page ID',
+'category_id'=>'Category ID',
+'choose_icon_position'=>'Choose Icon Position',
+'item_icon'=>'Icon',
+'item_url'=>'Item Url',
+'choose_page_id'=>'Choose Page ID',
+'page_list'=>'Page list',
+
+
+];

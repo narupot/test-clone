@@ -1,0 +1,267 @@
+/*  User Address Page */
+
+
+
+.user-list-wrap { 
+
+    li {
+        float: left;
+        margin: 0 24px 15px 0;
+        width: 210px;
+    }
+ 
+}
+
+.user-address-box {
+    border:1px solid $border;
+    width: 210px; min-height: 265px; position: relative;
+    margin-bottom: 10px; padding: 10px 15px; line-height: 1.4; 
+
+    &.add-user-address {
+        background: $default; 
+    }
+    .add-botttom {
+        position: absolute;
+        bottom: 10px;
+        left: 15px; 
+    }
+    .adduser-icon {
+        text-align: center;
+        margin-top: 80px; 
+    }
+    
+}
+
+
+@media all and (min-width: 768px) {
+  .user-list-wrap li {
+    min-height: 295px; } }
+
+
+  .user-address-box 
+    .user-address-box .adduser-icon .plus-circle-icon {
+      background: #fff;
+      padding: 10px;
+      -webkit-border-radius: 50%;
+      -moz-border-radius: 50%;
+      -ms-border-radius: 50%;
+      border-radius: 50%;
+      color: #6c6e6f;
+      width: 70px;
+      text-align: center;
+      font-size: 50px;
+      text-align: center;
+      display: inline-block;
+      border: 1px solid #bcbcbc; }
+      .user-address-box .adduser-icon .plus-circle-icon:hover {
+        background: #00b7bb;
+        color: #fff;
+        border-color: #00b7bb; }
+  .user-address-box .name, .user-address-box .tel, .user-address-box .email {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis; }
+  .user-address-box address {
+    max-height: 122px;
+    overflow: hidden; }
+
+.address-radio-group .radio-wrap {
+  display: block;
+  width: 100%; }
+  .address-radio-group .radio-wrap + .radio-wrap {
+    padding-top: 8px; }
+
+.modal button[type="submit"] {
+  min-width: 165px; }
+
+#sucess-msg .form-header {
+  border-bottom: none;
+  margin-bottom: 0; }
+
+.tel a {
+  color: #000; }
+  .tel a:hover {
+    color: #552c80; }
+
+.edit-del a {
+  color: #000; }
+.edit-del .delete {
+  margin-right: 15px; }
+
+.default-address-wrap {
+  border-bottom: 1px solid #bcbcbc;
+  margin-bottom: 25px; 
+  overflow: hidden;
+}
+
+
+
+  .default-address-wrap h2 {
+    margin-bottom: 5px; }
+
+.user-address-wrap {
+  background: #e6d2ff;
+  padding: 10px;
+  display: inline-block;
+  margin-bottom: 25px;
+  margin-right: 15px; }
+  .user-address-wrap .user-address-box {
+    background: #fff;
+    min-height: auto;
+    padding-bottom: 40px; 
+    line-height: 1.5;
+  }
+  .user-address-wrap .default-txt {
+    text-align: center;
+    padding-top: 5px; }
+
+#ui-id-1, #ui-id-2, #ui-id-3, #ui-id-4, #ui-id-5, [id*="ui-id-"], .address-autosearch {
+  position: absolute;
+  z-index: 999999 !important;
+  max-width: 262px; }
+  #ui-id-1 [id*="ui-id-"], #ui-id-2 [id*="ui-id-"], #ui-id-3 [id*="ui-id-"], #ui-id-4 [id*="ui-id-"], #ui-id-5 [id*="ui-id-"], [id*="ui-id-"] [id*="ui-id-"], .address-autosearch [id*="ui-id-"] {
+    max-width: 100%; }
+
+#add-address .modal-header, #add-address .modal-content {
+  padding: 0 7.5px; }
+#add-address .form-row {
+  margin-bottom: 0;
+  padding-bottom: 10px; }
+
+/* Map Picker Modal Styles */
+.map-picker-modal {
+  .map-container {
+    height: 500px;
+    width: 100%;
+    margin-bottom: 15px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+  }
+  
+  .modal-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    
+    h3 {
+      margin: 0;
+      flex-shrink: 0;
+    }
+    
+    .header-search-wrap {
+      flex: 1;
+      min-width: 200px;
+      max-width: 350px;
+      
+      .search-box,
+      .form-control {
+        width: 100%;
+      }
+    }
+  }
+  
+  .search-box {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  
+  .coordinate-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 15px;
+    background: #f5f5f5;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    
+    .coord-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .coord-label {
+      font-weight: 600;
+      color: #555;
+    }
+    
+    .coord-value {
+      font-family: monospace;
+      color: #000;
+      font-size: 14px;
+    }
+  }
+  
+  .btn-group-map {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+  
+  /* ปิด gmp-internal-camera-control (ปุ่มควบคุมกล้องภายในแผนที่) */
+  .gmp-internal-camera-control,
+  [class*="gmp-internal-camera-control"] {
+    display: none !important;
+  }
+}
+
+/* Address Form Coordinate Display */
+.coordinate-display {
+  background: #e8f5e9;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px dashed #4caf50;
+  margin-bottom: 15px;
+  
+  .coordinate-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #2e7d32;
+    
+    i {
+      color: #4caf50;
+    }
+  }
+  
+  .coordinate-selected,
+  .coordinate-not-selected {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    
+    .fa-check-circle {
+      font-size: 16px;
+    }
+  }
+  
+  .coordinate-selected {
+    color: #2e7d32;
+  }
+  
+  .coordinate-not-selected {
+    color: #666;
+  }
+  
+  .coordinate-value {
+    font-family: monospace;
+    font-size: 14px;
+    color: #1b5e20;
+    margin-bottom: 8px;
+  }
+  
+  .btn-edit-location {
+    margin-top: 10px;
+    font-size: 13px;
+  }
+}

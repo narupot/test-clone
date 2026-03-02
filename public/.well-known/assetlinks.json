@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.smm.buyer.smm_buyer",
+      "sha256_cert_fingerprints": [
+        "D9:09:33:DD:C7:7B:BB:E9:0C:8A:F4:2A:04:F3:04:D4:BA:20:DE:43:04:A3:A8:75:CA:33:1D:20:4F:49:49:A1"
+      ]
+    }
+  }
+]

@@ -1,0 +1,77 @@
+
+@import 'helpers/variable';
+
+h1 {
+	font-size: $font-36;
+}
+h2 {
+	font-size: $font-24;
+}
+h3 {
+	font-size: $font-18;
+}
+h4 {
+	font-size: $font-16;
+}
+h1, h2, h3,h4  {
+	font-family: $paridi; font-weight: normal;
+}
+
+p.error, .error, .error-msg {
+	font-size: $font-error;
+	color: $red;
+}
+
+body {
+	font-size: $font-normal; font-family: $paridi;
+	line-height: 1.3;
+}
+p {
+	font-size: $font-normal; line-height: 1.45;
+}
+a {
+	color: $black; text-decoration: none;
+	&:hover {
+		color:$primary-hover;
+		text-decoration: none;
+	}
+}
+
+
+img {
+	max-width: 100%;
+}
+ul , ol {
+	list-style: none; padding:0; margin:0;
+}
+ul {
+	&.disc {
+		list-style: disc;
+		padding-left: 25px;
+	}
+}
+ol {
+	&.number {
+		list-style: number;
+		padding-left: 25px;
+	}
+}
+.disabled {	
+  opacity: .7;	
+  pointer-events: none; 
+}
+.red {
+	color: $red;
+}
+.skyblue {
+	color: $skyblue;
+}
+.grey {
+	color: $grey3;
+}
+.green {
+	color: $green;
+}
+.blue {
+	color: $blue;
+}

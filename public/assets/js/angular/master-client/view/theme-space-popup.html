@@ -1,0 +1,65 @@
+<div class="sgpopup" data-popup="popup-1">
+      <div class="popup-inner">
+         <div class="popup-header">
+            <i class="fas fa-ruler-combined"></i> Spacing Properties
+            <a class="popup-close fas fa-times" data-popup-close="popup-1" href="javascript:void(0)" id="close_spacing_design_popup"></a>
+         </div>         
+         <div class="form-rows" ng-repeat="item in setting.spacing_prop">
+            <h2><%item.show_name%></h2>
+            <!-- for margin & pading -->
+            <div class="row" ng-if="item.html_type ==='input_text'">
+               <div class="col-sm-6 form-group" ng-repeat="prop in item.props_type_input">
+                  <label for="" ng-bind="prop.show_name"></label>
+                  <span class="spiner"> 
+                    <span class="decrease fas fa-minus" ng-click="increaseDecrease($event, 'decrease', prop)"></span>
+                    <input type="text" class="spinNum" value="0" min="0" max="50" ng-model="prop.prop_value" ng-change="inputChange(prop)" onkeypress="return isNumberKey(event)">
+                    <span class="increase fas fa-plus" ng-click="increaseDecrease($event, 'increase', prop)"></span>
+                  </span>
+               </div>
+            </div>
+            <!-- for Border --> 
+            <div ng-if="item.html_type === 'input_text_select_color'">
+               <div class="form-check pl-0" ng-style="item.line_style">
+                  <label class="check-wrap-admin radio-cart">
+                  <input type="checkbox" name="<%item.name%><%$index%>" ng-model="item.enable_border" ng-change="borderAction.enableDisableBorder(item)">
+                     <span class="checkmark"> Enable Border </span>
+                  </label>
+               </div>
+               <div class="bdr-alignmentBox clearfix" ng-if="item.props_type_input.length && item.enable_border">
+                  <ul class="nav nav-tabs mt-2 mb-2">
+                     <li class="<%prop.class_name%>" ng-repeat="prop in item.props_type_input" ng-click="borderAction.enableTab($event, prop, item.props_type_input)" ng-style="item.line_style">
+                        <a class="nav-link" data-toggle="tab" href="#<%prop.prop_name%>" ng-class="{'active show' : prop.status == 'active'}"><i class="fas fa-align-right"></i></a> 
+                     </li>
+                  </ul>
+                   <div class="tab-content">
+                      <div class="tab-pane fade" id="<%prop.prop_name%>" ng-repeat="prop in item.props_type_input" ng-class="{'active show' : prop.status == 'active'}">
+                         <div class="form-rows">
+                            <div class="row">
+                                <div class="col-sm-6 form-group" ng-repeat="item in prop.border_props">
+                                    <label ng-bind="item.show_name"></label>
+                                    <select ng-if="item.type === 'border_type'" ng-options="opt.value as opt.name for opt in item.prop_value" ng-model="item.type_model" ng-change="borderAction.styleChange(item)">
+                                    </select>
+                                    <div class="input-group cpicker colorpicker-component" ng-if="item.type === 'border_color'" colorpicker ng-model="item.prop_value">
+                                        <input type="text" class="form-control" placeholder="#4304ff" ng-model="item.prop_value" ng-change="borderAction.colorChange(item)">
+                                       <div class="input-group-append">
+                                          <span class="input-group-text">
+                                            <span class="input-group-addon" style="background: <%item.prop_value%>;">
+                                              <i style="background:<%item.prop_value%>"></i>
+                                            </span>
+                                          </span>
+                                       </div>
+                                    </div>
+                                    <div class="width-radius-slider" ng-if="item.type === 'border_width' || item.type === 'border_radius'">
+                                       <input type="text" placeholder="5px" ng-model="item.prop_value" ng-change="borderAction.widthRadiusChange(item)" onkeypress="return isNumberKey(event)">
+                                       <ui-slider-dir ng-model="item.prop_value"  max="100" min="0" on-changed="borderAction.widthRadiusChange(item)"></ui-slider-dir>  
+                                    </div>                                    
+                                </div>
+                            </div>
+                         </div>
+                      </div>
+                   </div>
+               </div>
+            </div>                      
+         </div>
+      </div>
+</div>

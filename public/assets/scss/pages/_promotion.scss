@@ -1,0 +1,272 @@
+
+/* Admin Prmotion style */
+#procondition {
+  .btn-group {
+    button {
+      &.active {
+        background: $primary;
+        border-color: $primary;
+        border-top-left-radius:10px !important;
+		border-bottom-left-radius:10px !important;
+      }
+      &:focus {
+      	box-shadow: none;
+      }
+    }
+
+	.btn-primary {
+		background: $default;
+		border: 1px solid $default;
+		color: $black;		
+		&.active {			
+			background: $primary;
+			border-color: $primary;
+		}
+		&:not(:last-child) {
+			border-top-left-radius:10px !important;
+			border-bottom-left-radius:10px !important;	
+		}
+		&:last-child {
+			border-top-right-radius:10px !important;
+			border-bottom-right-radius:10px !important;		
+		}
+	}
+
+  }
+}
+.promotion-content {
+	.spinner {
+		position: relative;
+		display: inline-block;
+		.up {
+			position: absolute;
+			right: 0;
+			top: 0;
+			cursor: pointer;
+			font-size: $font-normal;
+			border: 1px solid $border; border-bottom: none;
+			padding:6px 5px;
+			height: 25px;color: $black;
+			border-top-right-radius: 10px;
+			background-color: $secondary;
+		}
+		.down{
+			position: absolute;
+			right: 0px;
+			top: 25px;
+			cursor: pointer;
+			font-size: $font-normal;
+			border: 1px solid $border;
+			padding: 5px;
+			height: 25px;color: $black;
+			border-bottom-right-radius: 10px;
+			background-color: $secondary;
+		}
+	}
+	.product-detail-create {
+		.btn {
+			i {
+				color: $white;
+			}
+		}
+	}
+	.spinner {
+		width: 230px;
+	}
+	input[type="text"], input[type="password"], input[type="email"], input[type="tel"], select, textarea {
+	    width: 100%;
+	    max-width: 600px;
+	}
+	.query-builder {
+	  .rules-group-container, .rule-container, .rule-placeholder {
+	    position: relative;
+	    margin: 4px 0;
+	    padding: 5px;
+	    border: 1px solid $border;
+	  }
+	  .rule-container {
+	    .rule-filter-container, .rule-operator-container, .rule-value-container {
+	      display: inline-block;
+	      margin: 0 5px 0 0;
+	      vertical-align: middle;
+	    }
+	  }
+	  
+	  .error-container, .drag-handle {
+	    display: inline-block;
+	    margin: 0 5px 0 0;
+	    vertical-align: middle;
+	  }
+	  .rules-group-container {
+	    padding: 10px;
+	    padding-bottom: 6px;
+	    border: 1px solid $border;
+	  }
+	  .rules-group-header {
+	    margin-bottom: 10px;
+	    .group-conditions {
+	      .btn.readonly:not(.active), input[name$=_cond] {
+	        border: 0;
+	        clip: rect(0 0 0 0);
+	        height: 1px;
+	        margin: -1px;
+	        overflow: hidden;
+	        padding: 0;
+	        position: absolute;
+	        width: 1px;
+	        white-space: nowrap;
+	      }
+	    }
+	  }
+	  .rules-list {
+	    list-style: none;
+	    padding: 0 0 0 15px;
+	    margin: 0;
+	  }
+	  .rule-value-container {
+	    /*border-left: 1px solid $border;*/
+	    padding-left: 5px;
+	    label {
+	      margin-bottom: 0; display: inline-block; vertical-align: middle;
+	      input[type="checkbox"] {
+	      	display: inline-block;
+	      	vertical-align: middle;
+	      }
+	      &.block {
+	        display: block;
+	      }
+	    }
+	  }
+	  .error-container {
+	    display: none;
+	    cursor: help;
+	  }
+	  .has-error {
+	    background-color: $error;
+	    border-color: $border;
+	    .error-container {
+	      display: inline-block !important;
+	    }
+	  }
+	  .rules-list > * {
+	    &::before, &::after {
+	      content: '';
+	      position: absolute;
+	      left: -10px;
+	      width: 10px;
+	      height: calc(50% + 4px);
+	      border-color: $border;
+	      border-style: solid;
+	    }
+	    &::before {
+	      top: -4px;
+	      border-width: 0 0 2px 2px;
+	    }
+	    &::after {
+	      top: 50%;
+	      border-width: 0 0 0 2px;
+	    }
+	    &:first-child::before {
+	      top: -12px;
+	      height: calc(50% + 14px);
+	    }
+	    &:last-child {
+	      &::before {
+	        border-radius: 0 0 0 4px;
+	      }
+	      &::after {
+	        display: none;
+	      }
+	    }
+	  }
+	  .rules-group-header [data-invert] {
+	    margin-left: 5px;
+	  }
+	}
+	.form-row {
+		.radio-wrap {
+			padding-bottom: 0;
+		}
+	}
+	.glyphicon-menu-hamburger{
+		cursor: move;
+	}
+	.no-footer {
+		th {
+			&:first-child {
+			width: 6%;
+			text-align: center;
+			}			
+		}
+	}
+	.detail-box {border: none;padding: 0;}
+	.table-header {
+		li {
+		white-space: nowrap;
+	    max-width: 100px;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+	    min-width: 100px;		}
+	}
+	.table-wrapper {overflow: hidden;overflow-x: scroll;}
+	.coupon-contain {
+		max-width: 230px;
+	}
+	#proaction {
+		background-color: $white;
+		padding: 15px;
+		margin: -23px -15px -15px -15px;
+		border-bottom-left-radius: 10px;
+		border-bottom-right-radius: 10px;
+	}	
+	
+
+	.rules-group-container {
+		.group-conditions {
+			button {
+				margin-right: 10px;
+				border-top-right-radius:10px !important;
+				border-bottom-right-radius:10px !important;
+			}
+			label {
+				margin-right: 0px;
+			}			
+		}
+		.rule-header {
+			margin-bottom: 5px;
+		}
+
+		.group-actions {
+			.btn {
+				background: $success;
+				border:1px solid $success;
+				color: $white;
+			}
+		}
+		.rule-actions {
+			.btn {
+				background: $error;
+				border:1px solid $error;
+				color: $white;
+			}
+		}
+
+	}
+
+	.rule-operator-container {
+	  	span {
+	  		display: none;	
+	  	}	  	
+	 }
+
+
+	 .inline-labelblock {
+	 	label {
+	 		display: inline-block;
+	 		vertical-align: middle;
+	 		margin-right: 10px;
+	 	}
+	 }
+	
+
+}

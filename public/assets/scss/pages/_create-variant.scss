@@ -1,0 +1,92 @@
+
+/**/
+
+.content-right {
+	>.tab-content {
+		padding-top: 5px;
+		background: $white;
+	}
+}
+h2.title {
+	border-bottom: 1px solid $border; margin-bottom: 15px;
+	font-size: $font-normal; padding-bottom: 5px;
+	&.no-border {
+		border-bottom: none;
+		color: $black;
+		margin-bottom: 5px;
+		padding-bottom: 0;
+		font-size: $small_title; 
+	}
+}
+.help-txt {
+	line-height: 1.25;
+}
+.manage-option-row {
+	label {
+		padding-bottom: 8px;
+	}
+	.icon-close {
+		background: $white; padding:3px; font-size: $font-normal;
+		@include border-radius(50%);
+	}
+}
+.input-inline {
+	.radio-wrap {
+		padding-top: 7px;
+	}
+	input {
+		display: inline-block; max-width: 140px; width: calc(100% - 38px);
+	}
+}
+.attr-mgt-view {
+	img {
+		max-width: 100%;
+	}
+	h2 {
+		margin: 10px 0 15px 0; 
+	}
+	.btn {
+		font-size: $font-normal; display: block; margin-top: 10px;
+	}
+}
+
+/*  For Create variant Modal */
+
+#variantmodal {
+	.variant_name {
+		width: 170px;
+		label {
+			img {
+				float: left; margin-top: 5px;
+			}
+			input {
+				display: inline-block; width: 125px; margin-bottom: 4px;
+			}
+		}
+	}
+	.variant_stock_col {
+		input {
+			float: right; width: 50%; margin-bottom: 4px;
+		}
+	}
+	th {
+		border:1px solid $border;
+	}
+	td, th {
+		padding-left: 6px; padding-right: 6px;
+	}
+	input {
+		padding-left: 5px; padding-right: 3px;
+	}
+}
+.upload-wrap {
+	position: relative;
+	input[type="file"] {
+		position: absolute; left: 1px; bottom: 0; height: 100%; min-width: 50px; opacity: 0;
+		cursor: pointer; z-index: 1;
+	}
+	img {
+		max-width: 60px;
+	}
+}
+

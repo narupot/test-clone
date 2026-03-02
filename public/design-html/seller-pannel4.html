@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+	<title>Smmarket</title>
+	<link rel="stylesheet" type="text/css" href="css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="css/global.css">
+	<link rel="stylesheet" type="text/css" href="css/style-front.css">
+	<link rel="stylesheet" type="text/css" href="css/myaccount.css">
+	<link rel="stylesheet" type="text/css" href="css/select2.min.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-select.css">
+	<link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css">
+</head>
+<body>
+
+<div class="wrapper">
+
+	<header id="header">
+		<div class="container">
+			<div class="header-inner">
+				<div class="logo">
+					<a href="#" title="Smmarket"><img src="images/logo.png" width="85" alt=""></a>
+				</div>
+				<div class="header-content">
+					<div class="login-link">
+						<ul>
+							<li class="user dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									<img src="images/login/user.jpg" alt=""> Thanut Benjapat</a>
+								<div class="dropdown-menu">
+    								<a class="dropdown-item" href="#"><i class="fas fa-user"></i> My Account</a>
+								    <a class="dropdown-item" href="#"><i class="fas fa-credit-card"></i> My Credit</a>
+								    <a class="dropdown-item" href="#"><i class="fas fa-truck"></i> Product Tracking</a>
+								</div>
+							</li>
+							<li><a href="#"> <i class="fas fa-sign-in-alt"></i> Sign out</a></li>
+							<li><a href="#"> <i class="fas fa-comments"></i> Chat</a></li>
+						</ul>
+					</div>
+					<div class="search-cart-wrap">
+						<div class="head-col buyer-seller-col">
+							<div class="btn-buyer-header">
+								<a href="#" class="btn-grey active"><i class="far fa-home"></i> For Seller <i class="badge">3</i></a>
+								<a href="#" class="btn-grey"><i class="fas fa-user"></i> For Buyer <i class="badge">3</i></a>
+							</div>
+						</div>
+						<div class="head-col search-form">
+							<form action="" method="">
+								<div class="search-group">
+									<input type="text" placeholder="Search">
+									<button type="submit" class="btn-default"><i class="fas fa-search"></i></button>
+								</div>
+							</form>
+						</div>
+
+						<div class="head-col buyer-col">
+							<div class="buyer-pannel">
+								<a href="#" class="btn-grey dropdown-toggle" data-flip="false" data-toggle="dropdown"> <i class="fas fa-shopping-basket"></i> Buyer Panel</a>
+								<div class="dropdown-menu dropdown-menu-right">
+    								<a class="dropdown-item" href="#"><i class="fas fa-pen-square"></i> +Create Shopping list </a>
+								    <a class="dropdown-item" href="#"><i class="fas fa-credit-card"></i> Product bargaining <i class="badge">3</i></a>
+								    <a class="dropdown-item" href="#"><i class="fas fa-shopping-basket"></i> Product wait for payment <i class="badge">3</i></a>
+								    <a class="dropdown-item" href="#"><i class="fas fa-truck"></i> Product wait for end shopping <i class="badge">3</i></a>
+								</div>
+							</div>							
+						</div>
+					</div>
+				</div>
+			</div>			
+		</div>
+
+		<!-- Menu start -->
+		<div class="menu-wrap">
+			<div class="container">
+				<div class="header-menu">
+					<span class="menu-icon"><i class="fas fa-bars"></i></span>
+					<ul class="main-menu">
+						<li><a href="#" title="Import Fruit">Import Fruit</a></li>
+						<li><a href="#" title="Seasonal Fruit">Seasonal Fruit</a></li>
+						<li><a href="#" title="Normal Fruit">Normal Fruit</a></li>
+						<li><a href="#" title="Import Vegetable">Import Vegetable</a></li>
+						<li><a href="#" title="Local Vegetable">Local Vegetable</a></li>
+						<li><a href="#" title="Vegetable">Vegetable</a></li>
+						<li><a href="#" title="Vegetable">Vegetable</a></li>
+					</ul>
+					<div class="menu-link">
+						<ul>
+							<li>
+								<a href="#">Price Hostory</a>
+							</li>
+							<li>
+								<a href="#">Price Hostory</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Menu start -->
+	</header>
+	
+	<!-- Content Start -->
+	<div class="content-wrap">
+
+	
+
+
+		<div class="container">			
+			<div class="row">
+				<div class="col-sm-12">	
+
+						<div class="end-shopping-wrap form-group">
+							<div class="row">
+								<div class="col-sm-8">
+									<div class="product-purchase">Already paid <span>5</span> List From<span>12</span> List of Shopping List</div>
+									<div class="product-amount"> Paid <span>2000</span> Baht | Qty <span>10</span> Products </div>
+								</div>
+
+								<div class="col-sm-4 text-left text-md-right">									
+										<button class="btn btn-blue2 more-height">End Shopping</button>									
+								</div>								
+							</div>
+						</div>
+
+						<div class="seller-panneltab form-group">
+							<ul class="nav" id="seller-Tab">
+								<li>
+									<a data-toggle="tab" href="#tab-seler1" class="active"> 
+										<span class="icon-list"><i class="fas fa-pencil-alt"></i></span>
+										<span class="tab-name">Shopping List</span>
+										<!-- <span class="info-list">4</span> -->
+									</a>
+								</li>
+								<li>
+									<a data-toggle="tab" href="#tab-seler2"> 
+										<span class="icon-list"><i class="far fa-usd-circle"></i></span>
+										<span class="tab-name">Product Bargain</span>
+										<!-- <span class="info-list">4</span> -->
+									</a>
+								</li>
+								<li>
+									<a data-toggle="tab" href="#tab-seler5"> 
+										<span class="icon-list"><i class="fas fa-shopping-basket"></i></span>
+										<span class="tab-name">Shopping Cart</span>										
+										<!-- <span class="info-list">4</span> -->
+									</a>
+								</li>
+								
+								<li>
+									<a data-toggle="tab" href="#tab-seler4"> 
+										<span class="icon-list"><i class="fas fa-check"></i></span>
+										<span class="tab-name">Products already paid</span>											
+										<span class="info-list">1</span>
+									</a>
+								</li>								
+							</ul>
+						</div>							
+
+
+
+						<div class="tab-content">
+							<div class="tab-pane active" id="tab-seler1">	
+								<div class="form-group mt-3 text-right">
+									<h1 class="page-title title-border shipmenu-title">
+										<span><i class="fas fa-pencil-alt"></i> Shopping List Today</span> 
+										<span class="select-shopping-list pb-0">
+											<select class="selectpicker">
+												<option>Select from shopping list</option>
+												<option>Recent list for purchased</option>
+												<option>Favorite list</option>												
+												<option>+ Create shopping list</option>
+											</select>
+										</span>
+									</h1>
+								</div>	
+
+								<div class="form-group">
+									<label>Create name for shopping list*</label>
+									<div class="createlist-block">
+										<input type="text" name="">										
+										<button class="btn" id="show-autocomplete">+Create shopping list</button>
+									</div>
+								</div>
+								
+								<div class="box-product-search">
+									<div class="modal-header p-0 mb-3">					
+										<h2>Select product to shopping list</h2>
+										<span class="close fas fa-times" data-dismiss="modal"></span>
+									</div>
+									
+									<div class="form-group">
+										<div class="ui-widget">									  
+										  <input id="tags" type="text" placeholder="Product Search">
+										</div>
+									</div>									
+								</div>
+
+								
+								<div class="creatlist-shopping">
+									<div class="form-group mt-3 text-right">
+										<h1 class="page-title title-border shipmenu-title">
+											<span><i class="fas fa-pencil-alt"></i> Shopping List Today</span> 
+											<span class="select-shopping-list pb-0">
+												<select class="selectpicker">
+													<option>Select from shopping list</option>
+													<option>Recent list for purchased</option>
+													<option>Favorite list</option>												
+													<option>+ Create shopping list</option>
+												</select>
+											</span>
+										</h1>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-md-8 align-items-center edit-shipping">
+												<span class="sl-title">Orange Only</span>
+												<a href="#" class="skyblue px-sm-0 px-lg-4"><i class="fas fa-edit"></i> Edit shopping list</a>
+												<a href="#" class="skyblue"><i class="fas fa-trash-alt"></i> Delete this shopping list</a>
+											</div>
+											<div class="col-md-4 text-left text-md-right ">
+												<button class="btn-grey">+Add product</button>
+												<button class="btn">Save</button>
+											</div>
+										</div>
+									</div>
+
+									<div class="table-shoplist">
+										<div class="table-responsive track-order-table">
+											<div class="table">
+												<div class="table-content">
+													<ul>
+														<li>
+															<div class="product">
+															<span class="numbr-list">1</span>
+															<span class="prod-img"><img src="images/product/product_a.jpg" width="170px" class="prod-img"></span>
+															<span class="product-info">
+																<div class="nameproduct">Product name</div>
+																<div class="standard">Standard</div>
+																<div class="form-group">																
+																	<div class="prod-sizetype">
+																		<select>
+																			<option>XL (จัมโบ้)</option>
+																			<option>L (ใหญ่)</option>
+																			<option>M (กลาง)</option>												
+																			<option>S (เล็ก)</option>
+																			<option>XS (จิ๋ว)</option>
+																		</select>
+
+																		<select>
+																			<option>A (ดีมาก)</option>
+																			<option>B (ดี)</option>
+																			<option>C (พอใช้)</option>
+																			<option>R (คละ)</option>																		
+																		</select>
+																	</div>
+																</div>
+																	
+																	<div class="weigth-box icon-append">
+																		<label>Weight</label>
+																		<div class="inputgroup-icon">
+																			<input type="text" name="" placeholder="100" class="form-elements">
+																			<span class="fc-inner-iocns right"><span>Kilogram</span></span>
+																		</div>
+																	</div>																
+
+															</span>
+															</div>
+														</li>
+														<li class="add-note text-left">															
+															<a href="#" class="skyblue" data-toggle="modal" data-target="#notemodel">+Add note</a>															
+														</li>
+														<li>
+															<div class="action-blk mb-2">
+																<div class="blk-btn">
+																	<button class="btn-blue go-to-list btn-sm">Go to product list</button>
+																</div>
+																<div class="del-act">
+																	<a href="#"><i class="fas fa-trash-alt"></i></a>
+																</div>
+															</div>															
+														</li>
+													</ul>
+
+													<ul>
+														<li>
+															<div class="product">
+															<span class="numbr-list">2</span>
+															<span class="prod-img"><img src="images/product/product_a.jpg" width="170px" class="prod-img"></span>
+															<span class="product-info">
+																<div class="nameproduct">Product name</div>
+																<div class="standard">Standard</div>
+																<div class="form-group">																
+																	<div class="prod-sizetype">
+																		<span>XL (จัมโบ้)</span>
+																		<span>A (ดีมาก)</span>
+																	</div>
+																</div>
+																	
+																	<div class="weigth-box icon-append">
+																		<span class="pr-2">Paid <span class="unit blue">6 Kilogram</span></span>
+																		<span class="pr-3">From 10 Kilogram </span> 
+																		<span> <a href="#" class="skyblue">Edit</a></span>
+																	</div>
+																
+
+															</span>
+															</div>
+														</li>
+														<li class="add-note text-left">
+															<p>Want to get fresh orange from many shops And must be yellow only</p>
+															<a href="#" class="skyblue">Edit</a>
+														</li>
+														<li>
+															<div class="action-blk mb-2">
+																<div class="blk-btn">
+																	<a href="#" class="btn-grey go-to-list btn-sm"> <span class="btn-txt">Bargaining</span> <span class="btn-qty">1</span> <span class="list-text">List</span> </a>
+																	<a href="#" class="btn-grey go-to-list btn-sm"> <span class="btn-txt">Waiting payment</span> <span class="btn-qty">1</span> <span class="list-text">List</span> </a>
+																	<a href="#" class="btn-grey go-to-list btn-sm"> <span class="btn-txt">Paid</span> <span class="btn-qty">1</span> <span class="list-text">List</span> </a>
+																	
+																	<button class="btn-blue go-to-list btn-sm">Go to product list</button>
+																</div>
+																<div class="del-act">
+																	<a href="#"><i class="fas fa-trash-alt"></i></a>
+																</div>
+															</div>
+															<div class="form-group complete big-check">
+																<label class="chk-wrap">
+																	<input type="checkbox">
+																	<span class="chk-mark">Complete</span>
+																</label>
+															</div>
+														</li>
+													</ul>
+
+													<ul>
+														<li>
+															<div class="product">
+															<span class="numbr-list">3</span>
+															<span class="prod-img"><img src="images/product/product_a.jpg" width="170px" class="prod-img"></span>
+															<span class="product-info">
+																<div class="nameproduct">Product name</div>
+																<div class="standard">Standard</div>
+																<div class="form-group">																
+																	<div class="prod-sizetype">
+																		<span>XL (จัมโบ้)</span>
+																		<span>A (ดีมาก)</span>
+																	</div>
+																</div>
+																	
+																	<div class="weigth-box icon-append">
+																		<span class="pr-2">Paid <span class="unit blue">6 Kilogram</span></span>
+																		<span class="pr-3">From 10 Kilogram </span> 
+																		<span> <a href="#" class="skyblue">Edit</a></span>
+																	</div>
+																
+
+															</span>
+															</div>
+														</li>
+														<li class="add-note text-left">
+															<p>Want to get fresh orange from many shops And must be yellow only</p>
+															<a href="#" class="skyblue">Edit</a>
+														</li>
+														<li>
+															<div class="action-blk mb-2">
+																<div class="blk-btn">
+																	<a href="#" class="btn-grey go-to-list btn-sm"> <span class="btn-txt">Bargaining</span> <span class="btn-qty">1</span> <span class="list-text">List</span> </a>
+																	<a href="#" class="btn-grey go-to-list btn-sm"> <span class="btn-txt">Waiting payment</span> <span class="btn-qty">1</span> <span class="list-text">List</span> </a>
+																	<a href="#" class="btn-grey go-to-list btn-sm"> <span class="btn-txt">Paid</span> <span class="btn-qty">1</span> <span class="list-text">List</span> </a>
+																	
+																	<button class="btn-blue go-to-list btn-sm">Go to product list</button>
+																</div>
+																<div class="del-act">
+																	<a href="#"><i class="fas fa-trash-alt"></i></a>
+																</div>
+															</div>
+															<div class="form-group complete big-check">
+																<label class="chk-wrap">
+																	<input type="checkbox">
+																	<span class="chk-mark">Complete</span>
+																</label>
+															</div>
+														</li>
+													</ul>
+													
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							
+							</div>
+							<div class="tab-pane" id="tab-seler2">
+								<h2>Product Bargain</h2>
+							</div>
+							<div class="tab-pane" id="tab-seler3">								
+								<div class="delivery-filter form-group">											
+									<div class="row">
+										<div class="col-sm-4">
+											<label>Status</label>
+											<select class="js-select2" multiple="multiple">
+												<option value="O1" data-badge="">Ready</option>
+												<option value="O2" data-badge="">Prepare</option>
+												<option value="O3" data-badge="">Waiting</option>
+											</select>										
+										</div>
+										<div class="col-sm-4">
+											<label>Shipping Method</label>
+											<select class="js-select2" multiple="multiple">
+												<option value="O1" data-badge="">Pick up at store</option>
+												<option value="O2" data-badge="">Pick up at center</option>
+												<option value="O3" data-badge="">Delivered by company</option>
+											</select>
+										</div>
+										<div class="col-sm-4 sort-byfltr">
+											<label>Sort by</label>											
+											<select class="js-select2" multiple="multiple">
+												<option value="O1" data-badge="">Order</option>
+												<option value="O2" data-badge="">Time to Receive</option>
+											</select>
+											<span class="iconsort">
+												<a href="#">
+													<i class="fas fa-sort-amount-up"></i>
+												</a>
+											</span>
+										</div>										
+									</div>
+								</div>
+								<div class="form-group text-right">
+									<div class="abt-order-status">
+										<span>All pending delivery</span>
+										<span><span class="skyblue pr-1">10</span> Orders</span>
+										<button type="button" class="btn-dark-grey">Export CSV</button>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="delivery-list">
+										<ul>
+											<li>
+												<div class="deliv-header">
+													<div class="orderId">
+														<label class="chk-wrap">
+															<input type="checkbox">
+															<span class="chk-mark">Order No. <span class="skyblue">082889388366</span></span>
+														</label>
+														
+													</div>	
+													<div class="odr-grandTotal">
+														<span>Grand Total</span>
+														<span>40,000.00 Baht</span>
+														<span class="show-hide"><a href="javascript:void(0)" class="skyblue">Hide</a></span>
+													</div>
+												</div>
+
+												<div class="deliv-content">
+													<div class="row">
+														<div class="col-sm-3">
+															<div class="user-status">
+																<div class="user-img form-group">
+																	<img src="images/banner/prod-item9.jpg" width="59" height="50" alt="">
+																</div>
+																<div class="user-body form-group">
+																	<div class="user-row">
+																		<span>Buyer:</span> Thorntadh Marneenate
+																	</div>
+																	<div class="user-row">
+																		<span>Tel:</span> 094-696-2642
+																	</div>
+																</div>
+
+																<div class="user-shipmethod form-group">
+																	Shipping Method : <span>Pick up at store</span>
+																</div>
+
+																<div class="recieve-time form-group">
+																	Time to receive 11:20 น.
+																</div>
+
+																<div class="form-group">
+																	<label>Status</label>
+																	<div class="box-grey">
+																		<div class="form-group">
+																			<label class="radio-wrap">
+																				<input type="radio" name="radio">
+																				<span class="radio-mark">Prepare</span>
+																			</label>
+																		</div>
+																		<div class="form-group">
+																			<label class="radio-wrap">
+																				<input type="radio" name="radio">
+																				<span class="radio-mark">Ready</span>
+																			</label>
+																		</div>
+																		<div class="form-group">
+																			<label class="radio-wrap">
+																				<input type="radio" name="radio">
+																				<span class="radio-mark">Sent</span>
+																			</label>
+																		</div>
+																	</div>
+
+																</div>
+
+															</div>
+														</div>
+
+														<div class="col-sm-9">
+															<div class="table-wrapper">
+																<h2>Table will come here. ..............</h2>
+
+
+															</div>
+														</div>
+													</div>
+												</div>
+
+											</li>
+
+											<li>
+												<div class="deliv-header">
+													<div class="orderId">
+														<label class="chk-wrap">
+															<input type="checkbox">
+															<span class="chk-mark">Order No. <span class="skyblue">082889388366</span></span>
+														</label>
+														
+													</div>	
+													<div class="odr-grandTotal">
+														<span>Grand Total</span>
+														<span>40,000.00 Baht</span>
+														<span class="show-hide"><a href="javascript:void(0)" class="skyblue">Hide</a></span>
+													</div>
+												</div>
+
+												<div class="deliv-content">
+													<div class="row">
+														<div class="col-sm-3">
+															<div class="user-status">
+																<div class="user-img form-group">
+																	<img src="images/banner/prod-item9.jpg" width="59" height="50" alt="">
+																</div>
+																<div class="user-body form-group">
+																	<div class="user-row">
+																		<span>Buyer:</span> Thorntadh Marneenate
+																	</div>
+																	<div class="user-row">
+																		<span>Tel:</span> 094-696-2642
+																	</div>
+																</div>
+
+																<div class="user-shipmethod form-group">
+																	Shipping Method : <span>Pick up at store</span>
+																</div>
+
+																<div class="recieve-time form-group">
+																	Time to receive 11:20 น.
+																</div>
+
+																<div class="form-group">
+																	<label>Status</label>
+																	<div class="box-grey">
+																		<div class="form-group">
+																			<label class="radio-wrap">
+																				<input type="radio" name="radio">
+																				<span class="radio-mark">Prepare</span>
+																			</label>
+																		</div>
+																		<div class="form-group">
+																			<label class="radio-wrap">
+																				<input type="radio" name="radio">
+																				<span class="radio-mark">Ready</span>
+																			</label>
+																		</div>
+																		<div class="form-group">
+																			<label class="radio-wrap">
+																				<input type="radio" name="radio">
+																				<span class="radio-mark">Sent</span>
+																			</label>
+																		</div>
+																	</div>
+
+																</div>
+
+															</div>
+														</div>
+
+														<div class="col-sm-9">
+															<div class="table-wrapper">
+																<h2>Table will come here. ..............</h2>
+															</div>
+														</div>
+													</div>
+												</div>
+
+											</li>
+
+											<li>
+												<div class="deliv-header">
+													<div class="orderId">
+														<label class="chk-wrap">
+															<input type="checkbox">
+															<span class="chk-mark">Order No. <span class="skyblue">082889388366</span></span>
+														</label>
+														
+													</div>	
+													<div class="odr-grandTotal">
+														<span>Grand Total</span>
+														<span>40,000.00 Baht</span>
+														<span class="show-hide"><a href="javascript:void(0)" class="skyblue">Hide</a></span>
+													</div>
+												</div>
+
+												<div class="deliv-content">
+													<div class="row">
+														<div class="col-sm-3">
+															<div class="user-status">
+																<div class="user-img form-group">
+																	<img src="images/banner/prod-item9.jpg" width="59" height="50" alt="">
+																</div>
+																<div class="user-body form-group">
+																	<div class="user-row">
+																		<span>Buyer:</span> Thorntadh Marneenate
+																	</div>
+																	<div class="user-row">
+																		<span>Tel:</span> 094-696-2642
+																	</div>
+																</div>
+
+																<div class="user-shipmethod form-group">
+																	Shipping Method : <span>Pick up at store</span>
+																</div>
+
+																<div class="recieve-time form-group">
+																	Time to receive 11:20 น.
+																</div>
+
+																<div class="form-group">
+																	<label>Status</label>
+																	<div class="box-grey">
+																		<div class="form-group">
+																			<label class="radio-wrap">
+																				<input type="radio" name="radio">
+																				<span class="radio-mark">Prepare</span>
+																			</label>
+																		</div>
+																		<div class="form-group">
+																			<label class="radio-wrap">
+																				<input type="radio" name="radio">
+																				<span class="radio-mark">Ready</span>
+																			</label>
+																		</div>
+																		<div class="form-group">
+																			<label class="radio-wrap">
+																				<input type="radio" name="radio">
+																				<span class="radio-mark">Sent</span>
+																			</label>
+																		</div>
+																	</div>
+
+																</div>
+
+															</div>
+														</div>
+
+														<div class="col-sm-9">
+															<div class="table-wrapper">
+																<h2>Table will come here. ..............</h2>
+															</div>
+														</div>
+													</div>
+												</div>
+
+											</li>
+
+											<li>
+												<div class="deliv-header">
+													<div class="orderId">
+														<label class="chk-wrap">
+															<input type="checkbox">
+															<span class="chk-mark">Order No. <span class="skyblue">082889388366</span></span>
+														</label>
+														
+													</div>	
+													<div class="odr-grandTotal">
+														<span>Grand Total</span>
+														<span>40,000.00 Baht</span>
+														<span class="show-hide"><a href="javascript:void(0)" class="skyblue">Hide</a></span>
+													</div>
+												</div>
+
+												<div class="deliv-content">
+													<div class="row">
+														<div class="col-sm-3">
+															<div class="user-status">
+																<div class="user-img form-group">
+																	<img src="images/banner/prod-item9.jpg" width="59" height="50" alt="">
+																</div>
+																<div class="user-body form-group">
+																	<div class="user-row">
+																		<span>Buyer:</span> Thorntadh Marneenate
+																	</div>
+																	<div class="user-row">
+																		<span>Tel:</span> 094-696-2642
+																	</div>
+																</div>
+
+																<div class="user-shipmethod form-group">
+																	Shipping Method : <span>Pick up at store</span>
+																</div>
+
+																<div class="recieve-time form-group">
+																	Time to receive 11:20 น.
+																</div>
+
+																<div class="form-group">
+																	<label>Status</label>
+																	<div class="box-grey">
+																		<div class="form-group">
+																			<label class="radio-wrap">
+																				<input type="radio" name="radio">
+																				<span class="radio-mark">Prepare</span>
+																			</label>
+																		</div>
+																		<div class="form-group">
+																			<label class="radio-wrap">
+																				<input type="radio" name="radio">
+																				<span class="radio-mark">Ready</span>
+																			</label>
+																		</div>
+																		<div class="form-group">
+																			<label class="radio-wrap">
+																				<input type="radio" name="radio">
+																				<span class="radio-mark">Sent</span>
+																			</label>
+																		</div>
+																	</div>
+
+																</div>
+
+															</div>
+														</div>
+
+														<div class="col-sm-9">
+															<div class="table-wrapper">
+																<h2>Table will come here. ..............</h2>
+															</div>
+														</div>
+													</div>
+												</div>
+
+											</li>
+
+										</ul>
+									</div>
+								</div>
+
+							</div>
+							<div class="tab-pane " id="tab-seler4">
+								<div class="form-group">
+									<div class="table-wrapper">										
+										<div class="table-responsive checkout-order-table tblseller-pannel">
+										<div class="table">
+											<div class="table-header">
+												<ul>													
+													<li>Product</li>
+													<li>Standard</li>
+													<li>Shop</li>
+													<li>Unit Price</li>
+													<li>Qty</li>
+													<li>Price</li>													
+													<li>Payment Method</li>
+													<li>Transaction ID</li>													
+												</ul>
+											</div>
+											<div class="table-content">						
+												<ul>													
+													<li class="product">														
+														<span class="prod-img"><img src="images/banner/prod-item9.jpg" width="134" height="100" alt=""></span>
+														<span class="prod-name">Product Name</span>
+													</li>							
+													<li><span class="sb">SB</span></li>
+													<li>
+														<a href="#" class="link-skyblue">Shop Name</a>
+													</li>
+													<li>20 Baht/Bags</li>
+													<li>50 Bags</li>
+													<li>3,000 Baht</li>	
+													<li>Credit</li>												
+													<li class="transection-id-block">
+														<div class="link-skyblue">1029938278928</div>
+														<span class="date-time">10/10/2018 11:20:40</span>
+													</li>
+												</ul>
+
+												
+												
+												
+											</div>
+										</div>
+
+										
+
+										<div class="checkout-table-footer clearfix">
+											<div class="col-sm-4 float-right">
+												<div class="row">
+													<span class="col-6">Total weigth</span>
+													<span class="col-6">100 Kg</span>
+												</div>																						
+												<div class="bg-grey">
+													<div class="row">
+														<span class="col-6">Total paid price</span>
+														<span class="col-6">5,000.00 Baht</span>
+													</div>
+												</div>
+												<div class="bg-blue">
+													<div class="row">
+														<span class="col-12">End Shopping</span>
+													</div>
+												</div>												
+											</div>
+										</div>
+									</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="tab-pane " id="tab-seler5">								
+									<div class="row form-group">
+										<div class="col-sm-8 checkwrap-sel-all">
+											<label class="chk-wrap">
+												<input type="checkbox">
+												<span class="chk-mark">Select All</span>
+											</label>										
+										</div>
+										<div class="col-sm-4 text-right">									
+												<button class="btn">Buy Now</button>									
+										</div>								
+									</div>								
+									<div class="table-responsive checkout-order-table tblseller-pannel">
+										<div class="table">
+											<div class="table-header">
+												<ul>													
+													<li class="item-product">
+													<span class="sel-pay-item">Click to select Payment item</span>
+													Product</li>
+													<li>Standard</li>
+													<li>Shop</li>
+													<li>Unit Price</li>
+													<li>Qty</li>
+													<li>Price</li>													
+													<li>&nbsp;</li>
+												</ul>
+											</div>
+											<div class="table-content">						
+												<ul>													
+													<li class="product">
+														<span class="chk-img">
+															<label class="chk-wrap">
+																<input type="checkbox">
+																<span class="chk-mark"></span>
+															</label>
+														</span>
+														<span class="prod-img"><img src="images/banner/prod-item9.jpg" width="134" height="100" alt=""></span>
+														<span class="prod-name">Product Name</span>
+													</li>							
+													<li><span class="sb">SB</span></li>
+													<li>
+														<a href="#" class="link-skyblue">Shop Name</a>
+													</li>
+													<li>20 Baht/Bags</li>
+													<li>50 Bags</li>
+													<li>3,000 Baht
+													<div class="bargained-price grey">Price has already bargained</div>
+													</li>													
+													<li class="bargain-action">
+														<div class="del-action"><a href="#">Delete <i class="fas fa-times"></i></a></div>
+														<button class="btn-grey" type="submit" data-toggle="modal" data-target="#changePriceModel2">Bargain</button>
+													</li>
+												</ul>
+
+												<ul>													
+													<li class="product">
+														<span class="chk-img">
+															<label class="chk-wrap">
+																<input type="checkbox">
+																<span class="chk-mark"></span>
+															</label>
+														</span>
+														<span class="prod-img"><img src="images/banner/prod-item9.jpg" width="134" height="100" alt=""></span>
+														<span class="prod-name">Product Name</span>
+													</li>							
+													<li><span class="sb">SB</span></li>
+													<li>
+														<a href="#" class="link-skyblue">Shop Name</a>
+													</li>
+													<li>20 Baht/Bags</li>
+													<li>
+														<span class="spiner">
+										                    <span class="decrease fas fa-minus">  </span>
+										                    <input type="number" class="spinNum" value="50" min="0" max="100">
+										                    <span class="increase fas fa-plus">  </span>
+										                </span>
+										                <span class="qty-label">/Bags</span>
+													</li>
+													<li>3,000 Baht
+													<div class="bargained-price red">Price up : Shop changed 
+													price <span class="dated">11/12/2018 11:30</span></div>
+													</li>													
+													<li class="bargain-action">
+														<div class="del-action"><a href="#">Delete <i class="fas fa-times"></i></a></div>
+														<button class="btn-grey">Bargain</button>
+													</li>
+												</ul>
+
+												<ul>													
+													<li class="product">
+														<span class="chk-img">
+															<label class="chk-wrap">
+																<input type="checkbox">
+																<span class="chk-mark"></span>
+															</label>
+														</span>
+														<span class="prod-img"><img src="images/banner/prod-item9.jpg" width="134" height="100" alt=""></span>
+														<span class="prod-name">Product Name</span>
+													</li>							
+													<li><span class="sb">SB</span></li>
+													<li>
+														<a href="#" class="link-skyblue">Shop Name</a>
+													</li>
+													<li>20 Baht/Bags</li>
+													<li>
+														<span class="spiner">
+										                    <span class="decrease fas fa-minus">  </span>
+										                    <input type="number" class="spinNum" value="50" min="0" max="100">
+										                    <span class="increase fas fa-plus">  </span>
+										                </span>
+										                <span class="qty-label">/Bags</span>
+													</li>
+													<li>3,000 Baht 
+														<div class="bargained-price green">Price Down : Shop changed 
+														price <span class="dated">11/12/2018 11:30</span> </div>
+													</li>													
+													<li class="bargain-action">
+														<div class="del-action"><a href="#">Delete <i class="fas fa-times"></i></a></div>
+														<button class="btn-grey">Bargain</button>
+													</li>
+												</ul>
+
+												
+												
+											</div>
+										</div>
+
+										
+
+										<div class="checkout-table-footer clearfix">
+											<div class="col-sm-4 float-right">
+												<div class="row">
+													<span class="col-6">Total Products</span>
+													<span class="col-6">100 Unit</span>
+												</div>																						
+												<div class="bg-grey">
+													<div class="row">
+														<span class="col-6">Grand total </span>
+														<span class="col-6">5,000.00 Baht</span>
+													</div>
+												</div>												
+											</div>
+										</div>
+									</div>
+								
+
+								
+
+							</div>
+						</div>
+
+						
+				</div>
+			</div>	
+		</div>				
+	</div>
+
+
+<!-- Change price popup -->
+	<div class="modal" id="changePriceModel">
+		<div class="modal-dialog modal-sm modal-dialog-centered">
+			<div class="modal-content">
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<!-- <h3>Now you give credit for</h3> -->
+					<span class="close fas fa-times" data-dismiss="modal"></span>
+				</div>
+				<!-- Modal body -->
+				<div class="modal-body">									
+					<div class="productPopup">
+						<span class="prod-img">
+							<img src="images/product/product.jpg" width="169" height="126" alt="">
+						</span>
+						<div class="product-info">
+							<h2 class="prod-name">Product Name</h2>
+							<div class="sc">SC</div>
+						</div>
+					</div>
+					<div class="prod-orderDetail-box form-group">						
+						<div class="form-group">
+							<label>Price :</label>
+							<span class="spiner">
+			                    <span class="decrease fas fa-minus">  </span>
+			                    <input type="number" class="spinNum" value="50" min="0" max="100">
+			                    <span class="increase fas fa-plus">  </span>
+			                </span>
+			                <span class="qty-label">/ Bag</span>
+						</div>						
+					</div>									
+					<div class="form-group btn-group text-center">						
+						<button type="button" class="btn">Save</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="modal" id="changePriceModel2">
+		<div class="modal-dialog modal-sm modal-dialog-centered">
+			<div class="modal-content">
+				<!-- Modal Header -->
+				<div class="modal-header">					
+					<h2 class="skyblue">Shop Name</h2>
+					<span class="close fas fa-times" data-dismiss="modal"></span>
+				</div>
+				<!-- Modal body -->
+				<div class="modal-body">	
+													
+					<div class="product-information">
+								<div class="productPopup">						
+								<span class="prod-img">
+									<img src="images/product/product.jpg" width="169" height="126" alt="">
+								</span>
+
+								<div class="product-info">
+								<span class="prod-name">Product Name </span> <span class="la">LA</span>
+								<div class="grade">
+									<span> Size : L </span>   <span> Standard : A  </span>
+								</div>
+								<div class="product-review">							
+							        <div class="starrating">
+							            <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 star"></label>
+							            <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 star"></label>
+							            <input type="radio" id="star3" name="rating" value="3" checked="checked"/><label for="star3" title="3 star"></label>
+							            <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 star"></label>
+							            <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star"></label>
+							        </div>
+
+								</div>
+								<div class="price-box">
+									<span class="price">40.00 Baht/Bag</span>
+									<span class="remark">Remark : 1 Bag = 10 Kg</span>
+								</div>
+								<div class="price-list">
+									<table>
+										<tbody>
+											<tr>
+												<td>5 - 10 Bag</td>
+												<td>40.00 Baht/Bag</td>
+											</tr>
+											<tr>
+												<td>11 - 15 Bag</td>
+												<td>38.00 Baht/Bag</td>
+											</tr>
+											<tr>
+												<td>16 - 20 Bag</td>
+												<td>35.00 Baht/Bag</td>
+											</tr>
+											<tr>
+												<td>21 Bag up</td>
+												<td>30.00 Baht/Bag</td>
+											</tr>
+										</tbody>
+									</table>
+									<div class="min-order">Minimum Order 5 Bag</div>
+									<div class="stock"><span>Stock</span>: 100 Bag</div>
+								</div>
+
+								</div>
+								</div>
+								
+								
+						
+
+					</div>	
+					
+					<div class="need-bargain">					
+						<a href="#" class="btn">You need to bargaining ?</a>					
+					</div>
+					<div class="prod-orderDetail-box popup-bargain form-group">	
+
+						<div class="form-group">							
+							<label>Qty :</label>
+							<span class="spiner">
+			                    <span class="decrease fas fa-minus">  </span>
+			                    <input type="number" class="spinNum" value="50" min="0" max="100">
+			                    <span class="increase fas fa-plus">  </span>
+			                </span>
+			                <span class="qty-label">/ Bag</span> 
+			                <span class="qty-label">Minimum 10 Bags</span>
+						</div>	
+						<div class="form-group bargain-unit">
+							<label>The price you want to offer to the seller :</label>
+							<div class="tier-col unit-price">																	
+									<div class="input-sign">
+										<input type="text" placeholder="Unit Price">
+										<span class="curr-label">Baht</span>										
+									</div>
+							</div>
+							<span class="qty-label">/ Bag</span> 
+						<!-- 	<div class="col-sm-6">							
+							<label>The price you want to offer to the seller :</label>
+							<input type="text">
+							</div>
+			                <span class="qty-label">/ Bag</span> -->
+						</div>					
+					</div>									
+					<div class="form-group btn-group text-center">						
+						<button type="button" class="btn">Bargain</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+	<div class="modal" id="notemodel">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- Modal Header -->
+				<div class="modal-header">										
+					<span class="close fas fa-times" data-dismiss="modal"></span>
+				</div>
+				<!-- Modal body -->
+				<div class="modal-body">	
+				
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>Note</label>
+								<textarea></textarea>
+							</div>
+							<div class="text-center">
+								<button class="btn">บันทึก</button>
+							</div>
+						</div>
+					</div>
+						
+				
+												
+					
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+	<!-- Footer start here -->
+	<footer id="footer">
+		<div class="container">			
+			<div class="row">
+				<div class="col-sm-3 footer-list">
+					<h3 class="footer-subtitle">Site Map</h3>
+					<ul>
+						<li>
+							<a href="#" title="About us">About us</a>
+						</li>
+						<li>
+							<a href="#" title="Category">Category</a>
+						</li>
+						<li>
+							<a href="#" title="Shopping list">Shopping list</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-sm-3 footer-list">
+					<h3 class="footer-subtitle">Help seller</h3>
+					<ul>
+						<li>
+							<a href="#" title="Register">Register</a>
+						</li>
+						<li>
+							<a href="#" title="How to Create new product">How to Create new product</a>
+						</li>
+						<li>
+							<a href="#" title="Manual">Manual</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-sm-3 footer-list">
+					<h3 class="footer-subtitle">Site Map</h3>
+					<ul>
+						<li>
+							<a href="#" title="How to pay">How to pay</a>
+						</li>
+						<li>
+							<a href="#" title="How to buy">How to buy</a>
+						</li>
+						<li>
+							<a href="#" title="How to ship">How to ship</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-sm-3 footer-list">
+					<h3 class="footer-subtitle">Contact us</h3>
+					<address>
+						355/115-116 ม.15 ถนนพหลโยธิน ต.คูคต อ.ลำลูกกา จ.ปทุมธานี 12130 โทร. 02-995-0610-3
+					</address>
+				</div>
+			</div>
+			<div class="copyright">
+				copyright © Donmuangpattana Co., Ltd. All rights reserved.
+			</div>
+			
+		</div>
+	</footer>
+	
+
+
+</div>
+
+<script src="js/jquery.min.js"></script>  
+<script src="js/bootstrap.bundle.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/select2.min.js"></script> 
+<script src="js/bootstrap-select.js"></script>
+<script src="js/jquery-ui.min.js"></script>
+
+<script src="js/sgCustom.js"></script>
+<script type="text/javascript">		
+	$(document).ready(function(){
+		$(".js-select2").select2({
+			closeOnSelect : false,
+			//placeholder : "Status",
+			allowHtml: true,
+			allowClear: true,
+			tags: true
+		});
+		function iformat(icon, badge,) {
+			var originalOption = icon.element;
+			var originalOptionBadge = $(originalOption).data('badge');		 
+			return $('<span><i class="fa ' + $(originalOption).data('icon') + '"></i> ' + icon.text + '<span class="badge">' + originalOptionBadge + '</span></span>');
+		}
+
+		$('#show-autocomplete').on('click',function(){
+			console.log('test');
+			$('.box-product-search').show();			
+		});
+
+		$('.box-product-search .close').on('click',function(){
+			$('.box-product-search').hide();
+		});
+
+	});
+
+</script>
+
+<script>
+  $( function() {
+    var availableTags = [
+      "ActionScript",
+      "AppleScript",
+      "Asp",
+      "BASIC",
+      "C",
+      "C++",
+      "Clojure",
+      "COBOL",
+      "ColdFusion",
+      "Erlang",
+      "Fortran",
+      "Groovy",
+      "Haskell",
+      "Java",
+      "JavaScript",
+      "Lisp",
+      "Perl",
+      "PHP",
+      "Python",
+      "Ruby",
+      "Scala",
+      "Scheme"
+    ];
+    $( "#tags" ).autocomplete({
+      source: availableTags
+    });
+  } );
+  </script>
+
+</body>
+</html>
