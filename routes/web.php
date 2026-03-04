@@ -16,3 +16,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// product list page (database)
+Route::get('/products', [App\Http\Controllers\ProductController::class, 'index']);
+
+// mockup without database
+Route::get('/products-mockup', [App\Http\Controllers\ProductController::class, 'mockup']);
